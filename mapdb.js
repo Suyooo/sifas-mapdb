@@ -20,7 +20,7 @@ function attribute(attr_id) {
     throw new Error('Unknown Attribute ' + attr_id);
 }
 
-let songdata = JSON.parse(fs.readFileSync('notemap/song_db.json'));
+let songdata = JSON.parse(fs.readFileSync('mapdb.json'));
 let layout = fs.readFileSync('index.html').toString();
 let s = "<h5>µ's</h5>"
 
