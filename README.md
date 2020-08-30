@@ -1,6 +1,10 @@
-These values, especially the skill ones, are as incomplete as the song database (which means, if I don't have any songs
-where a certain effect appears I don't have it added. Feel free to make guesses, but I'm only putting confirmed ones
-here)
+This is a repository for both the [Note Map DB site](https://suyo.be/sifas/mapdb/) and the note map files, so you can
+use them for your own projects. The following is a short overview of the keys and values you'll find in those, which
+you can find as `.json` files in the `mapdb` folder.
+
+The values in the note map database, especially the skill ones, are as incomplete as the song database (which means, if
+I don't have any songs where a certain effect appears I don't have it added. Feel free to make guesses, but I'm only
+putting confirmed ones here)
 
 # Live Difficulty
 The live difficulty ID can be read as `ABCCCDDE`:  
@@ -12,7 +16,7 @@ The live difficulty ID can be read as `ABCCCDDE`:
 
 ## Live type
 - 1: Free Live
-- 2: Story Live and Event Songs (no attribute)
+- 2: Story Live and Event Songs (the pre-release no-attribute versions)
 - 4: Sukusuta Big Live
 - 5: Dream Live Parade
 
