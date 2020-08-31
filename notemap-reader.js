@@ -244,10 +244,10 @@ function make_notemap(live) {
                 }
                 s += '</div>';
             }
-            if ((ni+1) % 10 === 0) {
-                s += '<div class="marker' + ((ni+1) % 50 === 0 ? ' fifty' : '') +
+            if ((ni+1) % 5 === 0) {
+                s += '<div class="marker' + ((ni+1) % 50 === 0 ? ' fifty' : '') + ((ni+1) % 10 !== 0 ? ' five' : '') +
                     '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1em);">' +
-                    '|<br>' + format(ni+1) + '</div>';
+                    '|<br>' + (((ni+1) % 10 === 0) ? format(ni+1) : "&nbsp;") + '</div>';
             }
         }
 
