@@ -111,7 +111,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 50) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '%';
     if (type_id === 51) return 'increase Base Voltage Gain by ' + format(amount / 100) + '%';
     if (type_id === 52) return 'remove all buffs (excluding those affecting Base values)';
-    if (type_id === 68) return 'deal ' + format(amount) + ' points of stamina damage';
+    if (type_id === 68) return 'take ' + format(amount) + ' points of stamina damage';
     if (type_id === 69) return 'discharge SP Gauge by ' + format(amount / 100) + '%';
     if (type_id === 70) return 'lose ' + format(amount) + ' points of shield';
     if (type_id === 71) return 'lose ' + format(amount / 100) + '% Appeal';
