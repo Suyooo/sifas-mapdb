@@ -16,7 +16,8 @@ The live difficulty ID can be read as `ABCCCDDE`:
 
 ## Live type
 - 1: Free Live
-- 2: Story Live and Event Songs (the pre-release no-attribute versions)
+- 2: Event Songs (the pre-release no-attribute versions)
+- 3: Story Live
 - 4: Sukusuta Big Live
 - 5: Dream Live Parade
 
@@ -72,6 +73,9 @@ song by just using the length of the `notes` array.
 - 1: on hit (WONDERFUL, GREAT or NICE)
 - 2: on miss (BAD or MISS)
 - 3: always (no matter what timing)
+- 4: on hit (WONDERFUL, GREAT or NICE) with Vo type
+- 5: on hit (WONDERFUL, GREAT or NICE) with Sp type
+- 7: on hit (WONDERFUL, GREAT or NICE) with Sk type
 
 # Appeal Chances
 `mission_type`: Mission type, see below  
@@ -129,11 +133,17 @@ song by just using the length of the `notes` array.
 - 74: Non-Active
 - 75: Non-Natural
 - 76: Non-Elegant
-- 77: Non-Sp Type
-- 78: Non-Gd Type
-- 79: Non-Sk Type
-- 87: Non-Vo or Gd Type
-- 90: Non-Gd or Sp Type
+- 77: Non-Sp Types
+- 78: Non-Gd Types
+- 79: Non-Sk Types
+- 83: Current Strategy
+- 87: Non-Vo or Gd Types
+- 88: Non-Vo or Sp Types
+- 89: Non-Vo or Sk Types
+- 90: Non-Gd or Sp Types
+- 92: Non-Sp or Sk Types
+- 96: Vo and Sk Types
+- 97: Vo and Sp Types
 
 ## Effects
 - 3: SP Gauge Charge (fixed amount)
@@ -146,11 +156,12 @@ song by just using the length of the `notes` array.
 - 21: Critical Power Up
 - 22: Skill Activation Chance Up
 - 23: SP Voltage Gain Up
+- 26: Base Appeal Up
 - 45: Base SP Gauge Fill Rate Up
 - 46: Base Critical Chance Up
 - 47: Base Critical Power Up
 - 48: Base Skill Activation Chance Up
-- 49: Base Appeal Up
+- 49: Base Appeal Up (dupe?)
 - 50: Base SP Voltage Gain Up
 - 51: Base Voltage Gain Up
 - 52: Remove Buffs
@@ -175,11 +186,13 @@ song by just using the length of the `notes` array.
 - 134: Stamina Restore (fixed amount), based on the amount of Gd types
 - 141: Base Appeal Up, based on the amount of Sk types
 - 143: Base Appeal Up, based on the amount of Gd types
+- 163: Skill Activation Chance Up, based on the amount of Sk types
 - 164: Skill Activation Chance Up, based on the amount of Gd types
 - 179: Critical Chance Up, based on the amount of Sk types
 - 187: Base Critical Chance Up, based on the amount of Sk types
 - 193: Critical Power Up, based on the amount of Vo types
 - 210: SP Voltage Gain Up, based on the amount of Sp types
+- 219: Base SP Voltage Gain Up, based on the amount of Sk types
 - 230: Strategy Switch Bonus Up (fixed amount)
 
 ## Finish Conditions

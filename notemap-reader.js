@@ -49,7 +49,8 @@ function difficulty(diff_id) {
 }
 
 function skill(skill) {
-    return skill_target(skill.target) + skill_effect(skill.effect_type, skill.effect_amount) +
+    return (skill.finish_type === 3 ? "" : skill_target(skill.target)) +
+        skill_effect(skill.effect_type, skill.effect_amount) +
         skill_finish(skill.finish_type, skill.finish_amount);
 }
 
@@ -79,8 +80,14 @@ function skill_target(target_id) {
     if (target_id === 77) return 'non-<span class="t sp">Sp</span> units ';
     if (target_id === 78) return 'non-<span class="t gd">Gd</span> units ';
     if (target_id === 79) return 'non-<span class="t sk">Sk</span> units ';
+    if (target_id === 83) return 'units in the current strategy ';
     if (target_id === 87) return 'non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> units ';
+    if (target_id === 88) return 'non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units ';
+    if (target_id === 89) return 'non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units ';
     if (target_id === 90) return 'non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units ';
+    if (target_id === 92) return 'non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units ';
+    if (target_id === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
+    if (target_id === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 
@@ -95,6 +102,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 21) return 'gain ' + format(amount / 100) + '% Critical Power';
     if (type_id === 22) return 'gain ' + format(amount / 100) + '% Skill Activation Chance';
     if (type_id === 23) return 'increase SP Voltage Gain by ' + format(amount / 100) + '%';
+    if (type_id === 26) return 'gain ' + format(amount / 100) + '% Base Appeal';
     if (type_id === 45) return 'gain ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (type_id === 46) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (type_id === 47) return 'gain ' + format(amount / 100) + '% Base Critical Power';
@@ -124,11 +132,13 @@ function skill_effect(type_id, amount) {
     if (type_id === 134) return 'restore ' + format(amount) + ' points of stamina for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 141) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 143) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t gd">Gd</span> unit in the formation';
+    if (type_id === 163) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 164) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 179) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 187) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 193) return 'gain ' + format(amount / 100) + '% Critical Power for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 210) return 'increase SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
+    if (type_id === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 230) return 'increase the power of their Strategy Switch bonus by ' + format(amount) + ' points';
     throw new Error('Unknown Skill Effect Type ' + type_id);
 }
@@ -234,10 +244,10 @@ function make_notemap(live) {
                 }
                 s += '</div>';
             }
-            if (ni > 0 && ni % 10 === 0) {
-                s += '<div class="marker' + (ni % 50 === 0 ? ' fifty' : '') +
+            if ((ni+1) % 10 === 0) {
+                s += '<div class="marker' + ((ni+1) % 50 === 0 ? ' fifty' : '') +
                     '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1em);">' +
-                    '|<br>' + format(ni) + '</div>';
+                    '|<br>' + format(ni+1) + '</div>';
             }
         }
 
@@ -278,6 +288,15 @@ function make_notemap(live) {
             case 3:
                 s += "";
                 break; // always
+            case 4:
+                s += 'If hit with a <span class="t vo">Vo</span> unit, ';
+                break;
+            case 5:
+                s += 'If hit with a <span class="t sp">Sp</span> unit, ';
+                break;
+            case 7:
+                s += 'If hit with a <span class="t sk">Sk</span> unit, ';
+                break;
             default:
                 throw new Error('Unknown Note Gimmick Trigger ' + noteg.trigger);
         }

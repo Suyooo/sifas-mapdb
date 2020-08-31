@@ -22,11 +22,12 @@ const minify = require('html-minifier').minify;
 
 let live_ids = [];
 let songdata = {};
+let CURRENT_EVENT_ID = undefined;
 
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let lid = Number(f.substring(0, f.length - 5));
-        if (lid < 20000000 || lid === 20010301) {
+        if (lid < 20000000 || lid === CURRENT_EVENT_ID) {
             live_ids.push(lid);
             songdata[lid] = JSON.parse(fs.readFileSync('mapdb/' + lid + '.json'));
         }
@@ -42,7 +43,7 @@ live_ids = live_ids.sort(function (a, b) {
 });
 
 let layout = fs.readFileSync('index.html').toString();
-let s = "<h5>µ's</h5>"
+let s = '<h5 id="muse">µ\'s</h5>'
 
 let last_live_id = 0;
 let current_tabs = "";
@@ -57,9 +58,9 @@ for (let li = 0; li < live_ids.length; li++) {
         }
         current_tabs = "";
 
-        if (live_difficulty_id !== 20010301) {
-            if (live_difficulty_id >= 11000000 && last_live_id < 11000000) s += "<h5>Aqours</h5>";
-            if (live_difficulty_id >= 12000000 && last_live_id < 12000000) s += "<h5>Nijigaku</h5>";
+        if (live_difficulty_id !== CURRENT_EVENT_ID) {
+            if (live_difficulty_id >= 11000000 && last_live_id < 11000000) s += '<h5 id="aqours">Aqours</h5>';
+            if (live_difficulty_id >= 12000000 && last_live_id < 12000000) s += '<h5 id="niji">Nijigaku</h5>';
         }
 
         s += '<ul class="collapsible" data-collapsible="expandable"><li>' +
@@ -69,7 +70,7 @@ for (let li = 0; li < live_ids.length; li++) {
             '<b>' + live.song_name + '</b></div>' +
             '<div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
     }
-    if (live_difficulty_id !== 20010301) last_live_id = live_difficulty_id;
+    if (live_difficulty_id !== CURRENT_EVENT_ID) last_live_id = live_difficulty_id;
 
     s += '<li class="tab"><a href="#' + live_difficulty_id + '"' + (diff_id === 30 ? ' class="active"' : '') + '>' +
         notemap.difficulty(diff_id) + '</a></li>';
