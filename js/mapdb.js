@@ -116,7 +116,7 @@ $(function () {
             // gimmick mouseover
             let gimmickmarkers = $(".notebar .gimmick", this);
             let gimmickinfos = $(".detailinfo .gimmick", this);
-            gimmickmarkers.mouseover(function () {
+            gimmickmarkers.on("mouseover, touchstart", function () {
                 if (selecting || $(this).hasClass("hidden")) return;
                 let gi = $(this).data("gimmick");
                 gimmickinfos.each(function () {
@@ -138,7 +138,7 @@ $(function () {
             // appeal chance mouseover
             let acmarkers = $(".notebar .appealchance", this);
             let acinfos = $(".detailinfo .appealchance", this);
-            acmarkers.mouseover(function () {
+            acmarkers.on("mouseover, touchstart", function () {
                 if (selecting) return;
                 let ai = $(this).data("ac");
                 acinfos.each(function () {
