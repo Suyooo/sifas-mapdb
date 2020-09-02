@@ -1,6 +1,12 @@
 This is a repository for both the [Note Map DB site](https://suyo.be/sifas/mapdb/) and the note map files, so you can
 use them for your own projects. The following is a short overview of the keys and values you'll find in those, which
-you can find as `.json` files in the `mapdb` folder.
+you can find as JSON files in the `mapdb` folder.
+
+These JSON files are not the live data pulled from the server, but instead are processed versions with some filtering
+applied, and annotated with extra data such as full skill information. As getting the live data from the game requires
+me to play the respective song in-game, so I can dump the network traffic, it might take a while until new songs appear
+here (mostly depending on unlock conditions - campaign songs that are immediately available are quick, while story songs
+have to wait until I reach the end of the chapter and usually take a whole day).
 
 The values in the note map database, especially the skill ones, are as incomplete as the song database (which means, if
 I don't have any songs where a certain effect appears I don't have it added. Feel free to make guesses, but I'm only
