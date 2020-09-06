@@ -18,7 +18,7 @@ The live difficulty ID can be read as `ABCCCDDE`:
 `B`: Group, see below  
 `CCC`: Song ID  
 `DD`: (Real) Difficulty, see below  
-`E`: Version (starts at 1)
+`E`: Unique Identifier
 
 ## Live type
 - 1: Free Live
@@ -50,6 +50,23 @@ The live difficulty ID can be read as `ABCCCDDE`:
 Note: the difficulty in the `song_difficulty` field might be different from the one read from the live difficulty ID,
 because the one in `song_difficulty` is the one the game uses for timing judgement. Advanced+ songs will have a 40 in
 the live difficulty ID, but `song_difficulty` will be set to 30.
+
+## Unique Identifier
+For Free Lives, this is usually the version - if a note map is retired and replaced with a new one, this counter
+increases. One example is TOKIMEKI RUNNERS Adv+ - the original was version 1, while the currently available permanent
+one is version 2.
+
+For SBL, this marks the sub-difficulty. Beginner and Intermediate are split into three sub-difficulties identified by
+this digit, where 1 is the easiest and 3 is the hardest. Advanced does not have sub-difficulties, so there, this digit
+is always 1.
+
+For DLP and older Story Lives, this is a counter for the amount of repeats - so for example, the live with this digit
+set to 5 is the 5th occurence of this song at this difficulty across all DLPs/stories.
+
+## Live IDs for newer Story Lives
+While the Story Lives started out with the same pattern as above, at some point, Klab started just numbering them, maybe
+they thought the 1-digit unique identifier will probably run out at some point. These lives have the live ID `33XXXXXX`,
+where `XXXXXX` is simply a running counter starting at 000001. 
 
 # Notes
 `time`: Note timing, in milliseconds  
