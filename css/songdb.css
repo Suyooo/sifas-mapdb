@@ -44,6 +44,11 @@ h5 {
     flex-basis: 0;
 }
 
+.tab img {
+    height: 1.4em;
+    vertical-align: text-bottom;
+}
+
 .notebarcontainer {
     overflow-x: auto;
     overflow-y: hidden;

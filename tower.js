@@ -58,7 +58,7 @@ for (let tower_id in towerdata) {
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
-            '<b class="floorno">' + floor.floor_number + (floor.notes === null ? " *" : "") + ')</b>' +
+            '<b class="floorno">' + floor.floor_number + (floor.notes === null ? "*" : "") + ')</b>' +
             '<div class="row">' +
             '<div class="col l3"><b>' + floor.song_name + '</b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
@@ -70,7 +70,7 @@ for (let tower_id in towerdata) {
         s += '<div class="collapsible-body live-difficulty">' +
             '<div class="row nomargin"><div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div></div>' +
-            '<div class="row nomargin"><div class="col l6"><b>Note Damage: </b>' + notemap.format(floor.note_damage) +
+            '<div class="row nomargin"><div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
             ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div>' +
             '<div class="col l6"><b>Clear Reward: </b>' +
             notemap.format(floor.reward_clear["19001"]) + ' medals, ' + notemap.format(floor.reward_clear["0"]) + ' stars</div></div>' +

@@ -48,6 +48,14 @@ function difficulty(diff_id) {
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
+function difficulty_short(diff_id) {
+    if (diff_id === 10) return "Beg";
+    if (diff_id === 20) return "Int";
+    if (diff_id === 30) return "Adv";
+    if (diff_id === 40) return "Adv+";
+    throw new Error('Unknown Difficulty ' + diff_id);
+}
+
 function skill(skill) {
     return (skill.finish_type === 3 ? "" : skill_target(skill.target)) +
         skill_effect(skill.effect_type, skill.effect_amount) +
@@ -364,6 +372,7 @@ module.exports = {
     "make": make_notemap,
     "attribute": attribute,
     "difficulty": difficulty,
+    "difficulty_short": difficulty_short,
     "skill_effect": skill_effect,
     "format": format
 };
