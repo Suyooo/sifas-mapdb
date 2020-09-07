@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const CURRENT_EVENT_ID = undefined;
+const CURRENT_EVENT_ID = 20060;
 
 const fs = require('fs');
 const notemap = require('./notemap-reader.js');
@@ -29,7 +29,7 @@ let songdata = {};
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let lid = Number(f.substring(0, f.length - 5));
-        if (lid < 20000000 || lid === CURRENT_EVENT_ID) {
+        if (lid < 20000000 || Math.floor(lid / 1000) === CURRENT_EVENT_ID) {
             songdata[lid] = JSON.parse(fs.readFileSync('mapdb/' + lid + '.json'));
             live_ids.push(lid);
         } else if (lid >= 30000000 && lid < 40000000) {
@@ -81,7 +81,7 @@ for (let li = 0; li < live_ids.length; li++) {
             }
             current_tabs = "";
 
-            if (live_difficulty_id !== CURRENT_EVENT_ID) {
+            if (Math.floor(live_difficulty_id / 1000) !== CURRENT_EVENT_ID) {
                 if (live_difficulty_id >= 11000000 && last_live_id < 11000000) s += '<h5 id="aqours">Aqours</h5>';
                 if (live_difficulty_id >= 12000000 && last_live_id < 12000000) s += '<h5 id="niji">Nijigaku</h5>';
             }
@@ -93,7 +93,7 @@ for (let li = 0; li < live_ids.length; li++) {
                 '<b>' + live.song_name + '</b></div>' +
                 '<div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
         }
-        if (live_difficulty_id !== CURRENT_EVENT_ID) last_live_id = live_difficulty_id;
+        last_live_id = live_difficulty_id;
     }
 
     s += '<li class="tab"><a href="#' + live_difficulty_id + '"' +
