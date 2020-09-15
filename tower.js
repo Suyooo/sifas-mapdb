@@ -40,7 +40,7 @@ for (let tower_id in towerdata) {
     if (!towerdata.hasOwnProperty(tower_id)) continue;
     let tower = towerdata[tower_id];
 
-    s += '<h5>' + tower.name + '</h5>';
+    s += '<h5 id="tower' + tower_id + '">' + tower.name + '</h5>';
     s += '<b>Performance Points:</b> ' + tower.pp_at_start + ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br>'
     s += '<b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost + ' loveca stars<br><br>';
 
@@ -54,7 +54,7 @@ for (let tower_id in towerdata) {
             floor["appeal_chances"] = freelive["appeal_chances"];
         }
 
-        s += '<ul class="collapsible" data-floor="' + (fi + 1) + '" data-collapsible="expandable"><li>' +
+        s += '<ul class="collapsible" data-floor="' + tower_id + '-' + (fi + 1) + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
