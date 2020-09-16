@@ -31,13 +31,13 @@ fs.readdirSync("tower/.").forEach(function (f) {
     }
 });
 
-tower_ids = tower_ids.sort();
+tower_ids = tower_ids.sort().reverse();
 
 let layout = fs.readFileSync('tower.html').toString();
 let s = "";
 
-for (let tower_id in towerdata) {
-    if (!towerdata.hasOwnProperty(tower_id)) continue;
+for (let ti = 0; ti < tower_ids.length; ti++) {
+    let tower_id = tower_ids[ti];
     let tower = towerdata[tower_id];
 
     s += '<h5 id="tower' + tower_id + '">' + tower.name + '</h5>';
