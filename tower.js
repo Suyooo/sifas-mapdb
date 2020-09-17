@@ -60,7 +60,8 @@ for (let ti = 0; ti < tower_ids.length; ti++) {
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
             '<b class="floorno">' + floor.floor_number + (floor.notes === null ? "*" : "") + ')</b>' +
             '<div class="row">' +
-            '<div class="col l3"><b>' + floor.song_name + '</b></div>' +
+            '<div class="col l3"><b class="song_name" data-en="' + notemap.song_name_romaji(floor.live_difficulty_id) +
+            '"> ' +floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
             (floor.gimmick === null ? "-" :

@@ -4,6 +4,12 @@ $(function () {
     let tooltipInner = $(".tooltip-inner");
     let body = $("body");
 
+    $("#show_romaji").click(function() {
+        $(".song_name").each(function () {
+            $(this).text($(this).data("en"));
+        });
+    });
+
     $(".collapsible").each(function () {
         let collapsible = M.Collapsible.getInstance(this);
         if (IS_MAP_DB) {

@@ -90,8 +90,8 @@ for (let li = 0; li < live_ids.length; li++) {
                 '<div class="collapsible-header">' +
                 '<img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" ' +
                 'alt="' + notemap.attribute(live.song_attribute) + '">' +
-                '<b>' + live.song_name + '</b></div>' +
-                '<div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
+                '<b class="song_name" data-en="' + notemap.song_name_romaji(live_difficulty_id) + '">' + live.song_name +
+                '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
         }
         last_live_id = live_difficulty_id;
     }

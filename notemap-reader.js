@@ -56,6 +56,112 @@ function difficulty_short(diff_id) {
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
+
+function song_name_romaji(live_id) {
+    let lid = ("" + live_id).substring(1, 5);
+
+    // µ's
+    if (lid === "0001") return "Sore wa Bokutachi no Kiseki";
+    if (lid === "0002") return "START:DASH!!";
+    if (lid === "0014") return "Arashi no Naka no Koi dakara";
+    if (lid === "0011") return "Snow Halation";
+    if (lid === "0016") return "Bokura wa Ima no Naka de";
+    if (lid === "0013") return "Music S.T.A.R.T!!";
+    if (lid === "0008") return "Bokura no LIVE Kimi to no LIFE";
+    if (lid === "0003") return "Natsuiro Egao de 1,2,Jump!";
+    if (lid === "0017") return "HEART to HEART!";
+    if (lid === "0062") return "Yume no Tobira";
+    if (lid === "0037") return "Wonder zone";
+    if (lid === "0012") return "Wonderful Rush";
+    if (lid === "0036") return "No brand girls";
+    if (lid === "0118") return "A song for You! You? You!!";
+    if (lid === "0010") return "LOVELESS WORLD";
+    if (lid === "0060") return "Donna Toki mo Zutto";
+    if (lid === "0005") return "PSYCHIC FIRE";
+    if (lid === "0004") return "Shunjou Romantic";
+    if (lid === "0015") return "NO EXIT ORION";
+    if (lid === "0059") return "Someday of my life";
+    if (lid === "0061") return "Arifureta Kanashimi no Hate";
+    if (lid === "0064") return "Blueberry ♡ Train";
+    if (lid === "0067") return "Yuuki no Reason";
+    if (lid === "0070") return "Koi no Signal RIN RIN RIN!";
+    if (lid === "0066") return "Daring!!";
+    if (lid === "0073") return "Junai Lens";
+    if (lid === "0054") return "Kodoku na Heaven";
+    if (lid === "0076") return "Mahoutsukai Hajimemashita!";
+
+    // Aqours
+    if (lid === "1007") return "Mirai no Bokura wa Shitteru yo";
+    if (lid === "1001") return "Kimi no Kokoro wa Kagayaiteru kai?";
+    if (lid === "1002") return "Aozora Jumping Heart";
+    if (lid === "1014") return "KOKORO Magic &quot;A to Z&quot;";
+    if (lid === "1008") return "HAPPY PARTY TRAIN";
+    if (lid === "1012") return "Thrilling • One Way";
+    if (lid === "1003") return "Step! ZERO to ONE";
+    if (lid === "1011") return "SKY JOURNEY";
+    if (lid === "1078") return "Wake up, Challenger!!";
+    if (lid === "1015") return "Brightest Melody";
+    if (lid === "1009") return "Koi ni Naritai AQUARIUM";
+    if (lid === "1085") return "Fantastic Departure!";
+    if (lid === "1084") return "JIMO-AI Dash!";
+    if (lid === "1013") return "MIRACLE WAVE";
+    if (lid === "1005") return "Torikoriko PLEASE!!";
+    if (lid === "1044") return "GALAXY HidE and SeeK";
+    if (lid === "1004") return "Genki Zenkai DAY!DAY!DAY!";
+    if (lid === "1042") return "Kinmirai Happy End";
+    if (lid === "1006") return "Strawberry Trapper";
+    if (lid === "1046") return "Kowareyasuki";
+    if (lid === "1059") return "One More Sunshine Story";
+    if (lid === "1065") return "Pianoforte Monologue";
+    if (lid === "1070") return "Sakana ka Nanda ka?";
+    if (lid === "1067") return "WHITE FIRST LOVE";
+    if (lid === "1066") return "Beginner's Sailing";
+    if (lid === "1064") return "in this unstable world";
+    if (lid === "1062") return "Oyasuminasan!";
+    if (lid === "1069") return "New winding road";
+    if (lid === "1068") return "RED GEM WINK";
+
+    // Nijigaku
+    if (lid === "2001") return "TOKIMEKI Runners";
+    if (lid === "2020") return "Love U my friends";
+    if (lid === "2034") return "TOKIMEKI Runners (Chapter 17 Ver.)";
+    if (lid === "2053") return "Just Believe!!!";
+    if (lid === "2031") return "SUPER NOVA";
+    if (lid === "2032") return "Dream Land! Dream World!";
+    if (lid === "2033") return "Sing & Smile!!";
+    if (lid === "2002") return "Yume e no Ippo";
+    if (lid === "2011") return "Kaika Sengen";
+    if (lid === "2021") return "Say Good-Bye Namida";
+    if (lid === "2003") return "Diamond";
+    if (lid === "2012") return "☆Wonderland☆";
+    if (lid === "2039") return "Mutekikyuu * Believer";
+    if (lid === "2022") return "Margaret";
+    if (lid === "2004") return "Anata no Risou no Heroine";
+    if (lid === "2013") return "Audrey";
+    if (lid === "2023") return "Yagate Hitotsu no Monogatari";
+    if (lid === "2005") return "Starlight";
+    if (lid === "2014") return "Wish";
+    if (lid === "2024") return "Fire Bird";
+    if (lid === "2006") return "Meccha Going!!";
+    if (lid === "2015") return "Yuu & Ai";
+    if (lid === "2025") return "Tanoshii no Tensai";
+    if (lid === "2007") return "Nemureru Mori ni Ikitai na";
+    if (lid === "2016") return "My Own Fairy-Tale";
+    if (lid === "2026") return "Märchen Star";
+    if (lid === "2008") return "CHASE!";
+    if (lid === "2017") return "MELODY";
+    if (lid === "2027") return "LIKE IT! LOVE IT!";
+    if (lid === "2009") return "Evergreen";
+    if (lid === "2018") return "Koe Tsunagou yo";
+    if (lid === "2028") return "Aion no Uta";
+    if (lid === "2010") return "Dokipipo ☆ Emotion";
+    if (lid === "2019") return "Tereterepathy";
+    if (lid === "2029") return "Analog Heart";
+    if (lid === "2030") return "Ketsui no Hikari";
+
+    throw new Error('Unknown English Song Name for ' + live_id);
+}
+
 function skill(skill) {
     return (skill.finish_type === 3 ? "" : skill_target(skill.target)) +
         skill_effect(skill.effect_type, skill.effect_amount) +
@@ -374,5 +480,6 @@ module.exports = {
     "difficulty": difficulty,
     "difficulty_short": difficulty_short,
     "skill_effect": skill_effect,
-    "format": format
+    "format": format,
+    "song_name_romaji": song_name_romaji
 };
