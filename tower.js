@@ -70,13 +70,13 @@ for (let ti = 0; ti < tower_ids.length; ti++) {
             '</div></div>';
         s += '<div class="collapsible-body live-difficulty">' +
             '<div class="row nomargin"><div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
-            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div></div>' +
-            '<div class="row nomargin"><div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
-            ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div>' +
+            '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
             '<div class="col l6"><b>Clear Reward: </b>' +
-            notemap.format(floor.reward_clear["19001"]) + ' medals, ' + notemap.format(floor.reward_clear["0"]) + ' stars</div></div>' +
-            '<div class="row nomargin"><div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
-            '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div></div>';
+            notemap.format(floor.reward_clear["19001"]) + ' medals, ' + notemap.format(floor.reward_clear["0"]) + ' stars</div>' +
+            '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
+            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
+            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
+            ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div></div>';
 
         s += notemap.make(floor);
 
