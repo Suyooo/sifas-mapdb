@@ -289,7 +289,8 @@ function make_notemap(live) {
         // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
         let total_time = (lastnote_time - firstnote_time) / 98 * 100;
 
-        let totalacnotes = 0;
+        let total_ac_notes = 0;
+        let total_ac_rewards = 0;
         for (let ai = 0; ai < live.appeal_chances.length; ai++) {
             let ac = live.appeal_chances[ai];
             let start = live.notes[ac.range_note_ids[0]].time;
@@ -299,12 +300,15 @@ function make_notemap(live) {
                 'left: ' + ((start - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '%;' +
                 'width: ' + (length / (lastnote_time - firstnote_time) * 98) + '%;">' +
                 '&nbsp;</div>';
-            totalacnotes += ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
+            total_ac_notes += ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
+            total_ac_rewards += ac.reward_voltage;
         }
 
         let stacker_global = [];
         let stacker_seperate = [];
-        for (let gi = 0; gi < live.note_gimmicks.length; gi++) stacker_seperate.push([]);
+        for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
+            stacker_seperate.push([]);
+        }
         for (let ni = 0; ni < live.notes.length; ni++) {
             let note = live.notes[ni];
 
@@ -322,6 +326,7 @@ function make_notemap(live) {
             if (note.gimmick !== null) {
                 if (live.note_gimmicks[note.gimmick].counter === undefined) live.note_gimmicks[note.gimmick].counter = 1;
                 else live.note_gimmicks[note.gimmick].counter += 1;
+
                 let marker_position = ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1);
 
                 let stack_layer_global = 0;
@@ -358,15 +363,19 @@ function make_notemap(live) {
                 }
                 s += '</div>';
             }
-            if ((ni+1) % 5 === 0) {
-                s += '<div class="marker' + ((ni+1) % 50 === 0 ? ' fifty' : '') + ((ni+1) % 10 !== 0 ? ' five' : '') +
+            if ((ni + 1) % 5 === 0) {
+                s += '<div class="marker' + ((ni + 1) % 50 === 0 ? ' fifty' : '') + ((ni + 1) % 10 !== 0 ? ' five' : '') +
                     '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1em);">' +
-                    '|<br>' + (((ni+1) % 10 === 0) ? format(ni+1) : "&nbsp;") + '</div>';
+                    '|<br>' + (((ni + 1) % 10 === 0) ? format(ni + 1) : "&nbsp;") + '</div>';
             }
         }
 
+        let total_note_damage = live.notes.length * live.note_damage + total_ac_notes * Math.floor(live.note_damage / 10);
+
         s += '</div></div><div class="row"><div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
-            '<div class="col l6"><b>Notes in ACs: </b>' + format(totalacnotes) + '</div></div>';
+            '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
+            '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + '</div>' +
+            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div></div>';
         s = '<div class="notebarcontainer"><div class="notebar" style="--gimmicklayers: ' + stacker_global.length + '"' +
             'data-totaltime="' + total_time + '">' + s;
     } else {
