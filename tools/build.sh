@@ -21,7 +21,7 @@ done
 echo "Copy Library CSS..."
 for F in vendor/*.css; do
     echo "    ${F}"
-    purifycss ${F} index.html tower.html notemap-reader.js js/mapdb.js vendor/materialize.js -m -o build/${F}
+    purifycss ${F} index.html tower.html notemap-reader.js mapdb.js tower.js js/mapdb.js vendor/materialize.js -m -o build/${F}
 done
 
 echo "Minify Javascript..."
@@ -35,7 +35,7 @@ echo "Minify CSS..."
 mkdir build/css
 for F in css/*.css; do
     echo "    ${F}"
-    purifycss ${F} index.html tower.html notemap-reader.js js/mapdb.js vendor/materialize.js -m -o build/${F}
+    purifycss ${F} index.html tower.html notemap-reader.js mapdb.js tower.js js/mapdb.js vendor/materialize.js -m -o build/${F}
 done
 
 echo "Build DLP page..."
