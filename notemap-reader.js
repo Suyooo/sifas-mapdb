@@ -94,7 +94,7 @@ function song_name_romaji(live_id) {
     if (lid === "1007") return "Mirai no Bokura wa Shitteru yo";
     if (lid === "1001") return "Kimi no Kokoro wa Kagayaiteru kai?";
     if (lid === "1002") return "Aozora Jumping Heart";
-    if (lid === "1014") return "KOKORO Magic &quot;A to Z&quot;";
+    if (lid === "1014") return "KOKORO Magic “A to Z”";
     if (lid === "1008") return "HAPPY PARTY TRAIN";
     if (lid === "1012") return "Thrilling • One Way";
     if (lid === "1003") return "Step! ZERO to ONE";
