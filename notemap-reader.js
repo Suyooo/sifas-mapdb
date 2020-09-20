@@ -84,7 +84,7 @@ function song_name_romaji(live_id) {
     if (lid === "0061") return "Arifureta Kanashimi no Hate";
     if (lid === "0064") return "Blueberry ♡ Train";
     if (lid === "0067") return "Yuuki no Reason";
-    if (lid === "0070") return "Koi no Signal RIN RIN RIN!";
+    if (lid === "0070") return "Koi no Signal Rin rin rin!";
     if (lid === "0066") return "Daring!!";
     if (lid === "0073") return "Junai Lens";
     if (lid === "0054") return "Kodoku na Heaven";
