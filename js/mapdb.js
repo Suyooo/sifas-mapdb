@@ -78,6 +78,10 @@ $(function () {
             };
         }
 
+        collapsible.options.onCloseStart = function () {
+            window.location.hash = "";
+        };
+
         $(".live-difficulty", this).each(function () {
             let selecting = false;
             // note measure
