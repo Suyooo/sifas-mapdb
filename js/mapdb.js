@@ -6,8 +6,15 @@ $(function () {
 
     $("#show_romaji").click(function() {
         $(".song_name").each(function () {
-            $(this).text($(this).data("en"));
+            let new_title = $(this).data("en");
+            $(this).data("en",$(this).text());
+            $(this).text(new_title);
         });
+        if ($(this).text() === "click to show original song names") {
+            $(this).text("click to show romanized song names")
+        } else {
+            $(this).text("click to show original song names");
+        }
     });
 
     $(".collapsible").each(function () {
