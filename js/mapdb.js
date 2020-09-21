@@ -79,7 +79,7 @@ $(function () {
         }
 
         collapsible.options.onCloseStart = function () {
-            window.location.hash = "";
+            window.location.hash = "_";
         };
 
         $(".live-difficulty", this).each(function () {
