@@ -98,10 +98,10 @@ for (let li = 0; li < live_ids.length; li++) {
 
     s += '<li class="tab"><a href="#' + live_difficulty_id + '"' +
         (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>' +
-        (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "STORY " +
-            notemap.difficulty_short(live.song_difficulty) + ' <img src="image/icon_' +
-            notemap.attribute(live.song_attribute) + '.png" alt="' +
-            notemap.attribute(live.song_attribute) + '">') + '</a></li>';
+        (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "STORY " + live.extra_info.story_chapter +
+            '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short(live.song_difficulty) +
+            ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
+            notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
 
     current_tabs += '<div class="live-difficulty" id="' + live_difficulty_id + '">' +
         '<div class="row nomargin"><div class="col l6"><b>S Rank: </b>' + notemap.format(live.ranks.S) + '</div>' +
