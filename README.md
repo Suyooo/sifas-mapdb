@@ -23,7 +23,7 @@ The live difficulty ID can be read as `ABCCCDDE`:
 ## Live type
 - 1: Free Live
 - 2: Event Songs (the pre-release no-attribute versions)
-- 3: Story Live
+- 3: Story Stage
 - 4: Sukusuta Big Live
 - 5: Dream Live Parade
 
@@ -60,13 +60,29 @@ For SBL, this marks the sub-difficulty. Beginner and Intermediate are split into
 this digit, where 1 is the easiest and 3 is the hardest. Advanced does not have sub-difficulties, so there, this digit
 is always 1.
 
-For DLP and older Story Lives, this is a counter for the amount of repeats - so for example, the live with this digit
+For DLP and older Story Stages, this is a counter for the amount of repeats - so for example, the live with this digit
 set to 5 is the 5th occurence of this song at this difficulty across all DLPs/stories.
 
-## Live IDs for newer Story Lives
-While the Story Lives started out with the same pattern as above, at some point, Klab started just numbering them, maybe
-they thought the 1-digit unique identifier will probably run out at some point. These lives have the live ID `33XXXXXX`,
-where `XXXXXX` is simply a running counter starting at 000001. 
+## Live IDs for newer Story Stages
+While the Story Stages started out with the same pattern as above, at some point, Klab started just numbering them,
+maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the live ID
+`33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001.
+
+# Extra Info
+Depending on the Live Type (see above), additional info may be included in the `extra_info` object in the JSON root.
+
+## Story Stage
+`story_chapter`: The number of the Chapter this Stage appears in (starting from 1, as in-game)  
+`story_stage`: Counter for which Stage in the Chapter this is (starting from 1)  
+`story_is_super_stage`: Whether this Stage is the final Stage in the respective Chapter or not
+
+## SBL Live
+`sbl_event_id`: An unique identifier for which SBL Event this Live appeared in  
+`sbl_slot`: Which slot the Live was shown in the respective SBL's home page (starting from 1)
+
+## DLP Live
+`dlp_tower_id`: An unique identifier for which DLP Tower this Live appeared in  
+`dlp_floor`: Which floor this Live was played on in the respective DLP tower (starting from 1, as in-game)
 
 # Notes
 `time`: Note timing, in milliseconds  
