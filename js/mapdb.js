@@ -63,7 +63,9 @@ $(function () {
             // materialize doesn't set indicator positions inside hidden elements, so we'll do it ourselves on open
             // we can also use it to set the location anchor to link to that live difficulty
             collapsible.options.onOpenStart = function () {
-                fixTabIndicator($(".tabs", this.el)[0]);
+                let tabelement = $(".tabs", this.el)[0];
+                fixTabIndicator(tabelement);
+                let activetablink = $(".active", tabelement);
 
                 if (activetablink.attr("href").endsWith("story")) {
                     window.location.hash = "live" + $(".active", "#" + activetablink.attr("href").substring(1)).attr("href").substring(1);
