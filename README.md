@@ -13,12 +13,14 @@ I don't have any songs where a certain effect appears I don't have it added. Fee
 putting confirmed ones here)
 
 # Live Difficulty
-The live difficulty ID can be read as `ABCCCDDE`:  
+The Live Difficulty ID can be read as `ABCCCDDE`:  
 `A`: Live type, see below  
 `B`: Group, see below  
 `CCC`: Song ID  
 `DD`: (Real) Difficulty, see below  
 `E`: Unique Identifier
+
+`ABCCC` uniquely defines which song the live difficulty belongs to, and is called the Live ID.
 
 ## Live type
 - 1: Free Live
@@ -63,10 +65,10 @@ is always 1.
 For DLP and older Story Stages, this is a counter for the amount of repeats - so for example, the live with this digit
 set to 5 is the 5th occurence of this song at this difficulty across all DLPs/stories.
 
-## Live IDs for newer Story Stages
+## Live Difficulty IDs for newer Story Stages
 While the Story Stages started out with the same pattern as above, at some point, Klab started just numbering them,
-maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the live ID
-`33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001.
+maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
+Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001.
 
 # Extra Info
 Depending on the Live Type (see above), additional info may be included in the `extra_info` object in the JSON root.
