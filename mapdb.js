@@ -75,23 +75,26 @@ lives.forEach(function (live) {
         '<b class="song_name" data-en="' + notemap.song_name_romaji(live.id) + '">' + live.name +
         '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
 
+    let live_tabbar = "";
     let live_tabs = "";
+    let story_tabbar = "";
+    let story_tabs = "";
 
     live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
         let live = songdata[live_difficulty_id];
         let diff_id = Math.floor(live_difficulty_id % 1000 / 10);
 
-        s += '<li class="tab"><a href="#' + live_difficulty_id + '"' +
+        let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
             // Mark the Advanced difficulty as the initially open tab
             (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>' +
 
             // Full difficulty name for free lives, shortened difficulty plus location and attribute for story stages
-            (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "STORY " + live.extra_info.story_chapter +
+            (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "CHAPTER " + live.extra_info.story_chapter +
                 '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short(live.song_difficulty) +
                 ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
                 notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
 
-        let this_tab = '<div class="live-difficulty" id="' + live_difficulty_id + '">' + '<div class="row nomargin">' +
+        let this_tab = '<div class="live-difficulty" id="' + live_difficulty_id + '"><div class="row nomargin">' +
 
             // Top information
             '<div class="col l6"><b>S Rank: </b>' + notemap.format(live.ranks.S) + '</div>' +
@@ -104,10 +107,22 @@ lives.forEach(function (live) {
             // Create the note map
             notemap.make(live) + '</div>';
 
-        live_tabs += this_tab;
+        if (live_difficulty_id >= 30000000 && live_difficulty_id < 40000000) {
+            story_tabbar += this_tabbar;
+            story_tabs += this_tab;
+        } else {
+            live_tabbar += this_tabbar;
+            live_tabs += this_tab;
+        }
     });
 
-    s += '</ul>' + live_tabs + '</div></li></ul>';
+    if (story_tabs.length > 0) {
+        s += live_tabbar + '<li class="tab"><a href="#' + live.id + '-story">STORY STAGES</a></li></ul>' +
+            live_tabs + '<div id="' + live.id + '-story"><ul class="tabs tabs-transparent tabs-fixed-width">' +
+            story_tabbar + '</ul>' + story_tabs + '</div></div></li></ul>';
+    } else {
+        s += live_tabbar + '</ul>' + live_tabs + '</div></li></ul>';
+    }
 });
 
 fs.writeFile('build/index.html', minify(layout.replace("$SONGDB", s), {
