@@ -16,104 +16,99 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const CURRENT_EVENT_ID = 20060;
+const CURRENT_EVENT_LIVE_ID = 20060;
 
 const fs = require('fs');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 
-let live_ids = [];
-let story_ids = {};
+let lives = [];
+let live_difficulty_ids = {};
 let songdata = {};
 
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
-        let lid = Number(f.substring(0, f.length - 5));
-        if (lid < 20000000 || Math.floor(lid / 1000) === CURRENT_EVENT_ID) {
-            songdata[lid] = JSON.parse(fs.readFileSync('mapdb/' + lid + '.json'));
-            live_ids.push(lid);
-        } else if (lid >= 30000000 && lid < 40000000) {
-            songdata[lid] = JSON.parse(fs.readFileSync('mapdb/' + lid + '.json'));
-            if (!story_ids.hasOwnProperty(songdata[lid].song_name)) {
-                story_ids[songdata[lid].song_name] = [];
-            }
-            story_ids[songdata[lid].song_name].push(lid);
+        let ldid = Number(f.substring(0, f.length - 5));
+        if ((Math.floor(ldid / 1000) !== CURRENT_EVENT_LIVE_ID) && // Not an Event Variant
+            (ldid < 30000000 || ldid >= 40000000) &&                  // Not a Story Stage
+            ldid >= 20000000) {                                       // Not a Free Live
+            // ignore
+            return;
         }
+
+        songdata[ldid] = JSON.parse(fs.readFileSync('mapdb/' + f));
+        let lid = songdata[ldid].live_id;
+        if (!live_difficulty_ids.hasOwnProperty(lid)) {
+            live_difficulty_ids[lid] = [];
+            lives.push({
+                "id": lid,
+                "order": songdata[ldid].display_order,
+                "name": songdata[ldid].song_name,
+                "attribute": songdata[ldid].song_attribute
+            });
+        }
+        live_difficulty_ids[lid].push(ldid);
     }
 });
 
-live_ids = live_ids.sort(function (a, b) {
-    let do_comp = songdata[a].display_order - songdata[b].display_order;
-
-    // same live id => sort by difficulty id, which results in a sort by difficulty
-    if (do_comp !== 0) return do_comp;
-    else return a - b;
+lives = lives.sort(function (a, b) {
+    return a.order - b.order;
 });
-
-for (let li = live_ids.length - 1; li >= 0; li--) {
-    let song_name = songdata[live_ids[li]].song_name;
-    // add story songs into list at the right index (after Free Live)
-    if (story_ids.hasOwnProperty(song_name)) {
-        for (let si = 0; si < story_ids[song_name].length; si++) {
-            live_ids.splice(li + 1, 0, story_ids[song_name][si]);
-            li++;
-        }
-        delete story_ids[song_name];
-    }
-}
+lives.forEach(function (e) {
+    live_difficulty_ids[e.id] = live_difficulty_ids[e.id].sort();
+});
 
 let layout = fs.readFileSync('index.html').toString();
 let s = '<h5 id="muse">µ\'s</h5>'
 
 let last_live_id = 0;
-let current_tabs = "";
-for (let li = 0; li < live_ids.length; li++) {
-    let live_difficulty_id = live_ids[li];
-    let live = songdata[live_difficulty_id];
-    let diff_id = Math.floor(live_difficulty_id % 1000 / 10);
+lives.forEach(function (live) {
+    // start new section if the next group is up
+    if (live.id >= 11000 && last_live_id < 11000) s += '<h5 id="aqours">Aqours</h5>';
+    if (live.id >= 12000 && last_live_id < 12000) s += '<h5 id="niji">Nijigaku</h5>';
+    last_live_id = live.id;
 
-    // new song begins
-    if (live_difficulty_id < 30000000) {
-        if (Math.floor(live_difficulty_id / 1000) != Math.floor(last_live_id / 1000)) {
-            if (li > 0) {
-                // end the previous dropdown if we're not at the first song
-                s += '</ul>' + current_tabs + '</div></li></ul>';
-            }
-            current_tabs = "";
+    s += '<ul class="collapsible" data-collapsible="expandable"><li>' +
+        '<div class="collapsible-header">' +
+        '<img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
+        'alt="' + notemap.attribute(live.attribute) + '">' +
+        '<b class="song_name" data-en="' + notemap.song_name_romaji(live.id) + '">' + live.name +
+        '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
 
-            if (Math.floor(live_difficulty_id / 1000) !== CURRENT_EVENT_ID) {
-                if (live_difficulty_id >= 11000000 && last_live_id < 11000000) s += '<h5 id="aqours">Aqours</h5>';
-                if (live_difficulty_id >= 12000000 && last_live_id < 12000000) s += '<h5 id="niji">Nijigaku</h5>';
-            }
+    let live_tabs = "";
 
-            s += '<ul class="collapsible" data-collapsible="expandable"><li>' +
-                '<div class="collapsible-header">' +
-                '<img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" ' +
-                'alt="' + notemap.attribute(live.song_attribute) + '">' +
-                '<b class="song_name" data-en="' + notemap.song_name_romaji(live_difficulty_id) + '">' + live.song_name +
-                '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
-        }
-        last_live_id = live_difficulty_id;
-    }
+    live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
+        let live = songdata[live_difficulty_id];
+        let diff_id = Math.floor(live_difficulty_id % 1000 / 10);
 
-    s += '<li class="tab"><a href="#' + live_difficulty_id + '"' +
-        (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>' +
-        (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "STORY " + live.extra_info.story_chapter +
-            '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short(live.song_difficulty) +
-            ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
-            notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
+        s += '<li class="tab"><a href="#' + live_difficulty_id + '"' +
+            // Mark the Advanced difficulty as the initially open tab
+            (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>' +
 
-    current_tabs += '<div class="live-difficulty" id="' + live_difficulty_id + '">' +
-        '<div class="row nomargin"><div class="col l6"><b>S Rank: </b>' + notemap.format(live.ranks.S) + '</div>' +
-        '<div class="col l6"><b>A Rank: </b>' + notemap.format(live.ranks.A) + '</div>' +
-        '<div class="col l6"><b>B Rank: </b>' + notemap.format(live.ranks.B) + '</div>' +
-        '<div class="col l6"><b>C Rank: </b>' + notemap.format(live.ranks.C) + '</div>' +
-        '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live.recommended_stamina) + '</div>' +
-        '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live.note_damage) + '</div></div>';
+            // Full difficulty name for free lives, shortened difficulty plus location and attribute for story stages
+            (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "STORY " + live.extra_info.story_chapter +
+                '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short(live.song_difficulty) +
+                ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
+                notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
 
-    current_tabs += notemap.make(live) + '</div>';
-}
-s += '</ul>' + current_tabs + '</div></li></ul>';
+        let this_tab = '<div class="live-difficulty" id="' + live_difficulty_id + '">' + '<div class="row nomargin">' +
+
+            // Top information
+            '<div class="col l6"><b>S Rank: </b>' + notemap.format(live.ranks.S) + '</div>' +
+            '<div class="col l6"><b>A Rank: </b>' + notemap.format(live.ranks.A) + '</div>' +
+            '<div class="col l6"><b>B Rank: </b>' + notemap.format(live.ranks.B) + '</div>' +
+            '<div class="col l6"><b>C Rank: </b>' + notemap.format(live.ranks.C) + '</div>' +
+            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live.recommended_stamina) + '</div>' +
+            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live.note_damage) + '</div></div>' +
+
+            // Create the note map
+            notemap.make(live) + '</div>';
+
+        live_tabs += this_tab;
+    });
+
+    s += '</ul>' + live_tabs + '</div></li></ul>';
+});
 
 fs.writeFile('build/index.html', minify(layout.replace("$SONGDB", s), {
         collapseWhitespace: true

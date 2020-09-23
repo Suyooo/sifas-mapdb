@@ -36,40 +36,33 @@ tower_ids = tower_ids.sort().reverse();
 let layout = fs.readFileSync('tower.html').toString();
 let s = "";
 
-for (let ti = 0; ti < tower_ids.length; ti++) {
-    let tower_id = tower_ids[ti];
+tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
 
     s += '<h5 id="tower' + tower_id + '">' + tower.name + '</h5>';
     s += '<b>Performance Points:</b> ' + tower.pp_at_start + ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br>'
     s += '<b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost + ' loveca stars<br><br>';
 
-    for (let fi = 0; fi < tower["floors"].length; fi++) {
-        let floor = tower["floors"][fi];
-        if (floor["notemap_live_difficulty_id"] !== null) {
-            let freelive = JSON.parse(fs.readFileSync('mapdb/' + floor["notemap_live_difficulty_id"] + '.json'));
-            floor["notes"] = freelive["notes"];
-            floor["gimmick"] = freelive["gimmick"];
-            floor["note_gimmicks"] = freelive["note_gimmicks"];
-            floor["appeal_chances"] = freelive["appeal_chances"];
-        }
-
-        s += '<ul class="collapsible" data-floor="' + tower_id + '-' + (fi + 1) + '" data-collapsible="expandable"><li>' +
+    tower["floors"].forEach(function (floor) {
+        s += '<ul class="collapsible" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
             '<b class="floorno">' + floor.floor_number + (floor.notes === null ? "*" : "") + ')</b>' +
             '<div class="row">' +
-            '<div class="col l3"><b class="song_name" data-en="' + notemap.song_name_romaji(floor.live_difficulty_id) +
-            '"> ' +floor.song_name + ' </b></div>' +
+
+            // Header information
+            '<div class="col l3"><b class="song_name" data-en="' + notemap.song_name_romaji(floor.live_id) +
+            '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
             (floor.gimmick === null ? "-" :
                 notemap.skill_effect(floor.gimmick.effect_type, 0).indexOf("Base") === -1 ? "Yes" : "No") + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
-            '</div></div>';
-        s += '<div class="collapsible-body live-difficulty">' +
-            '<div class="row nomargin"><div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
+            '</div></div><div class="collapsible-body live-difficulty"><div class="row nomargin">' +
+
+            // Top information
+            '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
             '<div class="col l6"><b>Clear Reward: </b>' +
             notemap.format(floor.reward_clear["19001"]) + ' medals, ' + notemap.format(floor.reward_clear["0"]) + ' stars</div>' +
@@ -78,7 +71,13 @@ for (let ti = 0; ti < tower_ids.length; ti++) {
             '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
             ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div></div>';
 
-        s += notemap.make(floor);
+        // Load referenced note map if available
+        if (floor["notemap_live_difficulty_id"] !== null) {
+            let live = JSON.parse(fs.readFileSync('mapdb/' + floor["notemap_live_difficulty_id"] + '.json'));
+            s += notemap.make(live);
+        } else {
+            s += notemap.make(floor);
+        }
 
         s += '</div></li></ul>';
 
@@ -88,8 +87,8 @@ for (let ti = 0; ti < tower_ids.length; ti++) {
         } else {
             s += '<div class="progress">&nbsp;</div>';
         }
-    }
-}
+    });
+});
 
 fs.writeFile('build/tower.html', minify(layout.replace("$TOWER", s), {
         collapseWhitespace: true
