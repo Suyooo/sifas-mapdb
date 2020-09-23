@@ -1,13 +1,23 @@
+function fixTabIndicator(tabelement) {
+    let activetablink = $(".active", tabelement);
+    let activetab = activetablink.parent();
+    let alltabs = activetab.parent().children();
+    let tabindex = alltabs.index(activetab);
+    let tabwidth = 100 / (alltabs.length - 1);
+    $(".indicator", tabelement).css("left", (tabwidth * tabindex) + "%")
+        .css("right", (tabwidth * (-tabindex + alltabs.length - 2)) + "%");
+}
+
 $(function () {
     M.AutoInit();
     let tooltip = $(".tooltip");
     let tooltipInner = $(".tooltip-inner");
     let body = $("body");
 
-    $("#show_romaji").click(function() {
+    $("#show_romaji").click(function () {
         $(".song_name").each(function () {
             let new_title = $(this).data("en");
-            $(this).data("en",$(this).text());
+            $(this).data("en", $(this).text());
             $(this).text(new_title);
         });
         if ($(this).text() === "click to show original song names") {
@@ -22,7 +32,9 @@ $(function () {
         if (IS_MAP_DB) {
             // notemap database
             let tabs = $(".tabs", this);
+            let story_tabs = undefined;
             if (tabs.length === 0) return true; // page help collapsible
+            if (tabs.length > 1) story_tabs = M.Tabs.getInstance(tabs[1]);
             tabs = M.Tabs.getInstance(tabs[0]);
 
             if (window.location.hash.startsWith("#live")) {
@@ -35,7 +47,15 @@ $(function () {
                         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
                     }, 300);
                     collapsible.open();
-                    tabs.select(tabId);
+                    if (tabId.startsWith("3")) {
+                        // this is a Story Stage - open up the parent tab
+                        console.log("select outer 1" + tabId.substring(1, 5) + "-story");
+                        tabs.select($(this).data("live-id") + "-story");
+                        console.log("select inner " + tabId);
+                        story_tabs.select(tabId);
+                    } else {
+                        tabs.select(tabId);
+                    }
                     window.scrollTo(0, $(this).offset().top);
                 }
             }
@@ -43,20 +63,29 @@ $(function () {
             // materialize doesn't set indicator positions inside hidden elements, so we'll do it ourselves on open
             // we can also use it to set the location anchor to link to that live difficulty
             collapsible.options.onOpenStart = function () {
-                let tabelements = $(".tabs", this.el)[0];
-                let activetablink = $(".active", tabelements);
-                let activetab = activetablink.parent();
-                let alltabs = activetab.parent().children();
-                let tabindex = alltabs.index(activetab);
-                let tabwidth = 100 / (alltabs.length - 1);
-                $(".indicator", tabelements).css("left", (tabwidth * tabindex) + "%")
-                    .css("right", (tabwidth * (-tabindex + alltabs.length - 2)) + "%");
-                window.location.hash = "live" + activetablink.attr("href").substring(1);
+                fixTabIndicator($(".tabs", this.el)[0]);
+
+                if (activetablink.attr("href").endsWith("story")) {
+                    window.location.hash = "live" + $(".active", "#" + activetablink.attr("href").substring(1)).attr("href").substring(1);
+                } else {
+                    window.location.hash = "live" + activetablink.attr("href").substring(1);
+                }
             };
 
             tabs.options.onShow = function (e) {
-                window.location.hash = "live" + $(e).attr("id");
+                if ($(e).attr("id").endsWith("story")) {
+                    fixTabIndicator($(".tabs", e)[0]);
+                    window.location.hash = "live" + $(".active", e).attr("href").substring(1);
+                } else {
+                    window.location.hash = "live" + $(e).attr("id");
+                }
             };
+
+            if (story_tabs !== undefined) {
+                story_tabs.options.onShow = function (e) {
+                    window.location.hash = "live" + $(e).attr("id");
+                };
+            }
         } else {
             // DLP Stage List
 

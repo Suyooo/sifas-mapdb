@@ -68,7 +68,7 @@ lives.forEach(function (live) {
     if (live.id >= 12000 && last_live_id < 12000) s += '<h5 id="niji">Nijigaku</h5>';
     last_live_id = live.id;
 
-    s += '<ul class="collapsible" data-collapsible="expandable"><li>' +
+    s += '<ul class="collapsible" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header">' +
         '<img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
