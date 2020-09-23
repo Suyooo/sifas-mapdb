@@ -20,7 +20,7 @@ The Live Difficulty ID can be read as `ABCCCDDE`:
 `DD`: (Real) Difficulty, see below  
 `E`: Unique Identifier
 
-`ABCCC` uniquely defines which song the live difficulty belongs to, and is called the Live ID.
+`1BCCC` uniquely defines which song the live difficulty belongs to, and is called the Live ID.
 
 ## Live type
 - 1: Free Live
