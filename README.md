@@ -66,9 +66,12 @@ For DLP and older Story Stages, this is a counter for the amount of repeats - so
 set to 5 is the 5th occurence of this song at this difficulty across all DLPs/stories.
 
 ## Live Difficulty IDs for newer Story Stages
-While the Story Stages started out with the same pattern as above, at some point, Klab started just numbering them,
-maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
+While the Story Stages started out with the same pattern as above, from Chapter 8 on, Klab started just numbering them.
+Maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
 Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001.
+
+Note that after the amount of Story Stages in older chapters was reduced in version 2.0, these counters were not
+changed, so there are missing numbers if going through all the Story Stages.
 
 # Extra Info
 Depending on the Live Type (see above), additional info may be included in the `extra_info` object in the JSON root.
