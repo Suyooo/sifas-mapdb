@@ -48,7 +48,7 @@ tower_ids.forEach(function (tower_id) {
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
-            '<b class="floorno">' + floor.floor_number + (floor.notes === null ? "*" : "") + ')</b>' +
+            '<b class="floorno">' + floor.floor_number + (floor.notemap_live_difficulty_id === null ? "*" : "") + ')</b>' +
             '<div class="row">' +
 
             // Header information
