@@ -376,3 +376,7 @@ h5 {
 .dark-mode .a.elegant {
     color: #de94ff;
 }
+
+.dark-mode .light-blue.lighten-5 {
+    background-color: #006ece !important;
+}
