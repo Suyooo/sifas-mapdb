@@ -105,6 +105,7 @@ function song_name_romaji(live_id) {
     if (lid === "1085") return "Fantastic Departure!";
     if (lid === "1084") return "JIMO-AI Dash!";
     if (lid === "1013") return "MIRACLE WAVE";
+    if (lid === "1079") return "Mitaiken HORIZON";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1044") return "GALAXY HidE and SeeK";
     if (lid === "1004") return "Genki Zenkai DAY!DAY!DAY!";
