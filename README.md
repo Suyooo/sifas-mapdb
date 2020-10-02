@@ -49,9 +49,9 @@ The Live Difficulty ID can be read as `ABCCCDDE`:
 - 30: Advanced
 - 40: Advanced+ / Expert
 
-Note: the difficulty in the `song_difficulty` field might be different from the one read from the live difficulty ID,
-because the one in `song_difficulty` is the one the game uses for timing judgement. Advanced+ songs will have a 40 in
-the live difficulty ID, but `song_difficulty` will be set to 30.
+Note: the difficulty in the `song_difficulty` field might be different from the one read from the live difficulty ID.
+The most obvious example are Advanced+ songs, which have a 40 in the live difficulty ID, but `song_difficulty` will be
+set to 30. 
 
 ## Unique Identifier
 For Free Lives, this is usually the version - if a note map is retired and replaced with a new one, this counter
@@ -69,6 +69,12 @@ set to 5 is the 5th occurence of this song at this difficulty across all DLPs/st
 While the Story Stages started out with the same pattern as above, from Chapter 8 on, Klab started just numbering them.
 Maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
 Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001.
+
+Because the Live Difficulty ID is missing a Difficulty ID as described above, it cannot be used to derive which note
+map the Stage uses. It might seem obvious to use the `song_difficulty` field to get the difficulty instead, but in some
+cases, the value here is wrong (for example, Ch19 Donna Toki mo Zutto has `song_difficulty` set to 10, but uses the
+Intermediate note map). The best way to get the true note map difficulty for Story Stages so far seems to be reading the
+SP gauge size from the `sp_gauge_max` field and checking which difficulty matches it.
 
 Note that after the amount of Story Stages in older chapters was reduced in version 2.0, these counters were not
 changed, so there are missing numbers if going through all the Story Stages.

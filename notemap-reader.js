@@ -48,12 +48,12 @@ function difficulty(diff_id) {
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
-function difficulty_short(diff_id) {
-    if (diff_id === 10) return "Beg";
-    if (diff_id === 20) return "Int";
-    if (diff_id === 30) return "Adv";
-    if (diff_id === 40) return "Adv+";
-    throw new Error('Unknown Difficulty ' + diff_id);
+function difficulty_short_from_sp_gauge(sp_gauge) {
+    if (sp_gauge <= 3600) return "Beg";     // <=, because early Story Stages and Evergreen Beg have even smaller sizes
+    if (sp_gauge === 4800) return "Int";
+    if (sp_gauge === 6000) return "Adv";
+    if (sp_gauge === 7200) return "Adv+";
+    throw new Error('Unable to get Difficulty from SP Gauge Size ' + sp_gauge);
 }
 
 
@@ -488,7 +488,7 @@ module.exports = {
     "make": make_notemap,
     "attribute": attribute,
     "difficulty": difficulty,
-    "difficulty_short": difficulty_short,
+    "difficulty_short_from_sp_gauge": difficulty_short_from_sp_gauge,
     "skill_effect": skill_effect,
     "format": format,
     "song_name_romaji": song_name_romaji

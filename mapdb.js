@@ -90,7 +90,7 @@ lives.forEach(function (live) {
 
             // Full difficulty name for free lives, shortened difficulty plus location and attribute for story stages
             (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "CHAPTER " + live.extra_info.story_chapter +
-                '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short(live.song_difficulty) +
+                '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short_from_sp_gauge(live.sp_gauge_max) +
                 ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
                 notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
 
