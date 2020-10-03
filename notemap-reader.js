@@ -133,6 +133,7 @@ function song_name_romaji(live_id) {
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
     if (lid === "2021") return "Say Good-Bye Namida";
+    if (lid === "2042") return "Dream with You"
     if (lid === "2003") return "Diamond";
     if (lid === "2012") return "☆Wonderland☆";
     if (lid === "2039") return "Mutekikyuu * Believer";
