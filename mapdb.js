@@ -55,7 +55,15 @@ lives = lives.sort(function (a, b) {
     return a.order - b.order;
 });
 lives.forEach(function (e) {
-    live_difficulty_ids[e.id] = live_difficulty_ids[e.id].sort();
+    live_difficulty_ids[e.id] = live_difficulty_ids[e.id].sort(function (a, b) {
+        if (a < 30000000 || b < 30000000) {
+            return a.order - b.order;
+        } else {
+            // Sort Story Stages by chapter, not LDI (LDIs are only in the same order from Chapter 8 onwards)
+            return (songdata[a].extra_info.story_chapter * 100 + songdata[a].extra_info.story_stage) -
+                (songdata[b].extra_info.story_chapter * 100 + songdata[b].extra_info.story_stage);
+        }
+    });
 });
 
 let layout = fs.readFileSync('index.html').toString();
