@@ -49,9 +49,7 @@ $(function () {
                     collapsible.open();
                     if (tabId.startsWith("3")) {
                         // this is a Story Stage - open up the parent tab
-                        console.log("select outer 1" + tabId.substring(1, 5) + "-story");
                         tabs.select($(this).data("live-id") + "-story");
-                        console.log("select inner " + tabId);
                         story_tabs.select(tabId);
                     } else {
                         tabs.select(tabId);
