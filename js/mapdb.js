@@ -74,7 +74,7 @@ $(function () {
 
             tabs.options.onShow = function (e) {
                 if ($(e).attr("id").endsWith("story")) {
-                    fixTabIndicator($(".tabs", e)[0]);
+                    M.Tabs.getInstance($(".tabs", e)[0]).updateTabIndicator();
                     window.location.hash = "live" + $(".active", e).attr("href").substring(1);
                 } else {
                     window.location.hash = "live" + $(e).attr("id");
