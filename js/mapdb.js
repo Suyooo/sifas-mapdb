@@ -31,11 +31,11 @@ $(function () {
         let collapsible = M.Collapsible.getInstance(this);
         if (IS_MAP_DB) {
             // notemap database
-            let tabs = $(".tabs", this);
+            let tab_elements = $(".tabs", this);
             let story_tabs = undefined;
-            if (tabs.length === 0) return true; // page help collapsible
-            if (tabs.length > 1) story_tabs = M.Tabs.getInstance(tabs[1]);
-            tabs = M.Tabs.getInstance(tabs[0]);
+            if (tab_elements.length === 0) return true; // page help collapsible
+            if (tab_elements.length > 1) story_tabs = M.Tabs.getInstance(tab_elements[1]);
+            let tabs = M.Tabs.getInstance(tab_elements[0]);
 
             if (window.location.hash.startsWith("#live")) {
                 let tabId = window.location.hash.substring(5);
@@ -51,6 +51,11 @@ $(function () {
                         // this is a Story Stage - open up the parent tab
                         tabs.select($(this).data("live-id") + "-story");
                         story_tabs.select(tabId);
+                        $(".tab > a", tab_elements[1]).each(function () {
+                            if ($(this).attr("href").substring(1) === tabId) {
+                                $(tab_elements[1]).scrollLeft($(this).parent().position().left);
+                            }
+                        });
                     } else {
                         tabs.select(tabId);
                     }
