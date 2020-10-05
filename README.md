@@ -73,8 +73,8 @@ Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at
 Because the Live Difficulty ID is missing a Difficulty ID as described above, it cannot be used to derive which note
 map the Stage uses. It might seem obvious to use the `song_difficulty` field to get the difficulty instead, but in some
 cases, the value here is wrong (for example, Ch19 Donna Toki mo Zutto has `song_difficulty` set to 10, but uses the
-Intermediate note map). The best way to get the true note map difficulty for Story Stages so far seems to be reading the
-SP gauge size from the `sp_gauge_max` field and checking which difficulty matches it.
+Intermediate note map). Not even the `sp_gauge_max` field matches up with the note map difficulty consistently - the
+best way is probably to take the note maps for the Free Live difficulties and check which note count is the closest.
 
 Note that after the amount of Story Stages in older chapters was reduced in version 2.0, these counters were not
 changed, so there are missing numbers if going through all the Story Stages.

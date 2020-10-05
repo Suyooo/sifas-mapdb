@@ -22,6 +22,20 @@ const fs = require('fs');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 
+function guess_story_stage_difficulty(stage) {
+    let minimum_difference = stage.notes.length;
+    let minimum_difficulty = 0;
+    for (let difficulty = 0; difficulty <= 2; difficulty++) {
+        let live = songdata[live_difficulty_ids[stage.live_id][difficulty]];
+        let difference = Math.abs(stage.notes.length - live.notes.length);
+        if (difference < minimum_difference) {
+            minimum_difference = difference;
+            minimum_difficulty = live.song_difficulty;
+        }
+    }
+    return notemap.difficulty_short(minimum_difficulty);
+}
+
 let lives = [];
 let live_difficulty_ids = {};
 let songdata = {};
@@ -98,7 +112,7 @@ lives.forEach(function (live) {
 
             // Full difficulty name for free lives, shortened difficulty plus location and attribute for story stages
             (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "CHAPTER " + live.extra_info.story_chapter +
-                '-' + live.extra_info.story_stage + ' (' + notemap.difficulty_short_from_sp_gauge(live.sp_gauge_max) +
+                '-' + live.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live) +
                 ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
                 notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
 
