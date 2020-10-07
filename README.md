@@ -194,6 +194,7 @@ song by just using the length of the `notes` array.
 - 92: Non-Sp or Sk Types
 - 96: Vo and Sk Types
 - 97: Vo and Sp Types
+- 98: Vo and Gd Types
 
 ## Effects
 - 3: SP Gauge Charge (fixed amount)
