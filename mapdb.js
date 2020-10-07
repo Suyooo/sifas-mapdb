@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const CURRENT_EVENT_LIVE_ID = undefined;
+const CURRENT_EVENT_LIVE_ID = 21049;
 
 const fs = require('fs');
 const notemap = require('./notemap-reader.js');

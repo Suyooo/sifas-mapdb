@@ -106,6 +106,7 @@ function song_name_romaji(live_id) {
     if (lid === "1084") return "JIMO-AI Dash!";
     if (lid === "1013") return "MIRACLE WAVE";
     if (lid === "1079") return "Mitaiken HORIZON";
+    if (lid === "1049") return "Landing action Yeah!!";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1044") return "GALAXY HidE and SeeK";
     if (lid === "1004") return "Genki Zenkai DAY!DAY!DAY!";
@@ -204,6 +205,7 @@ function skill_target(target_id) {
     if (target_id === 92) return 'non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units ';
     if (target_id === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
     if (target_id === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
+    if (target_id === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 
