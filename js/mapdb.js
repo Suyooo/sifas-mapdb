@@ -15,9 +15,9 @@ $(function () {
     let body = $("body");
 
     $("#show_romaji").click(function () {
-        $(".song_name").each(function () {
-            let new_title = $(this).data("en");
-            $(this).data("en", $(this).text());
+        $(".translatable").each(function () {
+            let new_title = $(this).data("rom");
+            $(this).data("rom", $(this).text());
             $(this).text(new_title);
         });
         if ($(this).text() === "click to show original song names") {
@@ -42,7 +42,7 @@ $(function () {
                 let wantedTab = $("#" + tabId, this);
                 if (wantedTab.length > 0) {
                     // add padding at bottom to successfully scroll to divs at the end of the page
-                    body.css({"padding-bottom": "100%"});
+                    body.css({"padding-bottom": "500%"});
                     setTimeout(function () {
                         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
                     }, 300);
@@ -59,7 +59,7 @@ $(function () {
                     } else {
                         tabs.select(tabId);
                     }
-                    window.scrollTo(0, $(this).offset().top);
+                    window.scrollTo(0, $(this).position().top);
                 }
             }
 
@@ -95,21 +95,38 @@ $(function () {
             // DLP Stage List
 
             if (window.location.hash.startsWith("#floor")) {
-                if ($(this).data("floor") == window.location.hash.substring(6)) {
+                if ($(this).data("floor") !== undefined) {
+                    if ($(this).data("floor") == window.location.hash.substring(6)) {
+                        // add padding at bottom to successfully scroll to divs at the end of the page
+                        body.css({"padding-bottom": "500%"});
+                        setTimeout(function () {
+                            body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"});
+                        }, 300);
+                        collapsible.open();
+                        window.scrollTo(0, $(this).position().top);
+                    }
+                } else if ($(this).data("tower") == window.location.hash.substring(6, 11)) {
+                    collapsible.open();
+                }
+            } else if (window.location.hash.startsWith("#tower")) {
+                if ($(this).data("tower") == window.location.hash.substring(6)) {
                     // add padding at bottom to successfully scroll to divs at the end of the page
-                    body.css({"padding-bottom": "100%"});
+                    body.css({"padding-bottom": "500%"});
                     setTimeout(function () {
-                        body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
+                        body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"});
                     }, 300);
                     collapsible.open();
-                    window.scrollTo(0, $(this).offset().top);
+                    window.scrollTo(0, $(this).position().top);
                 }
             }
 
-            let thisFloor = $(this).data("floor");
             collapsible.options.onOpenStart = function () {
-                window.location.hash = "floor" + thisFloor;
-            };
+                if ($(this).data("floor") !== undefined) {
+                    window.location.hash = "floor" + $(this).data("floor");
+                } else {
+                    window.location.hash = "tower" + $(this).data("tower");
+                }
+            }.bind(this);
         }
 
         collapsible.options.onCloseStart = function () {

@@ -20,6 +20,13 @@ const fs = require('fs');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 
+function tower_name_romaji(tower_id) {
+    if (tower_id === 33001) return "Trial Event: Dream Live Parade";
+    if (tower_id === 33002) return "Dream Live Parade ~Aqours~";
+
+    throw new Error('Unknown Romaji Tower Name for ' + tower_id);
+}
+
 let tower_ids = [];
 let towerdata = {};
 
@@ -31,7 +38,7 @@ fs.readdirSync("tower/.").forEach(function (f) {
     }
 });
 
-tower_ids = tower_ids.sort().reverse();
+tower_ids = tower_ids.sort();
 
 let layout = fs.readFileSync('tower.html').toString();
 let s = "";
@@ -39,9 +46,11 @@ let s = "";
 tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
 
-    s += '<h5 id="tower' + tower_id + '">' + tower.name + '</h5>';
-    s += '<b>Performance Points:</b> ' + tower.pp_at_start + ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br>'
-    s += '<b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost + ' loveca stars<br><br>';
+    s += '<ul data-tower="' + tower_id + '" class="collapsible" data-collapsible="expandable"><li>' +
+        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
+        tower.name + '</b></div><div class="collapsible-body"><b>Performance Points:</b> ' + tower.pp_at_start +
+        ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
+        ' loveca stars<br><br>';
 
     tower["floors"].forEach(function (floor) {
         s += '<ul class="collapsible" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
@@ -52,7 +61,7 @@ tower_ids.forEach(function (tower_id) {
             '<div class="row">' +
 
             // Header information
-            '<div class="col l3"><b class="song_name" data-en="' + notemap.song_name_romaji(floor.live_id) +
+            '<div class="col l3"><b class="translatable" data-rom="' + notemap.song_name_romaji(floor.live_id) +
             '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
@@ -88,6 +97,8 @@ tower_ids.forEach(function (tower_id) {
             s += '<div class="progress">&nbsp;</div>';
         }
     });
+
+    s += '</div></li></ul>';
 });
 
 fs.writeFile('build/tower.html', minify(layout.replace("$TOWER", s), {

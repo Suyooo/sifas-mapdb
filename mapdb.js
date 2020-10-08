@@ -94,7 +94,7 @@ lives.forEach(function (live) {
         '<div class="collapsible-header">' +
         '<img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
-        '<b class="song_name" data-en="' + notemap.song_name_romaji(live.id) + '">' + live.name +
+        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
         '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
 
     let live_tabbar = "";

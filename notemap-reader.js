@@ -162,7 +162,7 @@ function song_name_romaji(live_id) {
     if (lid === "2029") return "Analog Heart";
     if (lid === "2030") return "Ketsui no Hikari";
 
-    throw new Error('Unknown English Song Name for ' + live_id);
+    throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
 
 function skill(skill) {
