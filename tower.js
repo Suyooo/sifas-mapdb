@@ -57,6 +57,7 @@ tower_ids.forEach(function (tower_id) {
         let linked_live = undefined;
         if (floor["notemap_live_difficulty_id"] !== null) {
             linked_live = JSON.parse(fs.readFileSync('mapdb/' + floor["notemap_live_difficulty_id"] + '.json'));
+            linked_live.note_damage = floor.note_damage;
         }
 
         s += '<ul class="collapsible" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
