@@ -53,6 +53,12 @@ tower_ids.forEach(function (tower_id) {
         ' loveca stars<br><br>';
 
     tower["floors"].forEach(function (floor) {
+        // Load referenced note map if available
+        let linked_live = undefined;
+        if (floor["notemap_live_difficulty_id"] !== null) {
+            linked_live = JSON.parse(fs.readFileSync('mapdb/' + floor["notemap_live_difficulty_id"] + '.json'));
+        }
+
         s += '<ul class="collapsible" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
@@ -65,8 +71,7 @@ tower_ids.forEach(function (tower_id) {
             '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
-            (floor.gimmick === null ? "-" :
-                notemap.skill_effect(floor.gimmick.effect_type, 0).indexOf("Base") === -1 ? "Yes" : "No") + '</div>' +
+            notemap.is_cleansable(linked_live === undefined ? floor.gimmick : linked_live.gimmick) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
             '</div></div><div class="collapsible-body live-difficulty"><div class="row nomargin">' +
 
@@ -80,10 +85,8 @@ tower_ids.forEach(function (tower_id) {
             '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
             ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div></div>';
 
-        // Load referenced note map if available
-        if (floor["notemap_live_difficulty_id"] !== null) {
-            let live = JSON.parse(fs.readFileSync('mapdb/' + floor["notemap_live_difficulty_id"] + '.json'));
-            s += notemap.make(live);
+        if (linked_live !== undefined) {
+            s += notemap.make(linked_live);
         } else {
             s += notemap.make(floor);
         }

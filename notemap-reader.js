@@ -271,6 +271,12 @@ function skill_finish(condition_id, amount) {
     throw new Error('Unknown Skill Finish Condition ' + condition_id);
 }
 
+function is_cleansable(skill) {
+    // TODO: This is based on the skill effect strings above right now... subject to typos and will break if translated
+    if (skill === null) return "-";
+    return skill_effect(skill.effect_type, 0).indexOf("Base") === -1 ? "Yes" : "No";
+}
+
 function ac_mission(type_id, goal) {
     if (type_id === 1) return 'Get ' + format(goal) + ' Voltage';
     if (type_id === 2) return 'Hit ' + format(goal) + ' NICEs';
@@ -397,7 +403,7 @@ function make_notemap(live) {
             // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
             skillstr = skillstr.substring(0, skillstr.length - 20);
         }
-        s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + (skillstr.indexOf("Base") !== -1 ? "No" : "Yes");
+        s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick);
     }
     s += '</div></div>';
 
@@ -492,7 +498,7 @@ module.exports = {
     "attribute": attribute,
     "difficulty": difficulty,
     "difficulty_short": difficulty_short,
-    "skill_effect": skill_effect,
+    "is_cleansable": is_cleansable,
     "format": format,
     "song_name_romaji": song_name_romaji
 };
