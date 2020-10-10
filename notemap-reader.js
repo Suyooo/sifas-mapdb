@@ -128,6 +128,7 @@ function song_name_romaji(live_id) {
     if (lid === "2020") return "Love U my friends";
     if (lid === "2034") return "TOKIMEKI Runners (Chapter 17 Ver.)";
     if (lid === "2053") return "Just Believe!!!";
+    if (lid === "2040") return "Niji-iro Passions!";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
@@ -139,6 +140,7 @@ function song_name_romaji(live_id) {
     if (lid === "2012") return "☆Wonderland☆";
     if (lid === "2039") return "Mutekikyuu * Believer";
     if (lid === "2022") return "Margaret";
+    if (lid === "2043") return "Poppin' Up!";
     if (lid === "2004") return "Anata no Risou no Heroine";
     if (lid === "2013") return "Audrey";
     if (lid === "2023") return "Yagate Hitotsu no Monogatari";
