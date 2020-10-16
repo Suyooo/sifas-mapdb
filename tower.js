@@ -21,8 +21,9 @@ const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 
 function tower_name_romaji(tower_id) {
-    if (tower_id === 33001) return "Trial Event: Dream Live Parade";
+    if (tower_id === 33001) return "Dream Live Parade";
     if (tower_id === 33002) return "Dream Live Parade ~Aqours~";
+    if (tower_id === 33003) return "Dream Live Parade ~Nijigaku~";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
