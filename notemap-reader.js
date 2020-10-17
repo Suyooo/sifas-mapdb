@@ -156,6 +156,7 @@ function song_name_romaji(live_id) {
     if (lid === "2008") return "CHASE!";
     if (lid === "2017") return "MELODY";
     if (lid === "2027") return "LIKE IT! LOVE IT!";
+    if (lid === "2048") return "DIVE!";
     if (lid === "2009") return "Evergreen";
     if (lid === "2018") return "Koe Tsunagou yo";
     if (lid === "2028") return "Aion no Uta";
@@ -223,6 +224,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 22) return 'gain ' + format(amount / 100) + '% Skill Activation Chance';
     if (type_id === 23) return 'increase SP Voltage Gain by ' + format(amount / 100) + '%';
     if (type_id === 26) return 'gain ' + format(amount / 100) + '% Base Appeal';
+    if (type_id === 33) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance';
     if (type_id === 45) return 'gain ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (type_id === 46) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (type_id === 47) return 'gain ' + format(amount / 100) + '% Base Critical Power';

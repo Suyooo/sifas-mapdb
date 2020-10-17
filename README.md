@@ -208,10 +208,11 @@ song by just using the length of the `notes` array.
 - 22: Skill Activation Chance Up
 - 23: SP Voltage Gain Up
 - 26: Base Appeal Up
+- 33: Base Skill Activation Chance Up
 - 45: Base SP Gauge Fill Rate Up
 - 46: Base Critical Chance Up
 - 47: Base Critical Power Up
-- 48: Base Skill Activation Chance Up
+- 48: Base Skill Activation Chance Up (dupe?)
 - 49: Base Appeal Up (dupe?)
 - 50: Base SP Voltage Gain Up
 - 51: Base Voltage Gain Up
