@@ -386,12 +386,12 @@ function make_notemap(live) {
 
         let total_note_damage = live.notes.length * live.note_damage + total_ac_notes * Math.floor(live.note_damage / 10);
 
-        s += '</div></div><div class="row"><div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
+        s = '<div class="row"><div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
             '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
             '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + '</div>' +
-            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div></div>';
-        s = '<div class="notebarcontainer"><div class="notebar" style="--gimmicklayers: ' + stacker_global.length + '"' +
-            'data-totaltime="' + total_time + '">' + s;
+            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div></div>' +
+            '<div class="notebarcontainer"><div class="notebar" style="--gimmicklayers: ' + stacker_global.length + '"' +
+            'data-totaltime="' + total_time + '">' + s + '</div></div>';
     } else {
         s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';
     }
