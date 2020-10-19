@@ -133,117 +133,121 @@ $(function () {
             window.location.hash = "_";
         };
 
-        $(".live-difficulty", this).each(function () {
-            let selecting = false;
-            // note measure
-            // TODO: add support for touch events on mobile... how?
-            let notebar = $(".notebar", this);
-            notebar.mousedown(function (e) {
-                selecting = true;
-                let selector = $("<div></div>").addClass("selection");
-                notebar.append(selector);
-                let fixedStartpos = e.pageX;
-                let notebarPos = notebar.offset();
-                let notebarWidth = notebar.width();
-                let totalTime = Number(notebar.data("totaltime"));
-                body.mousemove(function (e) {
-                    let startpos = fixedStartpos;
-                    let endpos = e.pageX;
-                    if (endpos < startpos) {
-                        let temp = startpos;
-                        startpos = endpos;
-                        endpos = temp;
-                    }
-                    if (startpos < notebarPos.left) {
-                        startpos = notebarPos.left;
-                    }
-                    if (endpos > notebarPos.left + notebarWidth) {
-                        endpos = notebarPos.left + notebarWidth;
-                    }
+        if ($(this).data("tower") === undefined) {
+            $(".live-difficulty", this).each(function () {
+                let selecting = false;
+                // note measure
+                // TODO: add support for touch events on mobile... how?
+                let notebar = $(".notebar", this);
+                notebar.mousedown(function (e) {
+                    selecting = true;
+                    let selector = $("<div></div>").addClass("selection");
+                    notebar.append(selector);
+                    let fixedStartpos = e.pageX;
+                    let notebarPos = notebar.offset();
+                    let notebarWidth = notebar.width();
+                    let totalTime = Number(notebar.data("totaltime"));
+                    body.mousemove(function (e) {
+                        let startpos = fixedStartpos;
+                        let endpos = e.pageX;
+                        if (endpos < startpos) {
+                            let temp = startpos;
+                            startpos = endpos;
+                            endpos = temp;
+                        }
+                        if (startpos < notebarPos.left) {
+                            startpos = notebarPos.left;
+                        }
+                        if (endpos > notebarPos.left + notebarWidth) {
+                            endpos = notebarPos.left + notebarWidth;
+                        }
 
-                    let count = 0;
-                    $(".note", notebar).each(function () {
-                        let notepos = $(this).offset().left;
-                        if (notepos >= startpos && notepos <= endpos) count++;
+                        let count = 0;
+                        $(".note", notebar).each(function () {
+                            let notepos = $(this).offset().left;
+                            if (notepos >= startpos && notepos <= endpos) count++;
+                        });
+
+                        let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
+
+                        tooltipInner.html(count + " note" + (count !== 1 ? "s" : "") + "<br>" + selectedTime + " seconds");
+                        tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
+                        selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
                     });
-
-                    let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
-
-                    tooltipInner.html(count + " note" + (count !== 1 ? "s" : "") + "<br>" + selectedTime + " seconds");
-                    tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
-                    selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
+                    body.mouseup(function () {
+                        $(this).off("mousemove").off("mouseup");
+                        selecting = false;
+                        selector.remove();
+                        tooltip.css({"left": 0, "top": 0});
+                    });
                 });
-                body.mouseup(function () {
-                    $(this).off("mousemove").off("mouseup");
-                    selecting = false;
-                    selector.remove();
-                    tooltip.css({"left": 0, "top": 0});
-                });
-            });
 
-            // gimmick mouseover
-            let gimmickmarkers = $(".notebar .gimmick", this);
-            let gimmickinfos = $(".detailinfo .gimmick", this);
-            gimmickmarkers.on("mouseover touchstart", function () {
-                if (selecting || $(this).hasClass("hidden")) return;
-                let gi = $(this).data("gimmick");
-                gimmickinfos.each(function () {
-                    if ($(this).data("gimmick") === gi) {
-                        let details = $("div", this);
-                        tooltipInner.html(details[1].innerHTML);
-                        return false;
-                    }
-                });
-                let thismarker = $(".gimmickmarker", this);
-                let position = thismarker.offset();
-                position.left += thismarker.width() / 2;
-                tooltip.css(position);
-            });
-            gimmickmarkers.mouseout(function () {
-                tooltip.css({"left": 0, "top": 0});
-            });
-
-            // appeal chance mouseover
-            let acmarkers = $(".notebar .appealchance", this);
-            let acinfos = $(".detailinfo .appealchance", this);
-            acmarkers.on("mouseover touchstart", function () {
-                if (selecting) return;
-                let ai = $(this).data("ac");
-                acinfos.each(function () {
-                    if ($(this).data("ac") === ai) {
-                        let details = $("div", this);
-                        tooltipInner.html("<b>" + details[0].innerHTML.split(":")[1] + "</b><br>" + details[1].innerHTML);
-                        return false;
-                    }
-                });
-                let position = $(this).offset();
-                position.left += $(this).width() / 2;
-                tooltip.css(position);
-            });
-            acmarkers.mouseout(function () {
-                tooltip.css({"left": 0, "top": 0});
-            });
-
-            // gimmick filtering
-            gimmickinfos.click(function () {
-                if ($(this).hasClass("filtered")) {
-                    $(this).removeClass("filtered");
-                    gimmickmarkers.removeClass("hidden filtered");
-                } else {
-                    gimmickinfos.removeClass("filtered");
-                    $(this).addClass("filtered");
+                // gimmick mouseover
+                let gimmickmarkers = $(".notebar .gimmick", this);
+                let gimmickinfos = $(".detailinfo .gimmick", this);
+                gimmickmarkers.on("mouseover touchstart", function () {
+                    if (selecting || $(this).hasClass("hidden")) return;
                     let gi = $(this).data("gimmick");
-                    gimmickmarkers.each(function () {
+                    gimmickinfos.each(function () {
                         if ($(this).data("gimmick") === gi) {
-                            $(this).removeClass("hidden");
-                            $(this).addClass("filtered");
-                        } else {
-                            $(this).removeClass("filtered");
-                            $(this).addClass("hidden");
+                            let details = $("div", this);
+                            tooltipInner.html(details[1].innerHTML);
+                            return false;
                         }
                     });
-                }
+                    let thismarker = $(".gimmickmarker", this);
+                    let position = thismarker.offset();
+                    position.left += thismarker.width() / 2;
+                    tooltip.css(position);
+                });
+                gimmickmarkers.mouseout(function () {
+                    tooltip.css({"left": 0, "top": 0});
+                });
+
+                // appeal chance mouseover
+                let acmarkers = $(".notebar .appealchance", this);
+                let acinfos = $(".detailinfo .appealchance", this);
+                acmarkers.on("mouseover touchstart", function () {
+                    if (selecting) return;
+                    let ai = $(this).data("ac");
+                    acinfos.each(function () {
+                        if ($(this).data("ac") === ai) {
+                            let details = $("div", this);
+                            tooltipInner.html("<b>" + details[0].innerHTML.split(":")[1] + "</b><br>" + details[1].innerHTML);
+                            return false;
+                        }
+                    });
+                    let position = $(this).offset();
+                    position.left += $(this).width() / 2;
+                    tooltip.css(position);
+                });
+                acmarkers.mouseout(function () {
+                    tooltip.css({"left": 0, "top": 0});
+                });
+
+                // gimmick filtering
+                console.log(this);
+                gimmickinfos.click(function () {
+                    console.log("clicky");
+                    if ($(this).hasClass("filtered")) {
+                        $(this).removeClass("filtered");
+                        gimmickmarkers.removeClass("hidden filtered");
+                    } else {
+                        gimmickinfos.removeClass("filtered");
+                        $(this).addClass("filtered");
+                        let gi = $(this).data("gimmick");
+                        gimmickmarkers.each(function () {
+                            if ($(this).data("gimmick") === gi) {
+                                $(this).removeClass("hidden");
+                                $(this).addClass("filtered");
+                            } else {
+                                $(this).removeClass("filtered");
+                                $(this).addClass("hidden");
+                            }
+                        });
+                    }
+                });
             });
-        });
+        }
     });
 });

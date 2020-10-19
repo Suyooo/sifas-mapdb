@@ -423,8 +423,8 @@ function make_notemap(live) {
                 s += "If missed, ";
                 break;
             case 3:
-                s += "";
-                break; // always
+                s += ""; // always
+                break;
             case 4:
                 s += 'If hit with a <span class="t vo">Vo</span> unit, ';
                 break;
