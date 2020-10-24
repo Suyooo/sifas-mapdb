@@ -150,6 +150,7 @@ function song_name_romaji(live_id) {
     if (lid === "2006") return "Meccha Going!!";
     if (lid === "2015") return "Yuu & Ai";
     if (lid === "2025") return "Tanoshii no Tensai";
+    if (lid === "2046") return "Saikou Heart";
     if (lid === "2007") return "Nemureru Mori ni Ikitai na";
     if (lid === "2016") return "My Own Fairy-Tale";
     if (lid === "2026") return "Märchen Star";
