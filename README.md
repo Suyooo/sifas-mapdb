@@ -28,6 +28,7 @@ The Live Difficulty ID can be read as `ABCCCDDE`:
 - 3: Story Stage
 - 4: Sukusuta Big Live
 - 5: Dream Live Parade
+- 6: Tutorial (Oshiete Sukusuta)
 
 ## Group
 - 0: µ's
@@ -65,10 +66,11 @@ is always 1.
 For DLP and older Story Stages, this is a counter for the amount of repeats - so for example, the live with this digit
 set to 5 is the 5th occurence of this song at this difficulty across all DLPs/stories.
 
-## Live Difficulty IDs for newer Story Stages
+## Numbered Live Difficulty IDs
 While the Story Stages started out with the same pattern as above, from Chapter 8 on, Klab started just numbering them.
 Maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
-Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001.
+Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001. The same is done for the
+`6XXXXXXX` Live Difficulty IDs of Tutorial stages.
 
 Because the Live Difficulty ID is missing a Difficulty ID as described above, it cannot be used to derive which note
 map the Stage uses. It might seem obvious to use the `song_difficulty` field to get the difficulty instead, but in some
