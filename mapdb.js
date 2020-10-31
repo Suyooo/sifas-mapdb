@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const CURRENT_EVENT_LIVE_ID = 21049;
+const CURRENT_EVENT_LIVE_ID = undefined;
 
 const fs = require('fs');
 const notemap = require('./notemap-reader.js');
@@ -27,7 +27,7 @@ function guess_story_stage_difficulty(stage) {
     let minimum_difficulty = 10;
     for (let difficulty = 0; difficulty <= 2; difficulty++) {
         let live = songdata[live_difficulty_ids[stage.live_id][difficulty]];
-        if (live.notes === null) continue;
+        if (live === undefined || live.notes === null) continue;
         let difference = Math.abs(stage.notes.length - live.notes.length);
         if (difference < minimum_difference) {
             minimum_difference = difference;

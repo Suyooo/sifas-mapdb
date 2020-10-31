@@ -71,8 +71,8 @@ set to 5 is the 5th occurence of this song at this difficulty across all DLPs/st
 While the Story Stages started out with the same pattern as above, from Chapter 8 on, Klab started just numbering them.
 Maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
 Difficulty ID `33DXXXXX`, where `XXXXX` is simply a running counter starting at 000001. The same is done for the
-`6XXXXXXX` Live Difficulty IDs of Tutorial stages. `D` is the story difficulty (introduced in Season 2) - `0` for
-Normal, `1` for Hard.
+`6XXXXXXX` Live Difficulty IDs of Tutorial stages. `D` is the story difficulty (introduced in Season 2) - `1` for
+Normal, `0` for Hard.
 
 Because the Live Difficulty ID is missing a Difficulty ID as described above, it cannot be used to derive which note
 map the Stage uses. It might seem obvious to use the `song_difficulty` field to get the difficulty instead, but in some
@@ -89,6 +89,7 @@ Depending on the Live Type (see above), additional info may be included in the `
 ## Story Stage
 `story_chapter`: The number of the Chapter this Stage appears in (starting from 1, as in-game)  
 `story_stage`: Counter for which Stage in the Chapter this is (starting from 1)  
+`story_is_hard_mode`: Whether this Stage is part of the Season's Hard course or not  
 `story_is_super_stage`: Whether this Stage is the final Stage in the respective Chapter or not
 
 ## SBL Live
