@@ -74,9 +74,11 @@ lives.forEach(function (e) {
         if (a < 30000000 || b < 30000000) {
             return a.order - b.order;
         } else {
-            // Sort Story Stages by chapter, not LDI (LDIs are only in the same order from Chapter 8 onwards)
-            return (songdata[a].extra_info.story_chapter * 100 + songdata[a].extra_info.story_stage) -
-                (songdata[b].extra_info.story_chapter * 100 + songdata[b].extra_info.story_stage);
+            // Sort Story Stages by chapter and mode, not LDI (LDIs are only in the same order from Chapter 8 onwards)
+            return (songdata[a].extra_info.story_chapter * 1000 + songdata[a].extra_info.story_stage * 10 +
+                (songdata[a].extra_info.story_is_hard_mode ? 1 : 0)) -
+                (songdata[b].extra_info.story_chapter * 1000 + songdata[b].extra_info.story_stage * 10 +
+                    (songdata[b].extra_info.story_is_hard_mode ? 1 : 0));
         }
     });
 });
@@ -112,7 +114,8 @@ lives.forEach(function (live) {
             (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>' +
 
             // Full difficulty name for free lives, shortened difficulty plus location and attribute for story stages
-            (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : "CHAPTER " + live.extra_info.story_chapter +
+            (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : (live.extra_info.story_chapter < 20 ? "" :
+                (live.extra_info.story_is_hard_mode ? "HARD" : "NORMAL") + " ") + live.extra_info.story_chapter +
                 '-' + live.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live) +
                 ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
                 notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
