@@ -24,9 +24,10 @@ const minify = require('html-minifier').minify;
 
 function guess_story_stage_difficulty(stage) {
     let minimum_difference = stage.notes.length;
-    let minimum_difficulty = 0;
+    let minimum_difficulty = 10;
     for (let difficulty = 0; difficulty <= 2; difficulty++) {
         let live = songdata[live_difficulty_ids[stage.live_id][difficulty]];
+        if (live.notes === null) continue;
         let difference = Math.abs(stage.notes.length - live.notes.length);
         if (difference < minimum_difference) {
             minimum_difference = difference;

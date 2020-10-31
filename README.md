@@ -29,6 +29,7 @@ The Live Difficulty ID can be read as `ABCCCDDE`:
 - 4: Sukusuta Big Live
 - 5: Dream Live Parade
 - 6: Tutorial (Oshiete Sukusuta)
+- 9: MV only
 
 ## Group
 - 0: µ's
@@ -69,8 +70,9 @@ set to 5 is the 5th occurence of this song at this difficulty across all DLPs/st
 ## Numbered Live Difficulty IDs
 While the Story Stages started out with the same pattern as above, from Chapter 8 on, Klab started just numbering them.
 Maybe they thought the 1-digit unique identifier will probably run out at some point. These lives have the Live
-Difficulty ID `33XXXXXX`, where `XXXXXX` is simply a running counter starting at 000001. The same is done for the
-`6XXXXXXX` Live Difficulty IDs of Tutorial stages.
+Difficulty ID `33DXXXXX`, where `XXXXX` is simply a running counter starting at 000001. The same is done for the
+`6XXXXXXX` Live Difficulty IDs of Tutorial stages. `D` is the story difficulty (introduced in Season 2) - `0` for
+Normal, `1` for Hard.
 
 Because the Live Difficulty ID is missing a Difficulty ID as described above, it cannot be used to derive which note
 map the Stage uses. It might seem obvious to use the `song_difficulty` field to get the difficulty instead, but in some
@@ -78,7 +80,7 @@ cases, the value here is wrong (for example, Ch19 Donna Toki mo Zutto has `song_
 Intermediate note map). Not even the `sp_gauge_max` field matches up with the note map difficulty consistently - the
 best way is probably to take the note maps for the Free Live difficulties and check which note count is the closest.
 
-Note that after the amount of Story Stages in older chapters was reduced in version 2.0, these counters were not
+Note that after the amount of Story Stages in Chapter 15 and before was reduced in version 2.0, these counters were not
 changed, so there are missing numbers if going through all the Story Stages.
 
 # Extra Info

@@ -77,6 +77,7 @@ function song_name_romaji(live_id) {
     if (lid === "0118") return "A song for You! You? You!!";
     if (lid === "0010") return "LOVELESS WORLD";
     if (lid === "0060") return "Donna Toki mo Zutto";
+    if (lid === "0071") return "Happy maker!";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0004") return "Shunjou Romantic";
     if (lid === "0015") return "NO EXIT ORION";
@@ -165,6 +166,7 @@ function song_name_romaji(live_id) {
     if (lid === "2019") return "Tereterepathy";
     if (lid === "2029") return "Analog Heart";
     if (lid === "2030") return "Ketsui no Hikari";
+    if (lid === "2999") return "Queendom";
 
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
