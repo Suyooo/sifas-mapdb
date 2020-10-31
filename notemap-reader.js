@@ -162,6 +162,7 @@ function song_name_romaji(live_id) {
     if (lid === "2009") return "Evergreen";
     if (lid === "2018") return "Koe Tsunagou yo";
     if (lid === "2028") return "Aion no Uta";
+    if (lid === "2049") return "La Bella Patria";
     if (lid === "2010") return "Dokipipo ☆ Emotion";
     if (lid === "2019") return "Tereterepathy";
     if (lid === "2029") return "Analog Heart";
