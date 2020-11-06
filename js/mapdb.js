@@ -1,3 +1,5 @@
+var current_filter_timeout = undefined;
+
 function fixTabIndicator(tabelement) {
     let activetablink = $(".active", tabelement);
     let activetab = activetablink.parent();
@@ -6,6 +8,54 @@ function fixTabIndicator(tabelement) {
     let tabwidth = 100 / (alltabs.length - 1);
     $(".indicator", tabelement).css("left", (tabwidth * tabindex) + "%")
         .css("right", (tabwidth * (-tabindex + alltabs.length - 2)) + "%");
+}
+
+function filterCollapsibles(search_input) {
+    let collapsibles = $(".collapsible");
+    let headers = $("h5");
+    if (search_input === undefined || search_input.trim() === "") {
+        collapsibles.each(function () {
+            $(this).show();
+            let collapsible = M.Collapsible.getInstance(this);
+            collapsible.close();
+        });
+        headers.show();
+        return;
+    }
+
+    let search_terms = search_input.trim().split(/\s+/);
+    let filtered = [];
+    collapsibles.each(function () {
+        let collapsible = M.Collapsible.getInstance(this);
+        if ($(".tabs", this).length === 0) return true; // page help collapsible
+
+        let song_name_element = $(".collapsible-header > .translatable", this);
+        let song_name_jp = song_name_element.text().toLowerCase();
+        let song_name_ro = song_name_element.data("rom").toLowerCase();
+
+        let result = true;
+        search_terms.forEach(function(t) {
+            let term = t.toLowerCase();
+            if (result && !song_name_jp.includes(term) && !song_name_ro.includes(term)) {
+                result = false;
+            }
+        });
+
+        if (result) {
+            $(this).show();
+            filtered.push(collapsible);
+        } else {
+            $(this).hide();
+            collapsible.close();
+        }
+    });
+
+    headers.hide();
+    if (filtered.length === 1) {
+        filtered[0].open();
+    } else {
+        filtered.forEach(function(c) { c.close(); })
+    }
 }
 
 $(function () {
@@ -250,4 +300,16 @@ $(function () {
             });
         }
     });
+
+    if (IS_MAP_DB) {
+        // filter field for map db
+        $("input#filter").keyup(function(e) {
+            if (current_filter_timeout !== undefined) {
+                clearTimeout(current_filter_timeout);
+            }
+            current_filter_timeout = setTimeout(function() {
+                filterCollapsibles(e.target.value);
+            }, 500);
+        });
+    }
 });

@@ -297,6 +297,10 @@ h5 {
     margin-bottom: 2em;
 }
 
+.input-field .prefix.active {
+    color: var(--key-accented);
+}
+
 .t, .a {
     font-weight: 500;
 }
