@@ -276,9 +276,7 @@ $(function () {
                 });
 
                 // gimmick filtering
-                console.log(this);
                 gimmickinfos.click(function () {
-                    console.log("clicky");
                     if ($(this).hasClass("filtered")) {
                         $(this).removeClass("filtered");
                         gimmickmarkers.removeClass("hidden filtered");
