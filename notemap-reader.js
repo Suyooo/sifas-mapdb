@@ -166,6 +166,7 @@ function song_name_romaji(live_id) {
     if (lid === "2010") return "Dokipipo ☆ Emotion";
     if (lid === "2019") return "Tereterepathy";
     if (lid === "2029") return "Analog Heart";
+    if (lid === "2050") return "Tsunagaru Connect";
     if (lid === "2030") return "Ketsui no Hikari";
     if (lid === "2999") return "Queendom";
 
