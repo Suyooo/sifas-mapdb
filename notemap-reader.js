@@ -133,6 +133,7 @@ function song_name_romaji(live_id) {
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
+    if (lid === "2037") return "Love U my friends";
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
     if (lid === "2021") return "Say Good-Bye Namida";
