@@ -126,7 +126,7 @@ function song_name_romaji(live_id) {
 
     // Nijigaku
     if (lid === "2001") return "TOKIMEKI Runners";
-    if (lid === "2020") return "Love U my friends";
+    if (lid === "2020") return "Love U my friends (2D)";
     if (lid === "2034") return "TOKIMEKI Runners (Chapter 17 Ver.)";
     if (lid === "2053") return "Just Believe!!!";
     if (lid === "2040") return "Niji-iro Passions!";
