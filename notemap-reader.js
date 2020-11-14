@@ -156,6 +156,7 @@ function song_name_romaji(live_id) {
     if (lid === "2007") return "Nemureru Mori ni Ikitai na";
     if (lid === "2016") return "My Own Fairy-Tale";
     if (lid === "2026") return "Märchen Star";
+    if (lid === "2047") return "Butterfly";
     if (lid === "2008") return "CHASE!";
     if (lid === "2017") return "MELODY";
     if (lid === "2027") return "LIKE IT! LOVE IT!";
