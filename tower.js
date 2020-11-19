@@ -24,6 +24,7 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33001) return "Dream Live Parade";
     if (tower_id === 33002) return "Dream Live Parade ~Aqours~";
     if (tower_id === 33003) return "Dream Live Parade ~Nijigaku~";
+    if (tower_id === 33004) return "Dream Live Parade ~μ's~";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
