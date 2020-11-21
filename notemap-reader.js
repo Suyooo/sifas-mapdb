@@ -146,6 +146,7 @@ function song_name_romaji(live_id) {
     if (lid === "2004") return "Anata no Risou no Heroine";
     if (lid === "2013") return "Audrey";
     if (lid === "2023") return "Yagate Hitotsu no Monogatari";
+    if (lid === "2044") return "Solitude Rain";
     if (lid === "2005") return "Starlight";
     if (lid === "2014") return "Wish";
     if (lid === "2024") return "Fire Bird";
