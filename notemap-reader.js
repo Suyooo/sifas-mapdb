@@ -150,6 +150,7 @@ function song_name_romaji(live_id) {
     if (lid === "2005") return "Starlight";
     if (lid === "2014") return "Wish";
     if (lid === "2024") return "Fire Bird";
+    if (lid === "2045") return "VIVID WORLD";
     if (lid === "2006") return "Meccha Going!!";
     if (lid === "2015") return "Yuu & Ai";
     if (lid === "2025") return "Tanoshii no Tensai";
