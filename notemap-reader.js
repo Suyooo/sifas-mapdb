@@ -311,7 +311,7 @@ function make_notemap(live) {
         let firstnote_time = live.notes[0].time;
         let lastnote_time = live.notes[live.notes.length - 1].time;
         // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
-        let total_time = (lastnote_time - firstnote_time) / 98 * 100;
+        let length_notes_only = (lastnote_time - firstnote_time) / 98 * 100;
 
         let total_ac_notes = 0;
         let total_ac_rewards = 0;
@@ -396,12 +396,17 @@ function make_notemap(live) {
 
         let total_note_damage = live.notes.length * live.note_damage + total_ac_notes * Math.floor(live.note_damage / 10);
 
-        s = '<div class="row"><div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
+        let infos = '<div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
             '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
             '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + '</div>' +
-            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div></div>' +
-            '<div class="notebarcontainer"><div class="notebar" style="--gimmicklayers: ' + stacker_global.length + '"' +
-            'data-totaltime="' + total_time + '">' + s + '</div></div>';
+            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>';
+        if (live.song_length) {
+            let min = Math.floor(live.song_length / 60000);
+            let sec = Math.floor(live.song_length % 60000 / 1000);
+            infos += '<div class="col l6"><b>Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
+        }
+        s = '<div class="row">' + infos + '</div><div class="notebarcontainer"><div class="notebar"' +
+            'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
     } else {
         s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';
     }
