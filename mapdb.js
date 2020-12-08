@@ -83,7 +83,6 @@ lives.forEach(function (e) {
     });
 });
 
-let layout = fs.readFileSync('index.html').toString();
 let s = '<h5 id="muse">µ\'s</h5>'
 
 let last_live_id = 0;
@@ -151,6 +150,7 @@ lives.forEach(function (live) {
     }
 });
 
+let layout = fs.readFileSync('index.html').toString();
 fs.writeFile('build/index.html', minify(layout.replace("$SONGDB", s), {
         collapseWhitespace: true
     }),

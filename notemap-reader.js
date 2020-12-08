@@ -405,7 +405,7 @@ function make_notemap(live) {
         if (live.song_length) {
             let min = Math.floor(live.song_length / 60000);
             let sec = Math.floor(live.song_length % 60000 / 1000);
-            infos += '<div class="col l6"><b>Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
+            infos += '<div class="col l6"><b>Actual Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
         }
         s = '<div class="row">' + infos + '</div><div class="notebarcontainer"><div class="notebar"' +
             'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
