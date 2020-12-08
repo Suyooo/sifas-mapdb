@@ -171,7 +171,7 @@ function song_name_romaji(live_id) {
     if (lid === "2028") return "Aion no Uta";
     if (lid === "2049") return "La Bella Patria";
     if (lid === "2010") return "Dokipipo ☆ Emotion";
-    if (lid === "2019") return "Tereterepathy";
+    if (lid === "2019") return "Teletelepathy";
     if (lid === "2029") return "Analog Heart";
     if (lid === "2050") return "Tsunagaru Connect";
     if (lid === "2030") return "Ketsui no Hikari";
