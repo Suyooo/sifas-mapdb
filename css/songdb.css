@@ -388,3 +388,41 @@ h5 {
 .dark-mode .light-blue.lighten-5 {
     background-color: #006ece !important;
 }
+
+table {
+    margin-bottom: 1em;
+}
+
+td, th {
+    padding: 5px 5px;
+}
+
+th, tr td:first-child {
+    font-weight: bold;
+}
+
+tr th:first-child {
+    background-size: 1.5em;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+tr td:first-child {
+    text-align: center;
+}
+
+thead tr {
+    background-color: var(--key-low) !important;
+}
+
+tr td:nth-child(1) {
+    width: 10%;
+}
+
+tr td:nth-child(2) {
+    width: 70%;
+}
+
+tr td:nth-child(3) {
+    width: 20%;
+}
