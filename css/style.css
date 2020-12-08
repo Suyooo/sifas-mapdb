@@ -715,7 +715,7 @@ input, textarea {
 }
 
 table.striped > tbody > tr:nth-child(2n+1) {
-    background-color: var(--sneaky);
+    background-color: var(--option);
 }
 
 .klab-warning {

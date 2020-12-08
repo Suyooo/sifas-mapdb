@@ -30,17 +30,20 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         }
 
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
+        if (!json.extra_info.is_available) {
+            return;
+        }
+
         let lid = (json.live_id % 10000 + "").padStart(4, "0");
-        let diff_id = Math.floor(ldid % 1000 / 10);
 
         if (!songs_dict.hasOwnProperty(lid)) {
             songs_dict[lid] = {
                 "name": json.song_name,
                 "attribute": json.song_attribute,
                 "length": json.song_length,
-                "notes": diff_id === 40 ? 0 : json.notes.length
+                "notes": json.extra_info.can_show_on_profile ? json.notes.length : 0
             };
-        } else if (diff_id !== 40) {
+        } else if (json.extra_info.can_show_on_profile) {
             if (json.notes.length > songs_dict[lid].notes) {
                 songs_dict[lid].notes = json.notes.length;
             }
@@ -54,10 +57,10 @@ let short = "";
 let most = "";
 
 for (let i = 1; i <= 6; i++) {
-    short += "<div class=\"col l6\"><table class=\"striped\" style=\"display: table;\"><thead><tr><th style=\"background-image: url('../image/icon_" +
+    short += "<div class=\"col l6\"><table class=\"striped\" style=\"display: table;\"><thead><tr><th style=\"background-image: url('image/icon_" +
         notemap.attribute(i) + ".png')\">&nbsp;</th><th>Song</th><th>Length</th></tr></thead><tbody>";
-    most += "<div class=\"col l6\"><table class=\"striped\" style=\"display: table;\"><thead><tr><th style=\"background-image: url('../image/icon_" +
-        notemap.attribute(i) + ".png')\">&nbsp;</th><th>Song</th><th>Length</th></tr></thead><tbody>";
+    most += "<div class=\"col l6\"><table class=\"striped\" style=\"display: table;\"><thead><tr><th style=\"background-image: url('image/icon_" +
+        notemap.attribute(i) + ".png')\">&nbsp;</th><th>Song</th><th>Note Count</th></tr></thead><tbody>";
 
     let attr_songs = songs.filter(function (e) {
         return e.attribute == i;
