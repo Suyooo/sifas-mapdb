@@ -24,9 +24,15 @@ let songs_dict = {};
 
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
+        let ldid = Number(f.substring(0, f.length - 5));
+        if (ldid >= 20000000) {
+            return;
+        }
+
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
         let lid = (json.live_id % 10000 + "").padStart(4, "0");
-        let diff_id = Math.floor(Number(f.substring(0, f.length - 5)) % 1000 / 10);
+        let diff_id = Math.floor(ldid % 1000 / 10);
+
         if (!songs_dict.hasOwnProperty(lid)) {
             songs_dict[lid] = {
                 "name": json.song_name,

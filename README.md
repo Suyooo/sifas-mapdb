@@ -86,6 +86,11 @@ changed, so there are missing numbers if going through all the Story Stages.
 # Extra Info
 Depending on the Live Type (see above), additional info may be included in the `extra_info` object in the JSON root.
 
+## Free Live
+`is_available`: Whether the song is currently playable (on the JP version)  
+`is_permanent`: Whether the song is a permanent song (not time-limited)  
+`can_show_on_profile`: Whether the song counts for the highest score/combo fields on player's profiles
+
 ## Story Stage
 `story_chapter`: The number of the Chapter this Stage appears in (starting from 1, as in-game)  
 `story_stage`: Counter for which Stage in the Chapter this is (starting from 1)  
