@@ -38,7 +38,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
 
         if (!songs_dict.hasOwnProperty(lid)) {
             songs_dict[lid] = {
-                "name": json.song_name,
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span>',
                 "attribute": json.song_attribute,
                 "length": json.song_length,
                 "notes": json.extra_info.can_show_on_profile ? json.notes.length : 0
@@ -51,7 +51,9 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
     }
 });
 
-let songs = Object.keys(songs_dict).map(function(e) { return songs_dict[e]; });
+let songs = Object.keys(songs_dict).map(function (e) {
+    return songs_dict[e];
+});
 
 let short = "";
 let most = "";
