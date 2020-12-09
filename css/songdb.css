@@ -428,14 +428,20 @@ h5 {
     width: 20%;
 }
 
-.rankingtable:not(.open) tr:nth-child(n+11):not(.open-button) {
-    display: none;
-}
-
 .rankingtable tr.open-button {
-    background-color: none;
+    display: none;
 }
 
-.rankingtable.open tr.open-button {
-    display: none;
+@media only screen and (max-width: 992px) {
+    .rankingtable:not(.open) tr:nth-child(n+11):not(.open-button) {
+        display: none;
+    }
+
+    .rankingtable tr.open-button {
+        display: table-row;
+    }
+
+    .rankingtable.open tr.open-button {
+        display: none;
+    }
 }
