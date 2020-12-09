@@ -389,8 +389,17 @@ h5 {
     background-color: #006ece !important;
 }
 
+.striped-manually > tbody > tr, .striped-manually > thead > tr {
+    border: none;
+}
+
+.striped-manually > tbody > tr.odd {
+    background-color: var(--option);
+}
+
 .rankingtable {
     margin-bottom: 1em;
+    counter-reset: rank;
 }
 
 .rankingtable td, .rankingtable th {
@@ -401,16 +410,26 @@ h5 {
     font-weight: bold;
 }
 
-.rankingtable tr td:first-child {
-    text-align: center;
-}
-
 .rankingtable thead tr {
     background-color: var(--key-low) !important;
 }
 
+.rankingtable tr.hidden {
+    display: none;
+}
+
+.rankingtable.show-all tr.hidden {
+    display: table-row;
+}
+
 .rankingtable tr td:nth-child(1) {
+    text-align: center;
     width: 7.5%;
+}
+
+.rankingtable tr td:nth-child(1)::before {
+    counter-increment: rank;
+    content: counter(rank);
 }
 
 .rankingtable tr td:nth-child(2) {

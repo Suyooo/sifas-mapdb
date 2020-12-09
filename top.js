@@ -64,7 +64,8 @@ songs.sort(function (a, b) {
 }).forEach(function (e) {
     let min = Math.floor(e.length / 60000);
     let sec = e.length % 60000 / 1000;
-    short += "<tr><td>" + (r++) + "</td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
+    let classStr = (r++ % 2 === 0) ? " class='odd'" : "";
+    short += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
 });
 
@@ -74,7 +75,8 @@ songs.filter(function (e) {
 }).sort(function (a, b) {
     return b.notes - a.notes;
 }).forEach(function (e) {
-    most += "<tr><td>" + (r++) + "</td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
+    let classStr = (r++ % 2 === 0) ? " class='odd'" : "";
+    most += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + e.notes + "</td></tr>";
 });
 
