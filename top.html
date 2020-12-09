@@ -39,22 +39,45 @@
     </div>
 </nav>
 <center><a href="index.html" style="font-size: 200%">View Full Note Map List &gt;&gt;&gt;</a></center>
-<div class="container">
+<div class="container row">
     <center>
-        <a id="show_romaji" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">click to show romanized song names</a>
+        <a id="show_romaji" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">click to
+            show romanized song names</a>
     </center>
-
-    <h5>Shortest Song Lengths</h5>
-    <div class="row nomargin">
-        $SHORT
+    <div class="col l6">
+        <h5>Shortest Song Lengths</h5>
+        <table class="striped rankingtable" style="display: table;">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Song</th>
+                <th>Length</th>
+            </tr>
+            </thead>
+            <tbody>
+            $SHORT
+            </tbody>
+        </table>
+        <small class="right">(only showing songs currently available on JP)</small>
     </div>
-    <small class="right">(only showing songs currently available on JP)</small>
-
-    <h5>Highest Note Counts</h5>
-    <div class="row nomargin">
-        $MOST
+    <div class="col l6">
+        <h5>Highest Note Counts</h5>
+        <table class="striped rankingtable" style="display: table;">
+            <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Song</th>
+                <th>Note Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            $MOST
+            </tbody>
+        </table>
+        <small class="right">(only showing songs that can be displayed on your profile)</small>
     </div>
-    <small class="right">(only showing songs that can be displayed on your profile)</small>
 </div>
 <script type="text/javascript" src="vendor/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="vendor/materialize.js"></script>
