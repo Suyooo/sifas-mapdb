@@ -427,7 +427,7 @@ h5 {
     width: 7.5%;
 }
 
-.rankingtable tr td:nth-child(1)::before {
+.rankingtable tr:not(.open-button) td:nth-child(1)::before {
     counter-increment: rank;
     content: counter(rank);
 }
