@@ -299,6 +299,13 @@ $(function () {
         }
     });
 
+    $(".rankingtable").each(function () {
+        let table = $(this);
+        $(".btn", this).click(function () {
+            table.addClass("open");
+        });
+    });
+
     if (IS_MAP_DB) {
         // filter field for map db
         $("input#filter").keyup(function(e) {

@@ -427,3 +427,15 @@ h5 {
 .rankingtable tr td:nth-child(4) {
     width: 20%;
 }
+
+.rankingtable:not(.open) tr:nth-child(n+11):not(.open-button) {
+    display: none;
+}
+
+.rankingtable tr.open-button {
+    background-color: none;
+}
+
+.rankingtable.open tr.open-button {
+    display: none;
+}
