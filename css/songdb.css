@@ -453,7 +453,7 @@ h5 {
 }
 
 @media only screen and (max-width: 992px) {
-    .rankingtable:not(.open) tr:nth-child(n+11):not(.open-button) {
+    .rankingtable:not(.open) tr.hide-if-narrow {
         display: none;
     }
 

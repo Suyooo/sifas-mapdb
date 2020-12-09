@@ -43,7 +43,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "length": json.song_length,
                 "notes": json.notes.length,
                 "is_available": json.extra_info.is_available,
-                "can_show_on_profile": json.extra_info.can_show_on_profile,
+                "can_show_on_profile": json.extra_info.can_show_on_profile
             };
         } else {
             if (json.notes.length > songs_dict[lid].notes) {
@@ -66,7 +66,11 @@ songs.sort(function (a, b) {
 }).forEach(function (e) {
     let min = Math.floor(e.length / 60000);
     let sec = e.length % 60000 / 1000;
-    let classStr = !e.is_available ? " class='hidden'" : (r++ % 2 === 0) ? " class='odd'" : "";
+
+    let classStr = !e.is_available ? "hidden" : (r++ % 2 === 0) ? "odd" : "";
+    if (r > 11) classStr += " hide-if-narrow";
+    if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
+
     short += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
 });
@@ -77,7 +81,10 @@ songs.filter(function (e) {
 }).sort(function (a, b) {
     return b.notes - a.notes;
 }).forEach(function (e) {
-    let classStr = !e.can_show_on_profile ? " class='hidden'" : (r++ % 2 === 0) ? " class='odd'" : "";
+    let classStr = !e.can_show_on_profile ? "hidden" : (r++ % 2 === 0) ? "odd" : "";
+    if (r > 11) classStr += " hide-if-narrow";
+    if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
+
     most += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + e.notes + "</td></tr>";
 });
