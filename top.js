@@ -53,6 +53,48 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             }
         }
     }
+
+    /* Manual additions: songs that I was unable to dump before they disappeared - but I still know stuff! */
+    songs_dict["0118"] = {
+        "name": '<span class="translatable" data-rom="A song for You! You? You!!">A song for You! You? You!!</span>',
+        "attribute": 4,
+        "length": 121867,
+        "notes": 188,
+        "is_available": false,
+        "can_show_on_profile": false
+    };
+    songs_dict["1080"] = {
+        "name": '<span class="translatable" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
+        "attribute": 1,
+        "length": 120838,
+        "notes": 179,
+        "is_available": false,
+        "can_show_on_profile": false
+    };
+    songs_dict["1081"] = {
+        "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart Coaster</span>',
+        "attribute": 4,
+        "length": 120215,
+        "notes": 182,
+        "is_available": false,
+        "can_show_on_profile": false
+    };
+    songs_dict["1082"] = {
+        "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing Travel DNA</span>',
+        "attribute": 6,
+        "length": 109635,
+        "notes": 163,
+        "is_available": false,
+        "can_show_on_profile": false
+    };
+    songs_dict["2020"] = {
+        "name": '<span class="translatable" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
+        "attribute": 4,
+        "length": 0,
+        "notes": 176,
+        "is_available": false,
+        "can_show_on_profile": false
+    };
 });
 
 let songs = Object.keys(songs_dict).map(function (e) {
@@ -63,7 +105,9 @@ let short = "";
 let most = "";
 
 let r = 1;
-songs.sort(function (a, b) {
+songs.filter(function (e) {
+    return e.length > 0;
+}).sort(function (a, b) {
     return a.length - b.length;
 }).forEach(function (e) {
     let min = Math.floor(e.length / 60000);
