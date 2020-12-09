@@ -30,20 +30,22 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         }
 
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
-        if (!json.extra_info.is_available) {
+        let lid = (json.live_id % 10000 + "").padStart(4, "0");
+        let diff_id = Math.floor(ldid / 10) % 100;
+        if (diff_id === 40) {
             return;
         }
-
-        let lid = (json.live_id % 10000 + "").padStart(4, "0");
 
         if (!songs_dict.hasOwnProperty(lid)) {
             songs_dict[lid] = {
                 "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span>',
                 "attribute": json.song_attribute,
                 "length": json.song_length,
-                "notes": json.extra_info.can_show_on_profile ? json.notes.length : 0
+                "notes": json.notes.length,
+                "is_available": json.extra_info.is_available,
+                "can_show_on_profile": json.extra_info.can_show_on_profile,
             };
-        } else if (json.extra_info.can_show_on_profile) {
+        } else {
             if (json.notes.length > songs_dict[lid].notes) {
                 songs_dict[lid].notes = json.notes.length;
             }
@@ -64,7 +66,7 @@ songs.sort(function (a, b) {
 }).forEach(function (e) {
     let min = Math.floor(e.length / 60000);
     let sec = e.length % 60000 / 1000;
-    let classStr = (r++ % 2 === 0) ? " class='odd'" : "";
+    let classStr = !e.is_available ? " class='hidden'" : (r++ % 2 === 0) ? " class='odd'" : "";
     short += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
 });
@@ -75,7 +77,7 @@ songs.filter(function (e) {
 }).sort(function (a, b) {
     return b.notes - a.notes;
 }).forEach(function (e) {
-    let classStr = (r++ % 2 === 0) ? " class='odd'" : "";
+    let classStr = !e.can_show_on_profile ? " class='hidden'" : (r++ % 2 === 0) ? " class='odd'" : "";
     most += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + e.notes + "</td></tr>";
 });

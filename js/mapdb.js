@@ -304,6 +304,10 @@ $(function () {
         $(".btn", this).click(function () {
             table.addClass("open");
         });
+        $("small.right", table.parent()).click(function () {
+            table.addClass("show-all");
+            $(this).remove();
+        });
     });
 
     if (IS_MAP_DB) {

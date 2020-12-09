@@ -416,6 +416,7 @@ h5 {
 
 .rankingtable tr.hidden {
     display: none;
+    background-color: var(--key-low2);
 }
 
 .rankingtable.show-all tr.hidden {
