@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 const fs = require('fs');
+const settings = require('./settings.js');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 
@@ -25,7 +26,8 @@ let songs_dict = {};
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let ldid = Number(f.substring(0, f.length - 5));
-        if (ldid >= 20000000) {
+        let isEventLive = Math.floor(ldid / 1000) === settings.current_event_live_id;
+        if (ldid >= 20000000 && !isEventLive) {
             return;
         }
 
@@ -42,8 +44,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "attribute": json.song_attribute,
                 "length": json.song_length,
                 "notes": json.notes.length,
-                "is_available": json.extra_info.is_available,
-                "can_show_on_profile": json.extra_info.can_show_on_profile
+                "is_available": isEventLive ? true : json.extra_info.is_available,
+                "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile
             };
         } else {
             if (json.notes.length > songs_dict[lid].notes) {

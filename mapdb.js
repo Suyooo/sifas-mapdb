@@ -16,9 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const CURRENT_EVENT_LIVE_ID = 21030;
-
 const fs = require('fs');
+const settings = require('./settings.js');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 
@@ -44,7 +43,7 @@ let songdata = {};
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let ldid = Number(f.substring(0, f.length - 5));
-        if ((Math.floor(ldid / 1000) !== CURRENT_EVENT_LIVE_ID) && // Not an Event Variant
+        if ((Math.floor(ldid / 1000) !== settings.current_event_live_id) && // Not an Event Variant
             (ldid < 30000000 || ldid >= 40000000) &&                  // Not a Story Stage
             ldid >= 20000000) {                                       // Not a Free Live
             // ignore
