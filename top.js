@@ -72,7 +72,7 @@ for (let i = 1; i <= 6; i++) {
     }).slice(0, 3).forEach(function (e) {
         let min = Math.floor(e.length / 60000);
         let sec = e.length % 60000 / 1000;
-        short += "<tr><td>" + (r++) + "</td><td>" + e.name + "</td><td>" + min + ":" + sec.toFixed(3) + "</td></tr>";
+        short += "<tr><td>" + (r++) + "</td><td>" + e.name + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
     });
 
     r = 1;
