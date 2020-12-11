@@ -221,6 +221,7 @@ function skill_target(target_id) {
     if (target_id === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
     if (target_id === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
     if (target_id === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
+    if (target_id === 99) return 'non-Aqours units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 
