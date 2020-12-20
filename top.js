@@ -55,14 +55,6 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
     }
 
     /* Manual additions: songs that I was unable to dump before they disappeared - but I still know stuff! */
-    songs_dict["0118"] = {
-        "name": '<span class="translatable" data-rom="A song for You! You? You!!">A song for You! You? You!!</span>',
-        "attribute": 4,
-        "length": 121867,
-        "notes": 188,
-        "is_available": false,
-        "can_show_on_profile": false
-    };
     songs_dict["1080"] = {
         "name": '<span class="translatable" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
         "attribute": 1,
