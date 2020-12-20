@@ -15,7 +15,7 @@ function filterCollapsibles(search_input) {
     let headers = $("h5");
     if (search_input === undefined || search_input.trim() === "") {
         collapsibles.each(function () {
-            $(this).show();
+            $(this).css("display","");
             let collapsible = M.Collapsible.getInstance(this);
             collapsible.close();
         });
@@ -42,10 +42,10 @@ function filterCollapsibles(search_input) {
         });
 
         if (result) {
-            $(this).show();
+            $(this).css("display","block");
             filtered.push(collapsible);
         } else {
-            $(this).hide();
+            $(this).css("display","none");
             collapsible.close();
         }
     });
@@ -77,6 +77,18 @@ $(function () {
         }
     });
 
+    $("#show_unavail").click(function () {
+        let cont = $(".container");
+        if (cont.hasClass("show-unavail")) {
+            cont.removeClass("show-unavail");
+            $(this).text("click to show unavailable songs")
+        } else {
+            cont.addClass("show-unavail");
+            $(this).text("click to hide unavailable songs");
+        }
+
+    });
+
     $(".collapsible").each(function () {
         let collapsible = M.Collapsible.getInstance(this);
         if (IS_MAP_DB) {
@@ -91,12 +103,18 @@ $(function () {
                 let tabId = window.location.hash.substring(5);
                 let wantedTab = $("#" + tabId, this);
                 if (wantedTab.length > 0) {
+                    if ($(this).hasClass("unavail")) {
+                        $(".container").addClass("show-unavail");
+                        $("#show_unavail").text("click to hide unavailable songs");
+                    }
+
                     // add padding at bottom to successfully scroll to divs at the end of the page
                     body.css({"padding-bottom": "500%"});
                     setTimeout(function () {
                         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
                     }, 300);
                     collapsible.open();
+
                     if (tabId.startsWith("3")) {
                         // this is a Story Stage - open up the parent tab
                         tabs.select($(this).data("live-id") + "-story");
