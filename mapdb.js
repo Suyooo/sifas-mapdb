@@ -71,7 +71,7 @@ lives = lives.sort(function (a, b) {
 lives.forEach(function (e) {
     live_difficulty_ids[e.id] = live_difficulty_ids[e.id].sort(function (a, b) {
         if (a < 30000000 || b < 30000000) {
-            return a.order - b.order;
+            return a - b;
         } else {
             // Sort Story Stages by chapter and mode, not LDI (LDIs are only in the same order from Chapter 8 onwards)
             return (songdata[a].extra_info.story_chapter * 1000 + songdata[a].extra_info.story_stage * 10 +
