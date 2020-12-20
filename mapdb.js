@@ -115,32 +115,40 @@ Object.keys(lives_dict).sort(function (a, b) {
     let story_tabs = "";
 
     live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
-        let live = songdata[live_difficulty_id];
+        let live_diff = songdata[live_difficulty_id];
         let diff_id = Math.floor(live_difficulty_id % 1000 / 10);
 
+        // Mark the Advanced difficulty as the initially open tab
         let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
-            // Mark the Advanced difficulty as the initially open tab
-            (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>' +
+            (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>';
 
-            // Full difficulty name for free lives, shortened difficulty plus location and attribute for story stages
-            (live_difficulty_id < 30000000 ? notemap.difficulty(diff_id) : (live.extra_info.story_chapter < 20 ? "" :
-                (live.extra_info.story_is_hard_mode ? "HARD" : "NORMAL") + " ") + live.extra_info.story_chapter +
-                '-' + live.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live) +
-                ' <img src="image/icon_' + notemap.attribute(live.song_attribute) + '.png" alt="' +
-                notemap.attribute(live.song_attribute) + '">)') + '</a></li>';
+        if (live_difficulty_id < 30000000) {
+            // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
+            this_tabbar += notemap.difficulty(diff_id) + (live_diff.song_attribute != live.attribute ?
+                ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
+                notemap.attribute(live_diff.song_attribute) + '">' : '');
+        } else {
+            // Shortened difficulty plus location for story stages, always show attribute
+            this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :
+                (live_diff.extra_info.story_is_hard_mode ? "HARD" : "NORMAL") + " ") + live_diff.extra_info.story_chapter +
+            '-' + live_diff.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live_diff) +
+            ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
+            notemap.attribute(live_diff.song_attribute) + '">)'
+        }
+        this_tabbar += '</a></li>';
 
         let this_tab = '<div class="live-difficulty" id="' + live_difficulty_id + '"><div class="row nomargin">' +
 
             // Top information
-            '<div class="col l6"><b>S Rank: </b>' + notemap.format(live.ranks.S) + '</div>' +
-            '<div class="col l6"><b>A Rank: </b>' + notemap.format(live.ranks.A) + '</div>' +
-            '<div class="col l6"><b>B Rank: </b>' + notemap.format(live.ranks.B) + '</div>' +
-            '<div class="col l6"><b>C Rank: </b>' + notemap.format(live.ranks.C) + '</div>' +
-            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live.recommended_stamina) + '</div>' +
-            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live.note_damage) + '</div></div>' +
+            '<div class="col l6"><b>S Rank: </b>' + notemap.format(live_diff.ranks.S) + '</div>' +
+            '<div class="col l6"><b>A Rank: </b>' + notemap.format(live_diff.ranks.A) + '</div>' +
+            '<div class="col l6"><b>B Rank: </b>' + notemap.format(live_diff.ranks.B) + '</div>' +
+            '<div class="col l6"><b>C Rank: </b>' + notemap.format(live_diff.ranks.C) + '</div>' +
+            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live_diff.recommended_stamina) + '</div>' +
+            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live_diff.note_damage) + '</div></div>' +
 
             // Create the note map
-            notemap.make(live) + '</div>';
+            notemap.make(live_diff) + '</div>';
 
         if (live_difficulty_id >= 30000000 && live_difficulty_id < 40000000) {
             story_tabbar += this_tabbar;
