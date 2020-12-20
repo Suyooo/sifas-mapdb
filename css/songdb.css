@@ -22,6 +22,11 @@ h5 {
     margin-right: 1em;
 }
 
+.collapsible.unavail .collapsible-header {
+    background-color: var(--option);
+    color: var(--dark-border);
+}
+
 .tabs.tabs-transparent {
     margin-top: -1rem;
     margin-bottom: 1rem;
@@ -416,7 +421,7 @@ h5 {
 
 .rankingtable tr.hidden {
     display: none;
-    background-color: var(--key-low2);
+    background-color: var(--border);
 }
 
 .rankingtable.show-all tr.hidden {

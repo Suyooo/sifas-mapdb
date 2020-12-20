@@ -101,12 +101,12 @@ Object.keys(lives_dict).sort(function (a, b) {
     if (live.id >= 12000 && last_live_id < 12000) s += '<h5 id="niji">Nijigaku</h5>';
     last_live_id = live.id;
 
-    s += '<ul class="collapsible" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
-        '<div class="collapsible-header">' +
-        '<img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
+    s += '<ul class="collapsible' + (!live.is_available ? " unavail" : (!live.is_permanent ? " temp" : "")) +
+        '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
+        '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
-        '</b>' + (!live.is_available ? "&nbsp;(unavailable)" : (!live.is_permanent ? "&nbsp;(temporary)" : "")) +
+        '</b>' + (!live.is_available ? "&nbsp;(unavailable)" : (!live.is_permanent ? "&nbsp;(time-limited)" : "")) +
         '</div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
 
     let live_tabbar = "";
