@@ -36,7 +36,7 @@ function guess_story_stage_difficulty(stage) {
     return notemap.difficulty_short(minimum_difficulty);
 }
 
-let lives = [];
+let lives_dict = {};
 let live_difficulty_ids = {};
 let songdata = {};
 
@@ -49,27 +49,42 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             // ignore
             return;
         }
+        let diff_id = Math.floor(ldid / 10) % 100;
+        let isEventLive = Math.floor(ldid / 1000) === settings.current_event_live_id;
 
         songdata[ldid] = JSON.parse(fs.readFileSync('mapdb/' + f));
         let lid = songdata[ldid].live_id;
         if (!live_difficulty_ids.hasOwnProperty(lid)) {
             live_difficulty_ids[lid] = [];
-            lives.push({
+            lives_dict[lid] = {
                 "id": lid,
                 "order": songdata[ldid].display_order,
                 "name": songdata[ldid].song_name,
-                "attribute": songdata[ldid].song_attribute
-            });
+                "attribute": isEventLive ? 9 : null,
+                "is_available": isEventLive ? true : null,
+                "is_permanent": isEventLive ? true : null
+            };
+        }
+        if (lives_dict[lid].attribute === null && ldid < 20000000 && diff_id !== 40) {
+            // only fill these fields from Free Live, non-Adv+ data
+            lives_dict[lid].attribute = songdata[ldid].song_attribute;
+            lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;
+            lives_dict[lid].is_permanent = songdata[ldid].extra_info.is_permanent;
         }
         live_difficulty_ids[lid].push(ldid);
     }
 });
 
-lives = lives.sort(function (a, b) {
-    return a.order - b.order;
-});
-lives.forEach(function (e) {
-    live_difficulty_ids[e.id] = live_difficulty_ids[e.id].sort(function (a, b) {
+let s = '<h5 id="muse">µ\'s</h5>'
+
+let last_live_id = 0;
+
+Object.keys(lives_dict).sort(function (a, b) {
+    return lives_dict[a].order - lives_dict[b].order;
+}).map(function (e) {
+    return lives_dict[e];
+}).forEach(function (live) {
+    live_difficulty_ids[live.id] = live_difficulty_ids[live.id].sort(function (a, b) {
         if (a < 30000000 || b < 30000000) {
             return a - b;
         } else {
@@ -80,12 +95,7 @@ lives.forEach(function (e) {
                     (songdata[b].extra_info.story_is_hard_mode ? 1 : 0));
         }
     });
-});
 
-let s = '<h5 id="muse">µ\'s</h5>'
-
-let last_live_id = 0;
-lives.forEach(function (live) {
     // start new section if the next group is up
     if (live.id >= 11000 && last_live_id < 11000) s += '<h5 id="aqours">Aqours</h5>';
     if (live.id >= 12000 && last_live_id < 12000) s += '<h5 id="niji">Nijigaku</h5>';
@@ -96,7 +106,8 @@ lives.forEach(function (live) {
         '<img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
-        '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
+        '</b>' + (!live.is_available ? "&nbsp;(unavailable)" : (!live.is_permanent ? "&nbsp;(temporary)" : "")) +
+        '</div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
 
     let live_tabbar = "";
     let live_tabs = "";
