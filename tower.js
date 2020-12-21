@@ -29,6 +29,21 @@ function tower_name_romaji(tower_id) {
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
 
+function make_reward_string(rewards) {
+    let rewardstrings = [];
+    Object.keys(rewards).sort(function (a, b) {
+        // Medals first, stars second
+        return Number(b) - Number(a);
+    }).forEach(function (k) {
+        let itemname;
+        if (k === "0") itemname = "star";
+        else if (k === "19001") itemname = "medal";
+        else throw new Error('Unknown Item ID ' + k);
+        rewardstrings.push(notemap.format(rewards[k]) + " " + itemname + (rewards[k] === 1 ? "" : "s"));
+    })
+    return rewardstrings.join(", ");
+}
+
 let tower_ids = [];
 let towerdata = {};
 
@@ -83,8 +98,7 @@ tower_ids.forEach(function (tower_id) {
             // Top information
             '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
-            '<div class="col l6"><b>Clear Reward: </b>' +
-            notemap.format(floor.reward_clear["19001"]) + ' medals, ' + notemap.format(floor.reward_clear["0"]) + ' stars</div>' +
+            '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
             '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
             '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
             '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
@@ -99,8 +113,7 @@ tower_ids.forEach(function (tower_id) {
         s += '</div></li></ul>';
 
         if (floor.reward_progress !== null) {
-            s += '<div class="progress reward"><b>Progress Reward:</b> ' + notemap.format(floor.reward_progress["19001"]) +
-                ' medals, ' + notemap.format(floor.reward_progress["0"]) + ' stars</div>';
+            s += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
         } else {
             s += '<div class="progress">&nbsp;</div>';
         }
