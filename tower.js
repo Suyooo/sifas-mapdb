@@ -70,7 +70,12 @@ tower_ids.forEach(function (tower_id) {
         ' loveca stars<br><br>';
 
     tower["floors"].forEach(function (floor) {
-        if (floor.floor_type == 1) return;
+        if (floor.floor_type == 1) {
+            s += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
+                '<b class="floorno">' + floor.floor_number + ')</b><b>Story Node: ' + floor.story_title + '</b></div>';
+            s += '<div class="progress">&nbsp;</div>';
+            return;
+        }
 
         // Load referenced note map if available
         let linked_live = undefined;
