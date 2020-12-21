@@ -55,6 +55,8 @@ tower_ids.forEach(function (tower_id) {
         ' loveca stars<br><br>';
 
     tower["floors"].forEach(function (floor) {
+        if (floor.floor_type == 1) return;
+
         // Load referenced note map if available
         let linked_live = undefined;
         if (floor["notemap_live_difficulty_id"] !== null) {
