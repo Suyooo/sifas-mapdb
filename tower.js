@@ -25,6 +25,7 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33002) return "Dream Live Parade ~Aqours~";
     if (tower_id === 33003) return "Dream Live Parade ~Nijigaku~";
     if (tower_id === 33004) return "Dream Live Parade ~μ's~";
+    if (tower_id === 33005) return "2020 Countdown Live";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
