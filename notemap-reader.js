@@ -133,6 +133,7 @@ function song_name_romaji(live_id) {
     if (lid === "2053") return "Just Believe!!!";
     if (lid === "2040") return "Niji-iro Passions!";
     if (lid === "2041") return "NEO SKY, NEO MAP!";
+    if (lid === "2051") return "Yume ga Koko Kara Hajimaru yo";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
