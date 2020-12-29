@@ -79,6 +79,7 @@ function song_name_romaji(live_id) {
     if (lid === "0060") return "Donna Toki mo Zutto";
     if (lid === "0071") return "Happy maker!";
     if (lid === "0077") return "COLORFUL VOICE";
+    if (lid === "0009") return "Angelic Angel";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0004") return "Shunjou Romantic";
     if (lid === "0015") return "NO EXIT ORION";
