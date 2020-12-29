@@ -32,6 +32,10 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         }
 
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
+        if (json.notes === null) {
+            // ignore preliminary live data without note map info
+            return;
+        }
         let lid = (json.live_id % 10000 + "").padStart(4, "0");
         let diff_id = Math.floor(ldid / 10) % 100;
         if (diff_id === 40) {
