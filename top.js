@@ -86,8 +86,16 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
     songs_dict["2020"] = {
         "name": '<span class="translatable" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
         "attribute": 4,
-        "length": 0,
+        "length": 0, // set to 0 so it doesn't show next to perma LUMF... would be useless
         "notes": 176,
+        "is_available": false,
+        "can_show_on_profile": false
+    };
+    songs_dict["2061"] = {
+        "name": '<span class="translatable" data-rom="Mirai Harmony">未来ハーモニー</span>',
+        "attribute": 3,
+        "length": 110058,
+        "notes": 0, // Adv note count unknown as of now
         "is_available": false,
         "can_show_on_profile": false
     };
