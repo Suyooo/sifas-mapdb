@@ -206,6 +206,7 @@ song by just using the length of the `notes` array.
 - 97: Vo and Sp Types
 - 98: Vo and Gd Types
 - 99: non-Aqours
+- 100: non-Niji
 
 ## Effects
 - 3: SP Gauge Charge (fixed amount)
@@ -251,6 +252,7 @@ song by just using the length of the `notes` array.
 - 143: Base Appeal Up, based on the amount of Gd types
 - 163: Skill Activation Chance Up, based on the amount of Sk types
 - 164: Skill Activation Chance Up, based on the amount of Gd types
+- 171: Base Skill Activation Chance Up, based on the amount of Sk types
 - 179: Critical Chance Up, based on the amount of Sk types
 - 187: Base Critical Chance Up, based on the amount of Sk types
 - 193: Critical Power Up, based on the amount of Vo types

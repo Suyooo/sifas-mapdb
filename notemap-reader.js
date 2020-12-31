@@ -111,6 +111,7 @@ function song_name_romaji(live_id) {
     if (lid === "1079") return "Mitaiken HORIZON";
     if (lid === "1049") return "Landing action Yeah!!";
     if (lid === "1030") return "Jingle Bells ga Tomaranai";
+    if (lid === "1072") return "Hop? Stop? Nonstop!";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1044") return "GALAXY HidE and SeeK";
     if (lid === "1004") return "Genki Zenkai DAY!DAY!DAY!";
@@ -135,6 +136,7 @@ function song_name_romaji(live_id) {
     if (lid === "2040") return "Niji-iro Passions!";
     if (lid === "2041") return "NEO SKY, NEO MAP!";
     if (lid === "2051") return "Yume ga Koko Kara Hajimaru yo";
+    if (lid === "2061") return "Mirai Harmony";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
@@ -225,6 +227,7 @@ function skill_target(target_id) {
     if (target_id === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
     if (target_id === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
     if (target_id === 99) return 'non-Aqours units ';
+    if (target_id === 100) return 'non-Niji units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 
@@ -272,6 +275,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 143) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 163) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 164) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
+    if (type_id === 171) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 179) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 187) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 193) return 'gain ' + format(amount / 100) + '% Critical Power for each <span class="t vo">Vo</span> unit in the formation';
