@@ -70,10 +70,11 @@ tower_ids.forEach(function (tower_id) {
         ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
         ' loveca stars<br><br>';
 
+    let floor_no = 1;
     tower["floors"].forEach(function (floor) {
         if (floor.floor_type == 1) {
             s += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
-                '<b class="floorno">' + floor.floor_number + ')</b><b>Story Node: ' + floor.story_title + '</b></div>';
+                '<b>Story Node: ' + floor.story_title + '</b></div>';
             s += '<div class="progress">&nbsp;</div>';
             return;
         }
@@ -89,7 +90,7 @@ tower_ids.forEach(function (tower_id) {
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
-            '<b class="floorno">' + floor.floor_number + (floor.notemap_live_difficulty_id === null ? "*" : "") + ')</b>' +
+            '<b class="floorno">' + (floor_no++) + (floor.notemap_live_difficulty_id === null ? "*" : "") + ')</b>' +
             '<div class="row">' +
 
             // Header information

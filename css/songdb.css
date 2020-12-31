@@ -21,10 +21,16 @@ h5 {
     padding: 0 !important;
 }
 
-.collapsible-header img, .fake-collapsible-header .spacer {
+.collapsible-header img {
     width: 1.5rem;
     height: 1.5rem;
     margin-right: 1em;
+}
+
+.fake-collapsible-header .spacer {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 4em;
 }
 
 .container:not(.show-unavail) .collapsible.unavail {
