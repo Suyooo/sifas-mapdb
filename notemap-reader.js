@@ -135,9 +135,11 @@ function song_name_romaji(live_id) {
     if (lid === "2053") return "Just Believe!!!";
     if (lid === "2040") return "Niji-iro Passions!";
     if (lid === "2041") return "NEO SKY, NEO MAP!";
+    if (lid === "2062") return "Sweet Eyes";
     if (lid === "2051") return "Yume ga Koko Kara Hajimaru yo";
     if (lid === "2061") return "Mirai Harmony";
     if (lid === "2031") return "SUPER NOVA";
+    if (lid === "2067") return "POWER SPOT";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
     if (lid === "2037") return "Love U my friends";
@@ -180,6 +182,7 @@ function song_name_romaji(live_id) {
     if (lid === "2029") return "Analog Heart";
     if (lid === "2050") return "Tsunagaru Connect";
     if (lid === "2030") return "Ketsui no Hikari";
+    if (lid === "2998") return "I'm Still...";
     if (lid === "2999") return "Queendom";
 
     throw new Error('Unknown Romaji Song Name for ' + live_id);

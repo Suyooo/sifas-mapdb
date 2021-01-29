@@ -65,8 +65,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "is_permanent": isEventLive ? true : null
             };
         }
-        if (lives_dict[lid].attribute === null && ldid < 20000000 && diff_id !== 40) {
-            // only fill these fields from Free Live, non-Adv+ data
+        if (lives_dict[lid].attribute === null || (ldid < 20000000 && diff_id !== 40)) {
+            // prefer info from Free Live, non-Adv+ data
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
             lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;
             lives_dict[lid].is_permanent = songdata[ldid].extra_info.is_permanent;
@@ -84,6 +84,7 @@ Object.keys(lives_dict).sort(function (a, b) {
 }).map(function (e) {
     return lives_dict[e];
 }).forEach(function (live) {
+    //console.log(live);
     live_difficulty_ids[live.id] = live_difficulty_ids[live.id].sort(function (a, b) {
         if (a < 30000000 || b < 30000000) {
             return a - b;
@@ -115,6 +116,7 @@ Object.keys(lives_dict).sort(function (a, b) {
     let story_tabs = "";
 
     live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
+        //console.log(live_difficulty_id);
         let live_diff = songdata[live_difficulty_id];
         let diff_id = Math.floor(live_difficulty_id % 1000 / 10);
 
