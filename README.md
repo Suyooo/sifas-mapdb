@@ -246,6 +246,7 @@ song by just using the length of the `notes` array.
 - 93: Shield Gain (percentage of max)
 - 96: Stamina Restore (percentage of max)
 - 119: Appeal Up, based on the amount of Vo types
+- 130: Stamina Restore (fixed amount), based on the amount of Sp types
 - 132: Stamina Restore (fixed amount), based on the amount of Sk types
 - 134: Stamina Restore (fixed amount), based on the amount of Gd types
 - 141: Base Appeal Up, based on the amount of Sk types

@@ -80,6 +80,7 @@ function song_name_romaji(live_id) {
     if (lid === "0071") return "Happy maker!";
     if (lid === "0077") return "COLORFUL VOICE";
     if (lid === "0009") return "Angelic Angel";
+    if (lid === "0068") return "KiRa-KiRa Sensation!";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0004") return "Shunjou Romantic";
     if (lid === "0015") return "NO EXIT ORION";
@@ -272,6 +273,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 93) return 'gain ' + format(amount / 100) + '% of max stamina as shield';
     if (type_id === 96) return 'restore ' + format(amount / 100) + '% of max stamina';
     if (type_id === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
+    if (type_id === 130) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 132) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 134) return 'restore ' + format(amount) + ' points of stamina for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 141) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t sk">Sk</span> unit in the formation';
