@@ -55,6 +55,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             if (json.notes.length > songs_dict[lid].notes) {
                 songs_dict[lid].notes = json.notes.length;
             }
+            songs_dict[lid].is_available = songs_dict[lid].is_available || json.extra_info.is_available;
+            songs_dict[lid].can_show_on_profile = songs_dict[lid].can_show_on_profile || json.extra_info.can_show_on_profile;
         }
     }
 
