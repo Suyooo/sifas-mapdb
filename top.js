@@ -38,16 +38,13 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         }
         let lid = (json.live_id % 10000 + "").padStart(4, "0");
         let diff_id = Math.floor(ldid / 10) % 100;
-        if (diff_id === 40) {
-            return;
-        }
 
         if (!songs_dict.hasOwnProperty(lid)) {
             songs_dict[lid] = {
                 "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span>',
                 "attribute": json.song_attribute,
                 "length": json.song_length,
-                "notes": json.notes.length,
+                "notes": diff_id !== 40 ? json.notes.length : 0, // don't count Adv+ note counts
                 "is_available": isEventLive ? true : json.extra_info.is_available,
                 "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile
             };
