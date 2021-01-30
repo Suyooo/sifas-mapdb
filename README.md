@@ -35,6 +35,7 @@ The Live Difficulty ID can be read as `ABCCCDDE`:
 - 0: µ's
 - 1: Aqours
 - 2: Nijigaku
+- 3: Liella!
 
 ## Attributes
 - 1: Smile

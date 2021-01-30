@@ -121,6 +121,7 @@ Object.keys(lives_dict).sort(function (a, b) {
     // start new section if the next group is up
     if (live.id >= 11000 && last_live_id < 11000) s += '<h5 id="aqours">Aqours</h5>';
     if (live.id >= 12000 && last_live_id < 12000) s += '<h5 id="niji">Nijigaku</h5>';
+    if (live.id >= 13000 && last_live_id < 13000) s += '<h5 id="liella">Liella!</h5>';
     last_live_id = live.id;
 
     s += '<ul class="collapsible' + (!live.is_available ? " unavail" : (!live.is_permanent ? " temp" : "")) +
