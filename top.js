@@ -107,7 +107,11 @@ let songs = Object.keys(songs_dict).map(function (e) {
 let short = "";
 let most = "";
 
-let r = 1;
+let rank = 1;
+let fullrank = 1;
+let rank_display = 1;
+let fullrank_display = 1;
+let last = -1;
 songs.filter(function (e) {
     return e.length > 0;
 }).sort(function (a, b) {
@@ -116,26 +120,44 @@ songs.filter(function (e) {
     let min = Math.floor(e.length / 60000);
     let sec = e.length % 60000 / 1000;
 
-    let classStr = !e.is_available ? "hidden" : (r++ % 2 === 0) ? "odd" : "";
-    if (r > 11) classStr += " hide-if-narrow";
+    if (e.length != last) {
+        rank_display = rank;
+        fullrank_display = fullrank;
+    }
+    fullrank++;
+    let classStr = !e.is_available ? "hidden" : (rank++ % 2 === 0) ? "odd" : "";
+    if (rank > 11) classStr += " hide-if-narrow";
     if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
 
-    short += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
+    short += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
+        "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
+    last = e.length;
 });
 
-r = 1;
+rank = 1;
+fullrank = 1;
+rank_display = 1;
+fullrank_display = 1;
+last = -1;
 songs.filter(function (e) {
     return e.notes > 0;
 }).sort(function (a, b) {
     return b.notes - a.notes;
 }).forEach(function (e) {
-    let classStr = !e.can_show_on_profile ? "hidden" : (r++ % 2 === 0) ? "odd" : "";
-    if (r > 11) classStr += " hide-if-narrow";
+    if (e.notes != last) {
+        rank_display = rank;
+        fullrank_display = fullrank;
+    }
+    fullrank++;
+    let classStr = !e.can_show_on_profile ? "hidden" : (rank++ % 2 === 0) ? "odd" : "";
+    if (rank > 11) classStr += " hide-if-narrow";
     if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
 
-    most += "<tr" + classStr + "><td></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
+    most += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
+        "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
         ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + e.notes + "</td></tr>";
+    last = e.notes;
 });
 
 let layout = fs.readFileSync('top.html').toString();

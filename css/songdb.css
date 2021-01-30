@@ -419,7 +419,6 @@ h5 {
 
 .rankingtable {
     margin-bottom: 1em;
-    counter-reset: rank;
 }
 
 .rankingtable td, .rankingtable th {
@@ -443,14 +442,17 @@ h5 {
     display: table-row;
 }
 
+.rankingtable:not(.show-all) span.open {
+    display: none;
+}
+
+.rankingtable.show-all span.notopen {
+    display: none;
+}
+
 .rankingtable tr td:nth-child(1) {
     text-align: center;
     width: 7.5%;
-}
-
-.rankingtable tr:not(.open-button) td:nth-child(1)::before {
-    counter-increment: rank;
-    content: counter(rank);
 }
 
 .rankingtable tr td:nth-child(2) {
