@@ -71,7 +71,28 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;
             lives_dict[lid].is_permanent = songdata[ldid].extra_info.is_permanent;
         }
-        live_difficulty_ids[lid].push(ldid);
+        if (ldid < 30000000) {
+            // On Free Live and Event songs, the last digit in the LDID is the version. If it is higher than one, that
+            // means there has been an update to it - so we can filter out older versions to make sure to only show
+            // the newest versions on the map DB
+            let ldidWithoutVer = Math.floor(ldid / 10);
+
+            // Check whether any newer versions already exist
+            if (live_difficulty_ids[lid].filter(function(e) {
+                return Math.floor(e / 10) === ldidWithoutVer && e > ldid;
+            }).length === 0) {
+                // If not, make sure to filter out any older versions if there are
+                if (ldid % 10 > 1) {
+                    live_difficulty_ids[lid] = live_difficulty_ids[lid].filter(function(e) {
+                        return Math.floor(e / 10) !== ldidWithoutVer;
+                    });
+                }
+                live_difficulty_ids[lid].push(ldid);
+            }
+        } else {
+            // Story/SBL/DLP/... songs don't use the last digit as version, always add them
+            live_difficulty_ids[lid].push(ldid);
+        }
     }
 });
 
