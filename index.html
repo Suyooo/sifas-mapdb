@@ -31,7 +31,7 @@
 </div>
 <nav>
     <div class="nav-wrapper orange lighten-5">
-        <a class="brand-logo center">Notemap DB</a>
+        <a class="brand-logo center">Note Map DB</a>
         <ul id="nav-mobile" class="left">
             <li class="orange lighten-3"><a href="/sifas/index.html"><i
                     class="material-icons left">keyboard_arrow_left</i>BACK</a></li>
@@ -39,75 +39,73 @@
     </div>
 </nav>
 <div class="container">
-    <ul class="collapsible" data-collapsible="expandable">
-        <li>
-            <div class="collapsible-header">
-                <i class="material-icons">help</i> What is this?
-            </div>
-            <div class="collapsible-body">
-                <p class="nomargin">
-                    This page attempts to give an as-complete-as-possible collection of song information. This is done
-                    by using note map data, which is downloaded from the server when playing a song in the game, in
-                    addition to the usual information from the app database.
-                </p>
-                <p>
-                    With the note map data, it is possible to show a full timeline of the song, including note counts,
-                    the positions of notes and which gimmicks they are associated with, the amount of notes in an Appeal
-                    Chance to see what voltage or skill/crit chances are required, and the rewards and penalties for
-                    clearing or failing them.
-                </p>
-                <p>
-                    Since note map data is only available when the song is played in game and requires network traffic
-                    to be captured, this is a lot of manual work. It might be possible that some songs will be missing
-                    for a while until I can unlock them (or just until I stop forgetting to dump them).
-                </p>
-                <p>
-                    If there's any note map that is missing, feel free to contact me and I'll add it as soon as
-                    possible. If you have any ideas for more features, I'd love to hear them, too! You can find
-                    Twitter/Discord/GitHub on the <a href="/sifas/index.html">Hub page</a>.
-                </p>
-                <b>Here's some neat stuff you can do on this page:</b>
-                <ul class="browser-default">
-                    <li>
-                        Hover over or tap a note gimmick or AC on the timeline to get a popup with the associated
-                        detail information. (It's the same information as the panels below, but without having to scroll
-                        down.)
-                    </li>
-                    <li>
-                        Click or tap on a Note Gimmick panel to highlight only that gimmick, moving the markers closer
-                        to the timeline and fading out others. Click/tap again to unhide. Good for Adv+ notemaps with
-                        tons of gimmick notes.
-                    </li>
-                    <li>
-                        Desktop only for now: Hold and drag on the timeline to measure the amount of notes and the time
-                        between any two points. You can use this, for example, to measure how many notes are between two
-                        ACs to see whether there is enough for you to re-charge your SP skill.
-                    </li>
-                    <li>
-                        After selecting a difficulty, you can copy the URL from the address bar. Share it with someone
-                        else, and their page will immediately open the correct note map - useful for linking others who
-                        need song information!
-                    </li>
-                </ul>
-                <br>
-                <b>Future Plans:</b>
-                <ul class="browser-default">
-                    <li>
-                        Make the romanized names a permanent option instead of a temporary toggle.
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
+                <li class="tab col s3 hide"><a class="active" href="#front">Front</a></li>
                 <li class="tab col s3"><a href="#muse">µ's</a></li>
                 <li class="tab col s3"><a href="#aqours">Aqours</a></li>
                 <li class="tab col s3"><a href="#niji">Nijigaku</a></li>
                 <li class="tab col s3"><a href="#liella">Liella!</a></li>
                 <li class="tab col s3"><a href="#dlp">DLP</a></li>
                 <li class="tab col s3"><a href="#top">Rankings</a></li>
+            </ul>
+        </div>
+        <div id="front" class="col s12" data-loaded="1">
+            <p style="font-weight: bold">
+                Welcome to the SIFAS Note Map Database! Click a group above to get started, or see the DLP stage lists
+                and Song Rankings by heading to the respective tabs.
+            </p>
+            <p>
+                In case you're here for the first time and are wondering what this is: This page attempts to give an
+                as-complete-as-possible collection of all the song information in the game. This is done by using note
+                map data, which is downloaded from the server when playing a song in the game, in addition to the usual
+                information from the app database.
+            </p>
+            <p>
+                With the note map data, it is possible to show a full timeline of the song, including note counts,
+                the positions of notes and which gimmicks they are associated with, the amount of notes in an Appeal
+                Chance to see what voltage or skill/crit chances are required, and the rewards and penalties for
+                clearing or failing them.
+            </p>
+            <p>
+                Since note map data is only available when the song is played in game and requires network traffic
+                to be captured, this is a lot of manual work. It might be possible that some songs will be missing
+                for a while until I can unlock them (or just until I stop forgetting to dump them).
+            </p>
+            <p>
+                If there's any note map that is missing, feel free to contact me and I'll add it as soon as
+                possible. If you have any ideas for more features, I'd love to hear them, too! You can find
+                Twitter/Discord/GitHub on the <a href="/sifas/index.html">Hub page</a>.
+            </p>
+            <b>Here's some neat stuff you can do on this page:</b>
+            <ul class="browser-default">
+                <li>
+                    Hover over or tap a note gimmick or AC on the timeline to get a popup with the associated
+                    detail information. (It's the same information as the panels below, but without having to scroll
+                    down.)
+                </li>
+                <li>
+                    Click or tap on a Note Gimmick panel to highlight only that gimmick, moving the markers closer
+                    to the timeline and fading out others. Click/tap again to unhide. Good for Adv+ notemaps with
+                    tons of gimmick notes.
+                </li>
+                <li>
+                    Desktop only for now: Hold and drag on the timeline to measure the amount of notes and the time
+                    between any two points. You can use this, for example, to measure how many notes are between two
+                    ACs to see whether there is enough for you to re-charge your SP skill.
+                </li>
+                <li>
+                    After selecting a difficulty, you can copy the URL from the address bar. Share it with someone
+                    else, and their page will immediately open the correct note map - useful for linking others who
+                    need song information!
+                </li>
+            </ul>
+            <b>Future Plans:</b>
+            <ul class="browser-default">
+                <li>
+                    Make the romanized names a permanent option instead of a temporary toggle.
+                </li>
             </ul>
         </div>
         <div id="muse" class="col s12">Loading...</div>
