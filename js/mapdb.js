@@ -10,11 +10,16 @@ function fixTabIndicator(tabelement) {
         .css("right", (tabwidth * (-tabindex + alltabs.length - 2)) + "%");
 }
 
+let tooltip = $(".tooltip");
+let tooltipInner = $(".tooltip-inner");
+let body = $("body");
+let currentPage = "start";
 $(function () {
     M.AutoInit();
     let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
     tabs.options.onShow = function(e) {
         let tab = $(e);
+        window.location.hash = currentPage = tab.attr("id").substring(4);
         if (tab.data("loaded") === undefined) {
             tab.data("loaded", 1);
             let type = tab.data("type");
@@ -25,7 +30,7 @@ $(function () {
             }
 
             // Load tab content, delay initialization until loaded
-            tab.load(tab.attr("id") + ".html", function() {
+            tab.load(tab.attr("id").substring(4) + ".html", function() {
                 tab.removeClass("unloaded");
 
                 if (type === "free") {
@@ -50,10 +55,6 @@ $(function () {
 });
 
 function doTabInit() {
-    let tooltip = $(".tooltip");
-    let tooltipInner = $(".tooltip-inner");
-    let body = $("body");
-
     $(".collapsible").each(function () {
         let collapsible = M.Collapsible.getInstance(this);
         if (IS_MAP_DB) {
@@ -63,38 +64,6 @@ function doTabInit() {
             if (tab_elements.length === 0) return true; // page help collapsible
             if (tab_elements.length > 1) story_tabs = M.Tabs.getInstance(tab_elements[1]);
             let tabs = M.Tabs.getInstance(tab_elements[0]);
-
-            if (window.location.hash.startsWith("#live")) {
-                let tabId = window.location.hash.substring(5);
-                let wantedTab = $("#" + tabId, this);
-                if (wantedTab.length > 0) {
-                    if ($(this).hasClass("unavail")) {
-                        $(".container").addClass("show-unavail");
-                        $("#show_unavail").text("click to hide unavailable songs");
-                    }
-
-                    // add padding at bottom to successfully scroll to divs at the end of the page
-                    body.css({"padding-bottom": "500%"});
-                    setTimeout(function () {
-                        body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
-                    }, 300);
-                    collapsible.open();
-
-                    if (tabId.startsWith("3")) {
-                        // this is a Story Stage - open up the parent tab
-                        tabs.select($(this).data("live-id") + "-story");
-                        story_tabs.select(tabId);
-                        $(".tab > a", tab_elements[1]).each(function () {
-                            if ($(this).attr("href").substring(1) === tabId) {
-                                $(tab_elements[1]).scrollLeft($(this).parent().position().left);
-                            }
-                        });
-                    } else {
-                        tabs.select(tabId);
-                    }
-                    window.scrollTo(0, $(this).position().top);
-                }
-            }
 
             // materialize doesn't set indicator positions inside hidden elements, so we'll do it ourselves on open
             // we can also use it to set the location anchor to link to that live difficulty
@@ -125,34 +94,6 @@ function doTabInit() {
                 };
             }
         } else {
-            // DLP Stage List
-
-            if (window.location.hash.startsWith("#floor")) {
-                if ($(this).data("floor") !== undefined) {
-                    if ($(this).data("floor") == window.location.hash.substring(6)) {
-                        // add padding at bottom to successfully scroll to divs at the end of the page
-                        body.css({"padding-bottom": "500%"});
-                        setTimeout(function () {
-                            body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"});
-                        }, 300);
-                        collapsible.open();
-                        window.scrollTo(0, $(this).position().top);
-                    }
-                } else if ($(this).data("tower") == window.location.hash.substring(6, 11)) {
-                    collapsible.open();
-                }
-            } else if (window.location.hash.startsWith("#tower")) {
-                if ($(this).data("tower") == window.location.hash.substring(6)) {
-                    // add padding at bottom to successfully scroll to divs at the end of the page
-                    body.css({"padding-bottom": "500%"});
-                    setTimeout(function () {
-                        body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"});
-                    }, 300);
-                    collapsible.open();
-                    window.scrollTo(0, $(this).position().top);
-                }
-            }
-
             collapsible.options.onOpenStart = function () {
                 if ($(this).data("floor") !== undefined) {
                     window.location.hash = "floor" + $(this).data("floor");
@@ -163,145 +104,125 @@ function doTabInit() {
         }
 
         collapsible.options.onCloseStart = function () {
-            window.location.hash = "_";
+            window.location.hash = currentPage;
         };
 
         if ($(this).data("tower") === undefined) {
             $(".live-difficulty", this).each(function () {
-                let selecting = false;
-                // note measure
-                // TODO: add support for touch events on mobile... how?
-                let notebar = $(".notebar", this);
-                notebar.mousedown(function (e) {
-                    selecting = true;
-                    let selector = $("<div></div>").addClass("selection");
-                    notebar.append(selector);
-                    let fixedStartpos = e.pageX;
-                    let notebarPos = notebar.offset();
-                    let notebarWidth = notebar.width();
-                    let totalTime = Number(notebar.data("totaltime"));
-                    body.mousemove(function (e) {
-                        let startpos = fixedStartpos;
-                        let endpos = e.pageX;
-                        if (endpos < startpos) {
-                            let temp = startpos;
-                            startpos = endpos;
-                            endpos = temp;
-                        }
-                        if (startpos < notebarPos.left) {
-                            startpos = notebarPos.left;
-                        }
-                        if (endpos > notebarPos.left + notebarWidth) {
-                            endpos = notebarPos.left + notebarWidth;
-                        }
-
-                        let count = 0;
-                        $(".note", notebar).each(function () {
-                            let notepos = $(this).offset().left;
-                            if (notepos >= startpos && notepos <= endpos) count++;
-                        });
-
-                        let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
-
-                        tooltipInner.html(count + " note" + (count !== 1 ? "s" : "") + "<br>" + selectedTime + " seconds");
-                        tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
-                        selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
-                    });
-                    body.mouseup(function () {
-                        $(this).off("mousemove").off("mouseup");
-                        selecting = false;
-                        selector.remove();
-                        tooltip.css({"left": 0, "top": 0});
-                    });
-                });
-
-                // gimmick mouseover
-                let gimmickmarkers = $(".notebar .gimmick", this);
-                let gimmickinfos = $(".detailinfo .gimmick", this);
-                gimmickmarkers.on("mouseover touchstart", function () {
-                    if (selecting || $(this).hasClass("hidden")) return;
-                    let gi = $(this).data("gimmick");
-                    gimmickinfos.each(function () {
-                        if ($(this).data("gimmick") === gi) {
-                            let details = $("div", this);
-                            tooltipInner.html(details[1].innerHTML);
-                            return false;
-                        }
-                    });
-                    let thismarker = $(".gimmickmarker", this);
-                    let position = thismarker.offset();
-                    position.left += thismarker.width() / 2;
-                    tooltip.css(position);
-                });
-                gimmickmarkers.mouseout(function () {
-                    tooltip.css({"left": 0, "top": 0});
-                });
-
-                // appeal chance mouseover
-                let acmarkers = $(".notebar .appealchance", this);
-                let acinfos = $(".detailinfo .appealchance", this);
-                acmarkers.on("mouseover touchstart", function () {
-                    if (selecting) return;
-                    let ai = $(this).data("ac");
-                    acinfos.each(function () {
-                        if ($(this).data("ac") === ai) {
-                            let details = $("div", this);
-                            tooltipInner.html("<b>" + details[0].innerHTML.split(":")[1] + "</b><br>" + details[1].innerHTML);
-                            return false;
-                        }
-                    });
-                    let position = $(this).offset();
-                    position.left += $(this).width() / 2;
-                    tooltip.css(position);
-                });
-                acmarkers.mouseout(function () {
-                    tooltip.css({"left": 0, "top": 0});
-                });
-
-                // gimmick filtering
-                gimmickinfos.click(function () {
-                    if ($(this).hasClass("filtered")) {
-                        $(this).removeClass("filtered");
-                        gimmickmarkers.removeClass("hidden filtered");
-                    } else {
-                        gimmickinfos.removeClass("filtered");
-                        $(this).addClass("filtered");
-                        let gi = $(this).data("gimmick");
-                        gimmickmarkers.each(function () {
-                            if ($(this).data("gimmick") === gi) {
-                                $(this).removeClass("hidden");
-                                $(this).addClass("filtered");
-                            } else {
-                                $(this).removeClass("filtered");
-                                $(this).addClass("hidden");
-                            }
-                        });
-                    }
-                });
             });
         }
     });
+}
 
-    $(".rankingtable").each(function () {
-        let table = $(this);
-        $(".btn", this).click(function () {
-            table.addClass("open");
+function initNoteMapInteractions() {
+    let selecting = false;
+    // note measure
+    // TODO: add support for touch events on mobile... how?
+    let notebar = $(".notebar", this);
+    notebar.mousedown(function (e) {
+        selecting = true;
+        let selector = $("<div></div>").addClass("selection");
+        notebar.append(selector);
+        let fixedStartpos = e.pageX;
+        let notebarPos = notebar.offset();
+        let notebarWidth = notebar.width();
+        let totalTime = Number(notebar.data("totaltime"));
+        body.mousemove(function (e) {
+            let startpos = fixedStartpos;
+            let endpos = e.pageX;
+            if (endpos < startpos) {
+                let temp = startpos;
+                startpos = endpos;
+                endpos = temp;
+            }
+            if (startpos < notebarPos.left) {
+                startpos = notebarPos.left;
+            }
+            if (endpos > notebarPos.left + notebarWidth) {
+                endpos = notebarPos.left + notebarWidth;
+            }
+
+            let count = 0;
+            $(".note", notebar).each(function () {
+                let notepos = $(this).offset().left;
+                if (notepos >= startpos && notepos <= endpos) count++;
+            });
+
+            let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
+
+            tooltipInner.html(count + " note" + (count !== 1 ? "s" : "") + "<br>" + selectedTime + " seconds");
+            tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
+            selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
         });
-        $("small.right", table.parent()).click(function () {
-            table.addClass("show-all");
-            $(this).remove();
+        body.mouseup(function () {
+            $(this).off("mousemove").off("mouseup");
+            selecting = false;
+            selector.remove();
+            tooltip.css({"left": 0, "top": 0});
         });
     });
 
-    if (IS_MAP_DB) {
-        // filter field for map db
-        $("input#filter").keyup(function(e) {
-            if (current_filter_timeout !== undefined) {
-                clearTimeout(current_filter_timeout);
+    // gimmick mouseover
+    let gimmickmarkers = $(".notebar .gimmick", this);
+    let gimmickinfos = $(".detailinfo .gimmick", this);
+    gimmickmarkers.on("mouseover touchstart", function () {
+        if (selecting || $(this).hasClass("hidden")) return;
+        let gi = $(this).data("gimmick");
+        gimmickinfos.each(function () {
+            if ($(this).data("gimmick") === gi) {
+                let details = $("div", this);
+                tooltipInner.html(details[1].innerHTML);
+                return false;
             }
-            current_filter_timeout = setTimeout(function() {
-                filterCollapsibles(e.target.value);
-            }, 500);
         });
-    }
+        let thismarker = $(".gimmickmarker", this);
+        let position = thismarker.offset();
+        position.left += thismarker.width() / 2;
+        tooltip.css(position);
+    });
+    gimmickmarkers.mouseout(function () {
+        tooltip.css({"left": 0, "top": 0});
+    });
+
+    // appeal chance mouseover
+    let acmarkers = $(".notebar .appealchance", this);
+    let acinfos = $(".detailinfo .appealchance", this);
+    acmarkers.on("mouseover touchstart", function () {
+        if (selecting) return;
+        let ai = $(this).data("ac");
+        acinfos.each(function () {
+            if ($(this).data("ac") === ai) {
+                let details = $("div", this);
+                tooltipInner.html("<b>" + details[0].innerHTML.split(":")[1] + "</b><br>" + details[1].innerHTML);
+                return false;
+            }
+        });
+        let position = $(this).offset();
+        position.left += $(this).width() / 2;
+        tooltip.css(position);
+    });
+    acmarkers.mouseout(function () {
+        tooltip.css({"left": 0, "top": 0});
+    });
+
+    // gimmick filtering
+    gimmickinfos.click(function () {
+        if ($(this).hasClass("filtered")) {
+            $(this).removeClass("filtered");
+            gimmickmarkers.removeClass("hidden filtered");
+        } else {
+            gimmickinfos.removeClass("filtered");
+            $(this).addClass("filtered");
+            let gi = $(this).data("gimmick");
+            gimmickmarkers.each(function () {
+                if ($(this).data("gimmick") === gi) {
+                    $(this).removeClass("hidden");
+                    $(this).addClass("filtered");
+                } else {
+                    $(this).removeClass("filtered");
+                    $(this).addClass("hidden");
+                }
+            });
+        }
+    });
 }
