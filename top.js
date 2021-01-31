@@ -49,7 +49,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile
             };
         } else {
-            if (json.notes.length > songs_dict[lid].notes) {
+            if (diff_id !== 40 && json.notes.length > songs_dict[lid].notes) {
                 songs_dict[lid].notes = json.notes.length;
             }
             songs_dict[lid].is_available = songs_dict[lid].is_available || json.extra_info.is_available;
