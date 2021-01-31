@@ -59,7 +59,6 @@ fs.readdirSync("tower/.").forEach(function (f) {
 
 tower_ids = tower_ids.sort();
 
-let layout = fs.readFileSync('tower.html').toString();
 let s = "";
 
 tower_ids.forEach(function (tower_id) {
@@ -130,7 +129,7 @@ tower_ids.forEach(function (tower_id) {
     s += '</div></li></ul>';
 });
 
-fs.writeFile('build/tower.html', minify(layout.replace("$TOWER", s), {
+fs.writeFile('build/tower.html', minify(s, {
         collapseWhitespace: true
     }),
     function (err) {

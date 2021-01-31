@@ -36,6 +36,18 @@ function guess_story_stage_difficulty(stage) {
     return notemap.difficulty_short(minimum_difficulty);
 }
 
+function dump(group, s) {
+    fs.writeFile('build/' + group + '.html', minify(s, {
+            collapseWhitespace: true
+        }),
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        }
+    );
+}
+
 let lives_dict = {};
 let live_difficulty_ids = {};
 let songdata = {};
@@ -78,12 +90,12 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             let ldidWithoutVer = Math.floor(ldid / 10);
 
             // Check whether any newer versions already exist
-            if (live_difficulty_ids[lid].filter(function(e) {
+            if (live_difficulty_ids[lid].filter(function (e) {
                 return Math.floor(e / 10) === ldidWithoutVer && e > ldid;
             }).length === 0) {
                 // If not, make sure to filter out any older versions if there are
                 if (ldid % 10 > 1) {
-                    live_difficulty_ids[lid] = live_difficulty_ids[lid].filter(function(e) {
+                    live_difficulty_ids[lid] = live_difficulty_ids[lid].filter(function (e) {
                         return Math.floor(e / 10) !== ldidWithoutVer;
                     });
                 }
@@ -96,8 +108,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
     }
 });
 
-let s = '<h5 id="muse">µ\'s</h5>'
-
+let s = ''
+let current_group = 'muse';
 let last_live_id = 0;
 
 Object.keys(lives_dict).sort(function (a, b) {
@@ -119,9 +131,13 @@ Object.keys(lives_dict).sort(function (a, b) {
     });
 
     // start new section if the next group is up
-    if (live.id >= 11000 && last_live_id < 11000) s += '<h5 id="aqours">Aqours</h5>';
-    if (live.id >= 12000 && last_live_id < 12000) s += '<h5 id="niji">Nijigaku</h5>';
-    if (live.id >= 13000 && last_live_id < 13000) s += '<h5 id="liella">Liella!</h5>';
+    if (Math.floor(live.id / 1000) !== Math.floor(last_live_id / 1000)) {
+        dump(current_group, s);
+        s = '';
+        if (live.id >= 11000 && last_live_id < 11000) current_group = 'aqours';
+        if (live.id >= 12000 && last_live_id < 12000) current_group = 'niji';
+        if (live.id >= 13000 && last_live_id < 13000) current_group = 'liella';
+    }
     last_live_id = live.id;
 
     s += '<ul class="collapsible' + (!live.is_available ? " unavail" : (!live.is_permanent ? " temp" : "")) +
@@ -155,9 +171,9 @@ Object.keys(lives_dict).sort(function (a, b) {
             // Shortened difficulty plus location for story stages, always show attribute
             this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :
                 (live_diff.extra_info.story_is_hard_mode ? "HARD" : "NORMAL") + " ") + live_diff.extra_info.story_chapter +
-            '-' + live_diff.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live_diff) +
-            ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
-            notemap.attribute(live_diff.song_attribute) + '">)'
+                '-' + live_diff.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live_diff) +
+                ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
+                notemap.attribute(live_diff.song_attribute) + '">)'
         }
         this_tabbar += '</a></li>';
 
@@ -192,13 +208,4 @@ Object.keys(lives_dict).sort(function (a, b) {
     }
 });
 
-let layout = fs.readFileSync('index.html').toString();
-fs.writeFile('build/index.html', minify(layout.replace("$SONGDB", s), {
-        collapseWhitespace: true
-    }),
-    function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    }
-);
+dump(current_group, s);

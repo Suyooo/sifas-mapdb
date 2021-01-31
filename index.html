@@ -38,7 +38,6 @@
         </ul>
     </div>
 </nav>
-<center><a href="tower.html" style="font-size: 200%">View DLP Stage List &gt;&gt;&gt;</a></center>
 <div class="container">
     <ul class="collapsible" data-collapsible="expandable">
         <li>
@@ -100,19 +99,24 @@
             </div>
         </li>
     </ul>
-    <center>
-        <a id="show_romaji" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">click to
-            show romanized song names</a>
-        &nbsp;
-        <a id="show_unavail" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">click to
-            show unavailable songs</a>
-    </center>
-    <div class="input-field" style="width: 100%">
-        <i class="material-icons prefix">search</i>
-        <input id="filter" type="text">
-        <label for="filter">Filter By Song Name (Japanese or Romanized)</label>
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"><a href="#muse">µ's</a></li>
+                <li class="tab col s3"><a href="#aqours">Aqours</a></li>
+                <li class="tab col s3"><a href="#niji">Nijigaku</a></li>
+                <li class="tab col s3"><a href="#liella">Liella!</a></li>
+                <li class="tab col s3"><a href="#dlp">DLP</a></li>
+                <li class="tab col s3"><a href="#top">Rankings</a></li>
+            </ul>
+        </div>
+        <div id="muse" class="col s12">Loading...</div>
+        <div id="aqours" class="col s12">Loading...</div>
+        <div id="niji" class="col s12">Loading...</div>
+        <div id="liella" class="col s12" data-loaded="1">Coming Soon...?</div>
+        <div id="dlp" class="col s12">Loading...</div>
+        <div id="top" class="col s12">Loading...</div>
     </div>
-    $SONGDB
 </div>
 <div class="tooltip">
     <div class="tooltip-inner"></div>
