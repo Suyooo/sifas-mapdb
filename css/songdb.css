@@ -6,6 +6,11 @@
     width: 3em;
 }
 
+.container > .row > div.unloaded {
+    margin-top: 2em;
+    text-align: center;
+}
+
 h5 {
     color: var(--key-accented);
     letter-spacing: .05em;

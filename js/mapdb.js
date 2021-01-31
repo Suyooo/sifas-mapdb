@@ -10,84 +10,41 @@ function fixTabIndicator(tabelement) {
         .css("right", (tabwidth * (-tabindex + alltabs.length - 2)) + "%");
 }
 
-function filterCollapsibles(search_input) {
-    let collapsibles = $(".collapsible");
-    let headers = $("h5");
-    if (search_input === undefined || search_input.trim() === "") {
-        collapsibles.each(function () {
-            $(this).css("display","");
-            let collapsible = M.Collapsible.getInstance(this);
-            collapsible.close();
-        });
-        headers.show();
-        return;
-    }
-
-    let search_terms = search_input.trim().split(/\s+/);
-    let filtered = [];
-    collapsibles.each(function () {
-        let collapsible = M.Collapsible.getInstance(this);
-        if ($(".tabs", this).length === 0) return true; // page help collapsible
-
-        let song_name_element = $(".collapsible-header > .translatable", this);
-        let song_name_jp = song_name_element.text().toLowerCase();
-        let song_name_ro = song_name_element.data("rom").toLowerCase();
-
-        let result = true;
-        search_terms.forEach(function(t) {
-            let term = t.toLowerCase();
-            if (result && !song_name_jp.includes(term) && !song_name_ro.includes(term)) {
-                result = false;
-            }
-        });
-
-        if (result) {
-            $(this).css("display","block");
-            filtered.push(collapsible);
-        } else {
-            $(this).css("display","none");
-            collapsible.close();
-        }
-    });
-
-    headers.hide();
-    if (filtered.length === 1) {
-        filtered[0].open();
-    } else {
-        filtered.forEach(function(c) { c.close(); })
-    }
-}
-
 $(function () {
     M.AutoInit();
+    let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
+    tabs.options.onShow = function(e) {
+        let tab = $(e);
+        if (tab.data("loaded") === undefined) {
+            tab.data("loaded", 1);
+            let type = tab.data("type");
+            if (type === "fixed") {
+                // tab already has content - don't do anything
+                tab.removeClass("unloaded");
+                return;
+            }
+
+            // Load tab content, delay initialization until loaded
+            tab.load(tab.attr("id") + ".html", function(response) {
+                tab.removeClass("unloaded");
+                tab.html(response);
+
+                if (type === "free") {
+                    // do initialization for a Free Live collection (map collapsibles on first level)
+                } else if (type === "dlp") {
+                    // do initialization for a DLP floor collection (map collapsibles on second level)
+                } else if (type === "top") {
+                    // do initialization for the Rankings page (logic on links/buttons)
+                }
+            });
+        }
+    }
+});
+
+function doTabInit() {
     let tooltip = $(".tooltip");
     let tooltipInner = $(".tooltip-inner");
     let body = $("body");
-
-    $("#show_romaji").click(function () {
-        $(".translatable").each(function () {
-            let new_title = $(this).data("rom");
-            $(this).data("rom", $(this).text());
-            $(this).text(new_title);
-        });
-        if ($(this).text() === "click to show original song names") {
-            $(this).text("click to show romanized song names")
-        } else {
-            $(this).text("click to show original song names");
-        }
-    });
-
-    $("#show_unavail").click(function () {
-        let cont = $(".container");
-        if (cont.hasClass("show-unavail")) {
-            cont.removeClass("show-unavail");
-            $(this).text("click to show unavailable songs")
-        } else {
-            cont.addClass("show-unavail");
-            $(this).text("click to hide unavailable songs");
-        }
-
-    });
 
     $(".collapsible").each(function () {
         let collapsible = M.Collapsible.getInstance(this);
@@ -339,4 +296,4 @@ $(function () {
             }, 500);
         });
     }
-});
+}
