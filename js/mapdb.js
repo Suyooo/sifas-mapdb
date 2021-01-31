@@ -25,16 +25,24 @@ $(function () {
             }
 
             // Load tab content, delay initialization until loaded
-            tab.load(tab.attr("id") + ".html", function(response) {
+            tab.load(tab.attr("id") + ".html", function() {
                 tab.removeClass("unloaded");
-                tab.html(response);
 
                 if (type === "free") {
                     // do initialization for a Free Live collection (map collapsibles on first level)
                 } else if (type === "dlp") {
                     // do initialization for a DLP floor collection (map collapsibles on second level)
                 } else if (type === "top") {
-                    // do initialization for the Rankings page (logic on links/buttons)
+                    $(".rankingtable", tab).each(function () {
+                        let table = $(this);
+                        $(".btn", this).click(function () {
+                            table.addClass("open");
+                        });
+                        $("small.right", table.parent()).click(function () {
+                            table.addClass("show-all");
+                            $(this).remove();
+                        });
+                    });
                 }
             });
         }
