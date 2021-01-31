@@ -129,7 +129,7 @@ tower_ids.forEach(function (tower_id) {
     s += '</div></li></ul>';
 });
 
-fs.writeFile('build/tower.html', minify(s, {
+fs.writeFile('build/dlp.html', minify(s, {
         collapseWhitespace: true
     }),
     function (err) {
