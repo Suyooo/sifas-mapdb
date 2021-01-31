@@ -42,25 +42,25 @@ h5 {
     color: var(--dark-border);
 }
 
-.tabs.tabs-transparent {
+.collapsible-body .tabs.tabs-transparent {
     margin-top: -1rem;
     margin-bottom: 1rem;
 }
 
-.tabs.tabs-transparent .tab a {
+.collapsible-body .tabs.tabs-transparent .tab a {
     color: var(--text);
 }
 
-.tabs.tabs-transparent .tab a.active, .tabs.tabs-transparent .tab a:hover {
+.collapsible-body .tabs.tabs-transparent .tab a.active, .tabs.tabs-transparent .tab a:hover {
     color: var(--text);
 }
 
-.tabs.tabs-transparent .tab a.active {
+.collapsible-body .tabs.tabs-transparent .tab a.active {
     background-color: var(--key-low);
     text-decoration: none;
 }
 
-.tabs.tabs-fixed-width .tab {
+.collapsible-body .tabs.tabs-fixed-width .tab {
     flex-basis: 0;
 }
 
