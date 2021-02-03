@@ -6,6 +6,10 @@
     width: 3em;
 }
 
+.nav-content li.tab {
+    text-transform: none;
+}
+
 .container > .row > div.unloaded {
     margin-top: 2em;
     text-align: center;
