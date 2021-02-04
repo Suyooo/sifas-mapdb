@@ -85,7 +85,7 @@ h5 {
 
 .notebar {
     width: 100%;
-    min-width: 1200px;
+    min-width: 1100px;
     background: var(--text);
     position: relative;
     height: 1em;
