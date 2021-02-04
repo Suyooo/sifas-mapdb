@@ -17,7 +17,7 @@ let currentPage = "start";
 $(function () {
     M.AutoInit();
     let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
-    tabs.options.onShow = function(e) {
+    tabs.options.onShow = function (e) {
         let page = $(e);
         window.location.hash = currentPage = page.attr("id").substring(4);
         if (page.data("loaded") === undefined) {
@@ -30,7 +30,7 @@ $(function () {
             }
 
             // Load tab content, delay initialization until loaded
-            page.load(page.attr("id").substring(4) + ".html", function() {
+            page.load(page.attr("id").substring(4) + ".html", function () {
                 page.removeClass("unloaded");
 
                 if (type === "free") {
@@ -85,21 +85,33 @@ function doFreeLiveInit(page) {
         };
 
         tabs.options.onShow = function (e) {
-            if ($(e).hasClass("live-difficulty") && $(e).data("initialized") === undefined) {
-                $(e).data("initialized", 1);
-                initNoteMapInteractions($(e));
-            }
-
-            if ($(e).attr("id").endsWith("story")) {
-                M.Tabs.getInstance($(".tabs", e)[0]).updateTabIndicator();
-                window.location.hash = "live" + $(".active", e).attr("href").substring(1);
-            } else {
+            if ($(e).hasClass("live-difficulty")) {
+                if ($(e).data("initialized") === undefined) {
+                    $(e).data("initialized", 1);
+                    initNoteMapInteractions($(e));
+                }
                 window.location.hash = "live" + $(e).attr("id");
+            } else {
+                let tabelement = $(".tabs", e)[0];
+                M.Tabs.getInstance(tabelement).updateTabIndicator();
+                let activetablink = $(".active", tabelement);
+                window.location.hash = "live" + activetablink.attr("href").substring(1);
+
+                let activetab = $(activetablink.attr("href"), e);
+                console.log(activetab);
+                if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
+                    activetab.data("initialized", 1);
+                    initNoteMapInteractions(activetab);
+                }
             }
         };
 
         if (story_tabs !== undefined) {
             story_tabs.options.onShow = function (e) {
+                if ($(e).data("initialized") === undefined) {
+                    $(e).data("initialized", 1);
+                    initNoteMapInteractions($(e));
+                }
                 window.location.hash = "live" + $(e).attr("id");
             };
         }
