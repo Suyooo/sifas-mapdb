@@ -126,7 +126,7 @@ songs.filter(function (e) {
     }
     fullrank++;
     let classStr = !e.is_available ? "hidden" : (rank++ % 2 === 0) ? "odd" : "";
-    if (rank > 11) classStr += " hide-if-narrow";
+    if (rank_display >= 11) classStr += " hide-if-narrow";
     if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
 
     short += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
@@ -151,7 +151,7 @@ songs.filter(function (e) {
     }
     fullrank++;
     let classStr = !e.can_show_on_profile ? "hidden" : (rank++ % 2 === 0) ? "odd" : "";
-    if (rank > 11) classStr += " hide-if-narrow";
+    if (rank_display >= 11) classStr += " hide-if-narrow";
     if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
 
     most += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
