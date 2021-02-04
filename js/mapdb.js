@@ -13,9 +13,30 @@ function fixTabIndicator(tabelement) {
 let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
 let body = $("body");
+
+function scrollToElement(e) {
+    // add padding at bottom to successfully scroll to divs at the end of the page
+    body.css({"padding-bottom": "100vh"});
+    setTimeout(function () {
+        body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
+    }, 300);
+    window.scrollTo(0, e.position().top);
+}
+
 let currentPage = "start";
+let afterSwitchCallback = undefined;
+
+function callAfterSwitchCallback(page) {
+    if (afterSwitchCallback !== undefined) {
+        afterSwitchCallback(page);
+        afterSwitchCallback = undefined;
+    }
+}
+
 $(function () {
     M.AutoInit();
+
+    // page tabs
     let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
     tabs.options.onShow = function (e) {
         let page = $(e);
@@ -24,32 +45,77 @@ $(function () {
             page.data("loaded", 1);
             let type = page.data("type");
             if (type === "fixed") {
-                // tab already has content - don't do anything
+                // Tab already has content - don't do anything
                 page.removeClass("unloaded");
-                return;
+                callAfterSwitchCallback(page);
+            } else {
+                // Load tab content, delay initialization until loaded
+                page.load(page.attr("id").substring(4) + ".html", function () {
+                    page.removeClass("unloaded");
+
+                    if (type === "free") {
+                        doFreeLiveInit(page);
+                    } else if (type === "dlp") {
+                        doDLPInit(page);
+                    } else if (type === "top") {
+                        $(".rankingtable", page).each(function () {
+                            let table = $(this);
+                            $(".btn", this).click(function () {
+                                table.addClass("open");
+                            });
+                            $("small.right", table.parent()).click(function () {
+                                table.addClass("show-all");
+                                $(this).remove();
+                            });
+                        });
+                    }
+                    callAfterSwitchCallback(page);
+                });
             }
+        } else {
+            callAfterSwitchCallback(page);
+        }
+    }
 
-            // Load tab content, delay initialization until loaded
-            page.load(page.attr("id").substring(4) + ".html", function () {
-                page.removeClass("unloaded");
+    // Handle location hash
+    if (window.location.hash !== "") {
+        let hash = window.location.hash;
+        if (hash.startsWith("#live")) {
+            // Direct link to a live difficulty
+            if (hash.charAt(5) === "1") {
+                // Free Live or Event Live (has group ID in next position)
+                afterSwitchCallback = function(page) {
+                    let liveDiffId = hash.substring(5);
+                    let collapsibleBody = $("#" + liveDiffId, page).parent();
+                    let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
+                    collapsible.open();
+                    let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
+                    liveDiffTabs.select(liveDiffId);
+                    scrollToElement($(collapsible.el));
+                };
 
-                if (type === "free") {
-                    doFreeLiveInit(page);
-                } else if (type === "dlp") {
-                    doDLPInit(page);
-                } else if (type === "top") {
-                    $(".rankingtable", page).each(function () {
-                        let table = $(this);
-                        $(".btn", this).click(function () {
-                            table.addClass("open");
-                        });
-                        $("small.right", table.parent()).click(function () {
-                            table.addClass("show-all");
-                            $(this).remove();
-                        });
-                    });
+                switch (hash.charAt(6)) {
+                    case "0":
+                        tabs.select("tab_muse");
+                        break;
+                    case "1":
+                        tabs.select("tab_aqours");
+                        break;
+                    case "2":
+                        tabs.select("tab_niji");
+                        break;
+                    case "3":
+                        tabs.select("tab_liella");
+                        break;
                 }
-            });
+            } else {
+                // Story Stage (TODO: uh oh, no group ID)
+            }
+        } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
+            // Direct link to a DLP tower or floor
+        } else {
+            // Direct link to a page
+            tabs.select("tab_" + hash.substring(1));
         }
     }
 });
@@ -61,7 +127,6 @@ function doFreeLiveInit(page) {
         collapsible.options.onOpenStart = function () {
             let tabElements = $(".tabs", this.el);
             if ($(this.el).data("initialized") === undefined) {
-                console.log(this.el);
                 $(this.el).data("initialized", 1);
                 tabElements.tabs();
                 let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
