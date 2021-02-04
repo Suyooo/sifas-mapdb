@@ -305,10 +305,6 @@ h5 {
     width: 100%;
 }
 
-.tower.container {
-    max-width: 1400px;
-}
-
 .tower .collapsible-body .collapsible {
     margin-top: 0;
     margin-bottom: 0;

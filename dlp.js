@@ -64,7 +64,7 @@ let s = "";
 tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
 
-    s += '<ul data-tower="' + tower_id + '" class="collapsible" data-collapsible="expandable"><li>' +
+    s += '<ul data-tower="' + tower_id + '" class="collapsible tower" data-collapsible="expandable"><li>' +
         '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
         tower.name + '</b></div><div class="collapsible-body"><b>Performance Points:</b> ' + tower.pp_at_start +
         ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
@@ -86,7 +86,7 @@ tower_ids.forEach(function (tower_id) {
             linked_live.note_damage = floor.note_damage;
         }
 
-        s += '<ul class="collapsible" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
+        s += '<ul class="collapsible floor" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +

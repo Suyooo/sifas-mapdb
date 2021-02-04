@@ -36,7 +36,7 @@ $(function () {
                 if (type === "free") {
                     doFreeLiveInit(page);
                 } else if (type === "dlp") {
-                    // do initialization for a DLP floor collection (map collapsibles on second level)
+                    doDLPInit(page);
                 } else if (type === "top") {
                     $(".rankingtable", page).each(function () {
                         let table = $(this);
@@ -117,6 +117,36 @@ function doFreeLiveInit(page) {
                 activetab.data("initialized", 1);
                 initNoteMapInteractions(activetab);
             }
+        };
+
+        collapsible.options.onCloseStart = function () {
+            window.location.hash = currentPage;
+        };
+    });
+}
+
+function doDLPInit(page) {
+    $(".collapsible.tower", page).collapsible().each(function () {
+        let collapsible = M.Collapsible.getInstance(this);
+
+        collapsible.options.onOpenStart = function () {
+            let towerLink = "tower" + $(this.el).data("tower");
+
+            let collapElements = $(".collapsible.floor", this.el);
+            collapElements.collapsible().each(function () {
+                let collapsible = M.Collapsible.getInstance(this);
+
+                collapsible.options.onOpenStart = function () {
+                    window.location.hash = "floor" + $(this.el).data("floor");
+                    initNoteMapInteractions($(".live-difficulty", this.el));
+                };
+
+                collapsible.options.onCloseStart = function () {
+                    window.location.hash = towerLink;
+                };
+            });
+
+            window.location.hash = towerLink;
         };
 
         collapsible.options.onCloseStart = function () {
