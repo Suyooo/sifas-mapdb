@@ -55,22 +55,57 @@ $(function () {
 });
 
 function doFreeLiveInit(page) {
-    $(".tabs", page).tabs();
     $(".collapsible", page).collapsible().each(function () {
         let collapsible = M.Collapsible.getInstance(this);
 
-        let tab_elements = $(".tabs", this);
-        let story_tabs = undefined;
-        if (tab_elements.length > 1) story_tabs = M.Tabs.getInstance(tab_elements[1]);
-        let tabs = M.Tabs.getInstance(tab_elements[0]);
-
-        // materialize doesn't set indicator positions inside hidden elements, so we'll do it ourselves on open
-        // we can also use it to set the location anchor to link to that live difficulty
         collapsible.options.onOpenStart = function () {
-            let tabelement = $(".tabs", this.el)[0];
-            fixTabIndicator(tabelement);
-            let activetablink = $(".active", tabelement);
+            let tabElements = $(".tabs", this.el);
+            if ($(this.el).data("initialized") === undefined) {
+                console.log(this.el);
+                $(this.el).data("initialized", 1);
+                tabElements.tabs();
+                let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
+                let tabs = M.Tabs.getInstance(tabElements[0]);
 
+                tabs.options.onShow = function (e) {
+                    if ($(e).hasClass("live-difficulty")) {
+                        if ($(e).data("initialized") === undefined) {
+                            $(e).data("initialized", 1);
+                            initNoteMapInteractions($(e));
+                        }
+                        window.location.hash = "live" + $(e).attr("id");
+                    } else {
+                        let tabElement = $(".tabs", e)[0];
+                        M.Tabs.getInstance(tabElement).updateTabIndicator();
+                        let activetablink = $(".active", tabElement);
+                        window.location.hash = "live" + activetablink.attr("href").substring(1);
+
+                        let activetab = $(activetablink.attr("href"), e);
+                        if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
+                            activetab.data("initialized", 1);
+                            initNoteMapInteractions(activetab);
+                        }
+                    }
+                };
+
+                // Materialize messes up the indicator position, so we'll fix it ourselves on first open
+                // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
+                setTimeout(function () {
+                    fixTabIndicator(tabElements[0]);
+                }, 1);
+
+                if (story_tabs !== undefined) {
+                    story_tabs.options.onShow = function (e) {
+                        if ($(e).data("initialized") === undefined) {
+                            $(e).data("initialized", 1);
+                            initNoteMapInteractions($(e));
+                        }
+                        window.location.hash = "live" + $(e).attr("id");
+                    };
+                }
+            }
+
+            let activetablink = $(".active", tabElements[0]);
             if (activetablink.attr("href").endsWith("story")) {
                 window.location.hash = "live" + $(".active", "#" + activetablink.attr("href").substring(1)).attr("href").substring(1);
             } else {
@@ -83,38 +118,6 @@ function doFreeLiveInit(page) {
                 initNoteMapInteractions(activetab);
             }
         };
-
-        tabs.options.onShow = function (e) {
-            if ($(e).hasClass("live-difficulty")) {
-                if ($(e).data("initialized") === undefined) {
-                    $(e).data("initialized", 1);
-                    initNoteMapInteractions($(e));
-                }
-                window.location.hash = "live" + $(e).attr("id");
-            } else {
-                let tabelement = $(".tabs", e)[0];
-                M.Tabs.getInstance(tabelement).updateTabIndicator();
-                let activetablink = $(".active", tabelement);
-                window.location.hash = "live" + activetablink.attr("href").substring(1);
-
-                let activetab = $(activetablink.attr("href"), e);
-                console.log(activetab);
-                if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
-                    activetab.data("initialized", 1);
-                    initNoteMapInteractions(activetab);
-                }
-            }
-        };
-
-        if (story_tabs !== undefined) {
-            story_tabs.options.onShow = function (e) {
-                if ($(e).data("initialized") === undefined) {
-                    $(e).data("initialized", 1);
-                    initNoteMapInteractions($(e));
-                }
-                window.location.hash = "live" + $(e).attr("id");
-            };
-        }
 
         collapsible.options.onCloseStart = function () {
             window.location.hash = currentPage;
