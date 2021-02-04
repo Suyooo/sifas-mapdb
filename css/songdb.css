@@ -51,6 +51,15 @@ h5 {
     color: var(--dark-border);
 }
 
+.collapsible.temp .collapsible-header b::after {
+    content: " (time-limited)";
+    font-weight: normal;
+}
+.collapsible.unavail .collapsible-header b::after {
+     content: " (unavailable)";
+     font-weight: normal;
+ }
+
 .collapsible-body .tabs.tabs-transparent {
     margin-top: -1rem;
     margin-bottom: 1rem;

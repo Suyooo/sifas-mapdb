@@ -145,8 +145,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
-        '</b>' + (!live.is_available ? "&nbsp;(unavailable)" : (!live.is_permanent ? "&nbsp;(time-limited)" : "")) +
-        '</div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
+        '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
 
     let live_tabbar = "";
     let live_tabs = "";
