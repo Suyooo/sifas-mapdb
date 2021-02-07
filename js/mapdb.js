@@ -138,8 +138,8 @@ function initPageFreeLive(page) {
     let collapsibles = $(".collapsible", page);
     collapsibles.collapsible().each(freeLiveCollapsibleInit);
 }
-function freeLiveCollapsibleInit(c) {
-    let collapsible = M.Collapsible.getInstance(c);
+function freeLiveCollapsibleInit() {
+    let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = freeLiveCollapsibleOpen;
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
