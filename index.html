@@ -32,10 +32,16 @@
 <nav class="nav-extended orange lighten-5">
     <div class="container">
         <div class="nav-wrapper">
-            <a class="brand-logo center">Note Map DB</a>
             <ul id="nav-mobile" class="left">
-                <li class="orange lighten-3"><a href="/sifas/index.html"><i
-                        class="material-icons left">keyboard_arrow_left</i>BACK</a></li>
+                <li class="lighten-3"><a href="/sifas/index.html" class="waves-effect waves-light">
+                    <i class="material-icons left">keyboard_arrow_left</i>
+                    <span class="hide-on-small-and-down">BACK</span>
+                </a></li>
+            </ul>
+            <a class="brand-logo center hide-on-small-and-down">Note Map DB</a>
+            <ul class="right">
+                <li><a id="toggle_romaji" class="waves-effect waves-light"><i class="material-icons">translate</i></a></li>
+                <li><a id="toggle_unavail" class="waves-effect waves-light"><i class="material-icons">history_toggle</i></a></li>
             </ul>
         </div>
         <div class="nav-content">
@@ -53,7 +59,7 @@
 </nav>
 <div class="container">
     <div class="row">
-        <div id="tab_start" class="col s12" data-type="fixed">
+        <div id="tab_start" class="col s12" data-type="fixed" style="text-align: justify">
             <p style="font-weight: bold">
                 Welcome to the SIFAS Note Map Database! Click a group above to get started, or see the DLP stage lists
                 and Song Rankings by heading to the respective tabs.

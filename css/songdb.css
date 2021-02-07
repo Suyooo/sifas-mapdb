@@ -10,6 +10,22 @@
     text-transform: none;
 }
 
+.nav-wrapper .right a {
+    text-decoration: none;
+}
+
+.nav-wrapper .right a i {
+    width: 1em;
+}
+
+.nav-wrapper .right a.on i {
+    color: var(--key-dark);
+}
+
+nav ul a:hover {
+    background-color: var(--key-normal);
+}
+
 div.unloaded {
     margin-top: 2em;
     text-align: center;
