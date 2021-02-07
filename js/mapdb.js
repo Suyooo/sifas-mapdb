@@ -7,15 +7,29 @@ M.Collapsible.prototype.instantOpen = function(i) {
     this.open(i);
     this.options.inDuration = tmp;
 }
-
-function fixTabIndicator(tabelement) {
-    let activetablink = $(".active", tabelement);
-    let activetab = activetablink.parent();
-    let alltabs = activetab.parent().children();
-    let tabindex = alltabs.index(activetab);
-    let tabwidth = 100 / (alltabs.length - 1);
-    $(".indicator", tabelement).css("left", (tabwidth * tabindex) + "%")
-        .css("right", (tabwidth * (-tabindex + alltabs.length - 2)) + "%");
+M.Tabs.prototype.instantSelect = function(id) {
+    let tmp = this._animateIndicator;
+    this._animateIndicator = function() { };
+    this.select(id);
+    this.fakeIndicator();
+    setTimeout(this.unfakeIndicator.bind(this), 1000);
+    this._animateIndicator = tmp;
+}
+M.Tabs.prototype.fakeIndicator = function() {
+    this.$el.addClass("fakeindicator");
+    $(this._indicator).addClass("hide");
+}
+M.Tabs.prototype.unfakeIndicator = function() {
+    this.forceTabIndicator();
+    this.$el.removeClass("fakeindicator");
+    $(this._indicator).removeClass("hide");
+}
+M.Tabs.prototype.forceTabIndicator = function() {
+    this._setTabsAndTabWidth();
+    $(".indicator", this.el).css({
+        "left": this._calcLeftPos(this.$activeTabLink) + "px",
+        "right": this._calcRightPos(this.$activeTabLink) + "px"
+    });
 }
 
 let tooltip = $(".tooltip");
@@ -42,12 +56,14 @@ let afterSwitchCallback = undefined;
 
 function callAfterSwitchCallback(page) {
     if (afterSwitchCallback !== undefined) {
-        afterSwitchCallback(page);
+        let f = afterSwitchCallback;
         afterSwitchCallback = undefined;
+        f(page);
     }
 }
 
-function loadPage(page) {
+function loadPage() {
+    let page = $(this);
     if (page.data("loaded") === undefined) {
         page.data("loaded", 1);
         let type = page.data("type");
@@ -87,9 +103,8 @@ $(function () {
     // page tabs
     let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
     tabs.options.onShow = function (e) {
-        let page = $(e);
-        window.location.hash = currentPage = page.attr("id").substring(4);
-        loadPage(page);
+        window.location.hash = currentPage = $(e).attr("id").substring(4);
+        loadPage.bind(e)();
     }
 
     // Handle location hash
@@ -99,7 +114,7 @@ $(function () {
             // Direct link to a live difficulty
             if (hash.charAt(5) === "1") {
                 // Free Live or Event Live (has group ID in next position)
-                afterSwitchCallback = scrollToFreeLive.bind(this, hash);
+                afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
                 switch (hash.charAt(6)) {
                     case "0":
                         tabs.select("tab_muse");
@@ -115,11 +130,15 @@ $(function () {
                         break;
                 }
             } else {
-                // Story Stage (TODO: uh oh, no group ID)
+                // Story Stage: Can't read group ID on newer stages, must load all group tabs
+                // and search for the correct stage by going through them all
+                let groupTabs = $(".group-tab");
+                afterSwitchCallback = showLinkedStoryStage.bind(this, groupTabs.length, hash, groupTabs, tabs);
+                groupTabs.each(loadPage);
             }
         } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
             // Direct link to a DLP tower or floor
-            afterSwitchCallback = scrollToDlp.bind(this, hash);
+            afterSwitchCallback = showLinkedDlp.bind(this, hash);
             tabs.select("tab_dlp");
         } else {
             // Direct link to a page
@@ -127,16 +146,37 @@ $(function () {
         }
     }
 });
-function scrollToFreeLive(hash, page) {
+function showLinkedFreeLive(hash, page) {
     let liveDiffId = hash.substring(5);
     let collapsibleBody = $("#" + liveDiffId, page).parent();
     let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
     collapsible.instantOpen(0);
     let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
-    liveDiffTabs.select(liveDiffId);
+    liveDiffTabs.instantSelect(liveDiffId);
     scrollToElement(collapsible.$el);
 }
-function scrollToDlp(hash, page) {
+function showLinkedStoryStage(counter, hash, groupTabs, tabs) {
+    if (counter > 1) {
+        afterSwitchCallback = showLinkedStoryStage.bind(this, counter - 1, hash, groupTabs, tabs);
+        return;
+    }
+
+    let targetLiveDiff = $("#" + hash.substring(5), groupTabs);
+    let targetLiveStoryTab = targetLiveDiff.parent();
+    let targetLive = targetLiveStoryTab.parent().parent().parent();
+    let targetPage = targetLive.parent();
+
+    let liveCollapsible = M.Collapsible.getInstance(targetLive[0]);
+    liveCollapsible.instantOpen(0);
+    let liveDiffTabs = M.Tabs.getInstance($(".tabs", targetLive)[0]);
+    liveDiffTabs.instantSelect(targetLiveStoryTab.attr("id"));
+    let storyTabs = M.Tabs.getInstance($(".tabs", targetLiveStoryTab)[0]);
+
+    tabs.instantSelect(targetPage.attr("id"));
+    storyTabs.instantSelect(targetLiveDiff.attr("id"));
+    scrollToElement(liveCollapsible.$el);
+}
+function showLinkedDlp(hash, page) {
     let towerId = hash.substr(6,5);
     let targetElement = $("#" + towerId, page);
     let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
@@ -166,31 +206,33 @@ function freeLiveCollapsibleInit() {
 }
 function freeLiveCollapsibleOpen() {
     let tabElements = $(".tabs", this.el);
+    let tabs;
     if (this.$el.data("initialized") === undefined) {
         this.$el.data("initialized", 1);
         tabElements.tabs();
         let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
-        let tabs = M.Tabs.getInstance(tabElements[0]);
+        tabs = M.Tabs.getInstance(tabElements[0]);
 
         tabs.options.onShow = freeLiveTabShow;
 
         // Materialize messes up the indicator position, so we'll fix it ourselves on first open
         // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
-        setTimeout(fixTabIndicator.bind(this, tabElements[0]), 1);
+        setTimeout(tabs.forceTabIndicator.bind(tabs), 1);
 
         if (story_tabs !== undefined) {
             story_tabs.options.onShow = freeLiveStoryTabShow;
         }
-    }
-
-    let activetablink = $(".active", tabElements[0]);
-    if (activetablink.attr("href").endsWith("story")) {
-        window.location.hash = "live" + $(".active", "#" + activetablink.attr("href").substring(1)).attr("href").substring(1);
     } else {
-        window.location.hash = "live" + activetablink.attr("href").substring(1);
+        tabs = M.Tabs.getInstance(tabElements[0]);
     }
 
-    let activetab = $(activetablink.attr("href"), this.el);
+    if (tabs.$activeTabLink.attr("href").endsWith("story")) {
+        window.location.hash = "live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1);
+    } else {
+        window.location.hash = "live" + tabs.$activeTabLink.attr("href").substring(1);
+    }
+
+    let activetab = $(tabs.$activeTabLink.attr("href"), this.el);
     if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
         activetab.data("initialized", 1);
         loadNoteMap(activetab);
@@ -207,12 +249,13 @@ function freeLiveTabShow(e) {
         }
         window.location.hash = "live" + $(e).attr("id");
     } else {
+        // Story Stages tab
         let tabElement = $(".tabs", e)[0];
-        M.Tabs.getInstance(tabElement).updateTabIndicator();
-        let activetablink = $(".active", tabElement);
-        window.location.hash = "live" + activetablink.attr("href").substring(1);
+        let tabs = M.Tabs.getInstance(tabElement);
+        tabs.forceTabIndicator();
+        window.location.hash = "live" + tabs.$activeTabLink.attr("href").substring(1);
 
-        let activetab = $(activetablink.attr("href"), e);
+        let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
             activetab.data("initialized", 1);
             loadNoteMap(activetab);

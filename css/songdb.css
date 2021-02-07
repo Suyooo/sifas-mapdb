@@ -78,6 +78,10 @@ h5 {
     text-decoration: none;
 }
 
+.collapsible-body .tabs.tabs-transparent.fakeindicator .tab a.active {
+    border-bottom: 5px solid var(--key-normal);
+}
+
 .collapsible-body .tabs.tabs-fixed-width .tab {
     flex-basis: 0;
 }
