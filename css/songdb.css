@@ -10,9 +10,10 @@
     text-transform: none;
 }
 
-.container > .row > div.unloaded {
+div.unloaded {
     margin-top: 2em;
     text-align: center;
+    height: 75vh;
 }
 
 h5 {
