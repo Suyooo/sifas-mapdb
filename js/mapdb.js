@@ -255,15 +255,15 @@ function initPageTop(page) {
 }
 function rankingTableInit() {
     let table = $(this);
-    $(".btn", this).on("click", rankingTableOpen.bind(this, table));
-    $("small.right", table.parent()).on("click", rankingTableShowAll.bind(this, table));
+    $(".btn", this).on("click", rankingTableOpen.bind(this));
+    $("small.right", table.parent()).on("click", rankingTableShowAll.bind(this));
 }
-function rankingTableOpen(table) {
-    table.addClass("open");
+function rankingTableOpen() {
+    $(this).addClass("open");
 }
-function rankingTableShowAll(table) {
-    table.addClass("show-all");
-    $(this).remove();
+function rankingTableShowAll() {
+    $(this).addClass("show-all");
+    $("small.right", $(this).parent()).remove();
 }
 
 /*
