@@ -1,4 +1,5 @@
-var current_filter_timeout = undefined;
+const DEBUG_MODE = true;
+//let current_filter_timeout = undefined;
 
 function fixTabIndicator(tabelement) {
     let activetablink = $(".active", tabelement);
@@ -23,6 +24,12 @@ function scrollToElement(e) {
     window.scrollTo(0, e.position().top);
 }
 
+/*
+ *  ----------
+ *  PAGE LOADING
+ *  ----------
+ */
+
 let currentPage = "start";
 let afterSwitchCallback = undefined;
 
@@ -43,24 +50,15 @@ function loadPage(page) {
             callAfterSwitchCallback(page);
         } else {
             // Load tab content, delay initialization until loaded
-            page.load(page.attr("id").substring(4) + ".html", function () {
+            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", function () {
                 page.removeClass("unloaded");
 
                 if (type === "free") {
-                    doFreeLiveInit(page);
+                    initPageFreeLive(page);
                 } else if (type === "dlp") {
-                    doDLPInit(page);
+                    initPageDlp(page);
                 } else if (type === "top") {
-                    $(".rankingtable", page).each(function () {
-                        let table = $(this);
-                        $(".btn", this).click(function () {
-                            table.addClass("open");
-                        });
-                        $("small.right", table.parent()).click(function () {
-                            table.addClass("show-all");
-                            $(this).remove();
-                        });
-                    });
+                    initPageTop(page);
                 }
                 callAfterSwitchCallback(page);
             });
@@ -69,6 +67,12 @@ function loadPage(page) {
         callAfterSwitchCallback(page);
     }
 }
+
+/*
+ *  ----------
+ *  SITE INIT AND DIRECT LINKING
+ *  ----------
+ */
 
 $(function () {
     M.AutoInit();
@@ -92,7 +96,7 @@ $(function () {
                     let liveDiffId = hash.substring(5);
                     let collapsibleBody = $("#" + liveDiffId, page).parent();
                     let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
-                    collapsible.open();
+                    collapsible.open(0);
                     let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
                     liveDiffTabs.select(liveDiffId);
                     scrollToElement($(collapsible.el));
@@ -124,215 +128,280 @@ $(function () {
     }
 });
 
-function doFreeLiveInit(page) {
-    $(".collapsible", page).collapsible().each(function () {
-        let collapsible = M.Collapsible.getInstance(this);
+/*
+ *  ----------
+ *  FREE LIVE PAGE
+ *  ----------
+ */
 
-        collapsible.options.onOpenStart = function () {
-            let tabElements = $(".tabs", this.el);
-            if ($(this.el).data("initialized") === undefined) {
-                $(this.el).data("initialized", 1);
-                tabElements.tabs();
-                let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
-                let tabs = M.Tabs.getInstance(tabElements[0]);
+function initPageFreeLive(page) {
+    let collapsibles = $(".collapsible", page);
+    collapsibles.collapsible().each(freeLiveCollapsibleInit);
+}
+function freeLiveCollapsibleInit(c) {
+    let collapsible = M.Collapsible.getInstance(c);
+    collapsible.options.onOpenStart = freeLiveCollapsibleOpen;
+    collapsible.options.onCloseStart = outerCollapsibleClose;
+}
+function freeLiveCollapsibleOpen() {
+    let tabElements = $(".tabs", this.el);
+    if ($(this.el).data("initialized") === undefined) {
+        $(this.el).data("initialized", 1);
+        tabElements.tabs();
+        let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
+        let tabs = M.Tabs.getInstance(tabElements[0]);
 
-                tabs.options.onShow = function (e) {
-                    if ($(e).hasClass("live-difficulty")) {
-                        if ($(e).data("initialized") === undefined) {
-                            $(e).data("initialized", 1);
-                            initNoteMapInteractions($(e));
-                        }
-                        window.location.hash = "live" + $(e).attr("id");
-                    } else {
-                        let tabElement = $(".tabs", e)[0];
-                        M.Tabs.getInstance(tabElement).updateTabIndicator();
-                        let activetablink = $(".active", tabElement);
-                        window.location.hash = "live" + activetablink.attr("href").substring(1);
+        tabs.options.onShow = freeLiveTabShow;
 
-                        let activetab = $(activetablink.attr("href"), e);
-                        if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
-                            activetab.data("initialized", 1);
-                            initNoteMapInteractions(activetab);
-                        }
-                    }
-                };
+        // Materialize messes up the indicator position, so we'll fix it ourselves on first open
+        // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
+        setTimeout(fixTabIndicator.bind(this, tabElements[0]), 1);
 
-                // Materialize messes up the indicator position, so we'll fix it ourselves on first open
-                // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
-                setTimeout(function () {
-                    fixTabIndicator(tabElements[0]);
-                }, 1);
+        if (story_tabs !== undefined) {
+            story_tabs.options.onShow = freeLiveStoryTabShow;
+        }
+    }
 
-                if (story_tabs !== undefined) {
-                    story_tabs.options.onShow = function (e) {
-                        if ($(e).data("initialized") === undefined) {
-                            $(e).data("initialized", 1);
-                            initNoteMapInteractions($(e));
-                        }
-                        window.location.hash = "live" + $(e).attr("id");
-                    };
-                }
-            }
+    let activetablink = $(".active", tabElements[0]);
+    if (activetablink.attr("href").endsWith("story")) {
+        window.location.hash = "live" + $(".active", "#" + activetablink.attr("href").substring(1)).attr("href").substring(1);
+    } else {
+        window.location.hash = "live" + activetablink.attr("href").substring(1);
+    }
 
-            let activetablink = $(".active", tabElements[0]);
-            if (activetablink.attr("href").endsWith("story")) {
-                window.location.hash = "live" + $(".active", "#" + activetablink.attr("href").substring(1)).attr("href").substring(1);
-            } else {
-                window.location.hash = "live" + activetablink.attr("href").substring(1);
-            }
+    let activetab = $(activetablink.attr("href"), this.el);
+    if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
+        activetab.data("initialized", 1);
+        initNoteMapInteractions(activetab);
+    }
+}
+function outerCollapsibleClose() {
+    window.location.hash = currentPage;
+}
+function freeLiveTabShow(e) {
+    if ($(e).hasClass("live-difficulty")) {
+        if ($(e).data("initialized") === undefined) {
+            $(e).data("initialized", 1);
+            initNoteMapInteractions($(e));
+        }
+        window.location.hash = "live" + $(e).attr("id");
+    } else {
+        let tabElement = $(".tabs", e)[0];
+        M.Tabs.getInstance(tabElement).updateTabIndicator();
+        let activetablink = $(".active", tabElement);
+        window.location.hash = "live" + activetablink.attr("href").substring(1);
 
-            let activetab = $(activetablink.attr("href"), this.el);
-            if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
-                activetab.data("initialized", 1);
-                initNoteMapInteractions(activetab);
-            }
-        };
-
-        collapsible.options.onCloseStart = function () {
-            window.location.hash = currentPage;
-        };
-    });
+        let activetab = $(activetablink.attr("href"), e);
+        if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
+            activetab.data("initialized", 1);
+            initNoteMapInteractions(activetab);
+        }
+    }
+}
+function freeLiveStoryTabShow(e) {
+    if ($(e).data("initialized") === undefined) {
+        $(e).data("initialized", 1);
+        initNoteMapInteractions($(e));
+    }
+    window.location.hash = "live" + $(e).attr("id");
 }
 
-function doDLPInit(page) {
-    $(".collapsible.tower", page).collapsible().each(function () {
-        let collapsible = M.Collapsible.getInstance(this);
+/*
+ *  ----------
+ *  DLP PAGE
+ *  ----------
+ */
 
-        collapsible.options.onOpenStart = function () {
-            let towerLink = "tower" + $(this.el).data("tower");
-
-            let collapElements = $(".collapsible.floor", this.el);
-            collapElements.collapsible().each(function () {
-                let collapsible = M.Collapsible.getInstance(this);
-
-                collapsible.options.onOpenStart = function () {
-                    window.location.hash = "floor" + $(this.el).data("floor");
-                    initNoteMapInteractions($(".live-difficulty", this.el));
-                };
-
-                collapsible.options.onCloseStart = function () {
-                    window.location.hash = towerLink;
-                };
-            });
-
-            window.location.hash = towerLink;
-        };
-
-        collapsible.options.onCloseStart = function () {
-            window.location.hash = currentPage;
-        };
-    });
+function initPageDlp(page) {
+    let e = $(".collapsible.tower", page).collapsible().each(dlpTowerCollapsibleInit);
+}
+function dlpTowerCollapsibleInit() {
+    let collapsible = M.Collapsible.getInstance(this);
+    collapsible.options.onOpenStart = dlpTowerCollapsibleOpen;
+    collapsible.options.onCloseStart = outerCollapsibleClose;
+}
+function dlpTowerCollapsibleOpen() {
+    let towerLink = "tower" + $(this.el).data("tower");
+    if ($(this.el).data("initialized") === undefined) {
+        $(this.el).data("initialized", 1);
+        $(".collapsible.floor", this.el).collapsible().each(dlpFloorCollapsibleInit, towerLink);
+    }
+    window.location.hash = towerLink;
+}
+function dlpFloorCollapsibleInit(towerLink) {
+    let collapsible = M.Collapsible.getInstance(this);
+    collapsible.options.onOpenStart = dlpFloorCollapsibleOpen;
+    collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(towerLink);
+}
+function dlpFloorCollapsibleOpen() {
+    window.location.hash = "floor" + $(this.el).data("floor");
+    if ($(this.el).data("initialized") === undefined) {
+        $(this.el).data("initialized", 1);
+        initNoteMapInteractions($(".live-difficulty", this.el));
+    }
+}
+function dlpFloorCollapsibleClose(towerLink) {
+    window.location.hash = towerLink;
 }
 
+/*
+ *  ----------
+ *  RANKING PAGE
+ *  ----------
+ */
+
+function initPageTop(page) {
+    $(".rankingtable", page).each(rankingTableInit);
+}
+function rankingTableInit() {
+    let table = $(this);
+    $(".btn", this).on("click", rankingTableOpen.bind(this, table));
+    $("small.right", table.parent()).on("click", rankingTableShowAll.bind(this, table));
+}
+function rankingTableOpen(table) {
+    table.addClass("open");
+}
+function rankingTableShowAll(table) {
+    table.addClass("show-all");
+    $(this).remove();
+}
+
+/*
+ *  ----------
+ *  NOTE MAP INTERACTIONS
+ *  ----------
+ */
+
+let selecting = false;
 function initNoteMapInteractions(noteMap) {
-    let selecting = false;
-    // note measure
-    // TODO: add support for touch events on mobile... how?
     let notebar = $(".notebar", noteMap);
-    notebar.mousedown(function (e) {
-        selecting = true;
-        let selector = $("<div></div>").addClass("selection");
-        notebar.append(selector);
-        let fixedStartpos = e.pageX;
-        let notebarPos = notebar.offset();
-        let notebarWidth = notebar.width();
-        let totalTime = Number(notebar.data("totaltime"));
-        body.mousemove(function (e) {
-            let startpos = fixedStartpos;
-            let endpos = e.pageX;
-            if (endpos < startpos) {
-                let temp = startpos;
-                startpos = endpos;
-                endpos = temp;
-            }
-            if (startpos < notebarPos.left) {
-                startpos = notebarPos.left;
-            }
-            if (endpos > notebarPos.left + notebarWidth) {
-                endpos = notebarPos.left + notebarWidth;
-            }
+    notebar.on("mousedown", notebarSelectionStart.bind(notebar));
 
-            let count = 0;
-            $(".note", notebar).each(function () {
-                let notepos = $(this).offset().left;
-                if (notepos >= startpos && notepos <= endpos) count++;
-            });
-
-            let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
-
-            tooltipInner.html(count + " note" + (count !== 1 ? "s" : "") + "<br>" + selectedTime + " seconds");
-            tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
-            selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
-        });
-        body.mouseup(function () {
-            body.off("mousemove").off("mouseup");
-            selecting = false;
-            selector.remove();
-            tooltip.css({"left": 0, "top": 0});
-        });
-    });
-
-    // gimmick mouseover
     let gimmickmarkers = $(".notebar .gimmick", noteMap);
     let gimmickinfos = $(".detailinfo .gimmick", noteMap);
-    gimmickmarkers.on("mouseover touchstart", function () {
-        if (selecting || $(this).hasClass("hidden")) return;
-        let gi = $(this).data("gimmick");
-        gimmickinfos.each(function () {
-            if ($(this).data("gimmick") === gi) {
-                let details = $("div", this);
-                tooltipInner.html(details[1].innerHTML);
-                return false;
-            }
-        });
-        let thismarker = $(".gimmickmarker", this);
-        let position = thismarker.offset();
-        position.left += thismarker.width() / 2;
-        tooltip.css(position);
-    });
-    gimmickmarkers.mouseout(function () {
-        tooltip.css({"left": 0, "top": 0});
-    });
+    let gimmickmarkermap = Array(gimmickinfos.length);
+    for (let i = 0; i < gimmickmarkers.length; i++) {
+        let gi = $(gimmickmarkers[i]).data("gimmick");
+        $(gimmickmarkers[i]).on("mouseover touchstart",
+            gimmickMarkerMouseover.bind(gimmickmarkers[i], gimmickinfos[gi]));
+        gimmickmarkermap[gi]
+            ? gimmickmarkermap[gi].push(gimmickmarkers[i])
+            : gimmickmarkermap[gi] = [gimmickmarkers[i]];
+    }
+    gimmickmarkers.on("mouseout", closeTooltip);
+    for (let i = 0; i < gimmickinfos.length; i++) {
+        $(gimmickinfos[i]).on("click", 
+            gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap));
+    }
 
-    // appeal chance mouseover
     let acmarkers = $(".notebar .appealchance", noteMap);
     let acinfos = $(".detailinfo .appealchance", noteMap);
-    acmarkers.on("mouseover touchstart", function () {
-        if (selecting) return;
-        let ai = $(this).data("ac");
-        acinfos.each(function () {
-            if ($(this).data("ac") === ai) {
-                let details = $("div", this);
-                tooltipInner.html("<b>" + details[0].innerHTML.split(":")[1] + "</b><br>" + details[1].innerHTML);
-                return false;
-            }
-        });
-        let position = $(this).offset();
-        position.left += $(this).width() / 2;
-        tooltip.css(position);
-    });
-    acmarkers.mouseout(function () {
-        tooltip.css({"left": 0, "top": 0});
-    });
+    for (let i = 0; i < acmarkers.length; i++) {
+        $(acmarkers[i]).on("mouseover touchstart",
+            acMarkerMouseover.bind(acmarkers[i], acinfos[$(acmarkers[i]).data("ac")]));
+    }
+    acmarkers.on("mouseout", closeTooltip);
+}
+function closeTooltip() {
+    tooltip.css({"left": 0, "top": 0});
+}
 
-    // gimmick filtering
-    gimmickinfos.click(function () {
-        if ($(this).hasClass("filtered")) {
-            $(this).removeClass("filtered");
-            gimmickmarkers.removeClass("hidden filtered");
-        } else {
-            gimmickinfos.removeClass("filtered");
-            $(this).addClass("filtered");
-            let gi = $(this).data("gimmick");
-            gimmickmarkers.each(function () {
-                if ($(this).data("gimmick") === gi) {
-                    $(this).removeClass("hidden");
-                    $(this).addClass("filtered");
-                } else {
-                    $(this).removeClass("filtered");
-                    $(this).addClass("hidden");
-                }
-            });
+// Note Bar Time Selection / Note Counter
+// TODO: add support for touch events on mobile... how?
+
+function notebarSelectionStart(e) {
+    selecting = true;
+    let selector = $("<div></div>").addClass("selection");
+    this.append(selector);
+    let fixedStartpos = e.pageX;
+    let notebarPos = this.offset();
+    let notebarWidth = this.width();
+    let totalTime = Number(this.data("totaltime"));
+    body.on("mousemove", notebarSelectionMove.bind(this, selector, fixedStartpos, notebarPos, notebarWidth, totalTime));
+    body.on("mouseup", notebarSelectionEnd.bind(this, selector));
+}
+function notebarSelectionMove(selector, fixedStartpos, notebarPos, notebarWidth, totalTime, e) {
+    let startpos = fixedStartpos;
+    let endpos = e.pageX;
+    if (endpos < startpos) {
+        let temp = startpos;
+        startpos = endpos;
+        endpos = temp;
+    }
+    if (startpos < notebarPos.left) {
+        startpos = notebarPos.left;
+    }
+    if (endpos > notebarPos.left + notebarWidth) {
+        endpos = notebarPos.left + notebarWidth;
+    }
+
+    let firstSelectedNote = undefined;
+    let count = undefined;
+    let notes = $(".note", this);
+    for (let i = 0; i < notes.length; i++) {
+        let notepos = $(notes[i]).offset().left;
+        if (notepos > endpos) {
+            count = (firstSelectedNote ? i - firstSelectedNote : 0);
+            break;
+        } else if (notepos >= startpos && firstSelectedNote === undefined) {
+            firstSelectedNote = i;
         }
-    });
+    }
+    if (count === undefined) {
+        count = notes.length - firstSelectedNote;
+    }
+
+    let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
+
+    tooltipInner.html(count + " note" + (count !== 1 ? "s" : "") + "<br>" + selectedTime + " seconds");
+    tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
+    selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
+}
+function notebarSelectionEnd(selector) {
+    body.off("mousemove").off("mouseup");
+    selecting = false;
+    selector.remove();
+    tooltip.css({"left": 0, "top": 0});
+}
+
+// Gimmick Info Tooltip
+
+function gimmickMarkerMouseover(gimmickinfo) {
+    if (selecting || $(this).hasClass("hidden")) return;
+    tooltipInner.html($("div", gimmickinfo)[1].innerHTML);
+    let thismarker = $(".gimmickmarker", this);
+    let position = thismarker.offset();
+    position.left += thismarker.width() / 2;
+    tooltip.css(position);
+}
+
+// AC Info Tooltip
+
+function acMarkerMouseover(acinfo) {
+    if (selecting) return;
+    let details = $("div", acinfo);
+    tooltipInner.html("<b>" + details[0].innerHTML.split(": ")[1] + "</b><br>" + details[1].innerHTML);
+    let position = $(this).offset();
+    position.left += $(this).width() / 2;
+    tooltip.css(position);
+}
+
+// Gimmick Filter
+
+function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
+    if ($(this).hasClass("filtered")) {
+        $(this).removeClass("filtered");
+        gimmickmarkers.removeClass("hidden filtered");
+    } else {
+        gimmickinfos.removeClass("filtered");
+        $(this).addClass("filtered");
+        let gi = $(this).data("gimmick");
+        for (let i = 0; i < gimmickmarkermap.length; i++) {
+            if (i === gi) {
+                $(gimmickmarkermap[i]).removeClass("hidden").addClass("filtered");
+            } else {
+                $(gimmickmarkermap[i]).removeClass("filtered").addClass("hidden");
+            }
+        }
+    }
 }
