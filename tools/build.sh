@@ -3,6 +3,7 @@
 echo "Create empty build folder..."
 rm -rf build
 mkdir build
+mkdir build/lives
 
 echo "Copy fonts..."
 cp --recursive fonts build

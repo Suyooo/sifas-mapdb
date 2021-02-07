@@ -176,7 +176,8 @@ Object.keys(lives_dict).sort(function (a, b) {
         }
         this_tabbar += '</a></li>';
 
-        let this_tab = '<div class="live-difficulty" id="' + live_difficulty_id + '"><div class="row nomargin">' +
+        let this_tab = '<div class="live-difficulty unloaded" id="' + live_difficulty_id + '">Loading...</div>';
+        let tab_content = '<div class="row nomargin">' +
 
             // Top information
             '<div class="col l6"><b>S Rank: </b>' + notemap.format(live_diff.ranks.S) + '</div>' +
@@ -187,7 +188,7 @@ Object.keys(lives_dict).sort(function (a, b) {
             '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live_diff.note_damage) + '</div></div>' +
 
             // Create the note map
-            notemap.make(live_diff) + '</div>';
+            notemap.make(live_diff);
 
         if (live_difficulty_id >= 30000000 && live_difficulty_id < 40000000) {
             story_tabbar += this_tabbar;
@@ -196,6 +197,16 @@ Object.keys(lives_dict).sort(function (a, b) {
             live_tabbar += this_tabbar;
             live_tabs += this_tab;
         }
+
+        fs.writeFile('build/lives/' + live_difficulty_id + '.html', minify(tab_content, {
+                collapseWhitespace: true
+            }),
+            function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+            }
+        );
     });
 
     if (story_tabs.length > 0) {

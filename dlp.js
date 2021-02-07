@@ -100,8 +100,9 @@ tower_ids.forEach(function (tower_id) {
             '<div class="col l3"><b>Cleansable:</b> ' +
             notemap.is_cleansable(linked_live === undefined ? floor.gimmick : linked_live.gimmick) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
-            '</div></div><div class="collapsible-body live-difficulty"><div class="row nomargin">' +
+            '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
 
+        let floor_content = '<div class="row nomargin">' +
             // Top information
             '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
@@ -112,12 +113,20 @@ tower_ids.forEach(function (tower_id) {
             ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div></div>';
 
         if (linked_live !== undefined) {
-            s += notemap.make(linked_live);
+            floor_content += notemap.make(linked_live);
         } else {
-            s += notemap.make(floor);
+            floor_content += notemap.make(floor);
         }
 
-        s += '</div></li></ul>';
+        fs.writeFile('build/lives/' + floor.live_difficulty_id + '.html', minify(floor_content, {
+                collapseWhitespace: true
+            }),
+            function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+            }
+        );
 
         if (floor.reward_progress !== null) {
             s += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';

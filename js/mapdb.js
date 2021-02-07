@@ -50,22 +50,22 @@ function loadPage(page) {
             callAfterSwitchCallback(page);
         } else {
             // Load tab content, delay initialization until loaded
-            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", function () {
-                page.removeClass("unloaded");
-
-                if (type === "free") {
-                    initPageFreeLive(page);
-                } else if (type === "dlp") {
-                    initPageDlp(page);
-                } else if (type === "top") {
-                    initPageTop(page);
-                }
-                callAfterSwitchCallback(page);
-            });
+            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page));
         }
     } else {
         callAfterSwitchCallback(page);
     }
+}
+function loadPageFinished(type, page) {
+    page.removeClass("unloaded");
+    if (type === "free") {
+        initPageFreeLive(page);
+    } else if (type === "dlp") {
+        initPageDlp(page);
+    } else if (type === "top") {
+        initPageTop(page);
+    }
+    callAfterSwitchCallback(page);
 }
 
 /*
@@ -172,7 +172,7 @@ function freeLiveCollapsibleOpen() {
     let activetab = $(activetablink.attr("href"), this.el);
     if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
         activetab.data("initialized", 1);
-        initNoteMapInteractions(activetab);
+        loadNoteMap(activetab);
     }
 }
 function outerCollapsibleClose() {
@@ -182,7 +182,7 @@ function freeLiveTabShow(e) {
     if ($(e).hasClass("live-difficulty")) {
         if ($(e).data("initialized") === undefined) {
             $(e).data("initialized", 1);
-            initNoteMapInteractions($(e));
+            loadNoteMap($(e));
         }
         window.location.hash = "live" + $(e).attr("id");
     } else {
@@ -194,14 +194,14 @@ function freeLiveTabShow(e) {
         let activetab = $(activetablink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
             activetab.data("initialized", 1);
-            initNoteMapInteractions(activetab);
+            loadNoteMap(activetab);
         }
     }
 }
 function freeLiveStoryTabShow(e) {
     if ($(e).data("initialized") === undefined) {
         $(e).data("initialized", 1);
-        initNoteMapInteractions($(e));
+        loadNoteMap($(e));
     }
     window.location.hash = "live" + $(e).attr("id");
 }
@@ -213,7 +213,7 @@ function freeLiveStoryTabShow(e) {
  */
 
 function initPageDlp(page) {
-    let e = $(".collapsible.tower", page).collapsible().each(dlpTowerCollapsibleInit);
+    $(".collapsible.tower", page).collapsible().each(dlpTowerCollapsibleInit);
 }
 function dlpTowerCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
@@ -237,7 +237,7 @@ function dlpFloorCollapsibleOpen() {
     window.location.hash = "floor" + $(this.el).data("floor");
     if ($(this.el).data("initialized") === undefined) {
         $(this.el).data("initialized", 1);
-        initNoteMapInteractions($(".live-difficulty", this.el));
+        loadNoteMap($(".live-difficulty", this.el));
     }
 }
 function dlpFloorCollapsibleClose(towerLink) {
@@ -268,17 +268,25 @@ function rankingTableShowAll() {
 
 /*
  *  ----------
- *  NOTE MAP INTERACTIONS
+ *  NOTE MAPS
  *  ----------
  */
 
+function loadNoteMap(e) {
+    e.load((DEBUG_MODE ? "build/" : "") + "lives/" + e.attr("id") + ".html", loadNoteMapFinish);
+}
+function loadNoteMapFinish() {
+    $(this).removeClass("unloaded");
+    initNoteMapInteractions(this);
+}
+
 let selecting = false;
-function initNoteMapInteractions(noteMap) {
-    let notebar = $(".notebar", noteMap);
+function initNoteMapInteractions(e) {
+    let notebar = $(".notebar", e);
     notebar.on("mousedown", notebarSelectionStart.bind(notebar));
 
-    let gimmickmarkers = $(".notebar .gimmick", noteMap);
-    let gimmickinfos = $(".detailinfo .gimmick", noteMap);
+    let gimmickmarkers = $(".notebar .gimmick", e);
+    let gimmickinfos = $(".detailinfo .gimmick", e);
     let gimmickmarkermap = Array(gimmickinfos.length);
     for (let i = 0; i < gimmickmarkers.length; i++) {
         let gi = $(gimmickmarkers[i]).data("gimmick");
@@ -294,8 +302,8 @@ function initNoteMapInteractions(noteMap) {
             gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap));
     }
 
-    let acmarkers = $(".notebar .appealchance", noteMap);
-    let acinfos = $(".detailinfo .appealchance", noteMap);
+    let acmarkers = $(".notebar .appealchance", e);
+    let acinfos = $(".detailinfo .appealchance", e);
     for (let i = 0; i < acmarkers.length; i++) {
         $(acmarkers[i]).on("mouseover touchstart",
             acMarkerMouseover.bind(acmarkers[i], acinfos[$(acmarkers[i]).data("ac")]));
