@@ -81,7 +81,7 @@ function song_name_romaji(live_id) {
     if (lid === "0077") return "COLORFUL VOICE";
     if (lid === "0009") return "Angelic Angel";
     if (lid === "0068") return "KiRa-KiRa Sensation!";
-    if (lid === "0021") return "Mogyutto \"love\" de Sekkin Chuu!";
+    if (lid === "0021") return "Mogyutto &quot;love&quot; de Sekkin Chuu!";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0004") return "Shunjou Romantic";
     if (lid === "0015") return "NO EXIT ORION";
