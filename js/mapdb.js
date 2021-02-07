@@ -92,16 +92,7 @@ $(function () {
             // Direct link to a live difficulty
             if (hash.charAt(5) === "1") {
                 // Free Live or Event Live (has group ID in next position)
-                afterSwitchCallback = function(page) {
-                    let liveDiffId = hash.substring(5);
-                    let collapsibleBody = $("#" + liveDiffId, page).parent();
-                    let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
-                    collapsible.open(0);
-                    let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
-                    liveDiffTabs.select(liveDiffId);
-                    scrollToElement($(collapsible.el));
-                };
-
+                afterSwitchCallback = scrollToFreeLive.bind(this, hash);
                 switch (hash.charAt(6)) {
                     case "0":
                         tabs.select("tab_muse");
@@ -121,12 +112,41 @@ $(function () {
             }
         } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
             // Direct link to a DLP tower or floor
+            afterSwitchCallback = scrollToDlp.bind(this, hash);
+            tabs.select("tab_dlp");
         } else {
             // Direct link to a page
             tabs.select("tab_" + hash.substring(1));
         }
     }
 });
+function scrollToFreeLive(hash, page) {
+    let liveDiffId = hash.substring(5);
+    let collapsibleBody = $("#" + liveDiffId, page).parent();
+    let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
+    collapsible.options.inDuration = 0;
+    collapsible.open(0);
+    collapsible.options.inDuration = 300;
+    let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
+    liveDiffTabs.select(liveDiffId);
+    scrollToElement($(collapsible.el));
+}
+function scrollToDlp(hash, page) {
+    let towerId = hash.substr(6,5);
+    let targetElement = $("#" + towerId, page);
+    let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
+    towerCollapsible.options.inDuration = 0;
+    towerCollapsible.open(0);
+    towerCollapsible.options.inDuration = 300;
+    if (hash.startsWith("#floor")) {
+        targetElement = $("#" + hash.substring(6), targetElement);
+        let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
+        floorCollapsible.options.inDuration = 0;
+        floorCollapsible.open(0);
+        floorCollapsible.options.inDuration = 300;
+    }
+    scrollToElement(targetElement);
+}
 
 /*
  *  ----------
@@ -221,7 +241,7 @@ function dlpTowerCollapsibleInit() {
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
 function dlpTowerCollapsibleOpen() {
-    let towerLink = "tower" + $(this.el).data("tower");
+    let towerLink = "tower" + $(this.el).attr("id");
     if ($(this.el).data("initialized") === undefined) {
         $(this.el).data("initialized", 1);
         $(".collapsible.floor", this.el).collapsible().each(dlpFloorCollapsibleInit, towerLink);
@@ -234,7 +254,7 @@ function dlpFloorCollapsibleInit(towerLink) {
     collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(towerLink);
 }
 function dlpFloorCollapsibleOpen() {
-    window.location.hash = "floor" + $(this.el).data("floor");
+    window.location.hash = "floor" + $(this.el).attr("id");
     if ($(this.el).data("initialized") === undefined) {
         $(this.el).data("initialized", 1);
         loadNoteMap($(".live-difficulty", this.el));
