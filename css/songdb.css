@@ -6,6 +6,10 @@
     width: 3em;
 }
 
+.nav-content {
+    width: 100%;
+}
+
 .nav-content li.tab {
     text-transform: none;
 }
@@ -95,7 +99,7 @@ body:not(.show-unavail) .collapsible.unavail {
     border-bottom: 5px solid var(--key-normal);
 }
 
-.collapsible-body .tabs.tabs-fixed-width .tab {
+.tabs.tabs-fixed-width .tab {
     flex-basis: 0;
 }
 
