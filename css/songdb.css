@@ -14,10 +14,6 @@
     text-decoration: none;
 }
 
-.nav-wrapper .right a i {
-    width: 1em;
-}
-
 .nav-wrapper .right a.on i {
     color: var(--key-dark);
 }
@@ -59,7 +55,7 @@ h5 {
     margin-right: 4em;
 }
 
-.container:not(.show-unavail) .collapsible.unavail {
+body:not(.show-unavail) .collapsible.unavail {
     display: none;
 }
 

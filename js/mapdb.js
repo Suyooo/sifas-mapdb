@@ -1,30 +1,31 @@
 const DEBUG_MODE = true;
 //let current_filter_timeout = undefined;
 
-M.Collapsible.prototype.instantOpen = function(i) {
+M.Collapsible.prototype.instantOpen = function (i) {
     let tmp = this.options.inDuration;
     this.options.inDuration = 0;
     this.open(i);
     this.options.inDuration = tmp;
 }
-M.Tabs.prototype.instantSelect = function(id) {
+M.Tabs.prototype.instantSelect = function (id) {
     let tmp = this._animateIndicator;
-    this._animateIndicator = function() { };
+    this._animateIndicator = function () {
+    };
     this.select(id);
     this.fakeIndicator();
     setTimeout(this.unfakeIndicator.bind(this), 1000);
     this._animateIndicator = tmp;
 }
-M.Tabs.prototype.fakeIndicator = function() {
+M.Tabs.prototype.fakeIndicator = function () {
     this.$el.addClass("fakeindicator");
     $(this._indicator).addClass("hide");
 }
-M.Tabs.prototype.unfakeIndicator = function() {
+M.Tabs.prototype.unfakeIndicator = function () {
     this.forceTabIndicator();
     this.$el.removeClass("fakeindicator");
     $(this._indicator).removeClass("hide");
 }
-M.Tabs.prototype.forceTabIndicator = function() {
+M.Tabs.prototype.forceTabIndicator = function () {
     this._setTabsAndTabWidth();
     $(".indicator", this.el).css({
         "left": this._calcLeftPos(this.$activeTabLink) + "px",
@@ -79,6 +80,7 @@ function loadPage() {
         callAfterSwitchCallback(page);
     }
 }
+
 function loadPageFinished(type, page) {
     page.removeClass("unloaded");
     if (type === "free") {
@@ -93,7 +95,7 @@ function loadPageFinished(type, page) {
 
 /*
  *  ----------
- *  SITE INIT AND DIRECT LINKING
+ *  SITE INIT
  *  ----------
  */
 
@@ -102,12 +104,24 @@ $(function () {
 
     // page tabs
     let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
-    tabs.options.onShow = function (e) {
-        window.location.hash = currentPage = $(e).attr("id").substring(4);
-        loadPage.bind(e)();
-    }
+    tabs.options.onShow = pageTabShow;
 
-    // Handle location hash
+    handleLocationHash(tabs);
+    registerHeaderButtons();
+});
+
+function pageTabShow(e) {
+    window.location.hash = currentPage = $(e).attr("id").substring(4);
+    loadPage.bind(e)();
+}
+
+/*
+ *  ----------
+ *  DIRECT LINKING
+ *  ----------
+ */
+
+function handleLocationHash(tabs) {
     if (window.location.hash !== "") {
         let hash = window.location.hash;
         if (hash.startsWith("#live")) {
@@ -145,7 +159,8 @@ $(function () {
             tabs.select("tab_" + hash.substring(1));
         }
     }
-});
+}
+
 function showLinkedFreeLive(hash, page) {
     let liveDiffId = hash.substring(5);
     let collapsibleBody = $("#" + liveDiffId, page).parent();
@@ -155,6 +170,7 @@ function showLinkedFreeLive(hash, page) {
     liveDiffTabs.instantSelect(liveDiffId);
     scrollToElement(collapsible.$el);
 }
+
 function showLinkedStoryStage(counter, hash, groupTabs, tabs) {
     if (counter > 1) {
         afterSwitchCallback = showLinkedStoryStage.bind(this, counter - 1, hash, groupTabs, tabs);
@@ -176,8 +192,9 @@ function showLinkedStoryStage(counter, hash, groupTabs, tabs) {
     storyTabs.instantSelect(targetLiveDiff.attr("id"));
     scrollToElement(liveCollapsible.$el);
 }
+
 function showLinkedDlp(hash, page) {
-    let towerId = hash.substr(6,5);
+    let towerId = hash.substr(6, 5);
     let targetElement = $("#" + towerId, page);
     let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
     towerCollapsible.instantOpen(0);
@@ -191,6 +208,52 @@ function showLinkedDlp(hash, page) {
 
 /*
  *  ----------
+ *  HEADER BUTTONS
+ *  ----------
+ */
+let showRomaji = false;
+let btnRomaji = $("#toggle_romaji");
+let showUnavailable = false;
+let btnUnavailable = $("#toggle_unavailable");
+
+function registerHeaderButtons() {
+    btnRomaji.on("click", toggleRomaji);
+    btnUnavailable.on("click", toggleUnavailable);
+}
+
+function toggleRomaji() {
+    showRomaji = !showRomaji;
+    $(".translatable").each(swapTitles);
+    if (showRomaji) {
+        btnRomaji.addClass("on");
+        M.toast({html: "Showing titles in Romaji"});
+    } else {
+        btnRomaji.removeClass("on");
+        M.toast({html: "Showing titles in Kana/Kanji"});
+    }
+}
+
+function swapTitles() {
+    let new_title = $(this).data("rom");
+    $(this).data("rom", $(this).text());
+    $(this).text(new_title);
+}
+
+function toggleUnavailable() {
+    showUnavailable = !showUnavailable;
+    if (showUnavailable) {
+        btnUnavailable.addClass("on");
+        body.addClass("show-unavail");
+        M.toast({html: "Showing unavailable songs"});
+    } else {
+        btnUnavailable.removeClass("on");
+        body.removeClass("show-unavail");
+        M.toast({html: "Hiding unavailable songs"});
+    }
+}
+
+/*
+ *  ----------
  *  FREE LIVE PAGE
  *  ----------
  */
@@ -199,11 +262,13 @@ function initPageFreeLive(page) {
     let collapsibles = $(".collapsible", page);
     collapsibles.collapsible().each(freeLiveCollapsibleInit);
 }
+
 function freeLiveCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = freeLiveCollapsibleOpen;
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
+
 function freeLiveCollapsibleOpen() {
     let tabElements = $(".tabs", this.el);
     let tabs;
@@ -238,9 +303,11 @@ function freeLiveCollapsibleOpen() {
         loadNoteMap(activetab);
     }
 }
+
 function outerCollapsibleClose() {
     window.location.hash = currentPage;
 }
+
 function freeLiveTabShow(e) {
     if ($(e).hasClass("live-difficulty")) {
         if ($(e).data("initialized") === undefined) {
@@ -262,6 +329,7 @@ function freeLiveTabShow(e) {
         }
     }
 }
+
 function freeLiveStoryTabShow(e) {
     if ($(e).data("initialized") === undefined) {
         $(e).data("initialized", 1);
@@ -279,11 +347,13 @@ function freeLiveStoryTabShow(e) {
 function initPageDlp(page) {
     $(".collapsible.tower", page).collapsible().each(dlpTowerCollapsibleInit);
 }
+
 function dlpTowerCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = dlpTowerCollapsibleOpen;
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
+
 function dlpTowerCollapsibleOpen() {
     let towerLink = "tower" + this.$el.attr("id");
     if (this.$el.data("initialized") === undefined) {
@@ -292,11 +362,13 @@ function dlpTowerCollapsibleOpen() {
     }
     window.location.hash = towerLink;
 }
+
 function dlpFloorCollapsibleInit(towerLink) {
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = dlpFloorCollapsibleOpen;
     collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(towerLink);
 }
+
 function dlpFloorCollapsibleOpen() {
     window.location.hash = "floor" + this.$el.attr("id");
     if (this.$el.data("initialized") === undefined) {
@@ -304,6 +376,7 @@ function dlpFloorCollapsibleOpen() {
         loadNoteMap($(".live-difficulty", this.el));
     }
 }
+
 function dlpFloorCollapsibleClose(towerLink) {
     window.location.hash = towerLink;
 }
@@ -317,14 +390,17 @@ function dlpFloorCollapsibleClose(towerLink) {
 function initPageTop(page) {
     $(".rankingtable", page).each(rankingTableInit);
 }
+
 function rankingTableInit() {
     let table = $(this);
     $(".btn", this).on("click", rankingTableOpen.bind(this));
     $("small.right", table.parent()).on("click", rankingTableShowAll.bind(this));
 }
+
 function rankingTableOpen() {
     $(this).addClass("open");
 }
+
 function rankingTableShowAll() {
     $(this).addClass("show-all");
     $("small.right", $(this).parent()).remove();
@@ -339,12 +415,14 @@ function rankingTableShowAll() {
 function loadNoteMap(e) {
     e.load((DEBUG_MODE ? "build/" : "") + "lives/" + e.attr("id") + ".html", loadNoteMapFinish);
 }
+
 function loadNoteMapFinish() {
     $(this).removeClass("unloaded");
     initNoteMapInteractions(this);
 }
 
 let selecting = false;
+
 function initNoteMapInteractions(e) {
     let notebar = $(".notebar", e);
     notebar.on("mousedown", notebarSelectionStart.bind(notebar));
@@ -362,7 +440,7 @@ function initNoteMapInteractions(e) {
     }
     gimmickmarkers.on("mouseout", closeTooltip);
     for (let i = 0; i < gimmickinfos.length; i++) {
-        $(gimmickinfos[i]).on("click", 
+        $(gimmickinfos[i]).on("click",
             gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap));
     }
 
@@ -374,6 +452,7 @@ function initNoteMapInteractions(e) {
     }
     acmarkers.on("mouseout", closeTooltip);
 }
+
 function closeTooltip() {
     tooltip.css({"left": 0, "top": 0});
 }
@@ -392,6 +471,7 @@ function notebarSelectionStart(e) {
     body.on("mousemove", notebarSelectionMove.bind(this, selector, fixedStartpos, notebarPos, notebarWidth, totalTime));
     body.on("mouseup", notebarSelectionEnd.bind(this, selector));
 }
+
 function notebarSelectionMove(selector, fixedStartpos, notebarPos, notebarWidth, totalTime, e) {
     let startpos = fixedStartpos;
     let endpos = e.pageX;
@@ -429,6 +509,7 @@ function notebarSelectionMove(selector, fixedStartpos, notebarPos, notebarWidth,
     tooltip.css({"left": (startpos + endpos) / 2, "top": notebarPos.top});
     selector.css({"left": startpos - notebarPos.left, "width": endpos - startpos});
 }
+
 function notebarSelectionEnd(selector) {
     body.off("mousemove").off("mouseup");
     selecting = false;
