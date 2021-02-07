@@ -415,7 +415,8 @@ function make_notemap(live) {
         let infos = '<div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
             '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
             '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + '</div>' +
-            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>';
+            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>' +
+            '<div class="col l6"><b>SP Gauge Size: </b>' + format(live.sp_gauge_max) + '</div>';
         if (live.song_length) {
             let min = Math.floor(live.song_length / 60000);
             let sec = Math.floor(live.song_length % 60000 / 1000);
