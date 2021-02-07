@@ -90,6 +90,9 @@ function loadPageFinished(type, page) {
     } else if (type === "top") {
         initPageTop(page);
     }
+    if (showRomaji) {
+        $(".translatable", page).each(swapTitles);
+    }
     callAfterSwitchCallback(page);
 }
 
