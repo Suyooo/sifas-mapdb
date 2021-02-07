@@ -129,7 +129,7 @@ function scrollToFreeLive(hash, page) {
     collapsible.options.inDuration = 300;
     let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
     liveDiffTabs.select(liveDiffId);
-    scrollToElement($(collapsible.el));
+    scrollToElement(collapsible.$el);
 }
 function scrollToDlp(hash, page) {
     let towerId = hash.substr(6,5);
@@ -165,8 +165,8 @@ function freeLiveCollapsibleInit() {
 }
 function freeLiveCollapsibleOpen() {
     let tabElements = $(".tabs", this.el);
-    if ($(this.el).data("initialized") === undefined) {
-        $(this.el).data("initialized", 1);
+    if (this.$el.data("initialized") === undefined) {
+        this.$el.data("initialized", 1);
         tabElements.tabs();
         let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
         let tabs = M.Tabs.getInstance(tabElements[0]);
@@ -241,9 +241,9 @@ function dlpTowerCollapsibleInit() {
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
 function dlpTowerCollapsibleOpen() {
-    let towerLink = "tower" + $(this.el).attr("id");
-    if ($(this.el).data("initialized") === undefined) {
-        $(this.el).data("initialized", 1);
+    let towerLink = "tower" + this.$el.attr("id");
+    if (this.$el.data("initialized") === undefined) {
+        this.$el.data("initialized", 1);
         $(".collapsible.floor", this.el).collapsible().each(dlpFloorCollapsibleInit, towerLink);
     }
     window.location.hash = towerLink;
@@ -254,9 +254,9 @@ function dlpFloorCollapsibleInit(towerLink) {
     collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(towerLink);
 }
 function dlpFloorCollapsibleOpen() {
-    window.location.hash = "floor" + $(this.el).attr("id");
-    if ($(this.el).data("initialized") === undefined) {
-        $(this.el).data("initialized", 1);
+    window.location.hash = "floor" + this.$el.attr("id");
+    if (this.$el.data("initialized") === undefined) {
+        this.$el.data("initialized", 1);
         loadNoteMap($(".live-difficulty", this.el));
     }
 }
