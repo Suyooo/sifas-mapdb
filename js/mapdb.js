@@ -33,6 +33,43 @@ function callAfterSwitchCallback(page) {
     }
 }
 
+function loadPage(page) {
+    if (page.data("loaded") === undefined) {
+        page.data("loaded", 1);
+        let type = page.data("type");
+        if (type === "fixed") {
+            // Tab already has content - don't do anything
+            page.removeClass("unloaded");
+            callAfterSwitchCallback(page);
+        } else {
+            // Load tab content, delay initialization until loaded
+            page.load(page.attr("id").substring(4) + ".html", function () {
+                page.removeClass("unloaded");
+
+                if (type === "free") {
+                    doFreeLiveInit(page);
+                } else if (type === "dlp") {
+                    doDLPInit(page);
+                } else if (type === "top") {
+                    $(".rankingtable", page).each(function () {
+                        let table = $(this);
+                        $(".btn", this).click(function () {
+                            table.addClass("open");
+                        });
+                        $("small.right", table.parent()).click(function () {
+                            table.addClass("show-all");
+                            $(this).remove();
+                        });
+                    });
+                }
+                callAfterSwitchCallback(page);
+            });
+        }
+    } else {
+        callAfterSwitchCallback(page);
+    }
+}
+
 $(function () {
     M.AutoInit();
 
@@ -41,40 +78,7 @@ $(function () {
     tabs.options.onShow = function (e) {
         let page = $(e);
         window.location.hash = currentPage = page.attr("id").substring(4);
-        if (page.data("loaded") === undefined) {
-            page.data("loaded", 1);
-            let type = page.data("type");
-            if (type === "fixed") {
-                // Tab already has content - don't do anything
-                page.removeClass("unloaded");
-                callAfterSwitchCallback(page);
-            } else {
-                // Load tab content, delay initialization until loaded
-                page.load(page.attr("id").substring(4) + ".html", function () {
-                    page.removeClass("unloaded");
-
-                    if (type === "free") {
-                        doFreeLiveInit(page);
-                    } else if (type === "dlp") {
-                        doDLPInit(page);
-                    } else if (type === "top") {
-                        $(".rankingtable", page).each(function () {
-                            let table = $(this);
-                            $(".btn", this).click(function () {
-                                table.addClass("open");
-                            });
-                            $("small.right", table.parent()).click(function () {
-                                table.addClass("show-all");
-                                $(this).remove();
-                            });
-                        });
-                    }
-                    callAfterSwitchCallback(page);
-                });
-            }
-        } else {
-            callAfterSwitchCallback(page);
-        }
+        loadPage(page);
     }
 
     // Handle location hash
