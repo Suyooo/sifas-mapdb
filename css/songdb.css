@@ -23,7 +23,7 @@ body:not(.loading) > .container {
     width: 100%;
 }
 
-.nav-content li.tab {
+.nav-content li.tab, .collapsible-header b {
     text-transform: none;
 }
 
@@ -86,8 +86,8 @@ body:not(.show-unavail) .collapsible.unavail {
     font-weight: normal;
 }
 .collapsible.unavail .collapsible-header b::after {
-     content: " (unavailable)";
-     font-weight: normal;
+    content: " (unavailable)";
+    font-weight: normal;
  }
 
 .collapsible-body .tabs.tabs-transparent {
