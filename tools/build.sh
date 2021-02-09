@@ -39,8 +39,8 @@ for F in css/*.css; do
     purifycss ${F} index.html top.html notemap-reader.js mapdb.js dlp.js top.js js/mapdb.js vendor/materialize.js -m -o build/${F}
 done
 
-echo "Copy Index page..."
-cp index.html build/index.html
+echo "Minify Index page..."
+html-minifier --collapse-whitespace -o build/index.html index.html
 
 echo "Build DLP page..."
 node dlp.js
