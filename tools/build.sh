@@ -29,7 +29,7 @@ echo "Minify Javascript..."
 mkdir build/js
 for F in js/*.js; do
     echo "    ${F}"
-    uglifyjs --compress sequences=true,conditionals=true,booleans=true,dead_code=true,unused=true,if_return=true,join_vars=true --mangle -o build/${F} ${F}
+    sed '1,1{s/true/false/}' ${F} | uglifyjs --compress sequences=true,conditionals=true,booleans=true,dead_code=true,unused=true,if_return=true,join_vars=true --mangle -o build/${F}
 done
 
 echo "Minify CSS..."
