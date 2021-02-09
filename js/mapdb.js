@@ -65,7 +65,7 @@ function callAfterSwitchCallback(page) {
 
 function loadPage() {
     let page = $(this);
-    if (page.data("loaded") === undefined) {
+    if (page.data("loaded") === undefined || page.data("loaded") === 0) {
         page.data("loaded", 1);
         let type = page.data("type");
         if (type === "fixed") {
@@ -81,19 +81,24 @@ function loadPage() {
     }
 }
 
-function loadPageFinished(type, page) {
-    page.removeClass("unloaded");
-    if (type === "free") {
-        initPageFreeLive(page);
-    } else if (type === "dlp") {
-        initPageDlp(page);
-    } else if (type === "top") {
-        initPageTop(page);
+function loadPageFinished(type, page, responseText, textStatus) {
+    if (textStatus === "error") {
+        page.data("loaded", 0);
+        page.html("Failed to load. <a onClick='M.Tabs.getInstance($(\"nav .tabs\")[0]).select(\"" + page.attr("id") + "\")'>Retry?</a>");
+    } else {
+        page.removeClass("unloaded");
+        if (type === "free") {
+            initPageFreeLive(page);
+        } else if (type === "dlp") {
+            initPageDlp(page);
+        } else if (type === "top") {
+            initPageTop(page);
+        }
+        if (showRomaji) {
+            $(".translatable", page).each(swapTitles);
+        }
+        callAfterSwitchCallback(page);
     }
-    if (showRomaji) {
-        $(".translatable", page).each(swapTitles);
-    }
-    callAfterSwitchCallback(page);
 }
 
 /*
@@ -420,9 +425,13 @@ function loadNoteMap(e) {
     e.load((DEBUG_MODE ? "build/" : "") + "lives/" + e.attr("id") + ".html", loadNoteMapFinish);
 }
 
-function loadNoteMapFinish() {
-    $(this).removeClass("unloaded");
-    initNoteMapInteractions(this);
+function loadNoteMapFinish(responseText, textStatus) {
+    if (textStatus === "error") {
+        $(this).html("Failed to load. <a onClick='loadNoteMap($(\"#" + $(this).attr("id") + "\"))'>Retry?</a>");
+    } else {
+        $(this).removeClass("unloaded");
+        initNoteMapInteractions(this);
+    }
 }
 
 let selecting = false;
