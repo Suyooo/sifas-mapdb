@@ -1,11 +1,14 @@
-body > .container {
-    animation: fadein 0.5s;
+body.loading {
+    pointer-events: none;
 }
 
-@keyframes fadein {
-    0% { opacity: 0; }
-    50% { opacity: 0; }
-    100%  { opacity: 1; }
+body > .container {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+body:not(.loading) > .container {
+    opacity: 1;
 }
 
 .row, .col {

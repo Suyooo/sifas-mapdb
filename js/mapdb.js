@@ -108,6 +108,7 @@ $(function () {
     // page tabs
     let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
     tabs.options.onShow = pageTabShow;
+    body.removeClass("loading");
 
     handleLocationHash(tabs);
     registerHeaderButtons();
