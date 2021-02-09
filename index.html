@@ -42,11 +42,13 @@
             <ul class="right">
                 <li><a id="toggle_romaji" class="waves-effect waves-light"><i class="material-icons">translate</i></a></li>
                 <li><a id="toggle_unavailable" class="waves-effect waves-light"><i class="material-icons">event_busy</i></a></li>
+                <li><a id="search_button" class="waves-effect waves-light"><i class="material-icons">search</i></a></li>
             </ul>
         </div>
         <div class="nav-content">
             <ul class="tabs tabs-transparent tabs-fixed-width">
                 <li class="tab hide"><a class="active" href="#tab_start">Start</a></li>
+                <li class="tab hide"><a href="#tab_search">Search</a></li>
                 <li class="tab"><a href="#tab_muse">µ's</a></li>
                 <li class="tab"><a href="#tab_aqours">Aqours</a></li>
                 <li class="tab"><a href="#tab_niji">Nijigaku</a></li>
@@ -118,12 +120,17 @@
                     Probably needs to handle error cases if loading fails somehow...
                 </li>
                 <li>
+                    Have story tabs scroll to the directly linked story stage.
+                </li>
+                <li>
                     How about getting a gooood hashChange listener going
                 </li>
                 <li>
                     Make the romanized names a permanent option instead of a temporary toggle.
                 </li>
             </ul>
+        </div>
+        <div id="tab_search" class="col s12" data-type="fixed">
         </div>
         <div id="tab_muse" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_aqours" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
