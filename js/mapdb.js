@@ -101,6 +101,29 @@ function loadPageFinished(type, page, responseText, textStatus) {
     }
 }
 
+function withAllGroupPages(callback) {
+    let groupPages = $(".group-tab");
+    let unloaded = groupPages.filter(filterUnloadedPages);
+    if (unloaded.length === 0) {
+        callback(groupPages);
+    } else {
+        afterSwitchCallback = checkAllPagesLoaded.bind(this, unloaded.length, callback, groupPages);
+        unloaded.each(loadPage);
+    }
+}
+
+function filterUnloadedPages(p) {
+    return $(this).hasClass("unloaded");
+}
+
+function checkAllPagesLoaded(counter, callback, groupPages) {
+    if (counter > 1) {
+        afterSwitchCallback = checkAllPagesLoaded.bind(this, counter - 1, callback, groupPages);
+    } else {
+        callback(groupPages);
+    }
+}
+
 /*
  *  ----------
  *  SITE INIT
@@ -155,9 +178,7 @@ function handleLocationHash(tabs) {
             } else {
                 // Story Stage: Can't read group ID on newer stages, must load all group tabs
                 // and search for the correct stage by going through them all
-                let groupTabs = $(".group-tab");
-                afterSwitchCallback = showLinkedStoryStage.bind(this, groupTabs.length, hash, groupTabs, tabs);
-                groupTabs.each(loadPage);
+                withAllGroupPages(showLinkedStoryStage.bind(this, hash, tabs));
             }
         } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
             // Direct link to a DLP tower or floor
@@ -180,13 +201,8 @@ function showLinkedFreeLive(hash, page) {
     scrollToElement(collapsible.$el);
 }
 
-function showLinkedStoryStage(counter, hash, groupTabs, tabs) {
-    if (counter > 1) {
-        afterSwitchCallback = showLinkedStoryStage.bind(this, counter - 1, hash, groupTabs, tabs);
-        return;
-    }
-
-    let targetLiveDiff = $("#" + hash.substring(5), groupTabs);
+function showLinkedStoryStage(hash, tabs, groupPages) {
+    let targetLiveDiff = $("#" + hash.substring(5), groupPages);
     let targetLiveStoryTab = targetLiveDiff.parent();
     let targetLive = targetLiveStoryTab.parent().parent().parent();
     let targetPage = targetLive.parent();
