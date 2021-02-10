@@ -140,11 +140,35 @@ $(function () {
 
     handleLocationHash(tabs);
     registerHeaderButtons();
+    registerSearch();
 });
 
 function pageTabShow(e) {
     window.location.hash = currentPage = $(e).attr("id").substring(4);
     loadPage.bind(e)();
+    searchActive = false;
+
+    if ($(e).attr("id") === "tab_search") {
+        withAllGroupPages(showSearch);
+    }
+}
+
+/*
+ *  ----------
+ *  SEARCH
+ *  ----------
+ */
+
+let searchActive = false;
+
+function registerSearch() {
+
+}
+
+function showSearch(groupPages) {
+    $("#search_loading").hide();
+    groupPages.show();
+    searchActive = true;
 }
 
 /*
@@ -241,7 +265,7 @@ let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
 let btnUnavailable = $("#toggle_unavailable");
 
-function registerHeaderButtons() {
+function registerHeaderButtons(tabs) {
     btnRomaji.on("click", toggleRomaji);
     btnUnavailable.on("click", toggleUnavailable);
 }

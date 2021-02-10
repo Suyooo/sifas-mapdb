@@ -42,13 +42,12 @@
             <ul class="right">
                 <li><a id="toggle_romaji" class="waves-effect waves-light"><i class="material-icons">translate</i></a></li>
                 <li><a id="toggle_unavailable" class="waves-effect waves-light"><i class="material-icons">event_busy</i></a></li>
-                <li><a id="search_button" class="waves-effect waves-light"><i class="material-icons">search</i></a></li>
             </ul>
         </div>
         <div class="nav-content">
             <ul class="tabs tabs-transparent tabs-fixed-width">
                 <li class="tab hide"><a class="active" href="#tab_start">Start</a></li>
-                <li class="tab hide"><a href="#tab_search">Search</a></li>
+                <li class="tab" style="flex-grow: 0"><a href="#tab_search"><i style="line-height: 50px" class="material-icons">search</i></a></li>
                 <li class="tab"><a href="#tab_muse">µ's</a></li>
                 <li class="tab"><a href="#tab_aqours">Aqours</a></li>
                 <li class="tab"><a href="#tab_niji">Nijigaku</a></li>
@@ -140,11 +139,12 @@
                 <input id="filter" type="text">
                 <label for="filter">Filter By Song Name (Japanese or Romanized)</label>
             </div>
+            <div id="search_loading" class="unloaded">Loading...</div>
         </div>
         <div id="tab_muse" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_aqours" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_niji" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
-        <div id="tab_liella" class="col s12 unloaded group-tab" data-type="fixed" style="margin-top: 2em; text-align: center;">Coming Soon...?</div>
+        <div id="tab_liella" class="col s12 unloaded" data-type="fixed" style="margin-top: 2em; text-align: center;">Coming Soon...?</div>
         <div id="tab_dlp" class="col s12 unloaded" data-type="dlp">Loading...</div>
         <div id="tab_top" class="col s12 unloaded" data-type="top">Loading...</div>
     </div>
