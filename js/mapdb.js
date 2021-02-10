@@ -55,33 +55,25 @@ function scrollToElement(e) {
 let currentPage = "start";
 let afterSwitchCallback = undefined;
 
-function callAfterSwitchCallback(page) {
-    if (afterSwitchCallback !== undefined) {
-        let f = afterSwitchCallback;
-        afterSwitchCallback = undefined;
-        f(page);
-    }
-}
-
-function loadPage() {
-    let page = $(this);
+function loadPageThen(page, callback) {
+    page = $(page);
     if (page.data("loaded") === undefined || page.data("loaded") === 0) {
         page.data("loaded", 1);
         let type = page.data("type");
         if (type === "fixed") {
             // Tab already has content - don't do anything
             page.removeClass("unloaded");
-            callAfterSwitchCallback(page);
+            if (callback !== undefined) callback(page);
         } else {
             // Load tab content, delay initialization until loaded
-            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page));
+            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page, callback));
         }
     } else {
-        callAfterSwitchCallback(page);
+        if (callback !== undefined) callback(page);
     }
 }
 
-function loadPageFinished(type, page, responseText, textStatus) {
+function loadPageFinished(type, page, callback, responseText, textStatus) {
     if (textStatus === "error") {
         page.data("loaded", 0);
         page.html("Failed to load. <a onClick='M.Tabs.getInstance($(\"nav .tabs\")[0]).select(\"" + page.attr("id") + "\")'>Retry?</a>");
@@ -97,30 +89,34 @@ function loadPageFinished(type, page, responseText, textStatus) {
         if (showRomaji) {
             $(".translatable", page).each(swapTitles);
         }
-        callAfterSwitchCallback(page);
+        if (callback !== undefined) callback(page);
     }
 }
 
-function withAllGroupPages(callback) {
+let unloadedGroupPages = 0;
+
+function loadAllGroupPagesThen(callback) {
     let groupPages = $(".group-tab");
     let unloaded = groupPages.filter(filterUnloadedPages);
     if (unloaded.length === 0) {
         callback(groupPages);
     } else {
-        afterSwitchCallback = checkAllPagesLoaded.bind(this, unloaded.length, callback, groupPages);
-        unloaded.each(loadPage);
+        unloadedGroupPages = unloaded.length;
+        let cb = checkAllPagesLoaded.bind(this, callback.bind(this, groupPages));
+        for (let i = 0; i < unloaded.length; i++) {
+            loadPageThen(unloaded[i], cb);
+        }
     }
 }
 
-function filterUnloadedPages(p) {
+function filterUnloadedPages() {
     return $(this).hasClass("unloaded");
 }
 
-function checkAllPagesLoaded(counter, callback, groupPages) {
-    if (counter > 1) {
-        afterSwitchCallback = checkAllPagesLoaded.bind(this, counter - 1, callback, groupPages);
-    } else {
-        callback(groupPages);
+function checkAllPagesLoaded(callback) {
+    unloadedGroupPages--;
+    if (unloadedGroupPages === 0) {
+        callback();
     }
 }
 
@@ -145,11 +141,12 @@ $(function () {
 
 function pageTabShow(e) {
     window.location.hash = currentPage = $(e).attr("id").substring(4);
-    loadPage.bind(e)();
+    loadPageThen(e, afterSwitchCallback);
+    afterSwitchCallback = undefined;
     searchActive = false;
 
     if ($(e).attr("id") === "tab_search") {
-        withAllGroupPages(showSearch);
+        loadAllGroupPagesThen(showSearch);
     }
 }
 
@@ -202,7 +199,7 @@ function handleLocationHash(tabs) {
             } else {
                 // Story Stage: Can't read group ID on newer stages, must load all group tabs
                 // and search for the correct stage by going through them all
-                withAllGroupPages(showLinkedStoryStage.bind(this, hash, tabs));
+                loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, tabs));
             }
         } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
             // Direct link to a DLP tower or floor
