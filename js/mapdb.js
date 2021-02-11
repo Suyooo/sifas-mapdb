@@ -143,10 +143,15 @@ function pageTabShow(e) {
     window.location.hash = currentPage = $(e).attr("id").substring(4);
     loadPageThen(e, afterSwitchCallback);
     afterSwitchCallback = undefined;
-    searchActive = false;
 
+    if (currentSearchTimeout !== undefined) {
+        clearTimeout(currentSearchTimeout);
+        currentSearchTimeout = undefined;
+    }
     if ($(e).attr("id") === "tab_search") {
         loadAllGroupPagesThen(showSearch);
+    } else {
+        doSearch("");
     }
 }
 
@@ -156,16 +161,80 @@ function pageTabShow(e) {
  *  ----------
  */
 
-let searchActive = false;
+let currentSearchTimeout = undefined;
+let searchInput = $("#search_input");
 
 function registerSearch() {
-
+    searchInput.on("keyup", searchInputKeyUp);
 }
 
 function showSearch(groupPages) {
     $("#search_loading").hide();
     groupPages.show();
-    searchActive = true;
+    if (currentSearchTimeout === undefined) {
+        // If user finished typing something into input before all the pages finished loading, filter
+        doSearch(searchInput.val());
+    }
+}
+
+function searchInputKeyUp(e) {
+    if (currentSearchTimeout !== undefined) {
+        clearTimeout(currentSearchTimeout);
+    }
+    if (e.key === 'Enter') {
+        currentSearchTimeout = undefined;
+        doSearch(e.target.value);
+    } else {
+        currentSearchTimeout = setTimeout(doSearch.bind(this, e.target.value), 1000);
+    }
+}
+
+function doSearch(search_input) {
+    currentSearchTimeout = undefined;
+    let collapsibles = $(".group-tab .collapsible");
+    if (search_input === undefined || search_input.trim() === "") {
+        collapsibles.each(resetCollapsibleFiltering);
+        return;
+    }
+
+    let search_terms = search_input.trim().split(/\s+/);
+    let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, search_terms)).map(M.Collapsible.getInstance);
+
+    if (filtered.length === 1) {
+        filtered[0].open();
+    } else {
+        $(filtered).each(M.Collapsible.prototype.close);
+    }
+}
+
+function filterCollapsibles(search_terms, e) {
+    let song_name_element = $(".collapsible-header > .translatable", e);
+    let song_name_jp = song_name_element.text().toLowerCase();
+    let song_name_ro = song_name_element.data("rom").toLowerCase();
+
+    let result = true;
+    for (let i = 0; i < search_terms.length; i++) {
+        let term = search_terms[i].toLowerCase();
+        if (result && !song_name_jp.includes(term) && !song_name_ro.includes(term)) {
+            result = false;
+        }
+    }
+
+    if (result) {
+        // Set to "block" to force unavailable songs to be visible as well
+        $(e).css("display","block");
+        return true;
+    } else {
+        $(e).css("display","none");
+        M.Collapsible.getInstance(e).close();
+        return false;
+    }
+}
+
+function resetCollapsibleFiltering() {
+    $(this).css("display","");
+    let collapsible = M.Collapsible.getInstance(this);
+    collapsible.close();
 }
 
 /*
