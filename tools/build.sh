@@ -11,6 +11,8 @@ echo "Copy change log..."
 cp changelog build
 echo "Copy app manifest..."
 cp manifest.json build
+echo "Copy .htaccess..."
+cp .htaccess build
 
 echo "Copy Library JS..."
 mkdir build/vendor
