@@ -23,7 +23,7 @@ body:not(.loading) > .container {
     width: 100%;
 }
 
-.nav-content li.tab, .collapsible-header b {
+.nav-content li.tab, .collapsible-header {
     text-transform: none;
 }
 
