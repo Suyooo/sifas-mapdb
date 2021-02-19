@@ -55,33 +55,25 @@ function scrollToElement(e) {
 let currentPage = "start";
 let afterSwitchCallback = undefined;
 
-function callAfterSwitchCallback(page) {
-    if (afterSwitchCallback !== undefined) {
-        let f = afterSwitchCallback;
-        afterSwitchCallback = undefined;
-        f(page);
-    }
-}
-
-function loadPage() {
-    let page = $(this);
+function loadPageThen(page, callback) {
+    page = $(page);
     if (page.data("loaded") === undefined || page.data("loaded") === 0) {
         page.data("loaded", 1);
         let type = page.data("type");
         if (type === "fixed") {
             // Tab already has content - don't do anything
             page.removeClass("unloaded");
-            callAfterSwitchCallback(page);
+            if (callback !== undefined) callback(page);
         } else {
             // Load tab content, delay initialization until loaded
-            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page));
+            page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page, callback));
         }
     } else {
-        callAfterSwitchCallback(page);
+        if (callback !== undefined) callback(page);
     }
 }
 
-function loadPageFinished(type, page, responseText, textStatus) {
+function loadPageFinished(type, page, callback, responseText, textStatus) {
     if (textStatus === "error") {
         page.data("loaded", 0);
         page.html("Failed to load. <a onClick='M.Tabs.getInstance($(\"nav .tabs\")[0]).select(\"" + page.attr("id") + "\")'>Retry?</a>");
@@ -97,7 +89,34 @@ function loadPageFinished(type, page, responseText, textStatus) {
         if (showRomaji) {
             $(".translatable", page).each(swapTitles);
         }
-        callAfterSwitchCallback(page);
+        if (callback !== undefined) callback(page);
+    }
+}
+
+let unloadedGroupPages = 0;
+
+function loadAllGroupPagesThen(callback) {
+    let groupPages = $(".group-tab");
+    let unloaded = groupPages.filter(filterUnloadedPages);
+    if (unloaded.length === 0) {
+        callback(groupPages);
+    } else {
+        unloadedGroupPages = unloaded.length;
+        let cb = checkAllPagesLoaded.bind(this, callback.bind(this, groupPages));
+        for (let i = 0; i < unloaded.length; i++) {
+            loadPageThen(unloaded[i], cb);
+        }
+    }
+}
+
+function filterUnloadedPages() {
+    return $(this).hasClass("unloaded");
+}
+
+function checkAllPagesLoaded(callback) {
+    unloadedGroupPages--;
+    if (unloadedGroupPages === 0) {
+        callback();
     }
 }
 
@@ -117,11 +136,115 @@ $(function () {
 
     handleLocationHash(tabs);
     registerHeaderButtons();
+    registerSearch();
 });
+
+let onSearchTab = false;
 
 function pageTabShow(e) {
     window.location.hash = currentPage = $(e).attr("id").substring(4);
-    loadPage.bind(e)();
+    loadPageThen(e, afterSwitchCallback);
+    afterSwitchCallback = undefined;
+
+    if (currentSearchTimeout !== undefined) {
+        clearTimeout(currentSearchTimeout);
+        currentSearchTimeout = undefined;
+    }
+    if ($(e).attr("id") === "tab_search") {
+        loadAllGroupPagesThen(showSearch);
+        onSearchTab = true;
+    } else if (onSearchTab) {
+        let groupTabs = $(".group-tab")
+        for (let i = 0; i < groupTabs.length; i++) {
+            if (groupTabs[i] !== e) {
+                $(groupTabs[i]).hide();
+            }
+        }
+        doSearch("");
+        onSearchTab = false;
+    }
+}
+
+/*
+ *  ----------
+ *  SEARCH
+ *  ----------
+ */
+
+let currentSearchTimeout = undefined;
+let searchInput = $("#search_input");
+
+function registerSearch() {
+    searchInput.on("keyup", searchInputKeyUp);
+}
+
+function showSearch(groupPages) {
+    $("#search_loading").hide();
+    groupPages.show();
+    if (currentSearchTimeout === undefined) {
+        // If user finished typing something into input before all the pages finished loading, filter
+        doSearch(searchInput.val());
+    }
+}
+
+function searchInputKeyUp(e) {
+    if (currentSearchTimeout !== undefined) {
+        clearTimeout(currentSearchTimeout);
+    }
+    if (e.key === 'Enter') {
+        currentSearchTimeout = undefined;
+        doSearch(e.target.value);
+    } else {
+        currentSearchTimeout = setTimeout(doSearch.bind(this, e.target.value), 1000);
+    }
+}
+
+function doSearch(search_input) {
+    currentSearchTimeout = undefined;
+    let collapsibles = $(".group-tab .collapsible");
+    if (search_input === undefined || search_input.trim() === "") {
+        collapsibles.each(resetCollapsibleFiltering);
+        return;
+    }
+
+    let search_terms = search_input.trim().split(/\s+/);
+    let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, search_terms)).map(M.Collapsible.getInstance);
+
+    if (filtered.length === 1) {
+        filtered[0].open();
+    } else {
+        $(filtered).each(M.Collapsible.prototype.close);
+    }
+}
+
+function filterCollapsibles(search_terms, e) {
+    let song_name_element = $(".collapsible-header > .translatable", e);
+    let song_name_jp = song_name_element.text().toLowerCase();
+    let song_name_ro = song_name_element.data("rom").toLowerCase();
+
+    let result = true;
+    for (let i = 0; i < search_terms.length; i++) {
+        let term = search_terms[i].toLowerCase();
+        if (result && !song_name_jp.includes(term) && !song_name_ro.includes(term)) {
+            result = false;
+        }
+    }
+
+    if (result) {
+        // Set to "block" to force unavailable songs to be visible as well
+        $(e).css("display","block");
+        return true;
+    } else {
+        $(e).css("display","none");
+        M.Collapsible.getInstance(e).close();
+        return false;
+    }
+}
+
+function resetCollapsibleFiltering() {
+    $(this).css("display","");
+    let collapsible = M.Collapsible.getInstance(this);
+    collapsible.close();
 }
 
 /*
@@ -131,6 +254,9 @@ function pageTabShow(e) {
  */
 
 function handleLocationHash(tabs) {
+    if (tabs === undefined) {
+        tabs = M.Tabs.getInstance($("nav .tabs")[0]);
+    }
     if (window.location.hash !== "") {
         let hash = window.location.hash;
         if (hash.startsWith("#live")) {
@@ -155,9 +281,7 @@ function handleLocationHash(tabs) {
             } else {
                 // Story Stage: Can't read group ID on newer stages, must load all group tabs
                 // and search for the correct stage by going through them all
-                let groupTabs = $(".group-tab");
-                afterSwitchCallback = showLinkedStoryStage.bind(this, groupTabs.length, hash, groupTabs, tabs);
-                groupTabs.each(loadPage);
+                loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, tabs));
             }
         } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
             // Direct link to a DLP tower or floor
@@ -180,13 +304,8 @@ function showLinkedFreeLive(hash, page) {
     scrollToElement(collapsible.$el);
 }
 
-function showLinkedStoryStage(counter, hash, groupTabs, tabs) {
-    if (counter > 1) {
-        afterSwitchCallback = showLinkedStoryStage.bind(this, counter - 1, hash, groupTabs, tabs);
-        return;
-    }
-
-    let targetLiveDiff = $("#" + hash.substring(5), groupTabs);
+function showLinkedStoryStage(hash, tabs, groupPages) {
+    let targetLiveDiff = $("#" + hash.substring(5), groupPages);
     let targetLiveStoryTab = targetLiveDiff.parent();
     let targetLive = targetLiveStoryTab.parent().parent().parent();
     let targetPage = targetLive.parent();
@@ -225,7 +344,7 @@ let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
 let btnUnavailable = $("#toggle_unavailable");
 
-function registerHeaderButtons() {
+function registerHeaderButtons(tabs) {
     btnRomaji.on("click", toggleRomaji);
     btnUnavailable.on("click", toggleUnavailable);
 }

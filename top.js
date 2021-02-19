@@ -46,11 +46,13 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "length": json.song_length,
                 "notes": diff_id !== 40 ? json.notes.length : 0, // don't count Adv+ note counts
                 "is_available": isEventLive ? true : json.extra_info.is_available,
-                "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile
+                "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile,
+                "linked_live_id": ldid
             };
         } else {
             if (diff_id !== 40 && json.notes.length > songs_dict[lid].notes) {
                 songs_dict[lid].notes = json.notes.length;
+                songs_dict[lid].linked_live_id = ldid;
             }
             if (!isEventLive) {
                 songs_dict[lid].is_available = songs_dict[lid].is_available || json.extra_info.is_available;
@@ -133,7 +135,8 @@ songs.filter(function (e) {
 
     short += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
         "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
-        ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
+        ".png')\">&nbsp;</td><td><a onClick='window.location.hash=\"live" + e.linked_live_id + "\";handleLocationHash();'>" +
+        e.name + "</a></td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
     last = e.length;
 });
 
@@ -158,7 +161,8 @@ songs.filter(function (e) {
 
     most += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
         "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
-        ".png')\">&nbsp;</td><td>" + e.name + "</td><td>" + e.notes + "</td></tr>";
+        ".png')\">&nbsp;</td><td><a onClick='window.location.hash=\"live" + e.linked_live_id + "\";handleLocationHash();'>" +
+        e.name + "</a></td><td>" + e.notes + "</td></tr>";
     last = e.notes;
 });
 

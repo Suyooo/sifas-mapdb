@@ -42,13 +42,12 @@
             <ul class="right">
                 <li><a id="toggle_romaji" class="waves-effect waves-light"><i class="material-icons">translate</i></a></li>
                 <li><a id="toggle_unavailable" class="waves-effect waves-light"><i class="material-icons">event_busy</i></a></li>
-                <li><a id="search_button" class="waves-effect waves-light"><i class="material-icons">search</i></a></li>
             </ul>
         </div>
         <div class="nav-content">
             <ul class="tabs tabs-transparent tabs-fixed-width">
                 <li class="tab hide"><a class="active" href="#tab_start">Start</a></li>
-                <li class="tab hide"><a href="#tab_search">Search</a></li>
+                <li class="tab" style="flex-grow: 0"><a href="#tab_search"><i style="line-height: 50px" class="material-icons">search</i></a></li>
                 <li class="tab"><a href="#tab_muse">µ's</a></li>
                 <li class="tab"><a href="#tab_aqours">Aqours</a></li>
                 <li class="tab"><a href="#tab_niji">Nijigaku</a></li>
@@ -118,16 +117,17 @@
             <b>Future Plans:</b>
             <ul class="browser-default">
                 <li>
-                    Bring back search by enabling all group tabs at the same time?
-                </li>
-                <li>
                     Probably make the error handling a little neater...? Auto retry a few times, go back to Loading text...?
                 </li>
                 <li>
                     Have story tabs scroll to the directly linked story stage.
                 </li>
                 <li>
+                    <!-- TODO: remove handleLocationHash() in top.js links when implementing this -->
                     How about getting a gooood hashChange listener going
+                </li>
+                <li>
+                    Code cleanup...
                 </li>
                 <li>
                     Make the romanized names a permanent option instead of a temporary toggle.
@@ -135,11 +135,17 @@
             </ul>
         </div>
         <div id="tab_search" class="col s12" data-type="fixed">
+            <div class="input-field" style="width: 100%">
+                <i class="material-icons prefix">search</i>
+                <input id="search_input" type="text">
+                <label for="search_input">Filter By Song Name (Japanese or Romanized)</label>
+            </div>
+            <div id="search_loading" class="unloaded">Loading...</div>
         </div>
         <div id="tab_muse" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_aqours" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_niji" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
-        <div id="tab_liella" class="col s12 unloaded group-tab" data-type="fixed" style="margin-top: 2em; text-align: center;">Coming Soon...?</div>
+        <div id="tab_liella" class="col s12 unloaded" data-type="fixed" style="margin-top: 2em; text-align: center;">Coming Soon...?</div>
         <div id="tab_dlp" class="col s12 unloaded" data-type="dlp">Loading...</div>
         <div id="tab_top" class="col s12 unloaded" data-type="top">Loading...</div>
     </div>

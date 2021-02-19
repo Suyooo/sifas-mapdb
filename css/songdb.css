@@ -112,6 +112,10 @@ body:not(.show-unavail) .collapsible.unavail {
     border-bottom: 5px solid var(--key-normal);
 }
 
+div.group-tab {
+    margin-bottom: -0.5em;
+}
+
 .tabs.tabs-fixed-width .tab {
     flex-basis: 0;
 }
@@ -520,6 +524,10 @@ body:not(.show-unavail) .collapsible.unavail {
 
 .rankingtable tr.open-button {
     display: none;
+}
+
+.rankingtable a, .rankingtable a:visited:not(:hover):not(:focus) {
+    color: var(--text);
 }
 
 @media only screen and (max-width: 992px) {
