@@ -139,6 +139,8 @@ $(function () {
     registerSearch();
 });
 
+let onSearchTab = false;
+
 function pageTabShow(e) {
     window.location.hash = currentPage = $(e).attr("id").substring(4);
     loadPageThen(e, afterSwitchCallback);
@@ -150,8 +152,16 @@ function pageTabShow(e) {
     }
     if ($(e).attr("id") === "tab_search") {
         loadAllGroupPagesThen(showSearch);
-    } else {
+        onSearchTab = true;
+    } else if (onSearchTab) {
+        let groupTabs = $(".group-tab")
+        for (let i = 0; i < groupTabs.length; i++) {
+            if (groupTabs[i] !== e) {
+                $(groupTabs[i]).hide();
+            }
+        }
         doSearch("");
+        onSearchTab = false;
     }
 }
 
