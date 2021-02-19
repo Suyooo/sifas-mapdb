@@ -244,6 +244,9 @@ function resetCollapsibleFiltering() {
  */
 
 function handleLocationHash(tabs) {
+    if (tabs === undefined) {
+        tabs = M.Tabs.getInstance($("nav .tabs")[0]);
+    }
     if (window.location.hash !== "") {
         let hash = window.location.hash;
         if (hash.startsWith("#live")) {

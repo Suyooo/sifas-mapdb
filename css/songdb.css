@@ -526,6 +526,10 @@ div.group-tab {
     display: none;
 }
 
+.rankingtable a, .rankingtable a:visited:not(:hover):not(:focus) {
+    color: var(--text);
+}
+
 @media only screen and (max-width: 992px) {
     .rankingtable:not(.open) tr.hide-if-narrow {
         display: none;
