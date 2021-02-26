@@ -142,6 +142,7 @@ function song_name_romaji(live_id) {
     if (lid === "2061") return "Mirai Harmony";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2067") return "POWER SPOT!!";
+    if (lid === "2066") return "Love Triangle";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
     if (lid === "2065") return "Cheer for you!!";
