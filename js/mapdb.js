@@ -153,6 +153,7 @@ function pageTabShow(e) {
     if ($(e).attr("id") === "tab_search") {
         loadAllGroupPagesThen(showSearch);
         onSearchTab = true;
+        searchInput.focus();
     } else if (onSearchTab) {
         let groupTabs = $(".group-tab")
         for (let i = 0; i < groupTabs.length; i++) {
