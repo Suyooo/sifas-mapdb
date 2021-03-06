@@ -150,12 +150,16 @@ function pageTabShow(e) {
         clearTimeout(currentSearchTimeout);
         currentSearchTimeout = undefined;
     }
+
+    let groupTabs = $(".group-tab");
     if ($(e).attr("id") === "tab_search") {
         loadAllGroupPagesThen(showSearch);
         onSearchTab = true;
-        searchInput.focus();
+        searchInput.trigger("focus");
+
+        // Dumb workaround for Materialize force-hiding the previous tab
+        setTimeout($.prototype.show.bind(groupTabs), 1);
     } else if (onSearchTab) {
-        let groupTabs = $(".group-tab")
         for (let i = 0; i < groupTabs.length; i++) {
             if (groupTabs[i] !== e) {
                 $(groupTabs[i]).hide();
@@ -356,7 +360,7 @@ let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
 let btnUnavailable = $("#toggle_unavailable");
 
-function registerHeaderButtons(tabs) {
+function registerHeaderButtons() {
     btnRomaji.on("click", toggleRomaji);
     btnUnavailable.on("click", toggleUnavailable);
 }
