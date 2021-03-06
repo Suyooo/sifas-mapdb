@@ -43,14 +43,15 @@ let songdata = {};
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let ldid = Number(f.substring(0, f.length - 5));
-        if ((Math.floor(ldid / 1000) !== settings.current_event_live_id) && // Not an Event Variant
-            (ldid < 30000000 || ldid >= 40000000) &&                  // Not a Story Stage
-            ldid >= 20000000) {                                       // Not a Free Live
+        let isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(ldid / 1000));
+
+        if (!isEventLive &&                             // Not an Event Variant
+            (ldid < 30000000 || ldid >= 40000000) &&    // Not a Story Stage
+            ldid >= 20000000) {                         // Not a Free Live
             // ignore
             return;
         }
         let diff_id = Math.floor(ldid / 10) % 100;
-        let isEventLive = Math.floor(ldid / 1000) === settings.current_event_live_id;
 
         songdata[ldid] = JSON.parse(fs.readFileSync('mapdb/' + f));
         let lid = songdata[ldid].live_id;
