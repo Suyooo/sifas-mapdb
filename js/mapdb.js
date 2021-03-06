@@ -340,3 +340,31 @@ $(function () {
         });
     }
 });
+
+function showLive(liveId, isUnavailable) {
+    if (isUnavailable) {
+        if (!$(".container").hasClass("show-unavail")) {
+            $("#show_unavail").trigger("click");
+        }
+    }
+
+    let collapsibleEl = undefined;
+    let allCollapsibleEls = $(".collapsible");
+    for (let i = 0; i < allCollapsibleEls.length; i++) {
+        if ($(allCollapsibleEls[i]).data("live-id") == liveId) {
+            collapsibleEl = allCollapsibleEls[i];
+            break;
+        }
+    }
+
+    if (collapsibleEl) {
+        let collapsible = M.Collapsible.getInstance(collapsibleEl);
+        let body = $("body");
+        body.css({"padding-bottom": "500%"});
+        setTimeout(function () {
+            body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"});
+        }, 300);
+        collapsible.open();
+        window.scrollTo(0, $(collapsibleEl).position().top);
+    }
+}
