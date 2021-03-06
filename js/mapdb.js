@@ -300,7 +300,11 @@ function showLinkedFreeLive(hash, page) {
     let collapsibleBody = $("#" + liveDiffId, page);
     if (collapsibleBody.length) {
         collapsibleBody = collapsibleBody.parent();
-        let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
+        let collapsibleEl = collapsibleBody.parent().parent();
+        if (!showUnavailable && collapsibleEl.hasClass("unavail")) {
+            toggleUnavailable();
+        }
+        let collapsible = M.Collapsible.getInstance(collapsibleEl[0]);
         collapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
         liveDiffTabs.instantSelect(liveDiffId);
