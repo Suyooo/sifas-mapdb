@@ -262,7 +262,7 @@ function handleLocationHash(tabs) {
         let hash = window.location.hash;
         if (hash.startsWith("#live")) {
             // Direct link to a live difficulty
-            if (hash.charAt(5) === "1") {
+            if (hash.charAt(5) === "1" || hash.charAt(5) === "2") {
                 // Free Live or Event Live (has group ID in next position)
                 afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
                 switch (hash.charAt(6)) {
