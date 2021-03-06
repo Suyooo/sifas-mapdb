@@ -721,3 +721,20 @@ table.striped > tbody > tr:nth-child(2n+1) {
 .klab-warning {
     display: none;
 }
+
+.live-warning {
+    margin-bottom: 1em;
+    padding: 1em 0.5em 1em 3em;
+    position: relative;
+    background-color: var(--key-low);
+    border: 5px solid var(--key-accented);
+}
+.live-warning::before {
+    content: "warning";
+    color: var(--key-dark);
+    font-family: 'Material Icons';
+    font-size: 24px;
+    position: absolute;
+    left: calc(1.66rem - 12px);
+    top: calc(1.33rem - 12px);
+}
