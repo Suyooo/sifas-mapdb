@@ -55,14 +55,15 @@ let songdata = {};
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let ldid = Number(f.substring(0, f.length - 5));
-        if ((Math.floor(ldid / 1000) !== settings.current_event_live_id) && // Not an Event Variant
-            (ldid < 30000000 || ldid >= 40000000) &&                  // Not a Story Stage
-            ldid >= 20000000) {                                       // Not a Free Live
+        let isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(ldid / 1000));
+
+        if (!isEventLive &&                             // Not an Event Variant
+            (ldid < 30000000 || ldid >= 40000000) &&    // Not a Story Stage
+            ldid >= 20000000) {                         // Not a Free Live
             // ignore
             return;
         }
         let diff_id = Math.floor(ldid / 10) % 100;
-        let isEventLive = Math.floor(ldid / 1000) === settings.current_event_live_id;
 
         songdata[ldid] = JSON.parse(fs.readFileSync('mapdb/' + f));
         let lid = songdata[ldid].live_id;
@@ -145,7 +146,6 @@ Object.keys(lives_dict).sort(function (a, b) {
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
-        '</b></div><div class="collapsible-body"><ul class="tabs tabs-transparent tabs-fixed-width">';
         '</b></div><div class="collapsible-body">';
 
     let warning = undefined;
