@@ -233,17 +233,17 @@ function filterCollapsibles(search_terms, e) {
 
     if (result) {
         // Set to "block" to force unavailable songs to be visible as well
-        $(e).css("display","block");
+        $(e).css("display", "block");
         return true;
     } else {
-        $(e).css("display","none");
+        $(e).css("display", "none");
         M.Collapsible.getInstance(e).close();
         return false;
     }
 }
 
 function resetCollapsibleFiltering() {
-    $(this).css("display","");
+    $(this).css("display", "");
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.close();
 }
@@ -297,42 +297,49 @@ function handleLocationHash(tabs) {
 
 function showLinkedFreeLive(hash, page) {
     let liveDiffId = hash.substring(5);
-    let collapsibleBody = $("#" + liveDiffId, page).parent();
-    let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
-    collapsible.instantOpen(0);
-    let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
-    liveDiffTabs.instantSelect(liveDiffId);
-    scrollToElement(collapsible.$el);
+    let collapsibleBody = $("#" + liveDiffId, page);
+    if (collapsibleBody.length) {
+        collapsibleBody = collapsibleBody.parent();
+        let collapsible = M.Collapsible.getInstance(collapsibleBody.parent().parent()[0]);
+        collapsible.instantOpen(0);
+        let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
+        liveDiffTabs.instantSelect(liveDiffId);
+        scrollToElement(collapsible.$el);
+    }
 }
 
 function showLinkedStoryStage(hash, tabs, groupPages) {
     let targetLiveDiff = $("#" + hash.substring(5), groupPages);
-    let targetLiveStoryTab = targetLiveDiff.parent();
-    let targetLive = targetLiveStoryTab.parent().parent().parent();
-    let targetPage = targetLive.parent();
+    if (targetLiveDiff.length) {
+        let targetLiveStoryTab = targetLiveDiff.parent();
+        let targetLive = targetLiveStoryTab.parent().parent().parent();
+        let targetPage = targetLive.parent();
 
-    let liveCollapsible = M.Collapsible.getInstance(targetLive[0]);
-    liveCollapsible.instantOpen(0);
-    let liveDiffTabs = M.Tabs.getInstance($(".tabs", targetLive)[0]);
-    liveDiffTabs.instantSelect(targetLiveStoryTab.attr("id"));
-    let storyTabs = M.Tabs.getInstance($(".tabs", targetLiveStoryTab)[0]);
+        let liveCollapsible = M.Collapsible.getInstance(targetLive[0]);
+        liveCollapsible.instantOpen(0);
+        let liveDiffTabs = M.Tabs.getInstance($(".tabs", targetLive)[0]);
+        liveDiffTabs.instantSelect(targetLiveStoryTab.attr("id"));
+        let storyTabs = M.Tabs.getInstance($(".tabs", targetLiveStoryTab)[0]);
 
-    tabs.instantSelect(targetPage.attr("id"));
-    storyTabs.instantSelect(targetLiveDiff.attr("id"));
-    scrollToElement(liveCollapsible.$el);
+        tabs.instantSelect(targetPage.attr("id"));
+        storyTabs.instantSelect(targetLiveDiff.attr("id"));
+        scrollToElement(liveCollapsible.$el);
+    }
 }
 
 function showLinkedDlp(hash, page) {
     let towerId = hash.substr(6, 5);
     let targetElement = $("#" + towerId, page);
-    let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
-    towerCollapsible.instantOpen(0);
-    if (hash.startsWith("#floor")) {
-        targetElement = $("#" + hash.substring(6), targetElement);
-        let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
-        floorCollapsible.instantOpen(0);
+    if (targetElement.length) {
+        let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
+        towerCollapsible.instantOpen(0);
+        if (hash.startsWith("#floor")) {
+            targetElement = $("#" + hash.substring(6), targetElement);
+            let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
+            floorCollapsible.instantOpen(0);
+        }
+        scrollToElement(targetElement);
     }
-    scrollToElement(targetElement);
 }
 
 /*
