@@ -60,49 +60,53 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             }
         }
     }
-
-    /* Manual additions: songs that I was unable to dump before they disappeared - but I still know stuff! */
-    songs_dict["1080"] = {
-        "name": '<span class="translatable" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
-        "attribute": 1,
-        "length": 120838,
-        "notes": 179,
-        "is_available": false,
-        "can_show_on_profile": false
-    };
-    songs_dict["1081"] = {
-        "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart Coaster</span>',
-        "attribute": 4,
-        "length": 120215,
-        "notes": 182,
-        "is_available": false,
-        "can_show_on_profile": false
-    };
-    songs_dict["1082"] = {
-        "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing Travel DNA</span>',
-        "attribute": 6,
-        "length": 109635,
-        "notes": 163,
-        "is_available": false,
-        "can_show_on_profile": false
-    };
-    songs_dict["2020"] = {
-        "name": '<span class="translatable" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
-        "attribute": 4,
-        "length": 0, // set to 0 so it doesn't show next to perma LUMF... would be useless
-        "notes": 176,
-        "is_available": false,
-        "can_show_on_profile": false
-    };
-    songs_dict["2061"] = {
-        "name": '<span class="translatable" data-rom="Mirai Harmony">未来ハーモニー</span>',
-        "attribute": 3,
-        "length": 110058,
-        "notes": 0, // Adv note count unknown as of now
-        "is_available": false,
-        "can_show_on_profile": false
-    };
 });
+
+/* Manual additions: songs that I was unable to dump before they disappeared - but I still know stuff! */
+songs_dict["1080"] = {
+    "name": '<span class="translatable" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
+    "attribute": 1,
+    "length": 120838,
+    "notes": 179,
+    "is_available": false,
+    "can_show_on_profile": false
+};
+songs_dict["1081"] = {
+    "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart Coaster</span>',
+    "attribute": 4,
+    "length": 120215,
+    "notes": 182,
+    "is_available": false,
+    "can_show_on_profile": false
+};
+songs_dict["1082"] = {
+    "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing Travel DNA</span>',
+    "attribute": 6,
+    "length": 109635,
+    "notes": 163,
+    "is_available": false,
+    "can_show_on_profile": false
+};
+songs_dict["2020"] = {
+    "name": '<span class="translatable" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
+    "attribute": 4,
+    "length": 105592,
+    "notes": 176,
+    "is_available": false,
+    "can_show_on_profile": false
+};
+songs_dict["2061"] = {
+    "name": '<span class="translatable" data-rom="Mirai Harmony">未来ハーモニー</span>',
+    "attribute": 3,
+    "length": 110058,
+    "notes": 0, // Adv note count unknown as of now
+    "is_available": false,
+    "can_show_on_profile": false
+};
+
+/* Ignore songs for length ranking: Remove old versions of songs that became permanent later */
+songs_dict["2020"].length = 0;      // Love U my friends(2D)
+songs_dict["2040"].length = 0;      // 虹色Passions！
 
 let songs = Object.keys(songs_dict).map(function (e) {
     return songs_dict[e];
