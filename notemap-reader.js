@@ -150,6 +150,7 @@ function song_name_romaji(live_id) {
     if (lid === "2065") return "Cheer for you!!";
     if (lid === "2064") return "Beautiful Moonlight";
     if (lid === "2037") return "Love U my friends";
+    if (lid === "2057") return "Nijiiro Passions!";
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
     if (lid === "2021") return "Say Good-Bye Namida";
