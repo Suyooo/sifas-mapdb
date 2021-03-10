@@ -86,7 +86,30 @@ $(function () {
             cont.addClass("show-unavail");
             $(this).text("click to hide unavailable songs");
         }
+    });
 
+    $("#dark_mode").click(function () {
+        body.addClass("dark-mode-transition-disabler");
+        let newCookie = "";
+        if (!body.hasClass("dark-mode")) {
+            body.addClass("dark-mode");
+            newCookie = "yes";
+        } else {
+            body.removeClass("dark-mode");
+            newCookie = "no";
+        }
+        setTimeout(function () {
+            body.removeClass("dark-mode-transition-disabler")
+        }, 1);
+        if (confirm("=====\nCookie Policy\n=====\nSIFAS MapDB uses cookies to store your preferences and inputs for later " +
+            "use. It will only do so if you agree to this message.\n\nThe page is still functional if you do not allow storage, " +
+            "however, you will be unable to save your setting for dark mode. No other data is stored, and this information " +
+            "is not saved on the server or used to identify you.\n\nYou can revoke your consent at any time by removing " +
+            "all cookies saved on your device by this site.\n\nClick OK to agree and save the dark mode setting.")) {
+            var expiryDate = new Date();
+            expiryDate.setTime(expiryDate.getTime() + (30 * 24 * 60 * 60 * 1000));
+            document.cookie = "dark-mode=" + newCookie + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+        }
     });
 
     $(".collapsible").each(function () {
