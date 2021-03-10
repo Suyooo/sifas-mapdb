@@ -28,6 +28,7 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33005) return "2020 Countdown Live";
     if (tower_id === 33006) return "Dream Live Parade ~ R On Stage ~";
     if (tower_id === 33007) return "Dream Live Parade ~ Pure / Smile On Stage ~";
+    if (tower_id === 33008) return "Dream Live Parade ~ Nijigaku On Stage ~";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
@@ -111,7 +112,8 @@ tower_ids.forEach(function (tower_id) {
             '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
             '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
             '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
-            ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)</div></div>';
+            (floor.note_damage_rate ? ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)' : '') +
+            '</div></div>';
 
         if (linked_live !== undefined) {
             floor_content += notemap.make(linked_live);
