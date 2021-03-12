@@ -63,7 +63,7 @@ function song_name_romaji(live_id) {
     // µ's
     if (lid === "0001") return "Sore wa Bokutachi no Kiseki";
     if (lid === "0002") return "START:DASH!!";
-    if (lid === "0014") return "Arashi no Naka no Koi dakara";
+    if (lid === "0014") return "Arashi no Naka no Koi Dakara";
     if (lid === "0011") return "Snow Halation";
     if (lid === "0016") return "Bokura wa Ima no Naka de";
     if (lid === "0013") return "Music S.T.A.R.T!!";
