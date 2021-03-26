@@ -129,7 +129,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
-        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
+        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '" data-en="' + notemap.song_name_april(live.id) + '" data-jp="' + live.name + '">' + notemap.song_name_april(live.id) +
         '</b>' + (!live.is_available ? "&nbsp;(unavailable)" : (!live.is_permanent ? "&nbsp;(time-limited)" : "")) +
         '</div><div class="collapsible-body">';
 

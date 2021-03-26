@@ -197,6 +197,145 @@ function song_name_romaji(live_id) {
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
 
+function song_name_april(live_id) {
+    let lid = ("" + live_id).substring(1);
+
+    // I don't even remember what language order I used in Google Translate, but these are all unedited results
+    // I just picked the best ones from a couple of results, so these are not all from the same process
+
+    if (lid === "0001") return "This is our miracle";
+    if (lid === "0002") return "Start: Dash!";
+    if (lid === "0003") return "Natsuiro Egao de 1, 2, jump!";
+    if (lid === "0004") return "Junju love";
+    if (lid === "0005") return "Heart fire";
+    if (lid === "0008") return "Our LIVE life with you";
+    if (lid === "0009") return "Angel angel";
+    if (lid === "0010") return "Ruthless world";
+    if (lid === "0011") return "Halogenation of snow";
+    if (lid === "0012") return "Great summit"; // how did this happen
+    if (lid === "0013") return "Music S.T.A.R.T !!";
+    if (lid === "0014") return "Because love is in the storm";
+    if (lid === "0015") return "Orion with no exit";
+    if (lid === "0016") return "Now we";
+    if (lid === "0017") return "From heart to heart!";
+    if (lid === "0021") return "Mogat's &quot;love&quot; is coming soon!"; // is this a threat?
+    if (lid === "0036") return "No brand girls";
+    if (lid === "0037") return "Wonder area";
+    if (lid === "0054") return "Lonely sky";
+    if (lid === "0059") return "At some point in my life";
+    if (lid === "0060") return "always";
+    if (lid === "0061") return "End of general sadness";
+    if (lid === "0062") return "Dream Tobira";
+    if (lid === "0064") return "Blueberry ♡ train";
+    if (lid === "0066") return "Brave! !!";
+    if (lid === "0067") return "Reason to be courageous";
+    if (lid === "0068") return "KiRa-KiRa has moved!";
+    if (lid === "0070") return "The signal of love Rin Rin!";
+    if (lid === "0071") return "Happy Creator!";
+    if (lid === "0073") return "Pure love lens";
+    if (lid === "0076") return "I started using magic!";
+    if (lid === "0077") return "Colorful sound";
+    if (lid === "0118") return "Recommended song! They are? They are! !!";
+    if (lid === "1001") return "Is your heart shining";
+    if (lid === "1002") return "A heart racing in the blue sky";
+    if (lid === "1003") return "Step! From zero to one";
+    if (lid === "1004") return "Energetic throttle day! Day! Day!";
+    if (lid === "1005") return "Tottorico, please!";
+    if (lid === "1006") return "Strawberry catcher";
+    if (lid === "1007") return "We know in the future";
+    if (lid === "1008") return "Happy party train";
+    if (lid === "1009") return "I want to fall in love with the aquarium";
+    if (lid === "1011") return "Heavenly journey";
+    if (lid === "1012") return "Exciting one-way street";
+    if (lid === "1013") return "Miracle wave";
+    if (lid === "1014") return "KOKORO Magic &quot;From A to Z&quot;";
+    if (lid === "1015") return "The brightest melody";
+    if (lid === "1017") return "Wait a minute love song";
+    if (lid === "1030") return "The bell continues to ring";
+    if (lid === "1042") return "Let's have a happy ending in the near future";
+    if (lid === "1044") return "Hide and search";
+    if (lid === "1046") return "Kobeljaski"; // this made me lose it
+    if (lid === "1049") return "Landing action!";
+    if (lid === "1059") return "Another sunshine story";
+    if (lid === "1062") return "Good night everyone!";
+    if (lid === "1064") return "In this unstable world";
+    if (lid === "1065") return "Piano long monologues";
+    if (lid === "1066") return "Beginner sailing";
+    if (lid === "1067") return "White first love";
+    if (lid === "1068") return "Ruby winks";
+    if (lid === "1069") return "New twists";
+    if (lid === "1070") return "Is it a fish";
+    if (lid === "1072") return "Leap? Stop? Nonstop!";
+    if (lid === "1078") return "Wake up the challenger!";
+    if (lid === "1079") return "Inexperienced horizon";
+    if (lid === "1080") return "New romantic sailor";
+    if (lid === "1081") return "Braveheart coasters";
+    if (lid === "1082") return "Amazing travel DNA";
+    if (lid === "1084") return "JIMO-AI Dash!";
+    if (lid === "1085") return "Great offspring!";
+    if (lid === "2001") return "Tokimeki runner";
+    if (lid === "2002") return "One step towards a dream";
+    if (lid === "2003") return "diamond";
+    if (lid === "2004") return "Your ideal heroine";
+    if (lid === "2005") return "Starlight";
+    if (lid === "2006") return "I'm going to try my best!";
+    if (lid === "2007") return "I want to go to the sleeping forest";
+    if (lid === "2008") return "Track!";
+    if (lid === "2009") return "Always green";
+    if (lid === "2010") return "Dokipipo ☆ emotion";
+    if (lid === "2011") return "Blooming declaration";
+    if (lid === "2012") return "☆ Wonderland ☆";
+    if (lid === "2013") return "Audrey";
+    if (lid === "2014") return "Want";
+    if (lid === "2015") return "Fall in love with a friend";
+    if (lid === "2016") return "My own fairy tale";
+    if (lid === "2017") return "melody";
+    if (lid === "2018") return "Let's connect the sounds";
+    if (lid === "2019") return "telepathy";
+    if (lid === "2020") return "My beloved friend (2D)";
+    if (lid === "2021") return "Tears are good";
+    if (lid === "2022") return "Margaret";
+    if (lid === "2023") return "Last story";
+    if (lid === "2024") return "Phoenix";
+    if (lid === "2025") return "Funny genius";
+    if (lid === "2026") return "Fairytale star";
+    if (lid === "2027") return "That is wonderful! I like this!"; // how nice
+    if (lid === "2028") return "Sad poetry";
+    if (lid === "2029") return "Simulated heart";
+    if (lid === "2030") return "Light of determination";
+    if (lid === "2031") return "Supernova";
+    if (lid === "2032") return "Dreamland! Dream world!";
+    if (lid === "2033") return "Sing and laugh!";
+    if (lid === "2034") return "TOKIMEKI Runners Chapter 17 Ver.";
+    if (lid === "2037") return "Love my friends";
+    if (lid === "2039") return "Invincible * followers";
+    if (lid === "2040") return "Rainbow colored passion!";
+    if (lid === "2041") return "NEO SKY, NEO MAP!";
+    if (lid === "2042") return "Dream with you";
+    if (lid === "2043") return "Poppin'Up!";
+    if (lid === "2044") return "Lonely rain";
+    if (lid === "2045") return "Lifeworld";
+    if (lid === "2046") return "Psychological mind";
+    if (lid === "2047") return "butterfly";
+    if (lid === "2048") return "go in!";
+    if (lid === "2049") return "La Bella Patria";
+    if (lid === "2050") return "Tuna connection"; // I can't really pick a favourite but this is probably up there
+    if (lid === "2051") return "The dream starts here";
+    if (lid === "2052") return "Awakened promise";
+    if (lid === "2053") return "Please believe!";
+    if (lid === "2057") return "Rainbow colored passion!";
+    if (lid === "2061") return "Future harmony";
+    if (lid === "2062") return "Sweet eyes";
+    if (lid === "2063") return "Dreamers move forward at full speed";
+    if (lid === "2064") return "Good moonlight";
+    if (lid === "2065") return "Please support! !!";
+    if (lid === "2066") return "Triangular relationship";
+    if (lid === "2067") return "Power spot!";
+    if (lid === "2068") return "Kakushiaji!";
+    if (lid === "2998") return "I'm still ...";
+    if (lid === "2999") return "Queen Dam";
+}
+
 function skill(skill) {
     return (skill.finish_type === 3 ? "" : skill_target(skill.target)) +
         skill_effect(skill.effect_type, skill.effect_amount) +
@@ -543,5 +682,6 @@ module.exports = {
     "difficulty_short": difficulty_short,
     "is_cleansable": is_cleansable,
     "format": format,
-    "song_name_romaji": song_name_romaji
+    "song_name_romaji": song_name_romaji,
+    "song_name_april": song_name_april
 };

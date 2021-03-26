@@ -65,15 +65,21 @@ $(function () {
     let body = $("body");
 
     $("#show_romaji").click(function () {
-        $(".translatable").each(function () {
-            let new_title = $(this).data("rom");
-            $(this).data("rom", $(this).text());
-            $(this).text(new_title);
-        });
         if ($(this).text() === "click to show original song names") {
-            $(this).text("click to show romanized song names")
-        } else {
+            $(this).text("click to show translated song names");
+            $(".translatable").each(function () {
+                $(this).text($(this).data("jp"));
+            });
+        } else if ($(this).text() === "click to show romanized song names") {
             $(this).text("click to show original song names");
+            $(".translatable").each(function () {
+                $(this).text($(this).data("rom"));
+            });
+        } else {
+            $(this).text("click to show romanized song names");
+            $(".translatable").each(function () {
+                $(this).text($(this).data("en"));
+            });
         }
     });
 
