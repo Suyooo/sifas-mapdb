@@ -267,7 +267,7 @@ ul.collapsible {
 .collapsible-header {
     text-transform: uppercase;
     background-color: var(--key-low);
-    user-select: none;
+    user-select: text;
     border-bottom: 1px solid var(--border);
 }
 
