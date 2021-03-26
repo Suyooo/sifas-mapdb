@@ -30,7 +30,7 @@ function filterCollapsibles(search_input) {
         if ($(".tabs", this).length === 0) return true; // page help collapsible
 
         let song_name_element = $(".collapsible-header > .translatable", this);
-        let song_name_jp = song_name_element.text().toLowerCase();
+        let song_name_jp = song_name_element.data("jp").toLowerCase();
         let song_name_ro = song_name_element.data("rom").toLowerCase();
 
         let result = true;
