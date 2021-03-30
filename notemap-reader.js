@@ -334,6 +334,9 @@ function song_name_april(live_id) {
     if (lid === "2068") return "Kakushiaji!";
     if (lid === "2998") return "I'm still ...";
     if (lid === "2999") return "Queen Dam";
+
+    if (lid === "2999") return "Smile when the ship takes off";
+    if (lid === "2999") return "We are light";
 }
 
 function skill(skill) {
