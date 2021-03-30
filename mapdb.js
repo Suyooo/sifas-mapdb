@@ -51,7 +51,6 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             // ignore
             return;
         }
-        let diff_id = Math.floor(ldid / 10) % 100;
 
         songdata[ldid] = JSON.parse(fs.readFileSync('mapdb/' + f));
         let lid = songdata[ldid].live_id;
@@ -66,7 +65,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "is_permanent": isEventLive ? true : null
             };
         }
-        if (lives_dict[lid].attribute === null || (ldid < 20000000 && diff_id !== 40)) {
+        if (lives_dict[lid].attribute === null || (ldid < 20000000 && songdata[ldid].song_difficulty !== 35)) {
             // prefer info from Free Live, non-Adv+ data
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
             lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;
@@ -150,15 +149,14 @@ Object.keys(lives_dict).sort(function (a, b) {
     live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
         //console.log(live_difficulty_id);
         let live_diff = songdata[live_difficulty_id];
-        let diff_id = Math.floor(live_difficulty_id % 1000 / 10);
 
         // Mark the Advanced difficulty as the initially open tab
         let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
-            (diff_id === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>';
+            (live_diff.song_difficulty === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>';
 
         if (live_difficulty_id < 30000000) {
             // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
-            this_tabbar += notemap.difficulty(diff_id) + (live_diff.song_attribute != live.attribute ?
+            this_tabbar += notemap.difficulty(live_diff.song_difficulty) + (live_diff.song_attribute != live.attribute ?
                 ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
                 notemap.attribute(live_diff.song_attribute) + '">' : '');
         } else {
