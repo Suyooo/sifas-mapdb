@@ -54,7 +54,7 @@ The Live Difficulty ID can be read as `ABCCCDDE`:
 
 Note: the difficulty in the `song_difficulty` field might be different from the one read from the live difficulty ID.
 The most obvious example are Advanced+ songs, which have a 40 in the live difficulty ID, but `song_difficulty` will be
-set to 30. 
+set to 35. 
 
 ## Unique Identifier
 For Free Lives, this is usually the version - if a note map is retired and replaced with a new one, this counter
