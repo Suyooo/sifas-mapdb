@@ -335,8 +335,8 @@ function song_name_april(live_id) {
     if (lid === "2998") return "I'm still ...";
     if (lid === "2999") return "Queen Dam";
 
-    if (lid === "2999") return "Smile when the ship takes off";
-    if (lid === "2999") return "We are light";
+    if (lid === "1089") return "Smile when the ship takes off!";
+    if (lid === "0089") return "We are light"; // doesn't come across in this: translator used "light" as in "not heavy"
 }
 
 function skill(skill) {
