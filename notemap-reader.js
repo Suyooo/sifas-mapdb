@@ -82,6 +82,7 @@ function song_name_romaji(live_id) {
     if (lid === "0009") return "Angelic Angel";
     if (lid === "0068") return "KiRa-KiRa Sensation!";
     if (lid === "0021") return "Mogyutto &quot;love&quot; de Sekkin Chuu!";
+    if (lid === "0089") return "Bokutachi wa Hitotsu no Hikari";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0004") return "Shunjou Romantic";
     if (lid === "0015") return "NO EXIT ORION";
@@ -115,6 +116,7 @@ function song_name_romaji(live_id) {
     if (lid === "1030") return "Jingle Bells ga Tomaranai";
     if (lid === "1072") return "Hop? Stop? Nonstop!";
     if (lid === "1017") return "Mattete Ai no Uta";
+    if (lid === "1089") return "smile smile ship Start!";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1044") return "GALAXY HidE and SeeK";
     if (lid === "1004") return "Genki Zenkai DAY!DAY!DAY!";
@@ -142,6 +144,8 @@ function song_name_romaji(live_id) {
     if (lid === "2063") return "Zensoku Dreamer";
     if (lid === "2051") return "Yume ga Koko Kara Hajimaru yo";
     if (lid === "2061") return "Mirai Harmony";
+    if (lid === "2037") return "Love U my friends";
+    if (lid === "2057") return "Nijiiro Passions!";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2067") return "POWER SPOT!!";
     if (lid === "2066") return "Love Triangle";
@@ -150,8 +154,6 @@ function song_name_romaji(live_id) {
     if (lid === "2068") return "Kakushiaji!";
     if (lid === "2065") return "Cheer for you!!";
     if (lid === "2064") return "Beautiful Moonlight";
-    if (lid === "2037") return "Love U my friends";
-    if (lid === "2057") return "Nijiiro Passions!";
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
     if (lid === "2021") return "Say Good-Bye Namida";
