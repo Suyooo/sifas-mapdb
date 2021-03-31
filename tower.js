@@ -68,8 +68,8 @@ tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
 
     s += '<ul data-tower="' + tower_id + '" class="collapsible" data-collapsible="expandable"><li>' +
-        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
-        tower.name + '</b></div><div class="collapsible-body"><b>Performance Points:</b> ' + tower.pp_at_start +
+        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '" data-en="' + tower_name_romaji(tower_id) + '" data-jp="' + tower.name + '">' +
+        tower_name_romaji(tower_id) + '</b></div><div class="collapsible-body"><b>Performance Points:</b> ' + tower.pp_at_start +
         ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
         ' loveca stars<br><br>';
 
@@ -98,7 +98,7 @@ tower_ids.forEach(function (tower_id) {
 
             // Header information
             '<div class="col l3"><b class="translatable" data-rom="' + notemap.song_name_romaji(floor.live_id) +
-            '"> ' + floor.song_name + ' </b></div>' +
+            '" data-en="' + notemap.song_name_april(floor.live_id) + '" data-jp="' + floor.song_name + '"> ' + notemap.song_name_april(floor.live_id) + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
             notemap.is_cleansable(linked_live === undefined ? floor.gimmick : linked_live.gimmick) + '</div>' +

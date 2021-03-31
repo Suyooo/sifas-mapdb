@@ -40,7 +40,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
 
         if (json.song_difficulty === 30) {
             songs_dict[lid] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span>',
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-en="' + notemap.song_name_april(json.live_id) + '" data-jp="' + json.song_name + '">' + notemap.song_name_april(json.live_id) + '</span>',
                 "is_advplus": false,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -52,7 +52,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             };
         } else if (json.song_difficulty === 35) {
             songs_dict[lid+"plus"] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Adv+)',
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-en="' + notemap.song_name_april(json.live_id) + '" data-jp="' + json.song_name + '">' + notemap.song_name_april(json.live_id) + '</span> (Adv+)',
                 "is_advplus": true,
                 "live_id": lid,
                 "attribute": json.song_attribute,
