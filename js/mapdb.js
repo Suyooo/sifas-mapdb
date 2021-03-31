@@ -70,13 +70,13 @@ $(function () {
             $(".translatable").each(function () {
                 $(this).text($(this).data("jp"));
             });
-        } else if ($(this).text() === "click to show romanized song names") {
+        } else if ($(this).text() === "click to show normal song names") {
             $(this).text("click to show original song names");
             $(".translatable").each(function () {
                 $(this).text($(this).data("rom"));
             });
         } else {
-            $(this).text("click to show romanized song names");
+            $(this).text("click to show normal song names");
             $(".translatable").each(function () {
                 $(this).text($(this).data("en"));
             });
