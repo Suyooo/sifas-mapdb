@@ -196,6 +196,9 @@ function song_name_romaji(live_id) {
     if (lid === "2998") return "I'm Still...";
     if (lid === "2999") return "Queendom";
 
+    // Liella!
+    if (lid === "3001") return "Hajimari wa Kimi no Sora";
+
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
 
