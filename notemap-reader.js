@@ -116,6 +116,7 @@ function song_name_romaji(live_id) {
     if (lid === "1030") return "Jingle Bells ga Tomaranai";
     if (lid === "1072") return "Hop? Stop? Nonstop!";
     if (lid === "1017") return "Mattete Ai no Uta";
+    if (lid === "1010") return "MIRAI TICKET";
     if (lid === "1089") return "smile smile ship Start!";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1044") return "GALAXY HidE and SeeK";
