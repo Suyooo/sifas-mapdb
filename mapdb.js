@@ -147,13 +147,6 @@ Object.keys(lives_dict).sort(function (a, b) {
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
         '</b></div><div class="collapsible-body">';
 
-    let warning = undefined;
-    if (live.id === 12040) warning = "If you are playing on the JP server, you're probably looking for <a onClick='window.location.hash=\"live22057301\";handleLocationHash();'>the 3D MV version of <span class='translatable' data-rom='Nijiiro Passions!'>虹色Passions！</span></a> instead of this song.";
-    else if (live.id === 12057) warning = "If you are playing on the WW server, you're probably looking for <a onClick='window.location.hash=\"live12040301\";handleLocationHash();'>the 2D MV version of <span class='translatable' data-rom='Nijiiro Passions!'>虹色Passions！</span></a> instead of this song.";
-    if (warning) {
-        s += '<div class="live-warning"><b>HEADS UP:</b> ' + warning + '</div>';
-    }
-
     s += '<ul class="tabs tabs-transparent tabs-fixed-width">';
 
     let live_tabbar = "";
