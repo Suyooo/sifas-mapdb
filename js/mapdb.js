@@ -638,17 +638,31 @@ function notebarSelectionMove(selector, fixedStartpos, notebarPos, notebarWidth,
     let firstSelectedNote = undefined;
     let count = undefined;
     let notes = $(".note", this);
-    for (let i = 0; i < notes.length; i++) {
-        let notepos = $(notes[i]).offset().left;
-        if (notepos > endpos) {
-            count = (firstSelectedNote ? i - firstSelectedNote : 0);
-            break;
-        } else if (notepos >= startpos && firstSelectedNote === undefined) {
-            firstSelectedNote = i;
+    if (endpos < $(notes[0]).offset().left || startpos > $(notes[notes.length - 1]).offset().left) {
+        count = 0;
+    } else {
+        if (startpos < $(notes[0]).offset().left) {
+            for (let i = 0; i < notes.length; i++) {
+                let notepos = $(notes[i]).offset().left;
+                if (notepos > endpos) {
+                    count = i;
+                    break;
+                }
+            }
+        } else {
+            for (let i = 0; i < notes.length; i++) {
+                let notepos = $(notes[i]).offset().left;
+                if (notepos > endpos) {
+                    count = (firstSelectedNote ? i - firstSelectedNote : 0);
+                    break;
+                } else if (notepos >= startpos && firstSelectedNote === undefined) {
+                    firstSelectedNote = i;
+                }
+            }
+            if (count === undefined) {
+                count = notes.length - firstSelectedNote;
+            }
         }
-    }
-    if (count === undefined) {
-        count = notes.length - firstSelectedNote;
     }
 
     let selectedTime = ((endpos - startpos) / notebarWidth * totalTime / 1000).toFixed(2);
