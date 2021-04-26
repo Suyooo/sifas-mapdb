@@ -669,7 +669,7 @@ function notebarSelectionEnd(selector) {
 
 function gimmickMarkerMouseover(gimmickinfo) {
     if (selecting || $(this).hasClass("hidden")) return;
-    tooltipInner.html($("div", gimmickinfo)[1].innerHTML);
+    tooltipInner.html($("div", gimmickinfo)[1].innerHTML + "<br><b>Note Position: </b>" + $(this).data("npos"));
     let thismarker = $(".gimmickmarker", this);
     let position = thismarker.offset();
     position.left += thismarker.width() / 2;

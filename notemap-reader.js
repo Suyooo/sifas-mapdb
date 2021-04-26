@@ -403,9 +403,10 @@ function make_notemap(live) {
                     marker_length = ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98);
                 }
 
-                s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" style="--gimmicklayer: ' + stack_layer_global +
-                    ';' + '--gimmicklayer-filtered: ' + stack_layer_seperate + '; left: ' + marker_position + '%; ' +
-                    'width:' + marker_length + '%"><div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
+                s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" data-npos="' + (ni + 1) +
+                    '" style="--gimmicklayer: ' + stack_layer_global + ';' + '--gimmicklayer-filtered: ' +
+                    stack_layer_seperate + '; left: ' + marker_position + '%; ' + 'width:' + marker_length + '%">' +
+                    '<div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
                 if (live.note_gimmicks[note.gimmick].finish_type === 2) {
                     s += '<div class="gimmicklength">&nbsp;</div>';
 
