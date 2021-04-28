@@ -119,10 +119,13 @@ function song_name_romaji(live_id) {
     if (lid === "1010") return "MIRAI TICKET";
     if (lid === "1089") return "smile smile ship Start!";
     if (lid === "1005") return "Torikoriko PLEASE!!";
+    if (lid === "1082") return "Amazing Travel DNA";
     if (lid === "1044") return "GALAXY HidE and SeeK";
     if (lid === "1004") return "Genki Zenkai DAY!DAY!DAY!";
+    if (lid === "1081") return "Braveheart Coaster";
     if (lid === "1042") return "Kinmirai Happy End";
     if (lid === "1006") return "Strawberry Trapper";
+    if (lid === "1080") return "New Romantic Sailors";
     if (lid === "1046") return "Kowareyasuki";
     if (lid === "1059") return "One More Sunshine Story";
     if (lid === "1065") return "Pianoforte Monologue";
