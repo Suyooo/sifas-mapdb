@@ -129,9 +129,11 @@ songs_dict["2061"] = {
 /* Ignore songs for length ranking: Remove old versions of songs that became permanent later */
 songs_dict["2020"].length = 0;      // Love U my friends(2D)
 songs_dict["2040"].length = 0;      // 虹色Passions！
+songs_dict["2041"].length = 0;      // NEO SKY, NEO MAP!
 
 /* Avoid mixups */
 songs_dict["2040"].name += " (2D)"; // 虹色Passions！
+songs_dict["2041"].name += " (2D)"; // NEO SKY, NEO MAP!
 
 let songs = Object.keys(songs_dict).map(function (e) {
     return songs_dict[e];
