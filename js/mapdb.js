@@ -502,15 +502,16 @@ function dlpTowerCollapsibleOpen() {
     let towerLink = "tower" + this.$el.attr("id");
     if (this.$el.data("initialized") === undefined) {
         this.$el.data("initialized", 1);
-        $(".collapsible.floor", this.el).collapsible().each(dlpFloorCollapsibleInit, towerLink);
+        $(".collapsible.floor", this.el).collapsible().each(dlpFloorCollapsibleInit);
     }
     window.location.hash = towerLink;
 }
 
-function dlpFloorCollapsibleInit(towerLink) {
+function dlpFloorCollapsibleInit() {
+    let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = dlpFloorCollapsibleOpen;
-    collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(towerLink);
+    collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(this, towerLink);
 }
 
 function dlpFloorCollapsibleOpen() {
