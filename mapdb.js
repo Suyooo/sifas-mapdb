@@ -20,6 +20,7 @@ const fs = require('fs');
 const settings = require('./settings.js');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
+const hash = require('object-hash');
 
 function guess_story_stage_difficulty(stage) {
     let minimum_difference = stage.notes.length;
@@ -46,6 +47,11 @@ function dump(group, s) {
             }
         }
     );
+}
+
+let hashes = {};
+if (fs.existsSync("build/lives/hash.json")) {
+    hashes = JSON.parse(fs.readFileSync("build/lives/hash.json"));
 }
 
 let lives_dict = {};
@@ -111,6 +117,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
 let s = ''
 let current_group = 'muse';
 let last_live_id = 0;
+let live_pages_built = 0;
 
 Object.keys(lives_dict).sort(function (a, b) {
     return lives_dict[a].order - lives_dict[b].order;
@@ -157,6 +164,35 @@ Object.keys(lives_dict).sort(function (a, b) {
     live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
         //console.log(live_difficulty_id);
         let live_diff = songdata[live_difficulty_id];
+        let live_diff_hash = hash(live_diff);
+
+        if (process.argv[2] === "full" || !hashes.hasOwnProperty(live_difficulty_id) || hashes[live_difficulty_id] !== live_diff_hash) {
+            let tab_content = '<div class="row nomargin">' +
+
+                // Top information
+                '<div class="col l6"><b>S Rank: </b>' + notemap.format(live_diff.ranks.S) + '</div>' +
+                '<div class="col l6"><b>A Rank: </b>' + notemap.format(live_diff.ranks.A) + '</div>' +
+                '<div class="col l6"><b>B Rank: </b>' + notemap.format(live_diff.ranks.B) + '</div>' +
+                '<div class="col l6"><b>C Rank: </b>' + notemap.format(live_diff.ranks.C) + '</div>' +
+                '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live_diff.recommended_stamina) + '</div>' +
+                '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live_diff.note_damage) + '</div></div>' +
+
+                // Create the note map
+                notemap.make(live_diff);
+
+            fs.writeFile('build/lives/' + live_difficulty_id + '.html', minify(tab_content, {
+                    collapseWhitespace: true
+                }),
+                function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                }
+            );
+
+            hashes[live_difficulty_id] = live_diff_hash;
+            live_pages_built++;
+        }
 
         // Mark the Advanced difficulty as the initially open tab
         let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
@@ -178,18 +214,6 @@ Object.keys(lives_dict).sort(function (a, b) {
         this_tabbar += '</a></li>';
 
         let this_tab = '<div class="live-difficulty unloaded" id="' + live_difficulty_id + '">Loading...</div>';
-        let tab_content = '<div class="row nomargin">' +
-
-            // Top information
-            '<div class="col l6"><b>S Rank: </b>' + notemap.format(live_diff.ranks.S) + '</div>' +
-            '<div class="col l6"><b>A Rank: </b>' + notemap.format(live_diff.ranks.A) + '</div>' +
-            '<div class="col l6"><b>B Rank: </b>' + notemap.format(live_diff.ranks.B) + '</div>' +
-            '<div class="col l6"><b>C Rank: </b>' + notemap.format(live_diff.ranks.C) + '</div>' +
-            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live_diff.recommended_stamina) + '</div>' +
-            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live_diff.note_damage) + '</div></div>' +
-
-            // Create the note map
-            notemap.make(live_diff);
 
         if (live_difficulty_id >= 30000000 && live_difficulty_id < 40000000) {
             story_tabbar += this_tabbar;
@@ -198,16 +222,6 @@ Object.keys(lives_dict).sort(function (a, b) {
             live_tabbar += this_tabbar;
             live_tabs += this_tab;
         }
-
-        fs.writeFile('build/lives/' + live_difficulty_id + '.html', minify(tab_content, {
-                collapseWhitespace: true
-            }),
-            function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            }
-        );
     });
 
     if (story_tabs.length > 0) {
@@ -220,3 +234,10 @@ Object.keys(lives_dict).sort(function (a, b) {
 });
 
 dump(current_group, s);
+fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
+    function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+console.log("    Built " + live_pages_built + " Live page(s).");

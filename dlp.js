@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const fs = require('fs');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
+const hash = require('object-hash');
 
 function tower_name_romaji(tower_id) {
     if (tower_id === 33001) return "Dream Live Parade";
@@ -49,6 +50,11 @@ function make_reward_string(rewards) {
     return rewardstrings.join(", ");
 }
 
+let hashes = {};
+if (fs.existsSync("build/lives/hash.json")) {
+    hashes = JSON.parse(fs.readFileSync("build/lives/hash.json"));
+}
+
 let tower_ids = [];
 let towerdata = {};
 
@@ -63,6 +69,7 @@ fs.readdirSync("tower/.").forEach(function (f) {
 tower_ids = tower_ids.sort();
 
 let s = "";
+let live_pages_built = 0;
 
 tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
@@ -89,6 +96,39 @@ tower_ids.forEach(function (tower_id) {
             linked_live.note_damage = floor.note_damage;
         }
 
+        let floor_hash = hash(floor);
+        if (process.argv[2] === "full" || !hashes.hasOwnProperty(floor.live_difficulty_id) || hashes[floor.live_difficulty_id] !== floor_hash) {
+            let floor_content = '<div class="row nomargin">' +
+                // Top information
+                '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
+                '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
+                '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
+                '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
+                '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
+                '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
+                (floor.note_damage_rate ? ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)' : '') +
+                '</div></div>';
+
+            if (linked_live !== undefined) {
+                floor_content += notemap.make(linked_live);
+            } else {
+                floor_content += notemap.make(floor);
+            }
+
+            fs.writeFile('build/lives/' + floor.live_difficulty_id + '.html', minify(floor_content, {
+                    collapseWhitespace: true
+                }),
+                function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                }
+            );
+
+            hashes[floor.live_difficulty_id] = floor_hash;
+            live_pages_built++;
+        }
+
         s += '<ul class="collapsible floor" id="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
@@ -104,33 +144,6 @@ tower_ids.forEach(function (tower_id) {
             notemap.is_cleansable(linked_live === undefined ? floor.gimmick : linked_live.gimmick) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
             '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
-
-        let floor_content = '<div class="row nomargin">' +
-            // Top information
-            '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
-            '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
-            '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
-            '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
-            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
-            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
-            (floor.note_damage_rate ? ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)' : '') +
-            '</div></div>';
-
-        if (linked_live !== undefined) {
-            floor_content += notemap.make(linked_live);
-        } else {
-            floor_content += notemap.make(floor);
-        }
-
-        fs.writeFile('build/lives/' + floor.live_difficulty_id + '.html', minify(floor_content, {
-                collapseWhitespace: true
-            }),
-            function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            }
-        );
 
         if (floor.reward_progress !== null) {
             s += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
@@ -151,3 +164,10 @@ fs.writeFile('build/dlp.html', minify(s, {
         }
     }
 );
+fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
+    function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+console.log("    Built " + live_pages_built + " Live page(s).");

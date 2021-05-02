@@ -1,9 +1,7 @@
 #!/usr/bin/env sh
 
-echo "Create empty build folder..."
-rm -rf build
-mkdir build
-mkdir build/lives
+echo "Create build folders..."
+mkdir -p build/lives
 
 echo "Copy fonts..."
 cp --recursive fonts build
@@ -42,10 +40,10 @@ done
 echo "Minify Index page..."
 html-minifier --collapse-whitespace -o build/index.html index.html
 
-echo "Build DLP page..."
-node dlp.js
-echo "Build Note Map DB page..."
+echo "Build updated Note Map DB pages..."
 node mapdb.js
+echo "Build updated DLP pages..."
+node dlp.js
 echo "Build Rankings page..."
 node top.js
 
