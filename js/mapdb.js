@@ -488,22 +488,35 @@ function freeLiveStoryTabShow(e) {
  *  ----------
  */
 
+function loadTower(e, id) {
+    if (e.data("initialized") === undefined) {
+        e.data("initialized", 1);
+        e.load((DEBUG_MODE ? "build/" : "") + "towers/" + id + ".html", loadTowerFinish);
+    }
+}
+
+function loadTowerFinish(responseText, textStatus) {
+    if (textStatus === "error") {
+        $(this).html("Failed to load. <a onClick='loadTower($(\"#" + $(this).attr("id") + "\"))'>Retry?</a>");
+    } else {
+        $(this).removeClass("unloaded");
+        dlpTowerCollapsibleOpen(this);
+    }
+}
+
 function initPageDlp(page) {
     $(".collapsible.tower", page).collapsible().each(dlpTowerCollapsibleInit);
 }
 
 function dlpTowerCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
-    collapsible.options.onOpenStart = dlpTowerCollapsibleOpen;
+    collapsible.options.onOpenStart = loadTower.bind(this, $("#tower-floorlist" + $(this).attr("id") ), $(this).attr("id"));
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
 
-function dlpTowerCollapsibleOpen() {
-    let towerLink = "tower" + this.$el.attr("id");
-    if (this.$el.data("initialized") === undefined) {
-        this.$el.data("initialized", 1);
-        $(".collapsible.floor", this.el).collapsible().each(dlpFloorCollapsibleInit);
-    }
+function dlpTowerCollapsibleOpen(e) {
+    let towerLink = "tower" + $(e).attr("id");
+    $(".collapsible.floor", e).collapsible().each(dlpFloorCollapsibleInit);
     window.location.hash = towerLink;
 }
 

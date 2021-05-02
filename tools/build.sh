@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 echo "Create build folders..."
-mkdir -p build/lives
+mkdir -p build/lives build/towers
 
 echo "Copy fonts..."
 cp --recursive fonts build

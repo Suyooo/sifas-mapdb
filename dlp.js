@@ -73,19 +73,21 @@ let live_pages_built = 0;
 
 tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
+    let tower_content = '<b>Performance Points:</b> ' + tower.pp_at_start +
+        ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
+        ' loveca stars<br><br>';
 
     s += '<ul id="' + tower_id + '" class="collapsible tower" data-collapsible="expandable"><li>' +
         '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
-        tower.name + '</b></div><div class="collapsible-body"><b>Performance Points:</b> ' + tower.pp_at_start +
-        ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
-        ' loveca stars<br><br>';
+        tower.name + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
+        'Loading...</div></li></ul>';
 
     let floor_no = 1;
     tower["floors"].forEach(function (floor) {
         if (floor.floor_type == 1) {
-            s += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
+            tower_content += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
                 '<b>Story Node: ' + floor.story_title + '</b></div>';
-            s += '<div class="progress">&nbsp;</div>';
+            tower_content += '<div class="progress">&nbsp;</div>';
             return;
         }
 
@@ -129,7 +131,7 @@ tower_ids.forEach(function (tower_id) {
             live_pages_built++;
         }
 
-        s += '<ul class="collapsible floor" id="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
+        tower_content += '<ul class="collapsible floor" id="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
@@ -146,13 +148,21 @@ tower_ids.forEach(function (tower_id) {
             '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
 
         if (floor.reward_progress !== null) {
-            s += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
+            tower_content += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
         } else {
-            s += '<div class="progress">&nbsp;</div>';
+            tower_content += '<div class="progress">&nbsp;</div>';
         }
     });
 
-    s += '</div></li></ul>';
+    fs.writeFile('build/towers/' + tower_id + '.html', minify(tower_content, {
+            collapseWhitespace: true
+        }),
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        }
+    );
 });
 
 fs.writeFile('build/dlp.html', minify(s, {
