@@ -774,6 +774,10 @@ function onKeyDown(e) {
         console.log(newTab);
         if ($(newTab).hasClass("hide")) return;
         pageTabsInstance.select($("a", newTab).attr("href").substring(1));
+    } else if (!e.ctrlKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
+        ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 95 && e.keyCode < 112))) {
+        pageTabsInstance.select("tab_search");
+        searchInput.val("");
     }
 }
 window.addEventListener("keydown", onKeyDown);
