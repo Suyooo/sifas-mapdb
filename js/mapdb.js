@@ -340,13 +340,29 @@ function showLinkedDlp(hash, page) {
     let targetElement = $("#" + towerId, page);
     if (targetElement.length) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
-        towerCollapsible.instantOpen(0);
         if (hash.startsWith("#floor")) {
-            targetElement = $("#" + hash.substring(6), targetElement);
+            let floorList = $("#tower-floorlist" + towerId);
+            loadTower(floorList, towerId, showLinkedDlpFloor.bind(floorList, hash));
+        } else {
+            scrollToElement(targetElement);
+        }
+        towerCollapsible.instantOpen(0);
+    }
+}
+
+function showLinkedDlpFloor(hash, responseText, textStatus) {
+    loadTowerFinish.bind(this, responseText, textStatus)();
+    if (textStatus !== "error") {
+        let targetElement = $("#" + hash.substring(6), this);
+        if (targetElement.length) {
             let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
             floorCollapsible.instantOpen(0);
+            scrollToElement(targetElement);
+        } else {
+            scrollToElement(this);
         }
-        scrollToElement(targetElement);
+    } else {
+        scrollToElement(this);
     }
 }
 
@@ -488,10 +504,10 @@ function freeLiveStoryTabShow(e) {
  *  ----------
  */
 
-function loadTower(e, id) {
+function loadTower(e, id, callback) {
     if (e.data("initialized") === undefined) {
         e.data("initialized", 1);
-        e.load((DEBUG_MODE ? "build/" : "") + "towers/" + id + ".html", loadTowerFinish);
+        e.load((DEBUG_MODE ? "build/" : "") + "towers/" + id + ".html", callback);
     }
 }
 
@@ -510,12 +526,12 @@ function initPageDlp(page) {
 
 function dlpTowerCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
-    collapsible.options.onOpenStart = loadTower.bind(this, $("#tower-floorlist" + $(this).attr("id") ), $(this).attr("id"));
+    collapsible.options.onOpenStart = loadTower.bind(this, $("#tower-floorlist" + $(this).attr("id") ), $(this).attr("id"), loadTowerFinish);
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
 
 function dlpTowerCollapsibleOpen(e) {
-    let towerLink = "tower" + $(e).attr("id");
+    let towerLink = "tower" + $(e).attr("id").substring(15);
     $(".collapsible.floor", e).collapsible().each(dlpFloorCollapsibleInit);
     window.location.hash = towerLink;
 }
