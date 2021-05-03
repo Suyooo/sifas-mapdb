@@ -71,6 +71,10 @@ body {
     overflow-y: scroll;
 }
 
+body.keyboard-focused :focus {
+    box-shadow: 0 3px 0 var(--key-accented) inset, 3px 0 0 var(--key-accented) inset, 0 -3px 0 var(--key-accented) inset, -3px 0 0 var(--key-accented) inset;
+}
+
 a:not(.btn), a:not(.btn):active, a:not(.btn):visited, a:not(.btn):hover, a:not(.btn):focus {
     color: var(--key-important);
 }
