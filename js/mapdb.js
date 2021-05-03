@@ -126,15 +126,21 @@ function checkAllPagesLoaded(callback) {
  *  ----------
  */
 
+let pageTabs;
+let pageTabsInstance;
+let groupTabs;
 $(function () {
     M.AutoInit();
 
-    // page tabs
-    let tabs = M.Tabs.getInstance($("nav .tabs")[0]);
-    tabs.options.onShow = pageTabShow;
+    pageTabs = $("nav .tabs")[0];
+    pageTabsInstance = M.Tabs.getInstance(pageTabs);
+    pageTabs = $(".tab", pageTabs);
+    groupTabs = $(".group-tab");
+
+    pageTabsInstance.options.onShow = pageTabShow;
     body.removeClass("loading");
 
-    handleLocationHash(tabs);
+    handleLocationHash(pageTabsInstance);
     registerHeaderButtons();
     registerSearch();
 });
@@ -151,7 +157,6 @@ function pageTabShow(e) {
         currentSearchTimeout = undefined;
     }
 
-    let groupTabs = $(".group-tab");
     if ($(e).attr("id") === "tab_search") {
         loadAllGroupPagesThen(showSearch);
         onSearchTab = true;
@@ -750,3 +755,25 @@ function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
         }
     }
 }
+
+/*
+ * -------------------
+ * KEYBOARD NAVIGATION
+ * -------------------
+ */
+
+
+
+function onKeyDown(e) {
+    if (e.ctrlKey && (e.key == "ArrowLeft" || e.key == "ArrowRight")) {
+        console.log("Moving from " + pageTabsInstance.index);
+        let newTabIndex = pageTabsInstance.index + (e.key == "ArrowLeft" ? -1 : 1);
+        console.log("Moving to " + newTabIndex);
+        if (newTabIndex < 0 || newTabIndex >= pageTabs.length) return;
+        let newTab = pageTabs[newTabIndex];
+        console.log(newTab);
+        if ($(newTab).hasClass("hide")) return;
+        pageTabsInstance.select($("a", newTab).attr("href").substring(1));
+    }
+}
+window.addEventListener("keydown", onKeyDown);
