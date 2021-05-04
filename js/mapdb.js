@@ -148,6 +148,7 @@ $(function () {
     if (bufferedInput !== "") {
         pageTabsInstance.select("tab_search");
         searchInput.val(bufferedInput);
+        currentSearchTimeout = setTimeout(doSearch.bind(this, bufferedInput), 1000);
     }
     initialized = true;
 });
