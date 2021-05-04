@@ -776,7 +776,7 @@ function setFocusToFirstFocusable(page) {
 
 let bufferedInput = "";
 function onKeyDown(e) {
-    if (e.key === "Enter" && $(document.activeElement).hasClass("has-on-click")) {
+    if (e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
         $(document.activeElement).trigger("click");
     } else if (e.ctrlKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
         body.addClass("keyboard-focused");
