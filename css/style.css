@@ -124,6 +124,7 @@ nav a {
 .tabs {
     display: flex;
     height: auto;
+    user-select: none;
 }
 
 .tabs.tabs-transparent .indicator {
