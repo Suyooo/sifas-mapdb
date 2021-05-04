@@ -37,13 +37,14 @@ let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
 let body = $("body");
 
-function scrollToElement(e) {
+function scrollToAndFocusCollapsible(e) {
     // add padding at bottom to successfully scroll to divs at the end of the page
     body.css({"padding-bottom": "100vh"});
     setTimeout(function () {
         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
     }, 300);
     window.scrollTo(0, e.position().top);
+    $("> li > .collapsible-header", e)[0].focus();
 }
 
 /*
@@ -325,7 +326,7 @@ function showLinkedFreeLive(hash, page) {
         collapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
         liveDiffTabs.instantSelect(liveDiffId);
-        scrollToElement(collapsible.$el);
+        scrollToAndFocusCollapsible(collapsible.$el);
     }
 }
 
@@ -344,7 +345,7 @@ function showLinkedStoryStage(hash, tabs, groupPages) {
 
         tabs.instantSelect(targetPage.attr("id"));
         storyTabs.instantSelect(targetLiveDiff.attr("id"));
-        scrollToElement(liveCollapsible.$el);
+        scrollToAndFocusCollapsible(liveCollapsible.$el);
     }
 }
 
@@ -357,7 +358,7 @@ function showLinkedDlp(hash, page) {
             let floorList = $("#tower-floorlist" + towerId);
             loadTower(floorList, towerId, showLinkedDlpFloor.bind(floorList, hash));
         } else {
-            scrollToElement(targetElement);
+            scrollToAndFocusCollapsible(targetElement);
         }
         towerCollapsible.instantOpen(0);
     }
@@ -370,12 +371,12 @@ function showLinkedDlpFloor(hash, responseText, textStatus) {
         if (targetElement.length) {
             let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
             floorCollapsible.instantOpen(0);
-            scrollToElement(targetElement);
+            scrollToAndFocusCollapsible(targetElement);
         } else {
-            scrollToElement(this);
+            scrollToAndFocusCollapsible($(this));
         }
     } else {
-        scrollToElement(this);
+        scrollToAndFocusCollapsible($(this));
     }
 }
 
