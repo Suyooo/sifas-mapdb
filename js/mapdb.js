@@ -145,6 +145,10 @@ $(function () {
     registerHeaderButtons();
     registerSearch();
 
+    if (bufferedInput !== "") {
+        pageTabsInstance.select("tab_search");
+        searchInput.val(bufferedInput);
+    }
     initialized = true;
 });
 
@@ -769,6 +773,7 @@ function setFocusToFirstFocusable(page) {
     page.find('a[href], input, [tabindex]').first().focus();
 }
 
+let bufferedInput = "";
 function onKeyDown(e) {
     if (e.key === "Enter" && $(document.activeElement).hasClass("has-on-click")) {
         $(document.activeElement).trigger("click");
@@ -788,8 +793,12 @@ function onKeyDown(e) {
         pageTabsInstance.select(tabName.substring(1));
     } else if (!e.ctrlKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
         ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 95 && e.keyCode < 112))) {
-        pageTabsInstance.select("tab_search");
-        searchInput.val("");
+        if (initialized) {
+            pageTabsInstance.select("tab_search");
+            searchInput.val("");
+        } else {
+            bufferedInput += e.key;
+        }
     }
 }
 window.addEventListener("keydown", onKeyDown);
