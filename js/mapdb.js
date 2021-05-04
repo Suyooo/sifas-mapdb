@@ -813,7 +813,7 @@ function onKeyDown(e) {
         // Start search
         if (initialized) {
             pageTabs.select("tab_search");
-            searchInput.val();
+            searchInput.val("");
         } else {
             searchInput[0].focus();
         }
