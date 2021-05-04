@@ -156,11 +156,6 @@ $(function () {
     registerHeaderButtons();
     registerSearch();
 
-    if (bufferedInput !== "") {
-        pageTabs.select("tab_search");
-        searchInput.val(bufferedInput);
-        currentSearchTimeout = setTimeout(doSearch.bind(this, bufferedInput), 1000);
-    }
     initialized = true;
 });
 
@@ -790,8 +785,6 @@ function setFocusToFirstFocusable(page) {
     page.find('a[href], input, [tabindex]').first().focus();
 }
 
-let bufferedInput = "";
-
 function onKeyDown(e) {
     if (!e.ctrlKey && !e.altKey && !e.shiftKey && e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
         // Call onClick handler for non-native buttons
@@ -820,9 +813,9 @@ function onKeyDown(e) {
         // Start search
         if (initialized) {
             pageTabs.select("tab_search");
-            searchInput.val("");
+            searchInput.val();
         } else {
-            bufferedInput += e.key;
+            searchInput[0].focus();
         }
     } else {
         let collapsibleParent = $(document.activeElement).parents('.collapsible')[0];
