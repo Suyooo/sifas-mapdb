@@ -776,9 +776,11 @@ function setFocusToFirstFocusable(page) {
 
 let bufferedInput = "";
 function onKeyDown(e) {
-    if (e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
+    if (!e.ctrlKey && !e.altKey && !e.shiftKey && e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
+        // Call onClick handler for non-native buttons
         $(document.activeElement).trigger("click");
-    } else if (e.ctrlKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
+    } else if (!e.ctrlKey && !e.altKey && e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
+        // Switch page tabs
         body.addClass("keyboard-focused");
         let newTabIndex = pageTabsInstance.index + (e.key === "ArrowLeft" ? -1 : 1);
         if (newTabIndex < 0 || newTabIndex >= pageTabs.length) return;
@@ -794,6 +796,7 @@ function onKeyDown(e) {
         pageTabsInstance.select(tabName.substring(1));
     } else if (!e.ctrlKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
         ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 95 && e.keyCode < 112))) {
+        // Start search
         if (initialized) {
             pageTabsInstance.select("tab_search");
             searchInput.val("");
