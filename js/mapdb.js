@@ -773,6 +773,7 @@ function setFocusToFirstFocusable(page) {
 }
 
 let bufferedInput = "";
+
 function onKeyDown(e) {
     if (!e.ctrlKey && !e.altKey && !e.shiftKey && e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
         // Call onClick handler for non-native buttons
@@ -805,6 +806,58 @@ function onKeyDown(e) {
         } else {
             bufferedInput += e.key;
         }
+    } else {
+        let collapsibleParent = $(document.activeElement).parents('.collapsible')[0];
+        if (collapsibleParent && initialized) {
+            // Live difficulty hotkeys
+            let liveBody = $("> li > .collapsible-body", collapsibleParent);
+            if (liveBody.hasClass("unloaded")) return;
+            let liveTabsEl = $("> .tabs", liveBody);
+            let liveTabs, storyTabs, liveDifficulty;
+            if (liveTabsEl.length > 0) {
+                liveTabs = M.Tabs.getInstance(liveTabsEl);
+                let activeLiveTab = liveTabs.$activeTabLink;
+                if (activeLiveTab.attr("href").endsWith("-story")) {
+                    // Story Stage
+                    storyTabs = M.Tabs.getInstance($(".tabs", liveTabs.$content));
+                    liveDifficulty = storyTabs.$content;
+                } else {
+                    // Free Live
+                    liveDifficulty = liveTabs.$content;
+                }
+            } else {
+                // DLP Floor
+                liveDifficulty = liveBody;
+            }
+
+            if (!e.ctrlKey && !e.altKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+                // Scroll note bar
+                let noteBar = $(".notebarcontainer", liveDifficulty);
+                noteBar.scrollLeft(noteBar.scrollLeft() + (e.key === "ArrowLeft" ? -100 : 100));
+            } else if (liveTabs && e.ctrlKey && !e.altKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+                // Switch difficulty tabs
+                let d = e.key === "ArrowLeft" ? -1 : 1;
+                let switchingTabs = storyTabs || liveTabs;
+                let newTabIndex = switchingTabs.index + d;
+                if (newTabIndex < 0 && switchingTabs === liveTabs || newTabIndex >= switchingTabs.$tabLinks.length) return;
+                if (newTabIndex < 0 && switchingTabs === storyTabs) {
+                    switchingTabs = liveTabs;
+                    newTabIndex = switchingTabs.index - 1;
+                }
+                switchingTabs.select($(switchingTabs.$tabLinks[newTabIndex]).attr("href").substring(1));
+            } else if (e.ctrlKey && !e.altKey && !e.shiftKey && ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 95 && e.keyCode < 112))) {
+                // Toggle gimmick
+                let gimmickIndex = e.keyCode > 95 ? e.keyCode - 97 : e.keyCode - 49;
+                if (gimmickIndex === -1) {
+                    gimmickIndex = 9;
+                }
+                let gimmick = $(".detailinfo .gimmick", liveDifficulty)[gimmickIndex];
+                if (gimmick) {
+                    $(gimmick).trigger("click");
+                }
+            }
+        }
     }
 }
+
 window.addEventListener("keydown", onKeyDown);
