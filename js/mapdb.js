@@ -766,19 +766,25 @@ function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
  */
 
 function setFocusToFirstFocusable(page) {
-    page.find('a, input, [tabindex]').first().focus();
+    page.find('a[href], input, [tabindex]').first().focus();
 }
 
 function onKeyDown(e) {
-    if (e.ctrlKey && (e.key == "ArrowLeft" || e.key == "ArrowRight") && initialized) {
+    if (e.key === "Enter" && $(document.activeElement).hasClass("has-on-click")) {
+        $(document.activeElement).trigger("click");
+    } else if (e.ctrlKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
         body.addClass("keyboard-focused");
-        let newTabIndex = pageTabsInstance.index + (e.key == "ArrowLeft" ? -1 : 1);
+        let newTabIndex = pageTabsInstance.index + (e.key === "ArrowLeft" ? -1 : 1);
         if (newTabIndex < 0 || newTabIndex >= pageTabs.length) return;
         let newTab = pageTabs[newTabIndex];
         if ($(newTab).hasClass("hide")) return;
 
         let tabName = $("a", newTab).attr("href");
-        afterSwitchCallback = setFocusToFirstFocusable;
+        if (tabName !== "#tab_top") {
+            afterSwitchCallback = setFocusToFirstFocusable;
+        } else {
+            $("a", newTab)[0].focus();
+        }
         pageTabsInstance.select(tabName.substring(1));
     } else if (!e.ctrlKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
         ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 95 && e.keyCode < 112))) {
