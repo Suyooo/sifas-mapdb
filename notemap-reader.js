@@ -441,7 +441,7 @@ function make_notemap(live) {
             let sec = Math.floor(live.song_length % 60000 / 1000);
             infos += '<div class="col l6"><b>Actual Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
         }
-        s = '<div class="row nomargin">' + infos + '</div><div class="notebarcontainer"><div class="notebar"' +
+        s = '<div class="row nomargin">' + infos + '</div><div class="notebarcontainer" tabindex="-1"><div class="notebar"' +
             'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
     } else {
         s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';

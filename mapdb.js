@@ -196,7 +196,7 @@ Object.keys(lives_dict).sort(function (a, b) {
 
         // Mark the Advanced difficulty as the initially open tab
         let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
-            (live_diff.song_difficulty === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + '>';
+            (live_diff.song_difficulty === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + ' tabindex="-1">';
 
         if (live_difficulty_id < 30000000) {
             // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
@@ -225,8 +225,8 @@ Object.keys(lives_dict).sort(function (a, b) {
     });
 
     if (story_tabs.length > 0) {
-        s += live_tabbar + '<li class="tab"><a href="#' + live.id + '-story">STORY STAGES</a></li></ul>' +
-            live_tabs + '<div id="' + live.id + '-story"><ul class="tabs tabs-transparent tabs-fixed-width">' +
+        s += live_tabbar + '<li class="tab"><a href="#' + live.id + '-story" tabindex="-1">STORY STAGES</a></li></ul>' +
+            live_tabs + '<div id="' + live.id + '-story"><ul class="tabs tabs-transparent tabs-fixed-width" tabindex="-1">' +
             story_tabbar + '</ul>' + story_tabs + '</div></div></li></ul>';
     } else {
         s += live_tabbar + '</ul>' + live_tabs + '</div></li></ul>';
