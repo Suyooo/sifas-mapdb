@@ -47,6 +47,17 @@ function scrollToAndFocusCollapsible(e) {
     $("> li > .collapsible-header", e)[0].focus();
 }
 
+function scrollIntoView(container, element) {
+    let leftSidePos = element.offset().left - container.offset().left;
+    let rightSidePos = leftSidePos + element.outerWidth();
+    if (rightSidePos > container.width()) {
+        container.scrollLeft(container.scrollLeft() + rightSidePos - container.width() + 50);
+    }
+    if (leftSidePos < 0) {
+        container.scrollLeft(container.scrollLeft() + leftSidePos - 50);
+    }
+}
+
 /*
  *  ----------
  *  PAGE LOADING
@@ -154,6 +165,7 @@ $(function () {
 let onSearchTab = false;
 
 function pageTabShow(e) {
+    scrollIntoView(pageTabs.$el, pageTabs.$activeTabLink);
     window.location.hash = currentPage = $(e).attr("id").substring(4);
     loadPageThen(e, afterSwitchCallback);
     afterSwitchCallback = undefined;
@@ -449,14 +461,14 @@ function freeLiveCollapsibleOpen() {
         let story_tabs = (tabElements.length > 1) ? M.Tabs.getInstance(tabElements[1]) : undefined;
         tabs = M.Tabs.getInstance(tabElements[0]);
 
-        tabs.options.onShow = freeLiveTabShow;
+        tabs.options.onShow = freeLiveTabShow.bind(this, tabs);
 
         // Materialize messes up the indicator position, so we'll fix it ourselves on first open
         // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
         setTimeout(tabs.forceTabIndicator.bind(tabs), 1);
 
         if (story_tabs !== undefined) {
-            story_tabs.options.onShow = freeLiveStoryTabShow;
+            story_tabs.options.onShow = freeLiveStoryTabShow.bind(this, tabs);
         }
     } else {
         tabs = M.Tabs.getInstance(tabElements[0]);
@@ -479,7 +491,7 @@ function outerCollapsibleClose() {
     window.location.hash = currentPage;
 }
 
-function freeLiveTabShow(e) {
+function freeLiveTabShow(tabs, e) {
     if ($(e).hasClass("live-difficulty")) {
         if ($(e).data("initialized") === undefined) {
             $(e).data("initialized", 1);
@@ -499,13 +511,15 @@ function freeLiveTabShow(e) {
             loadNoteMap(activetab);
         }
     }
+    scrollIntoView(tabs.$el, tabs.$activeTabLink);
 }
 
-function freeLiveStoryTabShow(e) {
+function freeLiveStoryTabShow(tabs, e) {
     if ($(e).data("initialized") === undefined) {
         $(e).data("initialized", 1);
         loadNoteMap($(e));
     }
+    scrollIntoView(tabs.$el, tabs.$activeTabLink);
     window.location.hash = "live" + $(e).attr("id");
 }
 
@@ -810,8 +824,8 @@ function onKeyDown(e) {
         let collapsibleParent = $(document.activeElement).parents('.collapsible')[0];
         if (collapsibleParent && initialized) {
             // Live difficulty hotkeys
-            let liveBody = $("> li > .collapsible-body", collapsibleParent);
-            if (liveBody.hasClass("unloaded")) return;
+            let liveBody = $("> li.active > .collapsible-body", collapsibleParent);
+            if (liveBody.length > 0 && liveBody.hasClass("unloaded")) return;
             let liveTabsEl = $("> .tabs", liveBody);
             let liveTabs, storyTabs, liveDifficulty;
             if (liveTabsEl.length > 0) {
