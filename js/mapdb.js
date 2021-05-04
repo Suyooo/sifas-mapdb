@@ -782,10 +782,14 @@ function onKeyDown(e) {
     } else if (!e.ctrlKey && !e.altKey && e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
         // Switch page tabs
         body.addClass("keyboard-focused");
-        let newTabIndex = pageTabsInstance.index + (e.key === "ArrowLeft" ? -1 : 1);
-        if (newTabIndex < 0 || newTabIndex >= pageTabs.length) return;
-        let newTab = pageTabs[newTabIndex];
-        if ($(newTab).hasClass("hide")) return;
+        let d = e.key === "ArrowLeft" ? -1 : 1;
+        let newTabIndex = pageTabsInstance.index, newTab = undefined;
+        while (newTab === undefined) {
+            newTabIndex += d;
+            if (newTabIndex < 0 || newTabIndex >= pageTabs.length) return;
+            newTab = pageTabs[newTabIndex];
+            if ($(newTab).hasClass("hide")) newTab = undefined;
+        }
 
         let tabName = $("a", newTab).attr("href");
         if (tabName !== "#tab_top") {
