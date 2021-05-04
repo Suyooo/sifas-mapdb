@@ -129,25 +129,22 @@ function checkAllPagesLoaded(callback) {
 
 let initialized = false;
 let pageTabs;
-let pageTabsInstance;
 let groupTabs;
 $(function () {
     M.AutoInit();
 
-    pageTabs = $("nav .tabs")[0];
-    pageTabsInstance = M.Tabs.getInstance(pageTabs);
-    pageTabs = $(".tab", pageTabs);
+    pageTabs = M.Tabs.getInstance($("nav .tabs")[0]);
     groupTabs = $(".group-tab");
 
-    pageTabsInstance.options.onShow = pageTabShow;
+    pageTabs.options.onShow = pageTabShow;
     body.removeClass("loading");
 
-    handleLocationHash(pageTabsInstance);
+    handleLocationHash(pageTabs);
     registerHeaderButtons();
     registerSearch();
 
     if (bufferedInput !== "") {
-        pageTabsInstance.select("tab_search");
+        pageTabs.select("tab_search");
         searchInput.val(bufferedInput);
         currentSearchTimeout = setTimeout(doSearch.bind(this, bufferedInput), 1000);
     }
@@ -540,7 +537,7 @@ function initPageDlp(page) {
 
 function dlpTowerCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
-    collapsible.options.onOpenStart = loadTower.bind(this, $("#tower-floorlist" + $(this).attr("id") ), $(this).attr("id"), loadTowerFinish);
+    collapsible.options.onOpenStart = loadTower.bind(this, $("#tower-floorlist" + $(this).attr("id")), $(this).attr("id"), loadTowerFinish);
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
 
@@ -784,26 +781,26 @@ function onKeyDown(e) {
         // Switch page tabs
         body.addClass("keyboard-focused");
         let d = e.key === "ArrowLeft" ? -1 : 1;
-        let newTabIndex = pageTabsInstance.index, newTab = undefined;
+        let newTabIndex = pageTabs.index, newTab = undefined;
         while (newTab === undefined) {
             newTabIndex += d;
-            if (newTabIndex < 0 || newTabIndex >= pageTabs.length) return;
-            newTab = pageTabs[newTabIndex];
-            if ($(newTab).hasClass("hide")) newTab = undefined;
+            if (newTabIndex < 0 || newTabIndex >= pageTabs.$tabLinks.length) return;
+            newTab = pageTabs.$tabLinks[newTabIndex];
+            if ($(newTab).parent().hasClass("hide")) newTab = undefined;
         }
 
-        let tabName = $("a", newTab).attr("href");
+        let tabName = $(newTab).attr("href");
         if (tabName !== "#tab_top") {
             afterSwitchCallback = setFocusToFirstFocusable;
         } else {
-            $("a", newTab)[0].focus();
+            newTab.focus();
         }
-        pageTabsInstance.select(tabName.substring(1));
+        pageTabs.select(tabName.substring(1));
     } else if (!e.ctrlKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
         ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 95 && e.keyCode < 112))) {
         // Start search
         if (initialized) {
-            pageTabsInstance.select("tab_search");
+            pageTabs.select("tab_search");
             searchInput.val("");
         } else {
             bufferedInput += e.key;
