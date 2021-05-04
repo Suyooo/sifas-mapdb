@@ -47,7 +47,9 @@ function scrollToAndFocusCollapsible(e) {
     $("> li > .collapsible-header", e)[0].focus();
 }
 
-function scrollIntoView(container, element) {
+function scrollActiveTabLabelIntoView(tabs) {
+    let container = $(tabs.el);
+    let element = tabs.$activeTabLink;
     let leftSidePos = element.offset().left - container.offset().left;
     let rightSidePos = leftSidePos + element.outerWidth();
     if (rightSidePos > container.width()) {
@@ -165,7 +167,7 @@ $(function () {
 let onSearchTab = false;
 
 function pageTabShow(e) {
-    scrollIntoView(pageTabs.$el, pageTabs.$activeTabLink);
+    scrollActiveTabLabelIntoView(pageTabs);
     window.location.hash = currentPage = $(e).attr("id").substring(4);
     loadPageThen(e, afterSwitchCallback);
     afterSwitchCallback = undefined;
@@ -468,7 +470,7 @@ function freeLiveCollapsibleOpen() {
         setTimeout(tabs.forceTabIndicator.bind(tabs), 1);
 
         if (story_tabs !== undefined) {
-            story_tabs.options.onShow = freeLiveStoryTabShow.bind(this, tabs);
+            story_tabs.options.onShow = freeLiveStoryTabShow.bind(this, story_tabs);
         }
     } else {
         tabs = M.Tabs.getInstance(tabElements[0]);
@@ -511,7 +513,7 @@ function freeLiveTabShow(tabs, e) {
             loadNoteMap(activetab);
         }
     }
-    scrollIntoView(tabs.$el, tabs.$activeTabLink);
+    scrollActiveTabLabelIntoView(tabs);
 }
 
 function freeLiveStoryTabShow(tabs, e) {
@@ -519,7 +521,7 @@ function freeLiveStoryTabShow(tabs, e) {
         $(e).data("initialized", 1);
         loadNoteMap($(e));
     }
-    scrollIntoView(tabs.$el, tabs.$activeTabLink);
+    scrollActiveTabLabelIntoView(tabs);
     window.location.hash = "live" + $(e).attr("id");
 }
 
