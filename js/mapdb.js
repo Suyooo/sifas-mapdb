@@ -338,6 +338,7 @@ function showLinkedFreeLive(hash, page) {
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
         liveDiffTabs.instantSelect(liveDiffId);
         scrollToAndFocusCollapsible(collapsible.$el);
+        scrollActiveTabLabelIntoView(liveDiffTabs);
     }
 }
 
@@ -357,6 +358,7 @@ function showLinkedStoryStage(hash, tabs, groupPages) {
         tabs.instantSelect(targetPage.attr("id"));
         storyTabs.instantSelect(targetLiveDiff.attr("id"));
         scrollToAndFocusCollapsible(liveCollapsible.$el);
+        scrollActiveTabLabelIntoView.bind(storyTabs);
     }
 }
 
