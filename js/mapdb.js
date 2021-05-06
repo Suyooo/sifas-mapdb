@@ -871,4 +871,4 @@ function onKeyDown(e) {
     }
 }
 
-window.addEventListener("keydown", onKeyDown);
+window.addEventListener("keydown", onKeyDown, { passive: true });
