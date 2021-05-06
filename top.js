@@ -170,7 +170,7 @@ songs.filter(function (e) {
     let la = "";
     let lb = "";
     if (e.linked_live_id !== null) {
-        la = "<a onClick='window.location.hash=\"live" + e.linked_live_id + "\";handleLocationHash();'>";
+        la = "<a onClick='window.location.hash=\"live" + e.linked_live_id + "\";'>";
         lb = "</a>";
     }
 
@@ -202,7 +202,7 @@ songs.filter(function (e) {
     let la = "";
     let lb = "";
     if (e.linked_live_id !== null) {
-        la = "<a onClick='window.location.hash=\"live" + e.linked_live_id + "\";handleLocationHash();'>";
+        la = "<a onClick='window.location.hash=\"live" + e.linked_live_id + "\";'>";
         lb = "</a>";
     }
 
