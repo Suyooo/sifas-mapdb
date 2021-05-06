@@ -5,8 +5,6 @@ mkdir -p build/lives build/towers
 
 echo "Copy fonts..."
 cp --recursive fonts build
-echo "Copy app manifest..."
-cp manifest.json build
 echo "Copy .htaccess..."
 cp .htaccess build
 
