@@ -285,41 +285,44 @@ function setURLHash(s) {
 
 function handleLocationHash() {
     disableHistory = true;
-    if (window.location.hash !== "") {
-        let hash = window.location.hash;
-        if (hash.startsWith("#live")) {
-            // Direct link to a live difficulty
-            if (hash.charAt(5) === "1" || hash.charAt(5) === "2") {
-                // Free Live or Event Live (has group ID in next position)
-                afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
-                switch (hash.charAt(6)) {
-                    case "0":
-                        pageTabs.select("tab_muse");
-                        break;
-                    case "1":
-                        pageTabs.select("tab_aqours");
-                        break;
-                    case "2":
-                        pageTabs.select("tab_niji");
-                        break;
-                    case "3":
-                        pageTabs.select("tab_liella");
-                        break;
-                }
-            } else {
-                // Story Stage: Can't read group ID on newer stages, must load all group tabs
-                // and search for the correct stage by going through them all
-                loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, pageTabs));
+    let hash = window.location.hash;
+    if (hash.startsWith("#live")) {
+        // Direct link to a live difficulty
+        if (hash.charAt(5) === "1" || hash.charAt(5) === "2") {
+            // Free Live or Event Live (has group ID in next position)
+            afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
+            switch (hash.charAt(6)) {
+                case "0":
+                    pageTabs.select("tab_muse");
+                    break;
+                case "1":
+                    pageTabs.select("tab_aqours");
+                    break;
+                case "2":
+                    pageTabs.select("tab_niji");
+                    break;
+                case "3":
+                    pageTabs.select("tab_liella");
+                    break;
+                default:
+                    afterSwitchCallback = undefined;
+                    disableHistory = false;
+                    break;
             }
-        } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
-            // Direct link to a DLP tower or floor
-            afterSwitchCallback = showLinkedDlp.bind(this, hash);
-            pageTabs.select("tab_dlp");
         } else {
-            // Direct link to a page
-            pageTabs.select("tab_" + hash.substring(1));
-            disableHistory = false;
+            // Story Stage: Can't read group ID on newer stages, must load all group tabs
+            // and search for the correct stage by going through them all
+            loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, pageTabs));
         }
+    } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
+        // Direct link to a DLP tower or floor
+        afterSwitchCallback = showLinkedDlp.bind(this, hash);
+        pageTabs.select("tab_dlp");
+    } else {
+        // Direct link to a page
+        if (hash === "") hash = "#start";
+        pageTabs.select("tab_" + hash.substring(1));
+        disableHistory = false;
     }
 }
 
