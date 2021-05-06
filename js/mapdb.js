@@ -371,12 +371,13 @@ function showLinkedDlp(hash, page) {
     let targetElement = $("#" + towerId, page);
     if (targetElement.length) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
-        towerCollapsible.instantOpen(0);
         if (hash.startsWith("#floor")) {
             let floorList = $("#tower-floorlist" + towerId);
             loadTower(floorList, towerId, showLinkedDlpFloor.bind(floorList, hash));
+            towerCollapsible.instantOpen(0);
         } else {
             scrollToAndFocusCollapsible(targetElement);
+            towerCollapsible.instantOpen(0);
             disableHistory = false;
         }
     }
