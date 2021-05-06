@@ -278,11 +278,13 @@ function resetCollapsibleFiltering() {
  *  ----------
  */
 
+let disableHistory = false;
 function setURLHash(s) {
-    history.pushState(undefined, undefined, "#" + s);
+    if (!disableHistory) history.pushState(undefined, undefined, "#" + s);
 }
 
 function handleLocationHash() {
+    disableHistory = true;
     if (window.location.hash !== "") {
         let hash = window.location.hash;
         if (hash.startsWith("#live")) {
@@ -316,6 +318,7 @@ function handleLocationHash() {
         } else {
             // Direct link to a page
             pageTabs.select("tab_" + hash.substring(1));
+            disableHistory = false;
         }
     }
 }
@@ -336,6 +339,7 @@ function showLinkedFreeLive(hash, page) {
         scrollToAndFocusCollapsible(collapsible.$el);
         scrollActiveTabLabelIntoView(liveDiffTabs);
     }
+    disableHistory = false;
 }
 
 function showLinkedStoryStage(hash, tabs, groupPages) {
@@ -356,6 +360,7 @@ function showLinkedStoryStage(hash, tabs, groupPages) {
         scrollToAndFocusCollapsible(liveCollapsible.$el);
         scrollActiveTabLabelIntoView.bind(storyTabs);
     }
+    disableHistory = false;
 }
 
 function showLinkedDlp(hash, page) {
@@ -363,13 +368,14 @@ function showLinkedDlp(hash, page) {
     let targetElement = $("#" + towerId, page);
     if (targetElement.length) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
+        towerCollapsible.instantOpen(0);
         if (hash.startsWith("#floor")) {
             let floorList = $("#tower-floorlist" + towerId);
             loadTower(floorList, towerId, showLinkedDlpFloor.bind(floorList, hash));
         } else {
             scrollToAndFocusCollapsible(targetElement);
+            disableHistory = false;
         }
-        towerCollapsible.instantOpen(0);
     }
 }
 
@@ -387,6 +393,7 @@ function showLinkedDlpFloor(hash, responseText, textStatus) {
     } else {
         scrollToAndFocusCollapsible($(this));
     }
+    disableHistory = false;
 }
 
 /*
