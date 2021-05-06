@@ -39,6 +39,15 @@ nav ul a:hover {
     background-color: var(--key-normal);
 }
 
+li.hidden-tab {
+    flex-grow: 0 !important;
+}
+
+li.hidden-tab a {
+    width: 0 !important;
+    padding: 0 !important;
+}
+
 div.unloaded {
     margin-top: 2em;
     text-align: center;

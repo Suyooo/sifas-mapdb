@@ -809,7 +809,7 @@ function onKeyDown(e) {
             newTabIndex += d;
             if (newTabIndex < 0 || newTabIndex >= pageTabs.$tabLinks.length) return;
             newTab = pageTabs.$tabLinks[newTabIndex];
-            if ($(newTab).parent().hasClass("hide")) newTab = undefined;
+            if ($(newTab).parent().hasClass("hidden-tab")) newTab = undefined;
         }
 
         let tabName = $(newTab).attr("href");
