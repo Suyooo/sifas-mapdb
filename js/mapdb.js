@@ -163,7 +163,7 @@ let onSearchTab = false;
 
 function pageTabShow(e) {
     scrollActiveTabLabelIntoView(pageTabs);
-    window.location.hash = currentPage = $(e).attr("id").substring(4);
+    setURLHash(currentPage = $(e).attr("id").substring(4));
     loadPageThen(e, afterSwitchCallback);
     afterSwitchCallback = undefined;
 
@@ -277,6 +277,10 @@ function resetCollapsibleFiltering() {
  *  DIRECT LINKING
  *  ----------
  */
+
+function setURLHash(s) {
+    history.pushState(undefined, undefined, "#" + s);
+}
 
 function handleLocationHash() {
     if (window.location.hash !== "") {
@@ -471,9 +475,9 @@ function freeLiveCollapsibleOpen() {
     }
 
     if (tabs.$activeTabLink.attr("href").endsWith("story")) {
-        window.location.hash = "live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1);
+        setURLHash("live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1));
     } else {
-        window.location.hash = "live" + tabs.$activeTabLink.attr("href").substring(1);
+        setURLHash("live" + tabs.$activeTabLink.attr("href").substring(1));
     }
 
     let activetab = $(tabs.$activeTabLink.attr("href"), this.el);
@@ -484,7 +488,7 @@ function freeLiveCollapsibleOpen() {
 }
 
 function outerCollapsibleClose() {
-    window.location.hash = currentPage;
+    setURLHash(currentPage);
 }
 
 function freeLiveTabShow(tabs, e) {
@@ -493,13 +497,13 @@ function freeLiveTabShow(tabs, e) {
             $(e).data("initialized", 1);
             loadNoteMap($(e));
         }
-        window.location.hash = "live" + $(e).attr("id");
+        setURLHash("live" + $(e).attr("id"));
     } else {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
         tabs.forceTabIndicator();
-        window.location.hash = "live" + tabs.$activeTabLink.attr("href").substring(1);
+        setURLHash("live" + tabs.$activeTabLink.attr("href").substring(1));
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -516,7 +520,7 @@ function freeLiveStoryTabShow(tabs, e) {
         loadNoteMap($(e));
     }
     scrollActiveTabLabelIntoView(tabs);
-    window.location.hash = "live" + $(e).attr("id");
+    setURLHash("live" + $(e).attr("id"));
 }
 
 /*
@@ -554,7 +558,7 @@ function dlpTowerCollapsibleInit() {
 function dlpTowerCollapsibleOpen(e) {
     let towerLink = "tower" + $(e).attr("id").substring(15);
     $(".collapsible.floor", e).collapsible().each(dlpFloorCollapsibleInit);
-    window.location.hash = towerLink;
+    setURLHash(towerLink);
 }
 
 function dlpFloorCollapsibleInit() {
@@ -565,7 +569,7 @@ function dlpFloorCollapsibleInit() {
 }
 
 function dlpFloorCollapsibleOpen() {
-    window.location.hash = "floor" + this.$el.attr("id");
+    setURLHash("floor" + this.$el.attr("id"));
     if (this.$el.data("initialized") === undefined) {
         this.$el.data("initialized", 1);
         loadNoteMap($(".live-difficulty", this.el));
@@ -573,7 +577,7 @@ function dlpFloorCollapsibleOpen() {
 }
 
 function dlpFloorCollapsibleClose(towerLink) {
-    window.location.hash = towerLink;
+    setURLHash(towerLink);
 }
 
 /*
