@@ -405,14 +405,28 @@ function showLinkedDlpFloor(hash, responseText, textStatus) {
  *  HEADER BUTTONS
  *  ----------
  */
+let btnDarkMode = $("#toggle_dark_mode");
 let showRomaji = false;
 let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
 let btnUnavailable = $("#toggle_unavailable");
 
 function registerHeaderButtons() {
+    btnDarkMode.on("click", toggleDarkMode);
     btnRomaji.on("click", toggleRomaji);
     btnUnavailable.on("click", toggleUnavailable);
+}
+
+function toggleDarkMode() {
+    if (!body.hasClass("dark-mode")) {
+        body.addClass("dark-mode");
+        btnDarkMode.addClass("on");
+        M.toast({html: "Enabled Dark Mode (BETA)"});
+    } else {
+        body.removeClass("dark-mode");
+        btnDarkMode.removeClass("on");
+        M.toast({html: "Disabled Dark Mode"});
+    }
 }
 
 function toggleRomaji() {
