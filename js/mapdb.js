@@ -152,7 +152,7 @@ $(function () {
     pageTabs.options.onShow = pageTabShow;
     body.removeClass("loading");
 
-    handleLocationHash(pageTabs);
+    handleLocationHash();
     registerHeaderButtons();
     registerSearch();
 
@@ -278,10 +278,7 @@ function resetCollapsibleFiltering() {
  *  ----------
  */
 
-function handleLocationHash(tabs) {
-    if (tabs === undefined) {
-        tabs = M.Tabs.getInstance($("nav .tabs")[0]);
-    }
+function handleLocationHash() {
     if (window.location.hash !== "") {
         let hash = window.location.hash;
         if (hash.startsWith("#live")) {
@@ -291,30 +288,30 @@ function handleLocationHash(tabs) {
                 afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
                 switch (hash.charAt(6)) {
                     case "0":
-                        tabs.select("tab_muse");
+                        pageTabs.select("tab_muse");
                         break;
                     case "1":
-                        tabs.select("tab_aqours");
+                        pageTabs.select("tab_aqours");
                         break;
                     case "2":
-                        tabs.select("tab_niji");
+                        pageTabs.select("tab_niji");
                         break;
                     case "3":
-                        tabs.select("tab_liella");
+                        pageTabs.select("tab_liella");
                         break;
                 }
             } else {
                 // Story Stage: Can't read group ID on newer stages, must load all group tabs
                 // and search for the correct stage by going through them all
-                loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, tabs));
+                loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, pageTabs));
             }
         } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
             // Direct link to a DLP tower or floor
             afterSwitchCallback = showLinkedDlp.bind(this, hash);
-            tabs.select("tab_dlp");
+            pageTabs.select("tab_dlp");
         } else {
             // Direct link to a page
-            tabs.select("tab_" + hash.substring(1));
+            pageTabs.select("tab_" + hash.substring(1));
         }
     }
 }
