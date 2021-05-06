@@ -880,3 +880,4 @@ function onKeyDown(e) {
 }
 
 window.addEventListener("keydown", onKeyDown, { passive: true });
+window.addEventListener("hashchange", handleLocationHash, { passive: true });
