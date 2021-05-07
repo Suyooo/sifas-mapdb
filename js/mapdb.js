@@ -176,6 +176,7 @@ function pageTabShow(e) {
         loadAllGroupPagesThen(showSearch);
         onSearchTab = true;
         searchInput.trigger("focus");
+        $(".no-available-songs").css("display","none");
 
         // Dumb workaround for Materialize force-hiding the previous tab
         setTimeout($.prototype.show.bind(groupTabs), 1);
@@ -187,6 +188,7 @@ function pageTabShow(e) {
         }
         doSearch("");
         onSearchTab = false;
+        $(".no-available-songs").css("display","");
     }
 }
 

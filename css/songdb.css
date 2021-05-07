@@ -125,6 +125,16 @@ div.group-tab {
     margin-bottom: -0.5em;
 }
 
+div.group-tab div.no-available-songs {
+    text-align: center;
+    margin-top: 2em;
+    width: 100%;
+}
+
+body.show-unavail div.group-tab div.no-available-songs {
+    display: none;
+}
+
 .tabs.tabs-fixed-width .tab {
     flex-basis: 0;
 }

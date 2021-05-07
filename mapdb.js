@@ -37,7 +37,11 @@ function guess_story_stage_difficulty(stage) {
     return notemap.difficulty_short(minimum_difficulty);
 }
 
-function dump(group, s) {
+function dump(group, s, has) {
+    if (!has) {
+        s += "<div class='no-available-songs'>This group currently has no available songs. Click the button in the " +
+            "header to show data from unavailable songs.</div>"
+    }
     fs.writeFile('build/' + group + '.html', minify(s, {
             collapseWhitespace: true
         }),
@@ -118,6 +122,7 @@ let s = ''
 let current_group = 'muse';
 let last_live_id = 0;
 let live_pages_built = 0;
+let has_available_songs = false;
 
 Object.keys(lives_dict).sort(function (a, b) {
     return lives_dict[a].order - lives_dict[b].order;
@@ -139,13 +144,18 @@ Object.keys(lives_dict).sort(function (a, b) {
 
     // start new section if the next group is up
     if (Math.floor(live.id / 1000) !== Math.floor(last_live_id / 1000)) {
-        dump(current_group, s);
+        dump(current_group, s, has_available_songs);
+        has_available_songs = false;
         s = '';
         if (live.id >= 11000 && last_live_id < 11000) current_group = 'aqours';
         if (live.id >= 12000 && last_live_id < 12000) current_group = 'niji';
         if (live.id >= 13000 && last_live_id < 13000) current_group = 'liella';
     }
     last_live_id = live.id;
+
+    if (live.is_available) {
+        has_available_songs = true;
+    }
 
     s += '<ul class="collapsible' + (!live.is_available ? " unavail" : (!live.is_permanent ? " temp" : "")) +
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
@@ -233,7 +243,7 @@ Object.keys(lives_dict).sort(function (a, b) {
     }
 });
 
-dump(current_group, s);
+dump(current_group, s, has_available_songs);
 fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
     function (err) {
         if (err) {
