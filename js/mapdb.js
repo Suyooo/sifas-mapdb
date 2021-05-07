@@ -173,10 +173,9 @@ function pageTabShow(e) {
     }
 
     if ($(e).attr("id") === "tab_search") {
-        loadAllGroupPagesThen(showSearch);
         onSearchTab = true;
+        loadAllGroupPagesThen(showSearch);
         searchInput.trigger("focus");
-        $(".no-available-songs").css("display","none");
 
         // Dumb workaround for Materialize force-hiding the previous tab
         setTimeout($.prototype.show.bind(groupTabs), 1);
@@ -206,11 +205,14 @@ function registerSearch() {
 }
 
 function showSearch(groupPages) {
-    $("#search_loading").hide();
-    groupPages.show();
-    if (currentSearchTimeout === undefined) {
-        // If user finished typing something into input before all the pages finished loading, filter
-        doSearch(searchInput.val());
+    if (onSearchTab) {
+        $("#search_loading").hide();
+        groupPages.show();
+        if (currentSearchTimeout === undefined) {
+            // If user finished typing something into input before all the pages finished loading, filter
+            doSearch(searchInput.val());
+        }
+        $(".no-available-songs").css("display","none");
     }
 }
 
