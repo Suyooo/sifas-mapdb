@@ -84,6 +84,7 @@ function song_name_romaji(live_id) {
     if (lid === "0021") return "Mogyutto &quot;love&quot; de Sekkin Chuu!";
     if (lid === "0089") return "Bokutachi wa Hitotsu no Hikari";
     if (lid === "0005") return "PSYCHIC FIRE";
+    if (lid === "0043") return "Cutie Panther";
     if (lid === "0004") return "Shunjou Romantic";
     if (lid === "0015") return "NO EXIT ORION";
     if (lid === "0059") return "Someday of my life";
