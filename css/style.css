@@ -666,9 +666,10 @@ input[type="checkbox"] + span {
     background-color: var(--background);
 }
 
-.popup-dialog a {
+.popup-dialog .card-action a {
     text-decoration: none !important;
     cursor: pointer;
+    padding: 0.5em;
 }
 
 .popup-dialog ul:not(.browser-default) > li {
