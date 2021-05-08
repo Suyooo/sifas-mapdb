@@ -429,10 +429,12 @@ function toggleDarkMode() {
         body.addClass("dark-mode");
         btnDarkMode.addClass("on");
         M.toast({html: "Enabled Dark Mode (BETA)"});
+        cookieSet("dark-mode", "yes", 365);
     } else {
         body.removeClass("dark-mode");
         btnDarkMode.removeClass("on");
         M.toast({html: "Disabled Dark Mode"});
+        cookieSet("dark-mode", "no", 365);
     }
 }
 
@@ -951,9 +953,9 @@ function closePopUp(eventOrPopUp) {
  * ---------------
  */
 
-const COOKIE_POLICY = "<h5>Cookie Policy</h5>SIFAS Map DB uses cookies to store your preferences for future visits. " +
+const COOKIE_POLICY = "<h5>Cookie Policy</h5>SIFAS Map DB uses cookies to store your dark mode preference. " +
     "It will only do so if you agree to this message.<br>The page is still functional without if you do " +
-    "not allow storage, however, your preferences will be reset on the next visit. No other data is stored, " +
+    "not allow storage, however, the site will default to light mode on every visit. No other data is stored, " +
     "and this information is not saved on the server or used to identify you.<br>You can revoke your consent at " +
     "any time by removing all cookies saved on your device by this site.";
 
