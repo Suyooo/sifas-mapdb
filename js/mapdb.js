@@ -153,8 +153,11 @@ $(function () {
     body.removeClass("loading");
 
     handleLocationHash();
+    window.addEventListener("hashchange", handleLocationHash, { passive: true });
+
     registerHeaderButtons();
     registerSearch();
+    $("#popUpButton, #dialogNoButton").on("click", closePopUp);
 
     initialized = true;
 });
@@ -902,4 +905,91 @@ function onKeyDown(e) {
 }
 
 window.addEventListener("keydown", onKeyDown, { passive: true });
-window.addEventListener("hashchange", handleLocationHash, { passive: true });
+
+/*
+ * ------------------
+ * POPUPS AND DIALOGS
+ * ------------------
+ */
+
+function showPopUp(content) {
+    $('#popUpButton').show(0)[0].focus();
+    $('#dialogYesButton').hide(0);
+    $('#dialogNoButton').hide(0);
+    $('#popUpContent').html(content);
+    let popUp = $('#popUp');
+    popUp.fadeTo(400, 1);
+    popUp.css("pointer-events", "auto");
+}
+
+function showDialog(content, yesFunc) {
+    let popUp = $('#popUp');
+    $('#popUpButton').hide(0);
+    $('#dialogYesButton').show(0).on("click", function () {
+        if (popUp.css("pointer-events") === "auto") {
+            if (yesFunc() !== false) closePopUp(popUp);
+        }
+    })[0].focus();
+    $('#dialogNoButton').show(0);
+    $('#popUpContent').html(content);
+    popUp.fadeTo(400, 1);
+    popUp.css("pointer-events", "auto");
+}
+
+function closePopUp(eventOrPopUp) {
+    // if this method is called with an event object instead of directly...
+    if (eventOrPopUp["type"] == "click") eventOrPopUp = $('#popUp');
+    if (eventOrPopUp.css("pointer-events") === "auto") {
+        eventOrPopUp.fadeTo(400, 0);
+        eventOrPopUp.css("pointer-events", "none");
+    }
+}
+
+/*
+ * ---------------
+ * COOKIE HANDLING
+ * ---------------
+ */
+
+const COOKIE_POLICY = "<h5>Cookie Policy</h5>SIFAS Map DB uses cookies to store your preferences for future visits. " +
+    "It will only do so if you agree to this message.<br>The page is still functional without if you do " +
+    "not allow storage, however, your preferences will be reset on the next visit. No other data is stored, " +
+    "and this information is not saved on the server or used to identify you.<br>You can revoke your consent at " +
+    "any time by removing all cookies saved on your device by this site.";
+
+function cookieSet(key, value, days) {
+    if (document.cookie === "") {
+        showDialog(COOKIE_POLICY + "<br><br>Do you agree with the cookie policy and " +
+            "allow this site to store cookies on your device?",
+            function () {
+                let expiryDate = new Date();
+                expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
+                document.cookie = "cookieConsent=1; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+                if (cookieGet("cookieConsent") === undefined) {
+                    showPopUp("Unable to store cookies. Your browser might be blocking cookie " +
+                        "storage. Please check your browser's privacy and storage settings, then try again.");
+                    return false;
+                }
+                cookieSet(key, value, days);
+            });
+        return false;
+    } else {
+        let expiryDate = new Date();
+        expiryDate.setTime(expiryDate.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = key + "=" + value + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+        return true;
+    }
+}
+
+function cookieGet(key) {
+    let cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        if (eqPos != -1 && cookie.substr(0, eqPos).trim() == key) {
+            return cookie.substr(eqPos + 1, cookie.length).trim();
+        }
+    }
+    return undefined;
+}

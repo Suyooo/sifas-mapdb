@@ -58,7 +58,6 @@ h5 {
     color: var(--key-accented);
     letter-spacing: .05em;
     font-weight: 700;
-    margin-top: 3rem;
 }
 
 .collapsible-header .row, .nomargin {
