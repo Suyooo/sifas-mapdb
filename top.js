@@ -120,7 +120,7 @@ songs_dict["2061"] = {
     "live_id": "2061",
     "attribute": 3,
     "length": 110058,
-    "notes": 0, // Adv note count unknown as of now
+    "notes": 175,
     "is_available": false,
     "can_show_on_profile": false,
     "linked_live_id": null
