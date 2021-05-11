@@ -40,7 +40,7 @@
             </ul>
             <a class="brand-logo center hide-on-small-and-down">Note Map DB</a>
             <ul class="right">
-                <li><a id="toggle_dark_mode" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">brightness_2</i></a></li>
+                <li><a id="show_preferences" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">settings</i></a></li>
                 <li><a id="toggle_romaji" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">translate</i></a></li>
                 <li><a id="toggle_unavailable" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">event_busy</i></a></li>
             </ul>
@@ -91,8 +91,12 @@
             <b>Here's some neat stuff you can do on this page:</b>
             <ul class="browser-default">
                 <li>
-                    Click the buttons in the top right to show romanized song names, show songs that are not available
-                    anymore, or search for a certain song by its name.
+                    Click the buttons in the top right to show romanized song names and show songs that are not
+                    available anymore, or choose your preferences by clicking the gear icon to set those by default on
+                    each visit.
+                </li>
+                <li>
+                    Search for a certain song by its name by clicking the Search icon on the left of the group tabs.
                 </li>
                 <li>
                     Hover over or tap a note gimmick or AC on the timeline to get a popup with the associated
@@ -151,15 +155,53 @@
         <div id="tab_top" class="col s12 unloaded" data-type="top">Loading...</div>
     </div>
 </div>
-<div class="popup-background valign-wrapper" id="popUp">
+<div class="popup-background valign-wrapper" id="popUpCookieConsent">
     <div class="popup-dialog z-depth-5 card">
         <div class="card-content">
-            <p id="popUpContent"></p>
+            <h5>Cookie Policy</h5>
+            SIFAS Map DB uses cookies to store your preferences. It will only do so if you agree to this message.
+            The page is still functional without if you do not allow storage, however, the site will reset to default
+            settings on every visit. No other data is stored, and this information is not saved on the server or used to
+            identify you.<br>
+            You can revoke your consent at any time by removing all cookies saved on your device by this site.<br>
+            <br>
+            Do you agree with the cookie policy and allow this site to store cookies on your device?
         </div>
         <div class="card-action right-align">
-            <a class="orange-text has-on-click" id="popUpButton" tabindex="0">Close</a>
-            <a class="orange-text has-on-click" id="dialogYesButton" tabindex="0">Yes</a>
-            <a class="orange-text has-on-click" id="dialogNoButton" tabindex="0">No</a>
+            <a class="orange-text has-on-click" id="consentYesButton" tabindex="0">Yes</a>
+            <a class="orange-text has-on-click" id="consentNoButton" tabindex="0">No</a>
+        </div>
+    </div>
+</div>
+<div class="popup-background valign-wrapper" id="popUpPreferences">
+    <div class="popup-dialog z-depth-5 card">
+        <div class="card-content">
+            <h5>Preferences</h5>
+            <span class="form-label">Song Titles</span>
+            <div class="radio-row">
+                <input name="preferencesTitles" type="radio" id="preferencesTitlesKana" value="kana" checked>
+                <label for="preferencesTitlesKana">Kana/Kanji</label>
+                <input name="preferencesTitles" type="radio" id="preferencesTitlesRoma" value="roma">
+                <label for="preferencesTitlesRoma">Romaji</label>
+            </div>
+            <span class="form-label">Unavailable Songs</span>
+            <div class="radio-row">
+                <input name="preferencesUnavailable" type="radio" id="preferencesUnavailableHide" value="hide" checked>
+                <label for="preferencesUnavailableHide">Hide</label>
+                <input name="preferencesUnavailable" type="radio" id="preferencesUnavailableShow" value="show">
+                <label for="preferencesUnavailableShow">Show</label>
+            </div>
+            <span class="form-label">Dark Mode (BETA)</span>
+            <div class="radio-row">
+                <input name="preferencesDarkMode" type="radio" id="preferencesDarkModeOff" value="no" checked>
+                <label for="preferencesDarkModeOff">Off</label>
+                <input name="preferencesDarkMode" type="radio" id="preferencesDarkModeOn" value="yes">
+                <label for="preferencesDarkModeOn">On</label>
+            </div>
+        </div>
+        <div class="card-action right-align">
+            <a class="orange-text has-on-click" id="preferencesSaveButton" tabindex="0">Save</a>
+            <a class="orange-text has-on-click" id="preferencesCancelButton" tabindex="0">Cancel</a>
         </div>
     </div>
 </div>

@@ -157,7 +157,7 @@ $(function () {
 
     registerHeaderButtons();
     registerSearch();
-    $("#popUpButton, #dialogNoButton").on("click", closePopUp);
+    initPopUps();
 
     initialized = true;
 });
@@ -412,30 +412,16 @@ function showLinkedDlpFloor(hash, responseText, textStatus) {
  *  HEADER BUTTONS
  *  ----------
  */
-let btnDarkMode = $("#toggle_dark_mode");
+let btnPreferences = $("#show_preferences");
 let showRomaji = false;
 let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
 let btnUnavailable = $("#toggle_unavailable");
 
 function registerHeaderButtons() {
-    btnDarkMode.on("click", toggleDarkMode);
+    btnPreferences.on("click", showPreferences);
     btnRomaji.on("click", toggleRomaji);
     btnUnavailable.on("click", toggleUnavailable);
-}
-
-function toggleDarkMode() {
-    if (!body.hasClass("dark-mode")) {
-        body.addClass("dark-mode");
-        btnDarkMode.addClass("on");
-        M.toast({html: "Enabled Dark Mode (BETA)"});
-        cookieSet("dark-mode", "yes", 365);
-    } else {
-        body.removeClass("dark-mode");
-        btnDarkMode.removeClass("on");
-        M.toast({html: "Disabled Dark Mode"});
-        cookieSet("dark-mode", "no", 365);
-    }
 }
 
 function toggleRomaji() {
@@ -914,37 +900,58 @@ window.addEventListener("keydown", onKeyDown, { passive: true });
  * ------------------
  */
 
-function showPopUp(content) {
-    $('#popUpButton').show(0)[0].focus();
-    $('#dialogYesButton').hide(0);
-    $('#dialogNoButton').hide(0);
-    $('#popUpContent').html(content);
-    let popUp = $('#popUp');
-    popUp.fadeTo(400, 1);
-    popUp.css("pointer-events", "auto");
-}
+let popUpPreferences = $('#popUpPreferences');
+let popUpCookieConsent = $('#popUpCookieConsent');
 
-function showDialog(content, yesFunc) {
-    let popUp = $('#popUp');
-    $('#popUpButton').hide(0);
-    $('#dialogYesButton').show(0).on("click", function () {
-        if (popUp.css("pointer-events") === "auto") {
-            if (yesFunc() !== false) closePopUp(popUp);
+function initPopUps() {
+    let currentPreferences = cookieGet("mapdb-preferences");
+    if (currentPreferences !== undefined) {
+        if (currentPreferences.titles === "roma") {
+            $('#preferencesTitlesRoma').prop("checked", true);
         }
-    })[0].focus();
-    $('#dialogNoButton').show(0);
-    $('#popUpContent').html(content);
+        if (currentPreferences.unavailable === "show") {
+            $('#preferencesUnavailableShow').prop("checked", true);
+        }
+    }
+    if (cookieGet("dark-mode") === "yes") {
+        $('#preferencesDarkModeOn').prop("checked", true);
+    }
+
+    $('#preferencesSaveButton').on("click", savePreferences);
+    $('#preferencesCancelButton').on("click", closePopUp.bind(this, popUpPreferences));
+
+    $('#consentNoButton').on("click", closePopUp.bind(this, popUpCookieConsent));
+}
+
+function openPopUp(popUp) {
     popUp.fadeTo(400, 1);
     popUp.css("pointer-events", "auto");
 }
 
-function closePopUp(eventOrPopUp) {
-    // if this method is called with an event object instead of directly...
-    if (eventOrPopUp["type"] == "click") eventOrPopUp = $('#popUp');
-    if (eventOrPopUp.css("pointer-events") === "auto") {
-        eventOrPopUp.fadeTo(400, 0);
-        eventOrPopUp.css("pointer-events", "none");
+function closePopUp(popUp) {
+    if (popUp.css("pointer-events") === "auto") {
+        popUp.fadeTo(400, 0);
+        popUp.css("pointer-events", "none");
     }
+}
+
+/*
+ * -----------
+ * PREFERENCES
+ * -----------
+ */
+
+function showPreferences() {
+    openPopUp(popUpPreferences);
+    $('#preferencesSaveButton')[0].focus();
+}
+
+function savePreferences() {
+    closePopUp(popUpPreferences);
+    cookieSet(["mapdb-preferences", "dark-mode"], [{
+        "titles": $("input:radio[name=preferencesTitles]:checked").val(),
+        "unavailable": $("input:radio[name=preferencesUnavailable]:checked").val()
+    }, $("input:radio[name=preferencesDarkMode]:checked").val()], 365);
 }
 
 /*
@@ -953,32 +960,39 @@ function closePopUp(eventOrPopUp) {
  * ---------------
  */
 
-const COOKIE_POLICY = "<h5>Cookie Policy</h5>SIFAS Map DB uses cookies to store your dark mode preference. " +
-    "It will only do so if you agree to this message.<br>The page is still functional without if you do " +
-    "not allow storage, however, the site will default to light mode on every visit. No other data is stored, " +
-    "and this information is not saved on the server or used to identify you.<br>You can revoke your consent at " +
-    "any time by removing all cookies saved on your device by this site.";
-
-function cookieSet(key, value, days) {
-    if (document.cookie === "") {
-        showDialog(COOKIE_POLICY + "<br><br>Do you agree with the cookie policy and " +
-            "allow this site to store cookies on your device?",
-            function () {
-                let expiryDate = new Date();
-                expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
-                document.cookie = "cookieConsent=1; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-                if (cookieGet("cookieConsent") === undefined) {
-                    showPopUp("Unable to store cookies. Your browser might be blocking cookie " +
-                        "storage. Please check your browser's privacy and storage settings, then try again.");
-                    return false;
-                }
-                cookieSet(key, value, days);
-            });
+function cookieSet(keys, values, days, createConsentCookie) {
+    if (document.cookie === "" && (createConsentCookie === undefined || createConsentCookie === false)) {
+        openPopUp(popUpCookieConsent);
+        $('#consentYesButton').off("click")
+            .on("click", cookieSet.bind(this, keys, values, days, true))[0].focus();
         return false;
     } else {
+        if (createConsentCookie === true) {
+            closePopUp(popUpCookieConsent);
+            let expiryDate = new Date();
+            expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
+            document.cookie = "cookieConsent=1; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+            if (cookieGet("cookieConsent") === undefined) {
+                alert("Unable to store cookies. Your browser might be blocking cookie " +
+                    "storage. Please check your browser's privacy and storage settings, then try again.");
+                return false;
+            }
+        }
         let expiryDate = new Date();
         expiryDate.setTime(expiryDate.getTime() + (days * 24 * 60 * 60 * 1000));
-        document.cookie = key + "=" + value + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+        if (Array.isArray(keys)) {
+            for (let i = 0; i < keys.length; i++) {
+                document.cookie = keys[i] + "=" + values[i] + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+                if (DEBUG_MODE) {
+                    console.log("Set cookie " + keys[i] + " to " + values[i]);
+                }
+            }
+        } else {
+            document.cookie = keys + "=" + values + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
+            if (DEBUG_MODE) {
+                console.log("Set cookie " + keys + " to " + values);
+            }
+        }
         return true;
     }
 }
