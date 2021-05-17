@@ -259,6 +259,7 @@ song by just using the length of the `notes` array.
 - 187: Base Critical Chance Up, based on the amount of Sk types
 - 193: Critical Power Up, based on the amount of Vo types
 - 210: SP Voltage Gain Up, based on the amount of Sp types
+- 218: Base SP Voltage Gain Up, based on the amount of Sp types
 - 219: Base SP Voltage Gain Up, based on the amount of Sk types
 - 230: Strategy Switch Bonus Up (fixed amount)
 

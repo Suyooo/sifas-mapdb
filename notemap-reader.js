@@ -156,6 +156,7 @@ function song_name_romaji(live_id) {
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2067") return "POWER SPOT!!";
     if (lid === "2066") return "Love Triangle";
+    if (lid === "2070") return "Saika -saika-";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2068") return "Kakushiaji!";
     if (lid === "2065") return "Cheer for you!!";
@@ -306,6 +307,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 187) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 193) return 'gain ' + format(amount / 100) + '% Critical Power for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 210) return 'increase SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
+    if (type_id === 218) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 230) return 'increase the power of their Strategy Switch bonus by ' + format(amount) + ' points';
     throw new Error('Unknown Skill Effect Type ' + type_id);
