@@ -1,3 +1,3 @@
 module.exports = {
-    "current_event_live_ids": [20043]
+    "current_event_live_ids": [undefined]
 };
