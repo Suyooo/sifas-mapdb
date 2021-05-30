@@ -247,15 +247,19 @@ song by just using the length of the `notes` array.
 - 93: Shield Gain (percentage of max)
 - 96: Stamina Restore (percentage of max)
 - 119: Appeal Up, based on the amount of Vo types
+- 128: Stamina Restore (fixed amount), based on the amount of Vo types
 - 130: Stamina Restore (fixed amount), based on the amount of Sp types
 - 132: Stamina Restore (fixed amount), based on the amount of Sk types
 - 134: Stamina Restore (fixed amount), based on the amount of Gd types
+- 137: Base Appeal Up, based on the amount of Vo types
 - 141: Base Appeal Up, based on the amount of Sk types
 - 143: Base Appeal Up, based on the amount of Gd types
 - 163: Skill Activation Chance Up, based on the amount of Sk types
 - 164: Skill Activation Chance Up, based on the amount of Gd types
+- 169: Base Skill Activation Chance Up, based on the amount of Vo types
 - 171: Base Skill Activation Chance Up, based on the amount of Sk types
 - 179: Critical Chance Up, based on the amount of Sk types
+- 185: Base Critical Chance Up, based on the amount of Vo types
 - 187: Base Critical Chance Up, based on the amount of Sk types
 - 193: Critical Power Up, based on the amount of Vo types
 - 210: SP Voltage Gain Up, based on the amount of Sp types
