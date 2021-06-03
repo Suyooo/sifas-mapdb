@@ -153,10 +153,10 @@ $(function () {
     body.removeClass("loading");
 
     // Small hack to handle redirect from old DLP URL if there's no hash specified, so it still goes directly to DLP
-    // This cookie is set in the rewrite rule from .htaccess
+    // This cookie is set in a rewrite rule in the top-level .htaccess
     if (cookieGet("tower-redirect") === "yes") {
-       cookieSet("tower-redirect","no", 0);
-       if (window.location.hash === "") window.location.hash = "#dlp";
+        document.cookie = "tower-redirect=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.suyo.be; path=/sifas;"
+        if (window.location.hash === "") window.location.hash = "#dlp";
     }
 
     handleLocationHash();
