@@ -153,11 +153,20 @@ $(function () {
     body.removeClass("loading");
 
     handleLocationHash();
-    window.addEventListener("hashchange", handleLocationHash, { passive: true });
+    window.addEventListener("hashchange", handleLocationHash, {passive: true});
+
+    let preferenceTitle = cookieGet("mapdb-titles");
+    let preferenceUnavailable = cookieGet("mapdb-unavailable");
+    if (preferenceTitle === "roma") {
+        toggleRomaji(false);
+    }
+    if (preferenceUnavailable === "show") {
+        toggleUnavailable(false);
+    }
 
     registerHeaderButtons();
     registerSearch();
-    initPopUps();
+    initPopUps(preferenceTitle, preferenceUnavailable);
 
     initialized = true;
 });
@@ -190,7 +199,7 @@ function pageTabShow(e) {
         }
         doSearch("");
         onSearchTab = false;
-        $(".no-available-songs").css("display","");
+        $(".no-available-songs").css("display", "");
     }
 }
 
@@ -215,7 +224,7 @@ function showSearch(groupPages) {
             // If user finished typing something into input before all the pages finished loading, filter
             doSearch(searchInput.val());
         }
-        $(".no-available-songs").css("display","none");
+        $(".no-available-songs").css("display", "none");
     }
 }
 
@@ -286,6 +295,7 @@ function resetCollapsibleFiltering() {
  */
 
 let disableHistory = false;
+
 function setURLHash(s) {
     if (!disableHistory) history.pushState(undefined, undefined, "#" + s);
 }
@@ -420,19 +430,19 @@ let btnUnavailable = $("#toggle_unavailable");
 
 function registerHeaderButtons() {
     btnPreferences.on("click", showPreferences);
-    btnRomaji.on("click", toggleRomaji);
-    btnUnavailable.on("click", toggleUnavailable);
+    btnRomaji.on("click", toggleRomaji.bind(this, true));
+    btnUnavailable.on("click", toggleUnavailable.bind(this, true));
 }
 
-function toggleRomaji() {
+function toggleRomaji(showToast) {
     showRomaji = !showRomaji;
     $(".translatable").each(swapTitles);
     if (showRomaji) {
         btnRomaji.addClass("on");
-        M.toast({html: "Showing titles in Romaji"});
+        if (showToast) M.toast({html: "Showing titles in Romaji"});
     } else {
         btnRomaji.removeClass("on");
-        M.toast({html: "Showing titles in Kana/Kanji"});
+        if (showToast) M.toast({html: "Showing titles in Kana/Kanji"});
     }
 }
 
@@ -442,16 +452,16 @@ function swapTitles() {
     $(this).text(new_title);
 }
 
-function toggleUnavailable() {
+function toggleUnavailable(showToast) {
     showUnavailable = !showUnavailable;
     if (showUnavailable) {
         btnUnavailable.addClass("on");
         body.addClass("show-unavail");
-        M.toast({html: "Showing unavailable songs"});
+        if (showToast) M.toast({html: "Showing unavailable songs"});
     } else {
         btnUnavailable.removeClass("on");
         body.removeClass("show-unavail");
-        M.toast({html: "Hiding unavailable songs"});
+        if (showToast) M.toast({html: "Hiding unavailable songs"});
     }
 }
 
@@ -892,7 +902,7 @@ function onKeyDown(e) {
     }
 }
 
-window.addEventListener("keydown", onKeyDown, { passive: true });
+window.addEventListener("keydown", onKeyDown, {passive: true});
 
 /*
  * ------------------
@@ -903,15 +913,12 @@ window.addEventListener("keydown", onKeyDown, { passive: true });
 let popUpPreferences = $('#popUpPreferences');
 let popUpCookieConsent = $('#popUpCookieConsent');
 
-function initPopUps() {
-    let currentPreferences = cookieGet("mapdb-preferences");
-    if (currentPreferences !== undefined) {
-        if (currentPreferences.titles === "roma") {
-            $('#preferencesTitlesRoma').prop("checked", true);
-        }
-        if (currentPreferences.unavailable === "show") {
-            $('#preferencesUnavailableShow').prop("checked", true);
-        }
+function initPopUps(initialPreferenceTitle, initialPreferenceUnavailable) {
+    if (initialPreferenceTitle === "roma") {
+        $('#preferencesTitlesRoma').prop("checked", true);
+    }
+    if (initialPreferenceUnavailable === "show") {
+        $('#preferencesUnavailableShow').prop("checked", true);
     }
     if (cookieGet("dark-mode") === "yes") {
         $('#preferencesDarkModeOn').prop("checked", true);
@@ -948,10 +955,26 @@ function showPreferences() {
 
 function savePreferences() {
     closePopUp(popUpPreferences);
-    cookieSet(["mapdb-preferences", "dark-mode"], [{
-        "titles": $("input:radio[name=preferencesTitles]:checked").val(),
-        "unavailable": $("input:radio[name=preferencesUnavailable]:checked").val()
-    }, $("input:radio[name=preferencesDarkMode]:checked").val()], 365);
+
+    let titlesSet = $("input:radio[name=preferencesTitles]:checked").val();
+    if ((titlesSet === "roma") !== showRomaji) {
+        toggleRomaji(false);
+    }
+
+    let unavailableSet = $("input:radio[name=preferencesUnavailable]:checked").val();
+    if ((unavailableSet === "show") !== showUnavailable) {
+        toggleUnavailable(false);
+    }
+
+    let darkModeSet = $("input:radio[name=preferencesDarkMode]:checked").val();
+    if (darkModeSet === "yes") {
+        body.addClass("dark-mode");
+    } else {
+        body.removeClass("dark-mode");
+    }
+
+    cookieSet(["mapdb-titles", "mapdb-unavailable", "dark-mode"],
+        [titlesSet, unavailableSet, darkModeSet], 365);
 }
 
 /*
