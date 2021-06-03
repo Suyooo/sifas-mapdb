@@ -152,6 +152,13 @@ $(function () {
     pageTabs.options.onShow = pageTabShow;
     body.removeClass("loading");
 
+    // Small hack to handle redirect from old DLP URL if there's no hash specified, so it still goes directly to DLP
+    // This cookie is set in the rewrite rule from .htaccess
+    if (cookieGet("tower-redirect") === "yes") {
+       cookieSet("tower-redirect","no", 0);
+       if (window.location.hash === "") window.location.hash = "#dlp";
+    }
+
     handleLocationHash();
     window.addEventListener("hashchange", handleLocationHash, {passive: true});
 
