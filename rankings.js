@@ -212,8 +212,8 @@ songs.filter(function (e) {
     last = e.notes;
 });
 
-let layout = fs.readFileSync('top.html').toString();
-fs.writeFile('build/top.html', minify(layout.replace("$SHORT", short).replace("$MOST", most), {
+let layout = fs.readFileSync('rankings.html').toString();
+fs.writeFile('build/rankings.html', minify(layout.replace("$SHORT", short).replace("$MOST", most), {
         collapseWhitespace: true
     }),
     function (err) {
