@@ -419,9 +419,10 @@ function make_notemap(live) {
                     marker_length = ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98);
                 }
 
-                s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" style="--gimmicklayer: ' + stack_layer_global +
-                    ';' + '--gimmicklayer-filtered: ' + stack_layer_seperate + '; left: ' + marker_position + '%; ' +
-                    'width:' + marker_length + '%"><div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
+                s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" data-npos="' + (ni + 1) +
+                    '" style="--gimmicklayer: ' + stack_layer_global + ';' + '--gimmicklayer-filtered: ' +
+                    stack_layer_seperate + '; left: ' + marker_position + '%; ' + 'width:' + marker_length + '%">' +
+                    '<div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
                 if (live.note_gimmicks[note.gimmick].finish_type === 2) {
                     s += '<div class="gimmicklength">&nbsp;</div>';
 
@@ -443,7 +444,8 @@ function make_notemap(live) {
 
         let infos = '<div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
             '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
-            '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + '</div>' +
+            '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + ' (' +
+            format(Math.round((total_ac_notes / live.notes.length) * 100)) + '%)</div>' +
             '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>' +
             '<div class="col l6"><b>SP Gauge Size: </b>' + format(live.sp_gauge_max) + '</div>';
         if (live.song_length) {
@@ -451,7 +453,7 @@ function make_notemap(live) {
             let sec = Math.floor(live.song_length % 60000 / 1000);
             infos += '<div class="col l6"><b>Actual Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
         }
-        s = '<div class="row">' + infos + '</div><div class="notebarcontainer"><div class="notebar"' +
+        s = '<div class="row nomargin">' + infos + '</div><div class="notebarcontainer" tabindex="-1"><div class="notebar"' +
             'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
     } else {
         s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';

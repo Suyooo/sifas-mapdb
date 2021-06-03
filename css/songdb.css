@@ -1,3 +1,16 @@
+body.loading {
+    pointer-events: none;
+}
+
+body > .container {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+body:not(.loading) > .container {
+    opacity: 1;
+}
+
 .row, .col {
     width: 100%;
 }
@@ -6,11 +19,45 @@
     width: 3em;
 }
 
+.nav-content {
+    width: 100%;
+}
+
+.nav-content li.tab, .collapsible-header {
+    text-transform: none;
+}
+
+.nav-wrapper .right a {
+    text-decoration: none;
+}
+
+.nav-wrapper .right a.on i {
+    color: var(--key-dark);
+}
+
+nav ul a:hover {
+    background-color: var(--key-normal);
+}
+
+li.hidden-tab {
+    flex-grow: 0 !important;
+}
+
+li.hidden-tab a {
+    width: 0 !important;
+    padding: 0 !important;
+}
+
+div.unloaded {
+    margin-top: 2em;
+    text-align: center;
+    height: 75vh;
+}
+
 h5 {
     color: var(--key-accented);
     letter-spacing: .05em;
     font-weight: 700;
-    margin-top: 3rem;
 }
 
 .collapsible-header .row, .nomargin {
@@ -33,7 +80,7 @@ h5 {
     margin-right: 4em;
 }
 
-.container:not(.show-unavail) .collapsible.unavail {
+body:not(.show-unavail) .collapsible.unavail {
     display: none;
 }
 
@@ -42,22 +89,49 @@ h5 {
     color: var(--dark-border);
 }
 
-.tabs.tabs-transparent {
+.collapsible.temp .collapsible-header b::after {
+    content: " (time-limited)";
+    font-weight: normal;
+}
+.collapsible.unavail .collapsible-header b::after {
+    content: " (unavailable)";
+    font-weight: normal;
+ }
+
+.collapsible-body .tabs.tabs-transparent {
     margin-top: -1rem;
     margin-bottom: 1rem;
 }
 
-.tabs.tabs-transparent .tab a {
+.collapsible-body .tabs.tabs-transparent .tab a {
     color: var(--text);
 }
 
-.tabs.tabs-transparent .tab a.active, .tabs.tabs-transparent .tab a:hover {
+.collapsible-body .tabs.tabs-transparent .tab a.active, .tabs.tabs-transparent .tab a:hover {
     color: var(--text);
 }
 
-.tabs.tabs-transparent .tab a.active {
+.collapsible-body .tabs.tabs-transparent .tab a.active {
     background-color: var(--key-low);
     text-decoration: none;
+}
+
+.collapsible-body .tabs.tabs-transparent.fakeindicator .tab a.active {
+    border-bottom: 5px solid var(--key-normal);
+}
+
+div.group-tab {
+    margin-bottom: -0.5em;
+}
+
+div.group-tab div.no-available-songs {
+    text-align: center;
+    margin-top: 2em;
+    width: 100%;
+}
+
+body.show-unavail div.group-tab div.no-available-songs {
+    display: none;
 }
 
 .tabs.tabs-fixed-width .tab {
@@ -66,6 +140,7 @@ h5 {
 
 .tab img {
     height: 1.4em;
+    width: 1.4em;
     vertical-align: text-bottom;
 }
 
@@ -76,7 +151,7 @@ h5 {
 
 .notebar {
     width: 100%;
-    min-width: 1200px;
+    min-width: 1100px;
     background: var(--text);
     position: relative;
     height: 1em;
@@ -285,10 +360,6 @@ h5 {
 
 .tooltip .col.m6 {
     width: 100%;
-}
-
-.tower.container {
-    max-width: 1400px;
 }
 
 .tower .collapsible-body .collapsible {

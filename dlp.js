@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const fs = require('fs');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
+const hash = require('object-hash');
 
 function tower_name_romaji(tower_id) {
     if (tower_id === 33001) return "Dream Live Parade";
@@ -50,6 +51,11 @@ function make_reward_string(rewards) {
     return rewardstrings.join(", ");
 }
 
+let hashes = {};
+if (fs.existsSync("build/lives/hash.json")) {
+    hashes = JSON.parse(fs.readFileSync("build/lives/hash.json"));
+}
+
 let tower_ids = [];
 let towerdata = {};
 
@@ -63,24 +69,26 @@ fs.readdirSync("tower/.").forEach(function (f) {
 
 tower_ids = tower_ids.sort();
 
-let layout = fs.readFileSync('tower.html').toString();
 let s = "";
+let live_pages_built = 0;
 
 tower_ids.forEach(function (tower_id) {
     let tower = towerdata[tower_id];
-
-    s += '<ul data-tower="' + tower_id + '" class="collapsible" data-collapsible="expandable"><li>' +
-        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
-        tower.name + '</b></div><div class="collapsible-body"><b>Performance Points:</b> ' + tower.pp_at_start +
+    let tower_content = '<b>Performance Points:</b> ' + tower.pp_at_start +
         ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
         ' loveca stars<br><br>';
+
+    s += '<ul id="' + tower_id + '" class="collapsible tower" data-collapsible="expandable"><li>' +
+        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
+        tower.name + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
+        'Loading...</div></li></ul>';
 
     let floor_no = 1;
     tower["floors"].forEach(function (floor) {
         if (floor.floor_type == 1) {
-            s += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
+            tower_content += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
                 '<b>Story Node: ' + floor.story_title + '</b></div>';
-            s += '<div class="progress">&nbsp;</div>';
+            tower_content += '<div class="progress">&nbsp;</div>';
             return;
         }
 
@@ -91,7 +99,40 @@ tower_ids.forEach(function (tower_id) {
             linked_live.note_damage = floor.note_damage;
         }
 
-        s += '<ul class="collapsible" data-floor="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
+        let floor_hash = hash(floor);
+        if (process.argv[2] === "full" || !hashes.hasOwnProperty(floor.live_difficulty_id) || hashes[floor.live_difficulty_id] !== floor_hash) {
+            let floor_content = '<div class="row nomargin">' +
+                // Top information
+                '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
+                '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
+                '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
+                '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
+                '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
+                '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
+                (floor.note_damage_rate ? ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)' : '') +
+                '</div></div>';
+
+            if (linked_live !== undefined) {
+                floor_content += notemap.make(linked_live);
+            } else {
+                floor_content += notemap.make(floor);
+            }
+
+            fs.writeFile('build/lives/' + floor.live_difficulty_id + '.html', minify(floor_content, {
+                    collapseWhitespace: true
+                }),
+                function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                }
+            );
+
+            hashes[floor.live_difficulty_id] = floor_hash;
+            live_pages_built++;
+        }
+
+        tower_content += '<ul class="collapsible floor" id="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
             '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
             'alt="' + notemap.attribute(floor.song_attribute) + '">' +
@@ -105,37 +146,27 @@ tower_ids.forEach(function (tower_id) {
             '<div class="col l3"><b>Cleansable:</b> ' +
             notemap.is_cleansable(linked_live === undefined ? floor.gimmick : linked_live.gimmick) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
-            '</div></div><div class="collapsible-body live-difficulty"><div class="row nomargin">' +
-
-            // Top information
-            '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
-            '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
-            '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
-            '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
-            '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
-            '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
-            (floor.note_damage_rate ? ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)' : '') +
-            '</div></div>';
-
-        if (linked_live !== undefined) {
-            s += notemap.make(linked_live);
-        } else {
-            s += notemap.make(floor);
-        }
-
-        s += '</div></li></ul>';
+            '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
 
         if (floor.reward_progress !== null) {
-            s += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
+            tower_content += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
         } else {
-            s += '<div class="progress">&nbsp;</div>';
+            tower_content += '<div class="progress">&nbsp;</div>';
         }
     });
 
-    s += '</div></li></ul>';
+    fs.writeFile('build/towers/' + tower_id + '.html', minify(tower_content, {
+            collapseWhitespace: true
+        }),
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        }
+    );
 });
 
-fs.writeFile('build/tower.html', minify(layout.replace("$TOWER", s), {
+fs.writeFile('build/dlp.html', minify(s, {
         collapseWhitespace: true
     }),
     function (err) {
@@ -144,3 +175,10 @@ fs.writeFile('build/tower.html', minify(layout.replace("$TOWER", s), {
         }
     }
 );
+fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
+    function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+console.log("    Built " + live_pages_built + " Live page(s).");

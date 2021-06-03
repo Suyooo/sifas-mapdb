@@ -71,6 +71,10 @@ body {
     overflow-y: scroll;
 }
 
+body.keyboard-focused :focus {
+    box-shadow: 0 3px 0 var(--key-accented) inset, 3px 0 0 var(--key-accented) inset, 0 -3px 0 var(--key-accented) inset, -3px 0 0 var(--key-accented) inset;
+}
+
 a:not(.btn), a:not(.btn):active, a:not(.btn):visited, a:not(.btn):hover, a:not(.btn):focus {
     color: var(--key-important);
 }
@@ -103,15 +107,6 @@ nav a {
     color: var(--link) !important;
 }
 
-.nav-extended .container {
-    background: url("../image/headericon_light.svg") no-repeat right;
-    background-size: contain;
-}
-
-.dark-mode .nav-extended .container {
-    background-image: url("../image/headericon_dark.svg");
-}
-
 .nav-content {
     overflow: hidden;
     height: 48px;
@@ -120,6 +115,7 @@ nav a {
 .tabs {
     display: flex;
     height: auto;
+    user-select: none;
 }
 
 .tabs.tabs-transparent .indicator {
@@ -458,7 +454,7 @@ input[type="radio"]:not(.default-radio):checked + label {
     font-weight: bold;
 }
 
-input[type="radio"]:not(.default-radio):focus + label {
+.keyboard-focused input[type="radio"]:not(.default-radio):focus + label {
     background-color: var(--key-low2);
 }
 
@@ -661,9 +657,10 @@ input[type="checkbox"] + span {
     background-color: var(--background);
 }
 
-.popup-dialog a {
+.popup-dialog .card-action a {
     text-decoration: none !important;
     cursor: pointer;
+    padding: 0.5em;
 }
 
 .popup-dialog ul:not(.browser-default) > li {

@@ -164,19 +164,19 @@ songs.filter(function (e) {
     }
     fullrank++;
     let classStr = !e.is_available ? "hidden" : (rank++ % 2 === 0) ? "odd" : "";
-    if (rank > 11) classStr += " hide-if-narrow";
+    if (rank_display >= 11) classStr += " hide-if-narrow";
     if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
 
     let la = "";
     let lb = "";
     if (e.linked_live_id !== null) {
-        la = "<a href='.#live" + e.linked_live_id + "'>";
+        la = "<a onClick='window.location.hash=\"live" + e.linked_live_id + "\";'>";
         lb = "</a>";
     }
 
     short += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
         "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
-        ".png')\">&nbsp;</td><td>" + la + e.name + lb + "</a></td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
+        ".png')\">&nbsp;</td><td>" + la + e.name + lb + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
     last = e.length;
 });
 
@@ -196,13 +196,13 @@ songs.filter(function (e) {
     }
     fullrank++;
     let classStr = !e.can_show_on_profile ? "hidden" : (rank++ % 2 === 0) ? "odd" : "";
-    if (rank > 11) classStr += " hide-if-narrow";
+    if (rank_display >= 11) classStr += " hide-if-narrow";
     if (classStr !== "") classStr = " class='" + classStr.trim() + "'";
 
     let la = "";
     let lb = "";
     if (e.linked_live_id !== null) {
-        la = "<a href='.#live" + e.linked_live_id + "'>";
+        la = "<a onClick='window.location.hash=\"live" + e.linked_live_id + "\";'>";
         lb = "</a>";
     }
 
