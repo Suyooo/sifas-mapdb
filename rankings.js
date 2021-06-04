@@ -62,6 +62,18 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile,
                 "linked_live_id": ldid
             };
+        } else if (json.song_difficulty === 37) {
+            songs_dict[lid+"ch"] = {
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Ch)',
+                "is_advplus": true,
+                "live_id": lid,
+                "attribute": json.song_attribute,
+                "length": json.song_length,
+                "notes": json.notes.length,
+                "is_available": isEventLive ? true : json.extra_info.is_available,
+                "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile,
+                "linked_live_id": ldid
+            };
         }
     }
 });
