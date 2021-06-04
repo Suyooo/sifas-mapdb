@@ -87,7 +87,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "is_permanent": isEventLive ? true : null
             };
         }
-        if (lives_dict[lid].attribute === null || (ldid < 20000000 && songdata[ldid].song_difficulty !== 35)) {
+        if (lives_dict[lid].attribute === null || (ldid < 20000000 && songdata[ldid].song_difficulty !== 35 && songdata[ldid].song_difficulty !== 37)) {
             // prefer info from Free Live, non-Adv+ data
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
             lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;

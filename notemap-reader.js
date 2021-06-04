@@ -45,7 +45,7 @@ function difficulty(diff_id) {
     if (diff_id === 20) return "Intermediate";
     if (diff_id === 30) return "Advanced";
     if (diff_id === 35) return "Advanced+";
-    if (diff_id === 40) return "Challenge";
+    if (diff_id === 37) return "Challenge";
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
@@ -54,7 +54,7 @@ function difficulty_short(diff_id) {
     if (diff_id === 20) return "Int";
     if (diff_id === 30) return "Adv";
     if (diff_id === 35) return "Adv+";
-    if (diff_id === 40) return "Ch";
+    if (diff_id === 37) return "Ch";
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
