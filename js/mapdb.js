@@ -578,6 +578,9 @@ function loadTowerFinish(responseText, textStatus) {
         $(this).html("Failed to load. <a onClick='loadTower($(\"#" + $(this).attr("id") + "\"))'>Retry?</a>");
     } else {
         $(this).removeClass("unloaded");
+        if (showRomaji) {
+            $(".translatable", this).each(swapTitles);
+        }
         dlpTowerCollapsibleOpen(this);
     }
 }
