@@ -22,6 +22,8 @@ const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 
+const WEEKDAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
 function guess_story_stage_difficulty(stage) {
     let minimum_difference = stage.notes.length;
     let minimum_difficulty = 10;
@@ -84,7 +86,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "name": songdata[ldid].song_name,
                 "attribute": isEventLive ? 9 : null,
                 "is_available": isEventLive ? true : null,
-                "is_permanent": isEventLive ? true : null
+                "is_permanent": isEventLive ? true : null,
+                "daily_weekday": null
             };
         }
         if (lives_dict[lid].attribute === null || (ldid < 20000000 && songdata[ldid].song_difficulty !== 35 && songdata[ldid].song_difficulty !== 37)) {
@@ -92,6 +95,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
             lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;
             lives_dict[lid].is_permanent = songdata[ldid].extra_info.is_permanent;
+            lives_dict[lid].daily_weekday = songdata[ldid].extra_info.daily_weekday;
         }
         if (ldid < 30000000) {
             // On Free Live and Event songs, the last digit in the LDID is the version. If it is higher than one, that
@@ -157,11 +161,12 @@ Object.keys(lives_dict).sort(function (a, b) {
         has_available_songs = true;
     }
 
-    s += '<ul class="collapsible' + (!live.is_available ? " unavail" : (!live.is_permanent ? " temp" : "")) +
+    s += '<ul class="collapsible' + (!live.is_available ? " note unavail" : (!live.is_permanent ? " note temp" : (live.daily_weekday !== null ? " note daily" : ""))) +
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
-        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '">' + live.name +
+        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '"' +
+        (live.daily_weekday !== null ? " data-weekday=\"" + WEEKDAYS[live.daily_weekday] + "\"" : "") + '>' + live.name +
         '</b></div><div class="collapsible-body">';
 
     s += '<ul class="tabs tabs-transparent tabs-fixed-width">';

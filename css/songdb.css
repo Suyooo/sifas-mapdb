@@ -89,14 +89,19 @@ body:not(.show-unavail) .collapsible.unavail {
     color: var(--dark-border);
 }
 
+
+.collapsible.note .collapsible-header b::after {
+    font-weight: normal;
+}
 .collapsible.temp .collapsible-header b::after {
     content: " (time-limited)";
-    font-weight: normal;
 }
 .collapsible.unavail .collapsible-header b::after {
     content: " (unavailable)";
-    font-weight: normal;
- }
+}
+.collapsible.daily .collapsible-header b::after {
+    content: " (daily: " attr(data-weekday) ")";
+}
 
 .collapsible-body .tabs.tabs-transparent {
     margin-top: -1rem;
