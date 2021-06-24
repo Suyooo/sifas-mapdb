@@ -166,7 +166,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '"' +
-        (live.daily_weekday !== null ? " data-weekday=\"" + WEEKDAYS[live.daily_weekday] + "\"" : "") + '>' + live.name +
+        (live.daily_weekday !== null ? " data-weekday=\"" + live.daily_weekday.map(x => WEEKDAYS[x]).join(", ") + "\"" : "") + '>' + live.name +
         '</b></div><div class="collapsible-body">';
 
     s += '<ul class="tabs tabs-transparent tabs-fixed-width">';
