@@ -91,8 +91,8 @@ Depending on the Live Type (see above), additional info may be included in the `
 `is_available`: Whether the song is currently playable or in rotation (on the JP version)  
 `is_permanent`: Whether the song is a permanent song (not time-limited)  
 `can_show_on_profile`: Whether the song counts for the highest score/combo fields on player's profiles  
-`daily_weekday`: The weekday number according to ISO 8601 (1 = Monday, 7 = Sunday) of the weekday on which this Daily
-Live is available, or null if this live is not a Daily Live
+`daily_weekday`: An array of weekday numbers according to ISO 8601 (1 = Monday, 7 = Sunday) of the weekday on which this
+Daily Live is available, or null if this live is not a Daily Live
 
 ## Story Stage
 `story_chapter`: The number of the Chapter this Stage appears in (starting from 1, as in-game)  
