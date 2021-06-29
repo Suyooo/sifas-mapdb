@@ -160,6 +160,7 @@ function song_name_romaji(live_id) {
     if (lid === "2067") return "POWER SPOT!!";
     if (lid === "2066") return "Love Triangle";
     if (lid === "2070") return "Saika -saika-";
+    if (lid === "2088") return "THE SECRET NiGHT";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2068") return "Kakushiaji!";
     if (lid === "2065") return "Cheer for you!!";
@@ -259,6 +260,8 @@ function skill_target(target_id) {
     if (target_id === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
     if (target_id === 99) return 'non-Aqours units ';
     if (target_id === 100) return 'non-Niji units ';
+    if (target_id === 104) return 'DiverDiva units ';
+    if (target_id === 107) return 'non-DiverDiva units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 

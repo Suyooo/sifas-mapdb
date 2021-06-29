@@ -161,12 +161,12 @@ Object.keys(lives_dict).sort(function (a, b) {
         has_available_songs = true;
     }
 
-    s += '<ul class="collapsible' + (!live.is_available ? " note unavail" : (!live.is_permanent ? " note temp" : (live.daily_weekday !== null ? " note daily" : ""))) +
+    s += '<ul class="collapsible' + (!live.is_available ? " note unavail" : (!live.is_permanent ? " note temp" : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '"' +
-        (live.daily_weekday !== null ? " data-weekday=\"" + live.daily_weekday.map(x => WEEKDAYS[x]).join(", ") + "\"" : "") + '>' + live.name +
+        (live.daily_weekday !== undefined && live.daily_weekday !== null ? " data-weekday=\"" + live.daily_weekday.map(x => WEEKDAYS[x]).join(", ") + "\"" : "") + '>' + live.name +
         '</b></div><div class="collapsible-body">';
 
     s += '<ul class="tabs tabs-transparent tabs-fixed-width">';

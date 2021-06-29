@@ -210,6 +210,8 @@ song by just using the length of the `notes` array.
 - 98: Vo and Gd Types
 - 99: non-Aqours
 - 100: non-Niji
+- 104: DiverDiva
+- 107: non-DiverDiva
 
 ## Effects
 - 3: SP Gauge Charge (fixed amount)
