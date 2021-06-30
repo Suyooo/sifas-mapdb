@@ -209,6 +209,7 @@ function song_name_romaji(live_id) {
     if (lid === "2050") return "Tsunagaru Connect";
     if (lid === "2030") return "Ketsui no Hikari";
     if (lid === "2038") return "Aoi Kanaria";
+    if (lid === "2997") return "MONSTER GIRLS";
     if (lid === "2998") return "I'm Still...";
     if (lid === "2999") return "Queendom";
 
