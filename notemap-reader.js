@@ -157,6 +157,7 @@ function song_name_romaji(live_id) {
     if (lid === "2057") return "Nijiiro Passions!";
     if (lid === "2058") return "NEO SKY, NEO MAP!";
     if (lid === "2059") return "Yume ga Koko Kara Hajimaru yo";
+    if (lid === "2060") return "Just Believe!!!";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2067") return "POWER SPOT!!";
     if (lid === "2066") return "Love Triangle";
