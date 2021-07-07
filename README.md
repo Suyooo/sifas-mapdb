@@ -262,6 +262,7 @@ song by just using the length of the `notes` array.
 - 164: Skill Activation Chance Up, based on the amount of Gd types
 - 169: Base Skill Activation Chance Up, based on the amount of Vo types
 - 171: Base Skill Activation Chance Up, based on the amount of Sk types
+- 172: Base Skill Activation Chance Up, based on the amount of Gd types
 - 179: Critical Chance Up, based on the amount of Sk types
 - 185: Base Critical Chance Up, based on the amount of Vo types
 - 187: Base Critical Chance Up, based on the amount of Sk types

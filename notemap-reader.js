@@ -169,6 +169,7 @@ function song_name_romaji(live_id) {
     if (lid === "2033") return "Sing & Smile!!";
     if (lid === "2069") return "Make-up session ABC";
     if (lid === "2064") return "Beautiful Moonlight";
+    if (lid === "2072") return "Twinkle Town";
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
     if (lid === "2021") return "Say Good-Bye Namida";
@@ -316,6 +317,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 164) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 169) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 171) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
+    if (type_id === 172) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 179) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 185) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 187) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
