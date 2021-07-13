@@ -3,23 +3,11 @@
 echo "Create build folders..."
 mkdir -p build/lives build/towers
 
-echo "Copy fonts..."
-cp --recursive fonts build
 echo "Copy .htaccess..."
 cp .htaccess build
 
-echo "Copy Library JS..."
-mkdir build/vendor
-for F in vendor/*.js; do
-    echo "    ${F}"
-    cp ${F} build/vendor
-done
-
-echo "Copy Library CSS..."
-for F in vendor/*.css; do
-    echo "    ${F}"
-    purifycss ${F} index.html rankings.html notemap-reader.js mapdb.js dlp.js rankings.js js/mapdb.js vendor/materialize.js -m -o build/${F}
-done
+echo "Copy Vendor Files..."
+cp -r vendor build/vendor
 
 echo "Minify Javascript..."
 mkdir build/js

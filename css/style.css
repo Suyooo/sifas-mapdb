@@ -735,3 +735,18 @@ table.striped > tbody > tr:nth-child(2n+1) {
     left: calc(1.66rem - 12px);
     top: calc(1.33rem - 12px);
 }
+
+.has-tooltip {
+    position: relative;
+    cursor: default;
+}
+
+.has-tooltip::after {
+    content:'';
+    position:absolute;
+    width: 90%;
+    height: 0;
+    left:0;
+    bottom: 2px;
+    border-bottom: 1px dotted var(--text);
+}
