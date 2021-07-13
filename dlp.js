@@ -33,6 +33,7 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33009) return "Dream Live Parade - Cool / Active On Stage -";
     if (tower_id === 33010) return "Dream Live Parade Love Live! Nijigasaki High School Idol Club 3rd Live! School Idol Festival ~ Beginning of The Dream ~";
     if (tower_id === 33011) return "Dream Live Parade - Natural / Elegant On Stage -";
+    if (tower_id === 33012) return "Dream Live Parade - 3rd Years On Stage -";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
