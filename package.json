@@ -21,6 +21,10 @@
         "src": "{files,100.css,300.css,400.css,500.css,700.css,900.css}",
         "target": "vendor/fonts/roboto/"
       },
+      "fuse.js": {
+        "version": "^6.4.6",
+        "src": "dist/fuse.min.js"
+      },
       "jquery": {
         "version": "^3.6.0",
         "src": "dist/jquery.min.js"
