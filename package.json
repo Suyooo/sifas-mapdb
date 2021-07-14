@@ -4,9 +4,10 @@
   "dependencies": {
     "frontend-dependencies": "^2.0.0",
     "html-minifier": "^4.0.0",
-    "object-hash": "^2.1.1",
-    "purify-css": "^1.1.9",
-    "uglify-js": "^3.13.5"
+    "object-hash": "^2.2.0",
+    "pngcrush-bin": "^5.0.1",
+    "purify-css": "^1.2.5",
+    "uglify-js": "^3.13.10"
   },
   "frontendDependencies": {
     "target": "vendor/",
@@ -32,7 +33,8 @@
     }
   },
   "scripts": {
-    "postinstall": "node ./node_modules/frontend-dependencies/index.js"
+    "build": "tools/build.sh",
+    "postinstall": "frontend-dependencies"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.6",
