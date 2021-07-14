@@ -167,6 +167,7 @@ function song_name_romaji(live_id) {
     if (lid === "2068") return "Kakushiaji!";
     if (lid === "2065") return "Cheer for you!!";
     if (lid === "2071") return "Happy Nyan! Days";
+    if (lid === "2090") return "Maze Town";
     if (lid === "2033") return "Sing & Smile!!";
     if (lid === "2069") return "Make-up session ABC";
     if (lid === "2064") return "Beautiful Moonlight";
@@ -265,7 +266,9 @@ function skill_target(target_id) {
     if (target_id === 99) return 'non-Aqours units ';
     if (target_id === 100) return 'non-Niji units ';
     if (target_id === 104) return 'DiverDiva units ';
+    if (target_id === 105) return 'A•ZU•NA units ';
     if (target_id === 107) return 'non-DiverDiva units ';
+    if (target_id === 108) return 'non-A•ZU•NA units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 

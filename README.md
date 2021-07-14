@@ -211,7 +211,9 @@ song by just using the length of the `notes` array.
 - 99: non-Aqours
 - 100: non-Niji
 - 104: DiverDiva
+- 105: A•ZU•NA
 - 107: non-DiverDiva
+- 108: non-A•ZU•NA
 
 ## Effects
 - 3: SP Gauge Charge (fixed amount)
