@@ -1,5 +1,5 @@
 {
-  "name": "sifas-calc",
+  "name": "sifas-mapdb",
   "version": "1.0.0",
   "dependencies": {
     "frontend-dependencies": "^2.0.0",
