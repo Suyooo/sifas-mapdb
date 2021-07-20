@@ -218,6 +218,7 @@ function song_name_romaji(live_id) {
 
     // Liella!
     if (lid === "3001") return "Hajimari wa Kimi no Sora";
+    if (lid === "3002") return "START!! True dreams";
 
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
@@ -306,6 +307,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 84) return 'lose ' + format(amount / 100) + '% Base Appeal';
     if (type_id === 85) return 'lose ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (type_id === 86) return 'lose ' + format(amount / 100) + '% Base Skill Activation Chance';
+    if (type_id === 87) return 'lose ' + format(amount / 100) + '% Base Critical Chance';
     if (type_id === 91) return 'charge SP Gauge by ' + format(amount / 100) + '%';
     if (type_id === 93) return 'gain ' + format(amount / 100) + '% of max stamina as shield';
     if (type_id === 96) return 'restore ' + format(amount / 100) + '% of max stamina';
