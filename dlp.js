@@ -34,6 +34,7 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33010) return "Dream Live Parade Love Live! Nijigasaki High School Idol Club 3rd Live! School Idol Festival ~ Beginning of The Dream ~";
     if (tower_id === 33011) return "Dream Live Parade - Natural / Elegant On Stage -";
     if (tower_id === 33012) return "Dream Live Parade - 3rd Years On Stage -";
+    if (tower_id === 33013) return "Dream Live Parade ~Summer Adventure 2021~";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
@@ -47,6 +48,7 @@ function make_reward_string(rewards) {
         let itemname;
         if (k === "0") itemname = "star";
         else if (k === "19001") itemname = "medal";
+        else if (k === "21041") itemname = "map piece";
         else throw new Error('Unknown Item ID ' + k);
         rewardstrings.push(notemap.format(rewards[k]) + " " + itemname + (rewards[k] === 1 ? "" : "s"));
     })
