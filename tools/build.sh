@@ -6,8 +6,9 @@ mkdir -p build/lives build/towers
 echo "Copy .htaccess..."
 cp .htaccess build
 
-echo "Copy Vendor Files..."
-cp -r vendor build/vendor
+# Only copy vendor files if updated to speed up uploads
+#echo "Copy Vendor Files..."
+#cp -r vendor build/vendor
 
 echo "Minify Javascript..."
 mkdir build/js
