@@ -220,6 +220,7 @@ function song_name_romaji(live_id) {
     // Liella!
     if (lid === "3001") return "Hajimari wa Kimi no Sora";
     if (lid === "3002") return "START!! True dreams";
+    if (lid === "3003") return "Mirai wa Kaze no You ni";
 
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
