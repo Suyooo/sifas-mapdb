@@ -124,6 +124,7 @@ function song_name_romaji(live_id) {
     if (lid === "1010") return "MIRAI TICKET";
     if (lid === "1089") return "smile smile ship Start!";
     if (lid === "1090") return "Future flight";
+    if (lid === "1025") return "Mijuku DREAMER";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1082") return "Amazing Travel DNA";
     if (lid === "1044") return "GALAXY HidE and SeeK";
@@ -311,8 +312,8 @@ function skill_effect(type_id, amount) {
     if (type_id === 86) return 'lose ' + format(amount / 100) + '% Base Skill Activation Chance';
     if (type_id === 87) return 'lose ' + format(amount / 100) + '% Base Critical Chance';
     if (type_id === 91) return 'charge SP Gauge by ' + format(amount / 100) + '%';
-    if (type_id === 93) return 'gain ' + format(amount / 100) + '% of max stamina as shield';
-    if (type_id === 96) return 'restore ' + format(amount / 100) + '% of max stamina';
+    if (type_id === 93) return 'gain ' + format(amount / 100) + '% of max Stamina as shield';
+    if (type_id === 96) return 'restore ' + format(amount / 100) + '% of max Stamina';
     if (type_id === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 128) return 'restore ' + format(amount) + ' points of stamina for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 130) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sp">Sp</span> unit in the formation';
@@ -334,6 +335,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 218) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 230) return 'increase the power of their Strategy Switch bonus by ' + format(amount) + ' points';
+    if (type_id === 263) return 'take ' + format(amount / 100) + '% of max Stamina as damage, bypassing Shield';
     throw new Error('Unknown Skill Effect Type ' + type_id);
 }
 
@@ -363,6 +365,7 @@ function ac_mission(type_id, goal) {
     if (type_id === 7) return 'Appeal with ' + format(goal) + ' unique Units';
     if (type_id === 8) return 'Get ' + format(goal) + ' Criticals';
     if (type_id === 9) return 'Activate ' + format(goal) + ' Tap Skills';
+    if (type_id === 16) return 'Finish the AC with ' + format(goal / 100) + '% of max Stamina or more';
     throw new Error('Unknown AC Mission Type ' + type_id);
 }
 

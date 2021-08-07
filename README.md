@@ -157,6 +157,7 @@ song by just using the length of the `notes` array.
 - 7: Appeal with unique units
 - 8: Get Criticals
 - 9: Activate Tap Skills
+- 16: Keep Stamina above limit (in percent x 100)
 
 ## Gimmick Triggers
 - 1: On AC Start (start note hit or missed)
@@ -273,6 +274,7 @@ song by just using the length of the `notes` array.
 - 218: Base SP Voltage Gain Up, based on the amount of Sp types
 - 219: Base SP Voltage Gain Up, based on the amount of Sk types
 - 230: Strategy Switch Bonus Up (fixed amount)
+- 263: Stamina Damage, bypassing Shield (percentage of max)
 
 ## Finish Conditions
 - 1: until song end
