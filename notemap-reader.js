@@ -174,6 +174,7 @@ function song_name_romaji(live_id) {
     if (lid === "2069") return "Make-up session ABC";
     if (lid === "2064") return "Beautiful Moonlight";
     if (lid === "2072") return "Twinkle Town";
+    if (lid === "2092") return "Swinging!";
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
     if (lid === "2021") return "Say Good-Bye Namida";
@@ -271,8 +272,10 @@ function skill_target(target_id) {
     if (target_id === 100) return 'non-Niji units ';
     if (target_id === 104) return 'DiverDiva units ';
     if (target_id === 105) return 'A•ZU•NA units ';
+    if (target_id === 106) return 'QU4RTZ units ';
     if (target_id === 107) return 'non-DiverDiva units ';
     if (target_id === 108) return 'non-A•ZU•NA units ';
+    if (target_id === 109) return 'non-QU4RTZ units ';
     throw new Error('Unknown Skill Target ' + target_id);
 }
 
