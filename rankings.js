@@ -26,7 +26,7 @@ let songs_dict = {};
 fs.readdirSync("mapdb/.").forEach(function (f) {
     if (f.endsWith(".json")) {
         let ldid = Number(f.substring(0, f.length - 5));
-        let isEventLive = Math.floor(ldid / 1000) === settings.current_event_live_ids[0];
+        let isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(ldid / 1000));
         if (ldid >= 20000000 && !isEventLive) {
             return;
         }
