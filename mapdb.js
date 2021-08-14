@@ -23,21 +23,6 @@ const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 
 const WEEKDAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const relDateFormatObj = new Intl.RelativeTimeFormat('en-GB');
-const absDateFormatObj = new Intl.DateTimeFormat("en", {month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false, timeZone: 'Asia/Tokyo'});
-const h = 1000 * 60 * 60, d = h * 24, w = d * 7, m = d * 30, y = d * 365;
-function relDateFormat(date) {
-    let diff = date - new Date();
-    if (diff > y) return relDateFormatObj.format(Math.floor(diff / y), "year");
-    if (diff > m) return relDateFormatObj.format(Math.floor(diff / m), "month");
-    if (diff > w) return relDateFormatObj.format(Math.floor(diff / w), "week");
-    if (diff > d) return relDateFormatObj.format(Math.floor(diff / d), "day");
-    if (diff > h) return relDateFormatObj.format(Math.floor(diff / h), "hour");
-    else return "less than an hour";
-}
-function absDateFormat(date) {
-    return absDateFormatObj.format(date) + " JST";
-}
 
 function guess_story_stage_difficulty(stage) {
     let minimum_difference = stage.notes.length;
@@ -185,26 +170,20 @@ Object.keys(lives_dict).sort(function (a, b) {
         has_available_songs = true;
     }
 
-    let limitedEndRelative = undefined;
-    let limitedEndAbsolute = undefined;
+    let limitedEnd = undefined;
     if (!live.is_permanent && live.is_available) {
         if (settings.limited_song_deadlines.hasOwnProperty(live.id)) {
-            let endDate = new Date(settings.limited_song_deadlines[live.id] * 1000);
-            limitedEndRelative = "expires " + relDateFormat(endDate);
-            limitedEndAbsolute = absDateFormat(endDate);
-        } else {
-            limitedEndRelative = "unknown expiry date";
+            limitedEnd = settings.limited_song_deadlines[live.id] * 1000;
         }
     }
 
-    s += '<ul class="collapsible' + (!live.is_available ? " note unavail" : (!live.is_permanent ? " note temp" + (limitedEndAbsolute ? " has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
+    s += '<ul class="collapsible' + (!live.is_available ? " note unavail" : (!live.is_permanent ? " note temp" + (limitedEnd ? " has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
         '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '"' +
         (live.daily_weekday !== undefined && live.daily_weekday !== null ? " data-weekday=\"" + live.daily_weekday.map(x => WEEKDAYS[x]).join(", ") + "\"" : "") +
-        (limitedEndRelative ? ' data-end-rel="' + limitedEndRelative + '"' : "") + (limitedEndAbsolute ? ' title="' + limitedEndAbsolute + '"' : "") + '>' + live.name +
-        '</b></div><div class="collapsible-body">';
+        (limitedEnd ? ' data-end="' + limitedEnd + '"' : "") + '>' + live.name + '</b></div><div class="collapsible-body">';
 
     s += '<ul class="tabs tabs-transparent tabs-fixed-width">';
 

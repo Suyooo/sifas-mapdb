@@ -103,6 +103,7 @@ function loadPageFinished(type, page, callback, responseText, textStatus) {
         if (showRomaji) {
             $(".translatable", page).each(swapTitles);
         }
+        $(".collapsible.temp", page).each(setExpiryDates);
         if (callback !== undefined) callback(page);
     }
 }
@@ -558,6 +559,30 @@ function freeLiveStoryTabShow(tabs, e) {
     }
     scrollActiveTabLabelIntoView(tabs);
     setURLHash("live" + $(e).attr("id"));
+}
+
+const relDateFormatObj = new Intl.RelativeTimeFormat("en");
+const absDateFormatObj = new Intl.DateTimeFormat("en", {month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false, timeZone: "Asia/Tokyo"});
+const h = 1000 * 60 * 60, d = h * 24, w = d * 7, m = d * 30, y = d * 365;
+function relDateFormat(date) {
+    let diff = date - new Date();
+    if (diff > y) return "expires in " + relDateFormatObj.format(Math.floor(diff / y), "year");
+    if (diff > m) return "expires in " + relDateFormatObj.format(Math.floor(diff / m), "month");
+    if (diff > w) return "expires in " + relDateFormatObj.format(Math.floor(diff / w), "week");
+    if (diff > d) return "expires in " + relDateFormatObj.format(Math.floor(diff / d), "day");
+    if (diff > h) return "expires in " + relDateFormatObj.format(Math.floor(diff / h), "hour");
+    if (diff > 0) return "expires in less than an hour";
+    return "has expired";
+}
+function absDateFormat(date) {
+    return absDateFormatObj.format(date) + " JST";
+}
+
+function setExpiryDates(page, e) {
+    let name = $(".collapsible-header > .translatable", e);
+    let d = new Date(Number(name.data("end")));
+    name.attr("data-end-formatted", relDateFormat(d));
+    name.attr("title", absDateFormat(d));
 }
 
 /*

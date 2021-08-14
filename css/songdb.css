@@ -95,7 +95,7 @@ body:not(.show-unavail) .collapsible.unavail {
     margin-left: 0.5em;
 }
 .collapsible.temp .collapsible-header b::after {
-    content: "(time-limited, " attr(data-end-rel) ")";
+    content: "(time-limited, " attr(data-end-formatted) ")";
 }
 .collapsible.temp.has-date .collapsible-header b::after {
     border-bottom: 1px dashed var(--dark-border);
