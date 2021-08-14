@@ -572,7 +572,7 @@ function relDateFormat(date) {
     if (diff > d) return "expires " + relDateFormatObj.format(Math.floor(diff / d), "day");
     if (diff > h) return "expires " + relDateFormatObj.format(Math.floor(diff / h), "hour");
     if (diff > 0) return "expires in less than an hour";
-    return "has expired";
+    return undefined;
 }
 function absDateFormat(date) {
     return absDateFormatObj.format(date) + " JST";
@@ -581,8 +581,13 @@ function absDateFormat(date) {
 function setExpiryDates(page, e) {
     let name = $(".collapsible-header > .translatable", e);
     let d = new Date(Number(name.data("end")));
-    name.attr("data-end-formatted", relDateFormat(d));
-    name.attr("title", absDateFormat(d));
+    let r = relDateFormat(d);
+    if (r === undefined) {
+        $(e).removeClass("temp").addClass("unavail");
+    } else {
+        name.attr("data-end-formatted", r);
+        name.attr("title", absDateFormat(d));
+    }
 }
 
 /*
