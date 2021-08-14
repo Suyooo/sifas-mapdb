@@ -92,15 +92,19 @@ body:not(.show-unavail) .collapsible.unavail {
 
 .collapsible.note .collapsible-header b::after {
     font-weight: normal;
+    margin-left: 0.5em;
 }
 .collapsible.temp .collapsible-header b::after {
-    content: " (time-limited)";
+    content: "(time-limited, " attr(data-end-rel) ")";
+}
+.collapsible.temp.has-date .collapsible-header b::after {
+    border-bottom: 1px dashed var(--dark-border);
 }
 .collapsible.unavail .collapsible-header b::after {
-    content: " (unavailable)";
+    content: "(unavailable)";
 }
 .collapsible.daily .collapsible-header b::after {
-    content: " (daily: " attr(data-weekday) ")";
+    content: "(daily: " attr(data-weekday) ")";
 }
 
 .collapsible-body .tabs.tabs-transparent {
