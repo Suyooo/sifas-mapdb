@@ -566,11 +566,11 @@ const absDateFormatObj = new Intl.DateTimeFormat("en", {month: "long", day: "num
 const h = 1000 * 60 * 60, d = h * 24, w = d * 7, m = d * 30, y = d * 365;
 function relDateFormat(date) {
     let diff = date - new Date();
-    if (diff > y) return "expires in " + relDateFormatObj.format(Math.floor(diff / y), "year");
-    if (diff > m) return "expires in " + relDateFormatObj.format(Math.floor(diff / m), "month");
-    if (diff > w) return "expires in " + relDateFormatObj.format(Math.floor(diff / w), "week");
-    if (diff > d) return "expires in " + relDateFormatObj.format(Math.floor(diff / d), "day");
-    if (diff > h) return "expires in " + relDateFormatObj.format(Math.floor(diff / h), "hour");
+    if (diff > y) return "expires " + relDateFormatObj.format(Math.floor(diff / y), "year");
+    if (diff > m) return "expires " + relDateFormatObj.format(Math.floor(diff / m), "month");
+    if (diff > w) return "expires " + relDateFormatObj.format(Math.floor(diff / w), "week");
+    if (diff > d) return "expires " + relDateFormatObj.format(Math.floor(diff / d), "day");
+    if (diff > h) return "expires " + relDateFormatObj.format(Math.floor(diff / h), "hour");
     if (diff > 0) return "expires in less than an hour";
     return "has expired";
 }
