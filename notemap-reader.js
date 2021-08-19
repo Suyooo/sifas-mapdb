@@ -484,17 +484,20 @@ function make_notemap(live) {
     }
 
     s += '<div class="row nomargin">'
-    s += '<div class="col l6 detailinfo"><h5>Gimmicks</h5>';
-    s += '<div><div>Song Gimmick</div><div>';
+    s += '<div class="col l6 detailinfo"><h5>Gimmicks</h5><div><div>Song Gimmick</div><div>';
     if (live.gimmick === null) {
         s += "none";
     } else {
-        let skillstr = skill(live.gimmick);
-        if (live.gimmick.finish_type === 1) {
-            // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
-            skillstr = skillstr.substring(0, skillstr.length - 20);
+        for (let i = 0; i < live.gimmick.length; i++) {
+            if (live.gimmick.length > 1) s += (i + 1) + ') ';
+            let skillstr = skill(live.gimmick[i]);
+            if (live.gimmick[i].finish_type === 1) {
+                // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
+                skillstr = skillstr.substring(0, skillstr.length - 20);
+            }
+            s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick[i]);
+            if (i+1 < live.gimmick.length) s += '<br>';
         }
-        s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick);
     }
     s += '</div></div>';
 

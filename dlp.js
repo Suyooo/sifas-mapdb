@@ -148,7 +148,7 @@ tower_ids.forEach(function (tower_id) {
             '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
-            notemap.is_cleansable(linked_live === undefined ? floor.gimmick : linked_live.gimmick) + '</div>' +
+            notemap.is_cleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0]) ) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
             '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
 
