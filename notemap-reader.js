@@ -489,7 +489,7 @@ function make_notemap(live) {
         s += "none";
     } else {
         for (let i = 0; i < live.gimmick.length; i++) {
-            if (live.gimmick.length > 1) s += (i + 1) + ') ';
+            if (live.gimmick.length > 1) s += '<b>' + (i + 1) + ')</b> ';
             let skillstr = skill(live.gimmick[i]);
             if (live.gimmick[i].finish_type === 1) {
                 // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
