@@ -217,9 +217,11 @@ function song_name_romaji(live_id) {
     if (lid === "2050") return "Tsunagaru Connect";
     if (lid === "2030") return "Ketsui no Hikari";
     if (lid === "2038") return "Aoi Kanaria";
+    if (lid === "2035") return "I'm Still...";
+    if (lid === "2036") return "Queendom";
     if (lid === "2997") return "MONSTER GIRLS";
-    if (lid === "2998") return "I'm Still...";
-    if (lid === "2999") return "Queendom";
+    if (lid === "2998") return "I'm Still... (MV)";
+    if (lid === "2999") return "Queendom (MV)";
 
     // Liella!
     if (lid === "3001") return "Hajimari wa Kimi no Sora";
@@ -325,11 +327,13 @@ function skill_effect(type_id, amount) {
     if (type_id === 132) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 134) return 'restore ' + format(amount) + ' points of stamina for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 137) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t vo">Vo</span> unit in the formation';
+    if (type_id === 139) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 141) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 143) return 'gain ' + format(amount / 100) + '% Base Appeal for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 163) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 164) return 'gain ' + format(amount / 100) + '% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 169) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation';
+    if (type_id === 170) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 171) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 172) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
     if (type_id === 179) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
