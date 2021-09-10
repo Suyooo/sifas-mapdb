@@ -219,7 +219,9 @@ function song_name_romaji(live_id) {
     if (lid === "2030") return "Ketsui no Hikari";
     if (lid === "2038") return "Aoi Kanaria";
     if (lid === "2035") return "I'm Still...";
+    if (lid === "2054") return "Toy Doll";
     if (lid === "2036") return "Queendom";
+    if (lid === "2055") return "Ye Mingzhu";
     if (lid === "2997") return "MONSTER GIRLS";
     if (lid === "2998") return "I'm Still... (MV)";
     if (lid === "2999") return "Queendom (MV)";
