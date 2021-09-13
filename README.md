@@ -192,6 +192,9 @@ song by just using the length of the `notes` array.
 - 66: Elegant
 - 67: Non-Smile
 - 68: Non-Vo Type
+- 69: 1st Years
+- 70: 2nd Years
+- 71: 3rd Years
 - 72: Non-Pure
 - 73: Non-Cool
 - 74: Non-Active
@@ -211,10 +214,15 @@ song by just using the length of the `notes` array.
 - 98: Vo and Gd Types
 - 99: non-Aqours
 - 100: non-Niji
+- 101: non-1st Years
+- 102: non-2nd Years
+- 103: non-3rd Years
 - 104: DiverDiva
 - 105: A•ZU•NA
+- 106: QU4RTZ
 - 107: non-DiverDiva
 - 108: non-A•ZU•NA
+- 109: non-QU4RTZ
 
 ## Effects
 - 3: SP Gauge Charge (fixed amount)
