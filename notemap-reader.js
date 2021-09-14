@@ -602,7 +602,7 @@ function make_notemap(live) {
                 s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of taps must proc)';
             }
             s += '<div class="row nomargin"><div class="col m6 no-padding"><b>Success:</b> ' + format(ac.reward_voltage) +
-                ' Voltage</div>' + '<div class="col m6 no-padding"><b>Failure:</b> ' + format(ac.penalty_damage) + ' Damage</div></div>';
+                ' Voltage</div>' + '<div class="col m6 no-padding"><b>Failure:</b> ' + (ac.penalty_damage !== null ? format(ac.penalty_damage) : "???") + ' Damage</div></div>';
         }
 
         s += '</div></div>';
