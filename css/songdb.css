@@ -3,12 +3,22 @@
     --type-sp: #248ecf; /* original colour */
     --type-gd: #3ea15b; /* original colour */
     --type-sk: #a07200;
+    --type-vo-orig: #cf403d; /* original colour */
+    --type-sp-orig: #248ecf; /* original colour */
+    --type-gd-orig: #3ea15b; /* original colour */
+    --type-sk-orig: #e4b642; /* original colour */
     --attr-s: #dd4aa5; /* original colour */
     --attr-p: #39a85d; /* original colour */
     --attr-c: #0099ee; /* original colour */
     --attr-a: #db3e3e; /* original colour */
     --attr-n: #b98c19;
     --attr-e: #85519c; /* original colour */
+    --attr-s-orig: #dd4aa5; /* original colour */
+    --attr-p-orig: #39a85d; /* original colour */
+    --attr-c-orig: #0099ee; /* original colour */
+    --attr-a-orig: #db3e3e; /* original colour */
+    --attr-n-orig: #edbb3e; /* original colour */
+    --attr-e-orig: #85519c; /* original colour */
 }
 
 .dark-mode {
@@ -120,15 +130,19 @@ body:not(.show-unavail) .collapsible.unavail {
     font-weight: normal;
     margin-left: 0.5em;
 }
+
 .collapsible.temp .collapsible-header b::after {
     content: "(time-limited, " attr(data-end-formatted) ")";
 }
+
 .collapsible.temp.has-date .collapsible-header b::after {
     border-bottom: 1px dashed var(--dark-border);
 }
+
 .collapsible.unavail .collapsible-header b::after {
     content: "(unavailable)";
 }
+
 .collapsible.daily .collapsible-header b::after {
     content: "(daily: " attr(data-weekday) ")";
 }
@@ -206,9 +220,10 @@ body.show-unavail div.group-tab div.no-available-songs {
     top: 0;
     bottom: 0;
     background-color: var(--text);
-    opacity: 0.2;
+    opacity: 0.33;
     pointer-events: none;
 }
+
 .dark-mode .notebar:after {
     opacity: 0.5;
 }
@@ -224,16 +239,19 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .notebar .appealchance.vo {
-    background: var(--type-vo);
+    background: var(--type-vo-orig);
 }
+
 .notebar .appealchance.sp {
-    background: var(--type-sp);
+    background: var(--type-sp-orig);
 }
+
 .notebar .appealchance.gd {
-    background: var(--type-gd);
+    background: var(--type-gd-orig);
 }
+
 .notebar .appealchance.sk {
-    background: var(--type-sk);
+    background: var(--type-sk-orig);
 }
 
 .notebar .note {
@@ -359,16 +377,19 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .detailinfo .appealchance.vo > div:first-child {
-    border-left: .4em solid var(--type-vo);
+    border-left: .4em solid var(--type-vo-orig);
 }
+
 .detailinfo .appealchance.sp > div:first-child {
-    border-left: .4em solid var(--type-sp);
+    border-left: .4em solid var(--type-sp-orig);
 }
+
 .detailinfo .appealchance.gd > div:first-child {
-    border-left: .4em solid var(--type-gd);
+    border-left: .4em solid var(--type-gd-orig);
 }
+
 .detailinfo .appealchance.sk > div:first-child {
-    border-left: .4em solid var(--type-sk);
+    border-left: .4em solid var(--type-sk-orig);
 }
 
 .detailinfo > div {
@@ -604,7 +625,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .fake-collapsible-header {
     display: flex;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.12),0 1px 5px 0 rgba(0,0,0,.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
     text-transform: uppercase;
     background-color: var(--option);
     user-select: none;
