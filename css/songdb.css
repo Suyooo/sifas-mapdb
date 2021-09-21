@@ -358,6 +358,19 @@ body.show-unavail div.group-tab div.no-available-songs {
     margin-top: 0;
 }
 
+.detailinfo .appealchance.vo > div:first-child {
+    border-left: .4em solid var(--type-vo);
+}
+.detailinfo .appealchance.sp > div:first-child {
+    border-left: .4em solid var(--type-sp);
+}
+.detailinfo .appealchance.gd > div:first-child {
+    border-left: .4em solid var(--type-gd);
+}
+.detailinfo .appealchance.sk > div:first-child {
+    border-left: .4em solid var(--type-sk);
+}
+
 .detailinfo > div {
     border: 1px solid var(--border);
     margin-bottom: 1em;
@@ -366,7 +379,6 @@ body.show-unavail div.group-tab div.no-available-songs {
 .detailinfo > div > div:first-child {
     background-color: var(--key-low);
     border-bottom: 1px solid var(--border);
-    padding: .3em .8em .2em;
     font-weight: bold;
     transition: background-color .2s;
 }
@@ -391,8 +403,12 @@ body.show-unavail div.group-tab div.no-available-songs {
     background-color: var(--key-normal);
 }
 
-.detailinfo > div > div:last-child {
+.detailinfo > div > div {
     padding: .3em .8em .2em;
+}
+
+.detailinfo > div.appealchance > div:first-child {
+    padding-left: .4em;
 }
 
 .tooltip {
