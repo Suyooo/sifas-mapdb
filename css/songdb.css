@@ -1,3 +1,29 @@
+:root {
+    --type-vo: #cf403d; /* original colour */
+    --type-sp: #248ecf; /* original colour */
+    --type-gd: #3ea15b; /* original colour */
+    --type-sk: #a07200;
+    --attr-s: #dd4aa5; /* original colour */
+    --attr-p: #39a85d; /* original colour */
+    --attr-c: #0099ee; /* original colour */
+    --attr-a: #db3e3e; /* original colour */
+    --attr-n: #b98c19;
+    --attr-e: #85519c; /* original colour */
+}
+
+.dark-mode {
+    --type-vo: #ff8e8b;
+    --type-sp: #248ecf;
+    --type-gd: #28ca57;
+    --type-sk: #e4b642; /* original colour */
+    --attr-s: #ffb6e3;
+    --attr-p: #16d754;
+    --attr-c: #3cb9ff;
+    --attr-a: #ff8e8e;
+    --attr-n: #edbb3e; /* original colour */
+    --attr-e: #de94ff;
+}
+
 body.loading {
     pointer-events: none;
 }
@@ -406,83 +432,43 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .t.vo {
-    color: #cf403d; /* original colour */
-}
-
-.dark-mode .t.vo {
-    color: #ff8e8b;
+    color: var(--type-vo);
 }
 
 .t.sp {
-    color: #248ecf; /* original colour */
-}
-
-.dark-mode .t.sp {
-    color: #4ebcff;
+    color: var(--type-sp);
 }
 
 .t.gd {
-    color: #3ea15b; /* original colour */
-}
-
-.dark-mode .t.gd {
-    color: #28ca57;
+    color: var(--type-gd);
 }
 
 .t.sk {
-    color: #a07200;
-}
-
-.dark-mode .t.sk {
-    color: #e4b642; /* original colour */
+    color: var(--type-sk);
 }
 
 .a.smile {
-    color: #dd4aa5; /* original colour */
-}
-
-.dark-mode .a.smile {
-    color: #ffb6e3;
+    color: var(--attr-s);
 }
 
 .a.pure {
-    color: #39a85d; /* original colour */
-}
-
-.dark-mode .a.pure {
-    color: #16d754;
+    color: var(--attr-p);
 }
 
 .a.cool {
-    color: #0099ee; /* original colour */
-}
-
-.dark-mode .a.cool {
-    color: #3cb9ff;
+    color: var(--attr-c);
 }
 
 .a.active {
-    color: #db3e3e; /* original colour */
-}
-
-.dark-mode .a.active {
-    color: #ff8e8e;
+    color: var(--attr-a);
 }
 
 .a.natural {
-    color: #b98c19;
-}
-
-.dark-mode .a.natural {
-    color: #edbb3e; /* original colour */
+    color: var(--attr-n);
 }
 
 .a.elegant {
-    color: #85519c; /* original colour */
-}
-
-.dark-mode .a.elegant {
-    color: #de94ff;
+    color: var(--attr-e);
 }
 
 .dark-mode .light-blue.lighten-5 {
