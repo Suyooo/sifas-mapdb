@@ -240,6 +240,7 @@ function song_name_romaji(live_id) {
     if (lid === "3001") return "Hajimari wa Kimi no Sora";
     if (lid === "3002") return "START!! True dreams";
     if (lid === "3003") return "Mirai wa Kaze no You ni";
+    if (lid === "3004") return "Mirai Yohou Hallelujah!";
 
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
@@ -397,6 +398,20 @@ function ac_mission(type_id, goal) {
     throw new Error('Unknown AC Mission Type ' + type_id);
 }
 
+function ac_colour(type_id) {
+    if (type_id === 1) return 'vo';
+    if (type_id === 2) return 'sk';
+    if (type_id === 3) return 'sk';
+    if (type_id === 4) return 'sk';
+    if (type_id === 5) return 'vo';
+    if (type_id === 6) return 'sp';
+    if (type_id === 7) return 'vo';
+    if (type_id === 8) return 'sk';
+    if (type_id === 9) return 'sk';
+    if (type_id === 16) return 'gd';
+    throw new Error('Unknown AC Mission Type ' + type_id);
+}
+
 function make_notemap(live) {
     let s = "";
 
@@ -413,7 +428,7 @@ function make_notemap(live) {
             let start = live.notes[ac.range_note_ids[0]].time;
             let length = live.notes[ac.range_note_ids[1]].time - start;
 
-            s += '<div data-ac="' + ai + '" class="appealchance" style="' +
+            s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '" style="' +
                 'left: ' + ((start - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '%;' +
                 'width: ' + (length / (lastnote_time - firstnote_time) * 98) + '%;">' +
                 '&nbsp;</div>';
@@ -567,7 +582,7 @@ function make_notemap(live) {
     for (let ai = 0; ai < live.appeal_chances.length; ai++) {
         let ac = live.appeal_chances[ai];
 
-        s += '<div data-ac="' + ai + '" class="appealchance"><div>AC ' + format(ai + 1) + ': ' +
+        s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '"><div>AC ' + format(ai + 1) + ': ' +
             ac_mission(ac.mission_type, ac.mission_value) + '</div><div>';
         if (ac.gimmick === null) {
             s += 'No Gimmick<br>';

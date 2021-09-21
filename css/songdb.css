@@ -197,15 +197,43 @@ body.show-unavail div.group-tab div.no-available-songs {
     font-size: 150%;
 }
 
+.notebar:after {
+    content: '';
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: var(--text);
+    opacity: 0.2;
+    pointer-events: none;
+}
+.dark-mode .notebar:after {
+    opacity: 0.5;
+}
+
 .notebar .appealchance {
     position: absolute;
     top: 0;
     height: 100%;
-    background: var(--key-dark);
     font-size: 70%;
     white-space: nowrap;
     user-select: none;
     z-index: 2;
+}
+
+.notebar .appealchance.vo {
+    background: var(--type-vo);
+}
+.notebar .appealchance.sp {
+    background: var(--type-sp);
+}
+.notebar .appealchance.gd {
+    background: var(--type-gd);
+}
+.notebar .appealchance.sk {
+    background: var(--type-sk);
 }
 
 .notebar .note {
@@ -213,7 +241,7 @@ body.show-unavail div.group-tab div.no-available-songs {
     height: 50%;
     background: var(--sidenav);
     width: 2px;
-    z-index: 3;
+    z-index: 4;
     pointer-events: none;
 }
 
@@ -228,7 +256,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 .notebar .hold {
     position: absolute;
     height: 0.25em;
-    z-index: 3;
+    z-index: 4;
     background: repeating-linear-gradient(to right, var(--sidenav) 0%, var(--sidenav) 50%, transparent 50%, transparent 100%);
     background-size: 2px 0.5em;
     pointer-events: none;
@@ -247,7 +275,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .dark-mode .notebar .note.gimmicked {
-    background: darkturquoise;
+    background: darkcyan;
 }
 
 .notebar .gimmick {
