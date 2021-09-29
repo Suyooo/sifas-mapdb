@@ -85,6 +85,7 @@ function song_name_romaji(live_id) {
     if (lid === "0068") return "KiRa-KiRa Sensation!";
     if (lid === "0021") return "Mogyutto &quot;love&quot; de Sekkin Chuu!";
     if (lid === "0089") return "Bokutachi wa Hitotsu no Hikari";
+    if (lid === "0046") return "Takaramonozu";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0043") return "Cutie Panther";
     if (lid === "0004") return "Shunjou Romantic";
@@ -281,6 +282,7 @@ function skill_target(target_id) {
     if (target_id === 78) return 'non-<span class="t gd">Gd</span> units ';
     if (target_id === 79) return 'non-<span class="t sk">Sk</span> units ';
     if (target_id === 83) return 'units in the current strategy ';
+    if (target_id === 86) return 'non-µ\'s units ';
     if (target_id === 87) return 'non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> units ';
     if (target_id === 88) return 'non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units ';
     if (target_id === 89) return 'non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units ';

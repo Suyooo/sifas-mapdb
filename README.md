@@ -204,6 +204,7 @@ song by just using the length of the `notes` array.
 - 78: Non-Gd Types
 - 79: Non-Sk Types
 - 83: Current Strategy
+- 86: Non-µ's
 - 87: Non-Vo or Gd Types
 - 88: Non-Vo or Sp Types
 - 89: Non-Vo or Sk Types
