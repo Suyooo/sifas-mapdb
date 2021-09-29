@@ -413,217 +413,222 @@ function ac_colour(type_id) {
 }
 
 function make_notemap(live) {
-    let s = "";
+    try {
+        let s = "";
 
-    if (live.notes !== null) {
-        let firstnote_time = live.notes[0].time;
-        let lastnote_time = live.notes[live.notes.length - 1].time;
-        // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
-        let length_notes_only = (lastnote_time - firstnote_time) / 98 * 100;
+        if (live.notes !== null) {
+            let firstnote_time = live.notes[0].time;
+            let lastnote_time = live.notes[live.notes.length - 1].time;
+            // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
+            let length_notes_only = (lastnote_time - firstnote_time) / 98 * 100;
 
-        let total_ac_notes = 0;
-        let total_ac_rewards = 0;
-        for (let ai = 0; ai < live.appeal_chances.length; ai++) {
-            let ac = live.appeal_chances[ai];
-            let start = live.notes[ac.range_note_ids[0]].time;
-            let length = live.notes[ac.range_note_ids[1]].time - start;
+            let total_ac_notes = 0;
+            let total_ac_rewards = 0;
+            for (let ai = 0; ai < live.appeal_chances.length; ai++) {
+                let ac = live.appeal_chances[ai];
+                let start = live.notes[ac.range_note_ids[0]].time;
+                let length = live.notes[ac.range_note_ids[1]].time - start;
 
-            s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '" style="' +
-                'left: ' + ((start - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '%;' +
-                'width: ' + (length / (lastnote_time - firstnote_time) * 98) + '%;">' +
-                '&nbsp;</div>';
-            total_ac_notes += ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
-            total_ac_rewards += ac.reward_voltage;
-        }
-
-        let stacker_global = [];
-        let stacker_seperate = [];
-        for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
-            stacker_seperate.push([]);
-        }
-        for (let ni = 0; ni < live.notes.length; ni++) {
-            let note = live.notes[ni];
-
-            s += '<div class="note ' + (note.rail == 1 ? 'top' : 'bottom') + (note.gimmick !== null ? ' gimmicked' : '') +
-                '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1px);">' +
-                '&nbsp;</div>';
-            if (note.type === 2) {
-                let ni2 = ni + 1;
-                while (live.notes[ni2].rail !== note.rail) ni2++;
-                s += '<div class="hold ' + (note.rail == 1 ? 'top' : 'bottom')
-                    + '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1px);' +
-                    'width: ' + ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98) + '%;">' +
+                s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '" style="' +
+                    'left: ' + ((start - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '%;' +
+                    'width: ' + (length / (lastnote_time - firstnote_time) * 98) + '%;">' +
                     '&nbsp;</div>';
+                total_ac_notes += ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
+                total_ac_rewards += ac.reward_voltage;
             }
-            if (note.gimmick !== null) {
-                if (live.note_gimmicks[note.gimmick].counter === undefined) live.note_gimmicks[note.gimmick].counter = 1;
-                else live.note_gimmicks[note.gimmick].counter += 1;
 
-                let marker_position = ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1);
-
-                let stack_layer_global = 0;
-                while (stack_layer_global < stacker_global.length && stacker_global[stack_layer_global] > marker_position) {
-                    stack_layer_global++;
-                }
-                if (stack_layer_global == stacker_global.length) stacker_global.push(0);
-
-                let stack_layer_seperate = 0;
-                while (stack_layer_seperate < stacker_seperate[note.gimmick].length &&
-                stacker_seperate[note.gimmick][stack_layer_seperate] > marker_position) {
-                    stack_layer_seperate++;
-                }
-                if (stack_layer_seperate == stacker_seperate[note.gimmick].length)
-                    stacker_seperate[note.gimmick].push(0);
-
-                let marker_length = 0;
-                if (live.note_gimmicks[note.gimmick].finish_type === 2) {
-                    let ni2 = ni + live.note_gimmicks[note.gimmick].finish_amount;
-                    if (ni2 >= live.notes.length) ni2 = live.notes.length - 1;
-                    marker_length = ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98);
-                }
-
-                s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" data-npos="' + (ni + 1) +
-                    '" style="--gimmicklayer: ' + stack_layer_global + ';' + '--gimmicklayer-filtered: ' +
-                    stack_layer_seperate + '; left: ' + marker_position + '%; ' + 'width:' + marker_length + '%">' +
-                    '<div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
-                if (live.note_gimmicks[note.gimmick].finish_type === 2) {
-                    s += '<div class="gimmicklength">&nbsp;</div>';
-
-                    stacker_global[stack_layer_global] = stacker_seperate[note.gimmick][stack_layer_seperate] = marker_position + marker_length;
-                } else {
-                    // magic value (TM) to avoid too much overlap of start markers
-                    stacker_global[stack_layer_global] = stacker_seperate[note.gimmick][stack_layer_seperate] = marker_position + 0.75;
-                }
-                s += '</div>';
+            let stacker_global = [];
+            let stacker_seperate = [];
+            for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
+                stacker_seperate.push([]);
             }
-            if ((ni + 1) % 5 === 0) {
-                s += '<div class="marker' + ((ni + 1) % 50 === 0 ? ' fifty' : '') + ((ni + 1) % 10 !== 0 ? ' five' : '') +
-                    '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1em);">' +
-                    '|<br>' + (((ni + 1) % 10 === 0) ? format(ni + 1) : "&nbsp;") + '</div>';
+            for (let ni = 0; ni < live.notes.length; ni++) {
+                let note = live.notes[ni];
+
+                s += '<div class="note ' + (note.rail == 1 ? 'top' : 'bottom') + (note.gimmick !== null ? ' gimmicked' : '') +
+                    '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1px);">' +
+                    '&nbsp;</div>';
+                if (note.type === 2) {
+                    let ni2 = ni + 1;
+                    while (live.notes[ni2].rail !== note.rail) ni2++;
+                    s += '<div class="hold ' + (note.rail == 1 ? 'top' : 'bottom')
+                        + '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1px);' +
+                        'width: ' + ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98) + '%;">' +
+                        '&nbsp;</div>';
+                }
+                if (note.gimmick !== null) {
+                    if (live.note_gimmicks[note.gimmick].counter === undefined) live.note_gimmicks[note.gimmick].counter = 1;
+                    else live.note_gimmicks[note.gimmick].counter += 1;
+
+                    let marker_position = ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1);
+
+                    let stack_layer_global = 0;
+                    while (stack_layer_global < stacker_global.length && stacker_global[stack_layer_global] > marker_position) {
+                        stack_layer_global++;
+                    }
+                    if (stack_layer_global == stacker_global.length) stacker_global.push(0);
+
+                    let stack_layer_seperate = 0;
+                    while (stack_layer_seperate < stacker_seperate[note.gimmick].length &&
+                    stacker_seperate[note.gimmick][stack_layer_seperate] > marker_position) {
+                        stack_layer_seperate++;
+                    }
+                    if (stack_layer_seperate == stacker_seperate[note.gimmick].length)
+                        stacker_seperate[note.gimmick].push(0);
+
+                    let marker_length = 0;
+                    if (live.note_gimmicks[note.gimmick].finish_type === 2) {
+                        let ni2 = ni + live.note_gimmicks[note.gimmick].finish_amount;
+                        if (ni2 >= live.notes.length) ni2 = live.notes.length - 1;
+                        marker_length = ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98);
+                    }
+
+                    s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" data-npos="' + (ni + 1) +
+                        '" style="--gimmicklayer: ' + stack_layer_global + ';' + '--gimmicklayer-filtered: ' +
+                        stack_layer_seperate + '; left: ' + marker_position + '%; ' + 'width:' + marker_length + '%">' +
+                        '<div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
+                    if (live.note_gimmicks[note.gimmick].finish_type === 2) {
+                        s += '<div class="gimmicklength">&nbsp;</div>';
+
+                        stacker_global[stack_layer_global] = stacker_seperate[note.gimmick][stack_layer_seperate] = marker_position + marker_length;
+                    } else {
+                        // magic value (TM) to avoid too much overlap of start markers
+                        stacker_global[stack_layer_global] = stacker_seperate[note.gimmick][stack_layer_seperate] = marker_position + 0.75;
+                    }
+                    s += '</div>';
+                }
+                if ((ni + 1) % 5 === 0) {
+                    s += '<div class="marker' + ((ni + 1) % 50 === 0 ? ' fifty' : '') + ((ni + 1) % 10 !== 0 ? ' five' : '') +
+                        '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1em);">' +
+                        '|<br>' + (((ni + 1) % 10 === 0) ? format(ni + 1) : "&nbsp;") + '</div>';
+                }
             }
-        }
 
-        let total_note_damage = live.notes.length * live.note_damage + total_ac_notes * Math.floor(live.note_damage / 10);
+            let total_note_damage = live.notes.length * live.note_damage + total_ac_notes * Math.floor(live.note_damage / 10);
 
-        let infos = '<div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
-            '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
-            '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + ' (' +
-            format(Math.round((total_ac_notes / live.notes.length) * 100)) + '%)</div>' +
-            '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>' +
-            '<div class="col l6"><b>SP Gauge Size: </b>' + format(live.sp_gauge_max) + '</div>';
-        if (live.song_length) {
-            let min = Math.floor(live.song_length / 60000);
-            let sec = Math.floor(live.song_length % 60000 / 1000);
-            infos += '<div class="col l6"><b>Actual Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
-        }
-        s = '<div class="row nomargin">' + infos + '</div><div class="notebarcontainer" tabindex="-1"><div class="notebar"' +
-            'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
-    } else {
-        s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';
-    }
-
-    s += '<div class="row nomargin">'
-    s += '<div class="col l6 detailinfo"><h5>Gimmicks</h5><div><div>Song Gimmick</div><div>';
-    if (live.gimmick === null) {
-        s += "none";
-    } else {
-        for (let i = 0; i < live.gimmick.length; i++) {
-            if (live.gimmick.length > 1) s += '<b>' + (i + 1) + ')</b> ';
-            let skillstr = skill(live.gimmick[i]);
-            if (live.gimmick[i].finish_type === 1) {
-                // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
-                skillstr = skillstr.substring(0, skillstr.length - 20);
+            let infos = '<div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
+                '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
+                '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + ' (' +
+                format(Math.round((total_ac_notes / live.notes.length) * 100)) + '%)</div>' +
+                '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>' +
+                '<div class="col l6"><b>SP Gauge Size: </b>' + format(live.sp_gauge_max) + '</div>';
+            if (live.song_length) {
+                let min = Math.floor(live.song_length / 60000);
+                let sec = Math.floor(live.song_length % 60000 / 1000);
+                infos += '<div class="col l6"><b>Actual Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
             }
-            s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick[i]);
-            if (i+1 < live.gimmick.length) s += '<br>';
-        }
-    }
-    s += '</div></div>';
-
-    for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
-        let noteg = live.note_gimmicks[gi];
-
-        s += '<div data-gimmick="' + gi + '" class="gimmick"><div>Note Gimmick ' + format(gi + 1) + '</div><div>';
-        switch (noteg.trigger) {
-            case 1:
-                s += "If hit, ";
-                break;
-            case 2:
-                s += "If missed, ";
-                break;
-            case 3:
-                s += ""; // always
-                break;
-            case 4:
-                s += 'If hit with a <span class="t vo">Vo</span> unit, ';
-                break;
-            case 5:
-                s += 'If hit with a <span class="t sp">Sp</span> unit, ';
-                break;
-            case 7:
-                s += 'If hit with a <span class="t sk">Sk</span> unit, ';
-                break;
-            default:
-                throw new Error('Unknown Note Gimmick Trigger ' + noteg.trigger);
+            s = '<div class="row nomargin">' + infos + '</div><div class="notebarcontainer" tabindex="-1"><div class="notebar"' +
+                'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
+        } else {
+            s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';
         }
 
-        let skillstr = skill(noteg);
-        if (noteg.trigger === 3) {
-            skillstr = capFirstLetter(skillstr);
-        }
-        s += skillstr;
-        if (noteg.counter !== undefined) {
-            s += '<br><b>Amount:</b> ' + format(noteg.counter) + ' note' + (noteg.counter === 1 ? '' : 's');
+        s += '<div class="row nomargin">'
+        s += '<div class="col l6 detailinfo"><h5>Gimmicks</h5><div><div>Song Gimmick</div><div>';
+        if (live.gimmick === null) {
+            s += "none";
+        } else {
+            for (let i = 0; i < live.gimmick.length; i++) {
+                if (live.gimmick.length > 1) s += '<b>' + (i + 1) + ')</b> ';
+                let skillstr = skill(live.gimmick[i]);
+                if (live.gimmick[i].finish_type === 1) {
+                    // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
+                    skillstr = skillstr.substring(0, skillstr.length - 20);
+                }
+                s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick[i]);
+                if (i+1 < live.gimmick.length) s += '<br>';
+            }
         }
         s += '</div></div>';
-    }
 
-    s += '</div><div class="col l6 detailinfo"><h5>Appeal Chances</h5>';
-    for (let ai = 0; ai < live.appeal_chances.length; ai++) {
-        let ac = live.appeal_chances[ai];
+        for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
+            let noteg = live.note_gimmicks[gi];
 
-        s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '"><div>AC ' + format(ai + 1) + ': ' +
-            ac_mission(ac.mission_type, ac.mission_value) + '</div><div>';
-        if (ac.gimmick === null) {
-            s += 'No Gimmick<br>';
-        } else {
-            switch (ac.gimmick.trigger) {
+            s += '<div data-gimmick="' + gi + '" class="gimmick"><div>Note Gimmick ' + format(gi + 1) + '</div><div>';
+            switch (noteg.trigger) {
                 case 1:
-                    s += (ac.gimmick.finish_type === 4) ? "During this AC, " : "When the AC starts, ";
+                    s += "If hit, ";
                     break;
                 case 2:
-                    s += "On AC Success, ";
+                    s += "If missed, ";
                     break;
                 case 3:
-                    s += "On AC Failure, ";
+                    s += ""; // always
                     break;
                 case 4:
-                    s += "At the end of the AC, ";
+                    s += 'If hit with a <span class="t vo">Vo</span> unit, ';
+                    break;
+                case 5:
+                    s += 'If hit with a <span class="t sp">Sp</span> unit, ';
+                    break;
+                case 7:
+                    s += 'If hit with a <span class="t sk">Sk</span> unit, ';
                     break;
                 default:
-                    throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
+                    throw new Error('Unknown Note Gimmick Trigger ' + noteg.trigger);
             }
-            s += skill(ac.gimmick) + '<br>';
+
+            let skillstr = skill(noteg);
+            if (noteg.trigger === 3) {
+                skillstr = capFirstLetter(skillstr);
+            }
+            s += skillstr;
+            if (noteg.counter !== undefined) {
+                s += '<br><b>Amount:</b> ' + format(noteg.counter) + ' note' + (noteg.counter === 1 ? '' : 's');
+            }
+            s += '</div></div>';
         }
 
-        if (ac.range_note_ids !== null) {
-            let aclength = (ac.range_note_ids[1] - ac.range_note_ids[0] + 1);
-            s += '<b>Length:</b> ' + format(aclength) + ' notes';
-            if (ac.mission_type === 1) {
-                s += ' (avg. ' + format(Math.ceil(ac.mission_value / aclength)) + ' Voltage per note)';
-            } else if (ac.mission_type === 8) {
-                s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of notes must crit)';
-            } else if (ac.mission_type === 9) {
-                s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of taps must proc)';
+        s += '</div><div class="col l6 detailinfo"><h5>Appeal Chances</h5>';
+        for (let ai = 0; ai < live.appeal_chances.length; ai++) {
+            let ac = live.appeal_chances[ai];
+
+            s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '"><div>AC ' + format(ai + 1) + ': ' +
+                ac_mission(ac.mission_type, ac.mission_value) + '</div><div>';
+            if (ac.gimmick === null) {
+                s += 'No Gimmick<br>';
+            } else {
+                switch (ac.gimmick.trigger) {
+                    case 1:
+                        s += (ac.gimmick.finish_type === 4) ? "During this AC, " : "When the AC starts, ";
+                        break;
+                    case 2:
+                        s += "On AC Success, ";
+                        break;
+                    case 3:
+                        s += "On AC Failure, ";
+                        break;
+                    case 4:
+                        s += "At the end of the AC, ";
+                        break;
+                    default:
+                        throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
+                }
+                s += skill(ac.gimmick) + '<br>';
             }
-            s += '<div class="row nomargin"><div class="col m6 no-padding"><b>Success:</b> ' + format(ac.reward_voltage) +
-                ' Voltage</div>' + '<div class="col m6 no-padding"><b>Failure:</b> ' + (ac.penalty_damage !== null ? format(ac.penalty_damage) : "???") + ' Damage</div></div>';
+
+            if (ac.range_note_ids !== null) {
+                let aclength = (ac.range_note_ids[1] - ac.range_note_ids[0] + 1);
+                s += '<b>Length:</b> ' + format(aclength) + ' notes';
+                if (ac.mission_type === 1) {
+                    s += ' (avg. ' + format(Math.ceil(ac.mission_value / aclength)) + ' Voltage per note)';
+                } else if (ac.mission_type === 8) {
+                    s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of notes must crit)';
+                } else if (ac.mission_type === 9) {
+                    s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of taps must proc)';
+                }
+                s += '<div class="row nomargin"><div class="col m6 no-padding"><b>Success:</b> ' + format(ac.reward_voltage) +
+                    ' Voltage</div>' + '<div class="col m6 no-padding"><b>Failure:</b> ' + (ac.penalty_damage !== null ? format(ac.penalty_damage) : "???") + ' Damage</div></div>';
+            }
+
+            s += '</div></div>';
         }
 
-        s += '</div></div>';
+        return s + "</div></div>";
+    } catch (e) {
+        console.log("In Live " + live.live_id + " (Diff " + live.song_difficulty + "):")
+        throw e;
     }
-
-    return s + "</div></div>";
 }
 
 module.exports = {
