@@ -125,7 +125,7 @@ function song_name_romaji(live_id) {
     if (lid === "1017") return "Mattete Ai no Uta";
     if (lid === "1010") return "MIRAI TICKET";
     if (lid === "1089") return "smile smile ship Start!";
-    if (lid === "1090") return "Future flight";
+    if (lid === "1090") return "Future Flight";
     if (lid === "1025") return "Mijuku DREAMER";
     if (lid === "1060") return "WATER BLUE NEW WORLD";
     if (lid === "1005") return "Torikoriko PLEASE!!";
