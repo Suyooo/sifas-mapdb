@@ -76,11 +76,12 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             return;
         }
         
-        // Exceptions: Ignore the temporary daily versions from the JP Summer Adventure 2021 campaign
+        // Exceptions: Ignore the temporary daily versions from Bonus Costume campaigns
         // TODO: Probably just replace this with a "prefer permanent versions over dailies" check
         if (ldid == 10003102 || ldid == 10003202 || ldid == 10003302 ||
             ldid == 11014102 || ldid == 11014202 || ldid == 11014302 ||
-            ldid == 12034102 || ldid == 12034202 || ldid == 12034302) {
+            ldid == 12034102 || ldid == 12034202 || ldid == 12034302 ||
+            ldid == 12074102 || ldid == 12074202 || ldid == 12074302) {
             return;
         }
 
