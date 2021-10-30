@@ -128,6 +128,7 @@ function song_name_romaji(live_id) {
     if (lid === "1090") return "Future Flight";
     if (lid === "1025") return "Mijuku DREAMER";
     if (lid === "1060") return "WATER BLUE NEW WORLD";
+    if (lid === "1036") return "Humming Friend";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1082") return "Amazing Travel DNA";
     if (lid === "1044") return "GALAXY HidE and SeeK";
