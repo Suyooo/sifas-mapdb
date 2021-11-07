@@ -1,5 +1,5 @@
 module.exports = {
-    "current_event_live_ids": [],
+    "current_event_live_ids": [22086],
     "limited_song_deadlines": {
         12069: 1636351140,
         12072: 1636351140,

@@ -177,6 +177,7 @@ function song_name_romaji(live_id) {
     if (lid === "2065") return "Cheer for you!!";
     if (lid === "2071") return "Happy Nyan! Days";
     if (lid === "2090") return "Maze Town";
+    if (lid === "2086") return "Dream Land! Dream World!";
     if (lid === "2033") return "Sing & Smile!!";
     if (lid === "2069") return "Make-up session ABC";
     if (lid === "2064") return "Beautiful Moonlight";
