@@ -148,12 +148,14 @@ songs_dict["2061"] = {
 
 /* Ignore songs for length ranking: Remove old versions of songs that became permanent later */
 songs_dict["2020"].length = 0;      // Love U my friends(2D)
+songs_dict["2032"].length = 0;      // Dream Land, Dream World!
 songs_dict["2040"].length = 0;      // 虹色Passions！
 songs_dict["2041"].length = 0;      // NEO SKY, NEO MAP!
 songs_dict["2051"].length = 0;      // 夢がここからはじまるよ
 songs_dict["2053"].length = 0;      // Just Believe!!!
 
 /* Avoid mixups */
+songs_dict["2032"].name += " (2D)"; // Dream Land, Dream World!
 songs_dict["2040"].name += " (2D)"; // 虹色Passions！
 songs_dict["2041"].name += " (2D)"; // NEO SKY, NEO MAP!
 songs_dict["2051"].name += " (2D)"; // 夢がここからはじまるよ
