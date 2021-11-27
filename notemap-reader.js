@@ -249,6 +249,7 @@ function song_name_romaji(live_id) {
     if (lid === "3002") return "START!! True dreams";
     if (lid === "3003") return "Mirai wa Kaze no You ni";
     if (lid === "3004") return "Mirai Yohou Hallelujah!";
+    if (lid === "3007") return "Wish Song";
 
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
