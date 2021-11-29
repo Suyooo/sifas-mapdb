@@ -87,6 +87,7 @@ function song_name_romaji(live_id) {
     if (lid === "0089") return "Bokutachi wa Hitotsu no Hikari";
     if (lid === "0046") return "Takaramonozu";
     if (lid === "0006") return "Dancing stars on me!";
+    if (lid === "0032") return "Kitto Seishun ga Kikoeru";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0043") return "Cutie Panther";
     if (lid === "0004") return "Shunjou Romantic";
