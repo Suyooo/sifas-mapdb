@@ -39,6 +39,7 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33015) return "Dream Live Parade ~We Are Challengers~";
     if (tower_id === 33016) return "Dream Live Parade ~Sp Types On Stage~";
     if (tower_id === 33017) return "Dream Live Parade ~Gd Types On Stage~";
+    if (tower_id === 33019) return "All Stars Special Dream Live Parade 2021";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
@@ -54,6 +55,7 @@ function make_reward_string(rewards) {
         else if (k === "19001") itemname = "medal";
         else if (k === "21041") itemname = "map piece";
         else if (k === "21044") itemname = "memory fragment";
+        else if (k === "21059") itemname = "star fragment";
         else throw new Error('Unknown Item ID ' + k);
         rewardstrings.push(notemap.format(rewards[k]) + " " + itemname + (rewards[k] === 1 ? "" : "s"));
     })
