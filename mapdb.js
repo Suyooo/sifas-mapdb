@@ -81,7 +81,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         if (ldid == 10003102 || ldid == 10003202 || ldid == 10003302 ||
             ldid == 11014102 || ldid == 11014202 || ldid == 11014302 ||
             ldid == 12034102 || ldid == 12034202 || ldid == 12034302 ||
-            ldid == 12074102 || ldid == 12074202 || ldid == 12074302) {
+            ldid == 12074102 || ldid == 12074202 || ldid == 12074302 ||
+            ldid == 10011102 || ldid == 10011202 || ldid == 10011302) {
             return;
         }
 
