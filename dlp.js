@@ -62,9 +62,13 @@ function make_reward_string(rewards) {
     return rewardstrings.join(", ");
 }
 
-let hashes = {};
+let hashes_live = {};
+let hashes_tower = {};
 if (fs.existsSync("build/lives/hash.json")) {
-    hashes = JSON.parse(fs.readFileSync("build/lives/hash.json"));
+    hashes_live = JSON.parse(fs.readFileSync("build/lives/hash.json"));
+}
+if (fs.existsSync("build/towers/hash.json")) {
+    hashes_tower = JSON.parse(fs.readFileSync("build/towers/hash.json"));
 }
 
 let tower_ids = [];
@@ -94,6 +98,9 @@ tower_ids.forEach(function (tower_id) {
         tower.name + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
         'Loading...</div></li></ul>';
 
+    let tower_hash = hash(tower);
+    let tower_update = process.argv[2] === "full" || !hashes_tower.hasOwnProperty(tower_id) || hashes_tower[tower_id] !== tower_hash;
+
     let floor_no = 1;
     tower["floors"].forEach(function (floor) {
         if (floor.floor_type == 1) {
@@ -111,7 +118,10 @@ tower_ids.forEach(function (tower_id) {
         }
 
         let floor_hash = hash(floor);
-        if (process.argv[2] === "full" || !hashes.hasOwnProperty(floor.live_difficulty_id) || hashes[floor.live_difficulty_id] !== floor_hash) {
+        if (process.argv[2] === "full" || !hashes_live.hasOwnProperty(floor.live_difficulty_id) || hashes_live[floor.live_difficulty_id] !== floor_hash) {
+            // Update tower page as well since the header information might have changed
+            tower_update = true;
+
             let floor_content = '<div class="row nomargin">' +
                 // Top information
                 '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
@@ -139,7 +149,7 @@ tower_ids.forEach(function (tower_id) {
                 }
             );
 
-            hashes[floor.live_difficulty_id] = floor_hash;
+            hashes_live[floor.live_difficulty_id] = floor_hash;
             live_pages_built++;
         }
 
@@ -155,7 +165,7 @@ tower_ids.forEach(function (tower_id) {
             '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
-            notemap.is_cleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0]) ) + '</div>' +
+            notemap.is_cleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0])) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
             '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
 
@@ -166,15 +176,18 @@ tower_ids.forEach(function (tower_id) {
         }
     });
 
-    fs.writeFile('build/towers/' + tower_id + '.html', minify(tower_content, {
-            collapseWhitespace: true
-        }),
-        function (err) {
-            if (err) {
-                return console.log(err);
+    if (tower_update) {
+        fs.writeFile('build/towers/' + tower_id + '.html', minify(tower_content, {
+                collapseWhitespace: true
+            }),
+            function (err) {
+                if (err) {
+                    return console.log(err);
+                }
             }
-        }
-    );
+        );
+        hashes_tower[tower_id] = tower_hash;
+    }
 });
 
 fs.writeFile('build/dlp.html', minify(s, {
@@ -186,7 +199,13 @@ fs.writeFile('build/dlp.html', minify(s, {
         }
     }
 );
-fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
+fs.writeFile('build/lives/hash.json', JSON.stringify(hashes_live),
+    function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+fs.writeFile('build/towers/hash.json', JSON.stringify(hashes_tower),
     function (err) {
         if (err) {
             return console.log(err);
