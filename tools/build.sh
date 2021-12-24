@@ -49,13 +49,13 @@ if [ "$1" = "full" ]; then
   echo "Build all DLP pages..."
   node dlp.js full
   echo "Build Rankings page..."
-  node rankings.js
+  node rankings.js full
 else
   echo "Build updated Note Map DB pages..."
   node mapdb.js
   echo "Build updated DLP pages..."
   node dlp.js
-  echo "Build Rankings page..."
+  echo "Update Rankings page if needed..."
   node rankings.js
 fi
 

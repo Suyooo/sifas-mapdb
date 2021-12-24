@@ -20,6 +20,7 @@ const fs = require('fs');
 const settings = require('./settings.js');
 const notemap = require('./notemap-reader.js');
 const minify = require('html-minifier').minify;
+const hash = require('object-hash');
 
 let songs_dict = {};
 
@@ -35,7 +36,9 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         // TODO: Probably just replace this with a "prefer permanent versions over dailies" check
         if (ldid == 10003102 || ldid == 10003202 || ldid == 10003302 ||
             ldid == 11014102 || ldid == 11014202 || ldid == 11014302 ||
-            ldid == 12034102 || ldid == 12034202 || ldid == 12034302) {
+            ldid == 12034102 || ldid == 12034202 || ldid == 12034302 ||
+            ldid == 12074102 || ldid == 12074202 || ldid == 12074302 ||
+            ldid == 10011102 || ldid == 10011202 || ldid == 10011302) {
             return;
         }
 
@@ -163,6 +166,16 @@ songs_dict["2041"].name += " (2D)"; // NEO SKY, NEO MAP!
 songs_dict["2051"].name += " (2D)"; // 夢がここからはじまるよ
 songs_dict["2053"].name += " (2D)"; // Just Believe!!!
 
+let rankings_hash = hash(songs_dict);
+let hashes = {};
+if (fs.existsSync("build/lives/hash.json")) {
+    hashes = JSON.parse(fs.readFileSync("build/lives/hash.json"));
+}
+if (process.argv[2] !== "full" && hashes.hasOwnProperty("rankings") && hashes["rankings"] === rankings_hash) {
+    console.log("    No update needed.")
+    return;
+}
+
 let songs = Object.keys(songs_dict).map(function (e) {
     return songs_dict[e];
 });
@@ -240,6 +253,8 @@ songs.filter(function (e) {
     last = e.notes;
 });
 
+console.log("    Built page.");
+hashes["rankings"] = rankings_hash;
 let layout = fs.readFileSync('rankings.html').toString();
 fs.writeFile('build/rankings.html', minify(layout.replace("$SHORT", short).replace("$MOST", most), {
         collapseWhitespace: true
@@ -250,3 +265,9 @@ fs.writeFile('build/rankings.html', minify(layout.replace("$SHORT", short).repla
         }
     }
 );
+fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
+    function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
