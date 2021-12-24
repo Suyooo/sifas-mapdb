@@ -137,6 +137,7 @@ let s = ''
 let current_group = 'muse';
 let last_live_id = 0;
 let live_pages_built = 0;
+let list_update = false;
 let has_available_songs = false;
 
 Object.keys(lives_dict).sort(function (a, b) {
@@ -159,8 +160,10 @@ Object.keys(lives_dict).sort(function (a, b) {
 
     // start new section if the next group is up
     if (Math.floor(live.id / 1000) !== Math.floor(last_live_id / 1000)) {
-        dump(current_group, s, has_available_songs);
-        has_available_songs = false;
+        if (list_update) {
+            dump(current_group, s, has_available_songs);
+        }
+        list_update = has_available_songs = false;
         s = '';
         if (live.id >= 11000 && last_live_id < 11000) current_group = 'aqours';
         if (live.id >= 12000 && last_live_id < 12000) current_group = 'niji';
@@ -200,6 +203,8 @@ Object.keys(lives_dict).sort(function (a, b) {
         let live_diff_hash = hash(live_diff);
 
         if (process.argv[2] === "full" || !hashes.hasOwnProperty(live_difficulty_id) || hashes[live_difficulty_id] !== live_diff_hash) {
+            list_update = true;
+
             let tab_content = '<div class="row nomargin">' +
 
                 // Top information
@@ -266,7 +271,9 @@ Object.keys(lives_dict).sort(function (a, b) {
     }
 });
 
-dump(current_group, s, has_available_songs);
+if (list_update) {
+    dump(current_group, s, has_available_songs);
+}
 fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
     function (err) {
         if (err) {

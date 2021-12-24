@@ -85,6 +85,7 @@ fs.readdirSync("tower/.").forEach(function (f) {
 tower_ids = tower_ids.sort();
 
 let s = "";
+let list_update = false;
 let live_pages_built = 0;
 
 tower_ids.forEach(function (tower_id) {
@@ -177,6 +178,7 @@ tower_ids.forEach(function (tower_id) {
     });
 
     if (tower_update) {
+        list_update = true;
         fs.writeFile('build/towers/' + tower_id + '.html', minify(tower_content, {
                 collapseWhitespace: true
             }),
@@ -190,15 +192,17 @@ tower_ids.forEach(function (tower_id) {
     }
 });
 
-fs.writeFile('build/dlp.html', minify(s, {
-        collapseWhitespace: true
-    }),
-    function (err) {
-        if (err) {
-            return console.log(err);
+if (list_update) {
+    fs.writeFile('build/dlp.html', minify(s, {
+            collapseWhitespace: true
+        }),
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
         }
-    }
-);
+    );
+}
 fs.writeFile('build/lives/hash.json', JSON.stringify(hashes_live),
     function (err) {
         if (err) {

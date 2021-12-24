@@ -27,18 +27,18 @@ done
 echo "Minify Index page..."
 html-minifier --collapse-whitespace -o build/index.html index.html
 
-echo "Build updated Note Map DB pages..."
-node mapdb.js
-echo "Build updated DLP pages..."
-node dlp.js
-echo "Build Rankings page..."
-node rankings.js
-
 echo "Crush PNG images..."
 mkdir build/image
 for F in image/*.png; do
     echo "    ${F}"
     pngcrush -s -rem gAMA -rem cHRM -rem iCCP -rem sRGB -rem alla -rem text ${F} build/${F}
 done
+
+echo "Build updated Note Map DB pages..."
+node mapdb.js
+echo "Build updated DLP pages..."
+node dlp.js
+echo "Build Rankings page..."
+node rankings.js
 
 echo "Done."
