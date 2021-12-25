@@ -708,7 +708,7 @@ function dlpFloorCollapsibleInit() {
 }
 
 function dlpFloorCollapsibleOpen(towerPageName) {
-    addHistoryItem("floor" + $(this).attr("id"), towerPageName);
+    addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $("b.translatable", $(this)).text());
     if ($(this).data("initialized") === undefined) {
         $(this).data("initialized", 1);
         loadNoteMap($(".live-difficulty", this));
