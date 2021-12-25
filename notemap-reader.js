@@ -377,6 +377,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 230) return 'increase the power of their Strategy Switch bonus by ' + format(amount) + ' points';
     if (type_id === 263) return 'take ' + format(amount / 100) + '% of max Stamina as damage, bypassing Shield';
+    if (type_id === 265) return 'block Healing';
     throw new Error('Unknown Skill Effect Type ' + type_id);
 }
 
