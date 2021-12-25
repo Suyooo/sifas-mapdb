@@ -61,11 +61,6 @@ function scrollActiveTabLabelIntoView(tabs) {
     }
 }
 
-function setPageName(page) {
-    if (page === undefined) document.title = PAGE_TITLE;
-    else document.title = page + PAGE_TITLE_SEP + PAGE_TITLE;
-}
-
 /*
  *  ----------
  *  PAGE LOADING
@@ -190,33 +185,31 @@ let onSearchTab = false;
 function pageTabShow(e) {
     scrollActiveTabLabelIntoView(pageTabs);
 
-    setURLHash(currentPage = $(e).attr("id").substring(4));
+    let pagename = undefined;
     switch ($(e).attr("id")) {
         case "tab_search":
-            setPageName("Search");
+            pagename = "Search";
             break;
         case "tab_muse":
-            setPageName("µ's");
+            pagename = "µ's";
             break;
         case "tab_aqours":
-            setPageName("Aqours");
+            pagename = "Aqours";
             break;
         case "tab_niji":
-            setPageName("Nijigaku");
+            pagename = "Nijigaku";
             break;
         case "tab_liella":
-            setPageName("Liella!");
+            pagename = "Liella!";
             break;
         case "tab_dlp":
-            setPageName("DLP");
+            pagename = "DLP";
             break;
         case "tab_rankings":
-            setPageName("Rankings");
-            break;
-        default:
-            setPageName();
+            pagename = "Rankings";
             break;
     }
+    addHistoryItem(currentPage = $(e).attr("id").substring(4), pagename);
 
     loadPageThen(e, afterSwitchCallback);
     afterSwitchCallback = undefined;
@@ -338,8 +331,10 @@ function resetCollapsibleFiltering() {
 
 let disableHistory = false;
 
-function setURLHash(s) {
+function addHistoryItem(s, page) {
     if (!disableHistory) history.pushState(undefined, undefined, "#" + s);
+    if (page === undefined) document.title = PAGE_TITLE;
+    else document.title = page + PAGE_TITLE_SEP + PAGE_TITLE;
 }
 
 function handleLocationHash() {
@@ -546,13 +541,15 @@ function freeLiveCollapsibleOpen() {
         tabs = M.Tabs.getInstance(tabElements[0]);
     }
 
+    let location, pagename;
     if (tabs.$activeTabLink.attr("href").endsWith("story")) {
-        setURLHash("live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1));
-        setPageName($("b.translatable", this.el).text() + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")");
+        location = "live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1);
+        pagename = $("b.translatable", this.el).text() + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")";
     } else {
-        setURLHash("live" + tabs.$activeTabLink.attr("href").substring(1));
-        setPageName($("b.translatable", this.el).text() + " (" + tabs.$activeTabLink.text() + ")");
+        location = "live" + tabs.$activeTabLink.attr("href").substring(1);
+        pagename = $("b.translatable", this.el).text() + " (" + tabs.$activeTabLink.text() + ")";
     }
+    addHistoryItem(location, pagename);
 
     let activetab = $(tabs.$activeTabLink.attr("href"), this.el);
     if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -562,33 +559,31 @@ function freeLiveCollapsibleOpen() {
 }
 
 function outerCollapsibleClose() {
-    setURLHash(currentPage);
+    let pagename = undefined;
     switch (currentPage) {
         case "search":
-            setPageName("Search");
+            pagename = "Search";
             break;
         case "muse":
-            setPageName("µ's");
+            pagename = "µ's";
             break;
         case "aqours":
-            setPageName("Aqours");
+            pagename = "Aqours";
             break;
         case "niji":
-            setPageName("Nijigaku");
+            pagename = "Nijigaku";
             break;
         case "liella":
-            setPageName("Liella!");
+            pagename = "Liella!";
             break;
         case "dlp":
-            setPageName("DLP");
+            pagename = "DLP";
             break;
         case "rankings":
-            setPageName("Rankings");
-            break;
-        default:
-            setPageName();
+            pagename = "Rankings";
             break;
     }
+    addHistoryItem(currentPage, pagename);
 }
 
 function freeLiveTabShow(tabs, e) {
@@ -597,15 +592,13 @@ function freeLiveTabShow(tabs, e) {
             $(e).data("initialized", 1);
             loadNoteMap($(e));
         }
-        setURLHash("live" + $(e).attr("id"));
-        setPageName($("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink.text().trim() + ")");
+        addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink.text().trim() + ")");
     } else {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
         tabs.forceTabIndicator();
-        setURLHash("live" + tabs.$activeTabLink.attr("href").substring(1));
-        setPageName($("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
+        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -622,8 +615,7 @@ function freeLiveStoryTabShow(tabs, e) {
         loadNoteMap($(e));
     }
     scrollActiveTabLabelIntoView(tabs);
-    setURLHash("live" + $(e).attr("id"));
-    setPageName($("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
+    addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
 }
 
 const relDateFormatObj = new Intl.RelativeTimeFormat("en");
@@ -704,29 +696,27 @@ function dlpTowerCollapsibleInit() {
 function dlpTowerCollapsibleOpen(e) {
     let towerLink = "tower" + $(e).attr("id").substring(15);
     $(".collapsible.floor", e).collapsible().each(dlpFloorCollapsibleInit);
-    setURLHash(towerLink);
-    setPageName($($("b.translatable", $(e).parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
+    addHistoryItem(towerLink, $($("b.translatable", $(e).parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
 }
 
 function dlpFloorCollapsibleInit() {
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
     let towerPageName = $($("b.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
-    collapsible.options.onOpenStart = dlpFloorCollapsibleOpen;
+    collapsible.options.onOpenStart = dlpFloorCollapsibleOpen.bind(this, towerPageName);
     collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(this, towerLink, towerPageName);
 }
 
-function dlpFloorCollapsibleOpen() {
-    setURLHash("floor" + this.$el.attr("id"));
-    if (this.$el.data("initialized") === undefined) {
-        this.$el.data("initialized", 1);
-        loadNoteMap($(".live-difficulty", this.el));
+function dlpFloorCollapsibleOpen(towerPageName) {
+    addHistoryItem("floor" + $(this).attr("id"), towerPageName);
+    if ($(this).data("initialized") === undefined) {
+        $(this).data("initialized", 1);
+        loadNoteMap($(".live-difficulty", this));
     }
 }
 
 function dlpFloorCollapsibleClose(towerLink, towerPageName) {
-    setURLHash(towerLink);
-    setPageName(towerPageName);
+    addHistoryItem(towerLink, towerPageName);
 }
 
 /*
