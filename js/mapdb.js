@@ -671,7 +671,6 @@ function setExpiryDates(page, e) {
 
 function loadTower(e, id, callback) {
     if (e.data("initialized") === undefined) {
-        e.data("initialized", 1);
         e.load((DEBUG_MODE ? "build/" : "") + "towers/" + id + ".html", callback);
     } else {
         dlpTowerCollapsibleOpen(e);
@@ -682,6 +681,7 @@ function loadTowerFinish(responseText, textStatus) {
     if (textStatus === "error") {
         $(this).html("Failed to load. <a onClick='loadTower($(\"#" + $(this).attr("id") + "\")," + $(this).attr("id").split("tower-floorlist")[1] + ",loadTowerFinish)'>Retry?</a>");
     } else {
+        $(this).data("initialized", 1);
         $(this).removeClass("unloaded");
         if (showRomaji) {
             $(".translatable", this).each(swapTitles);
