@@ -427,7 +427,7 @@ function showLinkedDlp(hash, page) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
         if (hash.startsWith("#floor")) {
             let floorList = $("#tower-floorlist" + towerId);
-            loadTower(floorList, towerId, showLinkedDlpFloor.bind(floorList, hash));
+            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, hash));
             towerCollapsible.instantOpen(0);
         } else {
             scrollToAndFocusCollapsible(targetElement);
@@ -437,8 +437,12 @@ function showLinkedDlp(hash, page) {
     }
 }
 
-function showLinkedDlpFloor(hash, responseText, textStatus) {
+function showLinkedDlpFloor1(hash, responseText, textStatus) {
     loadTowerFinish.bind(this, responseText, textStatus)();
+    setTimeout(showLinkedDlpFloor2.bind(this, hash, responseText, textStatus), 1);
+}
+
+function showLinkedDlpFloor2(hash, responseText, textStatus) {
     if (textStatus !== "error") {
         let targetElement = $("#" + hash.substring(6), this);
         if (targetElement.length) {
