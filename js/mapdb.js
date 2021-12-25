@@ -189,15 +189,8 @@ let onSearchTab = false;
 
 function pageTabShow(e) {
     scrollActiveTabLabelIntoView(pageTabs);
+
     setURLHash(currentPage = $(e).attr("id").substring(4));
-    loadPageThen(e, afterSwitchCallback);
-    afterSwitchCallback = undefined;
-
-    if (currentSearchTimeout !== undefined) {
-        clearTimeout(currentSearchTimeout);
-        currentSearchTimeout = undefined;
-    }
-
     switch ($(e).attr("id")) {
         case "tab_search":
             setPageName("Search");
@@ -223,6 +216,14 @@ function pageTabShow(e) {
         default:
             setPageName();
             break;
+    }
+
+    loadPageThen(e, afterSwitchCallback);
+    afterSwitchCallback = undefined;
+
+    if (currentSearchTimeout !== undefined) {
+        clearTimeout(currentSearchTimeout);
+        currentSearchTimeout = undefined;
     }
 
     if ($(e).attr("id") === "tab_search") {
