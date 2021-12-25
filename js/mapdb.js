@@ -1,5 +1,6 @@
 const DEBUG_MODE = true;
-//let current_filter_timeout = undefined;
+const PAGE_TITLE = "SIFAS Note Map Database";
+const PAGE_TITLE_SEP = " • ";
 
 M.Collapsible.prototype.instantOpen = function (i) {
     let tmp = this.options.inDuration;
@@ -58,6 +59,11 @@ function scrollActiveTabLabelIntoView(tabs) {
     if (leftSidePos < 0) {
         container.scrollLeft(container.scrollLeft() + leftSidePos - 50);
     }
+}
+
+function setPageName(page) {
+    if (page === undefined) document.title = PAGE_TITLE;
+    else document.title = page + PAGE_TITLE_SEP + PAGE_TITLE;
 }
 
 /*
@@ -190,6 +196,33 @@ function pageTabShow(e) {
     if (currentSearchTimeout !== undefined) {
         clearTimeout(currentSearchTimeout);
         currentSearchTimeout = undefined;
+    }
+
+    switch ($(e).attr("id")) {
+        case "tab_search":
+            setPageName("Search");
+            break;
+        case "tab_muse":
+            setPageName("µ's");
+            break;
+        case "tab_aqours":
+            setPageName("Aqours");
+            break;
+        case "tab_niji":
+            setPageName("Nijigaku");
+            break;
+        case "tab_liella":
+            setPageName("Liella!");
+            break;
+        case "tab_dlp":
+            setPageName("DLP");
+            break;
+        case "tab_rankings":
+            setPageName("Rankings");
+            break;
+        default:
+            setPageName();
+            break;
     }
 
     if ($(e).attr("id") === "tab_search") {
@@ -514,8 +547,10 @@ function freeLiveCollapsibleOpen() {
 
     if (tabs.$activeTabLink.attr("href").endsWith("story")) {
         setURLHash("live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1));
+        setPageName($("b.translatable", this.el).text() + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")");
     } else {
         setURLHash("live" + tabs.$activeTabLink.attr("href").substring(1));
+        setPageName($("b.translatable", this.el).text() + " (" + tabs.$activeTabLink.text() + ")");
     }
 
     let activetab = $(tabs.$activeTabLink.attr("href"), this.el);
@@ -527,6 +562,32 @@ function freeLiveCollapsibleOpen() {
 
 function outerCollapsibleClose() {
     setURLHash(currentPage);
+    switch (currentPage) {
+        case "search":
+            setPageName("Search");
+            break;
+        case "muse":
+            setPageName("µ's");
+            break;
+        case "aqours":
+            setPageName("Aqours");
+            break;
+        case "niji":
+            setPageName("Nijigaku");
+            break;
+        case "liella":
+            setPageName("Liella!");
+            break;
+        case "dlp":
+            setPageName("DLP");
+            break;
+        case "rankings":
+            setPageName("Rankings");
+            break;
+        default:
+            setPageName();
+            break;
+    }
 }
 
 function freeLiveTabShow(tabs, e) {
@@ -536,12 +597,14 @@ function freeLiveTabShow(tabs, e) {
             loadNoteMap($(e));
         }
         setURLHash("live" + $(e).attr("id"));
+        setPageName($("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink.text().trim() + ")");
     } else {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
         tabs.forceTabIndicator();
         setURLHash("live" + tabs.$activeTabLink.attr("href").substring(1));
+        setPageName($("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -559,11 +622,20 @@ function freeLiveStoryTabShow(tabs, e) {
     }
     scrollActiveTabLabelIntoView(tabs);
     setURLHash("live" + $(e).attr("id"));
+    setPageName($("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
 }
 
 const relDateFormatObj = new Intl.RelativeTimeFormat("en");
-const absDateFormatObj = new Intl.DateTimeFormat("en", {month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false, timeZone: "Asia/Tokyo"});
+const absDateFormatObj = new Intl.DateTimeFormat("en", {
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+    timeZone: "Asia/Tokyo"
+});
 const h = 1000 * 60 * 60, d = h * 24, w = d * 7, m = d * 30, y = d * 365;
+
 function relDateFormat(date) {
     let diff = date - new Date();
     if (diff > y) return "expires " + relDateFormatObj.format(Math.floor(diff / y), "year");
@@ -574,6 +646,7 @@ function relDateFormat(date) {
     if (diff > 0) return "expires in less than an hour";
     return undefined;
 }
+
 function absDateFormat(date) {
     return absDateFormatObj.format(date) + " JST";
 }
@@ -600,12 +673,14 @@ function loadTower(e, id, callback) {
     if (e.data("initialized") === undefined) {
         e.data("initialized", 1);
         e.load((DEBUG_MODE ? "build/" : "") + "towers/" + id + ".html", callback);
+    } else {
+        dlpTowerCollapsibleOpen(e);
     }
 }
 
 function loadTowerFinish(responseText, textStatus) {
     if (textStatus === "error") {
-        $(this).html("Failed to load. <a onClick='loadTower($(\"#" + $(this).attr("id") + "\"))'>Retry?</a>");
+        $(this).html("Failed to load. <a onClick='loadTower($(\"#" + $(this).attr("id") + "\")," + $(this).attr("id").split("tower-floorlist")[1] + ",loadTowerFinish)'>Retry?</a>");
     } else {
         $(this).removeClass("unloaded");
         if (showRomaji) {
@@ -629,13 +704,15 @@ function dlpTowerCollapsibleOpen(e) {
     let towerLink = "tower" + $(e).attr("id").substring(15);
     $(".collapsible.floor", e).collapsible().each(dlpFloorCollapsibleInit);
     setURLHash(towerLink);
+    setPageName($($("b.translatable", $(e).parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
 }
 
 function dlpFloorCollapsibleInit() {
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
+    let towerPageName = $($("b.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = dlpFloorCollapsibleOpen;
-    collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(this, towerLink);
+    collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(this, towerLink, towerPageName);
 }
 
 function dlpFloorCollapsibleOpen() {
@@ -646,8 +723,9 @@ function dlpFloorCollapsibleOpen() {
     }
 }
 
-function dlpFloorCollapsibleClose(towerLink) {
+function dlpFloorCollapsibleClose(towerLink, towerPageName) {
     setURLHash(towerLink);
+    setPageName(towerPageName);
 }
 
 /*
@@ -873,7 +951,7 @@ function onKeyDown(e) {
         }
 
         let tabName = $(newTab).attr("href");
-        if (tabName !== "#tab_top") {
+        if (tabName !== "#tab_rankings") {
             afterSwitchCallback = setFocusToFirstFocusable;
         } else {
             newTab.focus();

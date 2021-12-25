@@ -244,7 +244,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         } else {
             // Shortened difficulty plus location for story stages, always show attribute
             this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :
-                (live_diff.extra_info.story_is_hard_mode ? "HARD" : "NORMAL") + " ") + live_diff.extra_info.story_chapter +
+                (live_diff.extra_info.story_is_hard_mode ? "Hard" : "Normal") + " ") + live_diff.extra_info.story_chapter +
                 '-' + live_diff.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live_diff) +
                 ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
                 notemap.attribute(live_diff.song_attribute) + '">)'
@@ -263,7 +263,7 @@ Object.keys(lives_dict).sort(function (a, b) {
     });
 
     if (story_tabs.length > 0) {
-        s += live_tabbar + '<li class="tab"><a href="#' + live.id + '-story" tabindex="-1">STORY STAGES</a></li></ul>' +
+        s += live_tabbar + '<li class="tab"><a href="#' + live.id + '-story" tabindex="-1">Story Stages</a></li></ul>' +
             live_tabs + '<div id="' + live.id + '-story"><ul class="tabs tabs-transparent tabs-fixed-width" tabindex="-1">' +
             story_tabbar + '</ul>' + story_tabs + '</div></div></li></ul>';
     } else {
