@@ -669,8 +669,6 @@ function setExpiryDates(page, e) {
 function loadTower(e, id, callback) {
     if (e.data("initialized") === undefined) {
         e.load((DEBUG_MODE ? "build/" : "") + "towers/" + id + ".html", callback);
-    } else {
-        dlpTowerCollapsibleOpen(e);
     }
 }
 
@@ -679,6 +677,7 @@ function loadTowerFinish(responseText, textStatus) {
         $(this).html("Failed to load. <a onClick='loadTower($(\"#" + $(this).attr("id") + "\")," + $(this).attr("id").split("tower-floorlist")[1] + ",loadTowerFinish)'>Retry?</a>");
     } else {
         $(this).data("initialized", 1);
+        $(".collapsible.floor", this).collapsible().each(dlpFloorCollapsibleInit);
         $(this).removeClass("unloaded");
         if (showRomaji) {
             $(".translatable", this).each(swapTitles);
@@ -692,17 +691,18 @@ function initPageDlp(page) {
 
 function dlpTowerCollapsibleInit() {
     let collapsible = M.Collapsible.getInstance(this);
-    collapsible.options.onOpenStart = loadTower.bind(this, $("#tower-floorlist" + $(this).attr("id")), $(this).attr("id"), loadTowerFinish);
+    collapsible.options.onOpenStart = dlpTowerCollapsibleOpen;
     collapsible.options.onCloseStart = outerCollapsibleClose;
 }
 
-function dlpTowerCollapsibleOpen(e) {
-    let towerLink = "tower" + $(e).attr("id").substring(15);
-    $(".collapsible.floor", e).collapsible().each(dlpFloorCollapsibleInit);
-    addHistoryItem(towerLink, $($("b.translatable", $(e).parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
+function dlpTowerCollapsibleOpen() {
+    loadTower($("#tower-floorlist" + this.$el.attr("id")), this.$el.attr("id"), loadTowerFinish);
+    let towerLink = "tower" + this.$el.attr("id");
+    addHistoryItem(towerLink, $($("b.translatable", this.$el)[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
 }
 
 function dlpFloorCollapsibleInit() {
+    console.log(this);
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
     let towerPageName = $($("b.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
