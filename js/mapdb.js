@@ -427,8 +427,7 @@ function showLinkedDlp(hash, page) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
         if (hash.startsWith("#floor")) {
             let floorList = $("#tower-floorlist" + towerId);
-            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, hash));
-            towerCollapsible.instantOpen(0);
+            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, hash, towerCollapsible));
         } else {
             scrollToAndFocusCollapsible(targetElement);
             towerCollapsible.instantOpen(0);
@@ -437,8 +436,9 @@ function showLinkedDlp(hash, page) {
     }
 }
 
-function showLinkedDlpFloor1(hash, responseText, textStatus) {
+function showLinkedDlpFloor1(hash, towerCollapsible, responseText, textStatus) {
     loadTowerFinish.bind(this, responseText, textStatus)();
+    towerCollapsible.instantOpen(0);
     setTimeout(showLinkedDlpFloor2.bind(this, hash, responseText, textStatus), 1);
 }
 
@@ -683,7 +683,6 @@ function loadTowerFinish(responseText, textStatus) {
         if (showRomaji) {
             $(".translatable", this).each(swapTitles);
         }
-        dlpTowerCollapsibleOpen(this);
     }
 }
 
