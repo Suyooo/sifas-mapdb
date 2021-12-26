@@ -14,9 +14,8 @@ if [ "$1" != "update" ]; then
   echo "Copy .htaccess..."
   cp .htaccess build
 
-  # Only copy vendor files if updated to speed up uploads
-  #echo "Copy Vendor Files..."
-  #cp -r vendor build/vendor
+  echo "Copy Vendor Files..."
+  cp -r vendor build/vendor
 
   echo "Minify Javascript..."
   mkdir -p build/js
