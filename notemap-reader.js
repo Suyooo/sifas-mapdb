@@ -188,6 +188,7 @@ function song_name_romaji(live_id) {
     if (lid === "2072") return "Twinkle Town";
     if (lid === "2092") return "Swinging!";
     if (lid === "2093") return "Not Sad";
+    if (lid === "2087") return "Sing & Smile!!";
     if (lid === "2056") return "MONSTER GIRLS";
     if (lid === "2002") return "Yume e no Ippo";
     if (lid === "2011") return "Kaika Sengen";
