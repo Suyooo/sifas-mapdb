@@ -153,6 +153,7 @@ songs_dict["2061"] = {
 songs_dict["2020"].length = 0;      // Love U my friends(2D)
 songs_dict["2031"].length = 0;      // SUPER NOVA
 songs_dict["2032"].length = 0;      // Dream Land, Dream World!
+songs_dict["2033"].length = 0;      // Sing & Smile!!
 songs_dict["2040"].length = 0;      // 虹色Passions！
 songs_dict["2041"].length = 0;      // NEO SKY, NEO MAP!
 songs_dict["2051"].length = 0;      // 夢がここからはじまるよ
@@ -161,6 +162,7 @@ songs_dict["2053"].length = 0;      // Just Believe!!!
 /* Avoid mixups */
 songs_dict["2031"].name += " (2D)"; // SUPER NOVA
 songs_dict["2032"].name += " (2D)"; // Dream Land, Dream World!
+songs_dict["2033"].name += " (2D)"; // Sing & Smile!!
 songs_dict["2040"].name += " (2D)"; // 虹色Passions！
 songs_dict["2041"].name += " (2D)"; // NEO SKY, NEO MAP!
 songs_dict["2051"].name += " (2D)"; // 夢がここからはじまるよ
