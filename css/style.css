@@ -154,6 +154,11 @@ nav a {
     z-index: 0;
 }
 
+.collapsible-body .tab .material-icons {
+    padding-top: 0.45em;
+    vertical-align: top;
+}
+
 #notification {
     display: none;
     padding-top: 1px;

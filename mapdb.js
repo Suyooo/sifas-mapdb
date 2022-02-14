@@ -95,8 +95,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "order": songdata[ldid].display_order,
                 "name": songdata[ldid].song_name,
                 "attribute": isEventLive ? 9 : null,
-                "is_available": isEventLive ? true : null,
-                "is_permanent": isEventLive ? true : null,
+                "is_all_unavailable": isEventLive ? false : true,
+                "is_any_permanent": isEventLive ? true : null,
                 "daily_weekday": null
             };
         }
@@ -104,10 +104,13 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         if (lives_dict[lid].attribute === null || (ldid < 20000000 && songdata[ldid].song_difficulty !== 35 && songdata[ldid].song_difficulty !== 37)) {
             // prefer info from Free Live, non-Adv+ data
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
-            lives_dict[lid].is_available = songdata[ldid].extra_info.is_available;
-            lives_dict[lid].is_permanent = songdata[ldid].extra_info.is_permanent;
             lives_dict[lid].daily_weekday = songdata[ldid].extra_info.daily_weekday;
         }
+        if (ldid < 20000000) {
+            lives_dict[lid].is_all_unavailable = (!songdata[ldid].extra_info.is_available) && lives_dict[lid].is_all_unavailable;
+            lives_dict[lid].is_any_permanent = songdata[ldid].extra_info.is_permanent || lives_dict[lid].is_any_permanent;
+        }
+
         if (ldid < 30000000) {
             // On Free Live and Event songs, the last digit in the LDID is the version. If it is higher than one, that
             // means there has been an update to it - so we can filter out older versions to make sure to only show
@@ -148,7 +151,6 @@ Object.keys(lives_dict).sort(function (a, b) {
     //console.log(live);
     live_difficulty_ids[live.id] = live_difficulty_ids[live.id].sort(function (a, b) {
         if (a < 30000000 || b < 30000000) {
-            return a - b;
         } else {
             // Sort Story Stages by chapter and mode, not LDI (LDIs are only in the same order from Chapter 8 onwards)
             return (songdata[a].extra_info.story_chapter * 1000 + songdata[a].extra_info.story_stage * 10 +
@@ -171,18 +173,18 @@ Object.keys(lives_dict).sort(function (a, b) {
     }
     last_live_id = live.id;
 
-    if (live.is_available) {
+    if (!live.is_all_unavailable) {
         has_available_songs = true;
     }
 
     let limitedEnd = undefined;
-    if (!live.is_permanent && live.is_available) {
+    if (!live.is_any_permanent && !live.is_all_unavailable) {
         if (settings.limited_song_deadlines.hasOwnProperty(live.id)) {
             limitedEnd = settings.limited_song_deadlines[live.id] * 1000;
         }
     }
 
-    s += '<ul class="collapsible' + (!live.is_available ? " note unavail" : (!live.is_permanent ? " note temp" + (limitedEnd ? " has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
+    s += '<ul class="collapsible' + (live.is_all_unavailable ? " note unavail" : (!live.is_any_permanent ? " note temp" + (limitedEnd ? " has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
@@ -240,7 +242,9 @@ Object.keys(lives_dict).sort(function (a, b) {
             // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
             this_tabbar += notemap.difficulty(live_diff.song_difficulty) + (live_diff.song_attribute != live.attribute ?
                 ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
-                notemap.attribute(live_diff.song_attribute) + '">' : '');
+                notemap.attribute(live_diff.song_attribute) + '">' : '') +
+                (live_difficulty_id < 20000000 && !live_diff.extra_info.is_available && !live.is_all_unavailable ?
+                    '<i class="material-icons" title="Unavailable">event_busy</i>' : '');
         } else {
             // Shortened difficulty plus location for story stages, always show attribute
             this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :
