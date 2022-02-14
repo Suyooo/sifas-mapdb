@@ -61,6 +61,13 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile,
                 "linked_live_id": ldid
             };
+            // Make sure to show in length ranking even if only Adv+ or Challenge are available
+            if (songs_dict[lid+"plus"]) {
+                songs_dict[lid].is_available = songs_dict[lid].is_available || songs_dict[lid+"plus"].is_available;
+            }
+            if (songs_dict[lid+"ch"]) {
+                songs_dict[lid].is_available = songs_dict[lid].is_available || songs_dict[lid+"ch"].is_available;
+            }
         } else if (json.song_difficulty === 35) {
             songs_dict[lid+"plus"] = {
                 "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Adv+)',
@@ -73,6 +80,10 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile,
                 "linked_live_id": ldid
             };
+            // Make sure to show in length ranking even if only Adv+ or Challenge are available
+            if (songs_dict[lid]) {
+                songs_dict[lid].is_available = songs_dict[lid].is_available || songs_dict[lid+"plus"].is_available;
+            }
         } else if (json.song_difficulty === 37) {
             songs_dict[lid+"ch"] = {
                 "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Ch)',
@@ -85,6 +96,10 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "can_show_on_profile": isEventLive ? false : json.extra_info.can_show_on_profile,
                 "linked_live_id": ldid
             };
+            // Make sure to show in length ranking even if only Adv+ or Challenge are available
+            if (songs_dict[lid]) {
+                songs_dict[lid].is_available = songs_dict[lid].is_available || songs_dict[lid+"ch"].is_available;
+            }
         }
     }
 });
@@ -193,7 +208,7 @@ let last = -1;
 songs.filter(function (e) {
     if (e.length === 0) return false;
     if (!e.is_advplus) return true;
-    if (songs_dict.hasOwnProperty(e.live_id)) return false; // only show Adv+ in timing if there is no Adv version
+    if (songs_dict.hasOwnProperty(e.live_id)) return false; // only show Adv+/Ch in timing if there is no Adv version
     return true;
 }).sort(function (a, b) {
     return a.length - b.length;
