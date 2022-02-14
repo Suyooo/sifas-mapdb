@@ -75,7 +75,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             // ignore
             return;
         }
-        
+
         // Exceptions: Ignore the temporary daily versions from Bonus Costume campaigns
         // TODO: Probably just replace this with a "prefer permanent versions over dailies" check
         if (ldid == 10003102 || ldid == 10003202 || ldid == 10003302 ||
@@ -97,7 +97,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "attribute": isEventLive ? 9 : null,
                 "is_all_unavailable": isEventLive ? false : true,
                 "is_any_permanent": isEventLive ? true : null,
-                "daily_weekday": null
+                "daily_weekday": null,
+                "default_diff": null
             };
         }
 
@@ -105,10 +106,13 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             // prefer info from Free Live, non-Adv+ data
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
             lives_dict[lid].daily_weekday = songdata[ldid].extra_info.daily_weekday;
+            // default diff should be Advanced if available
+            if (songdata[ldid].song_difficulty === 30 && songdata[ldid].extra_info.is_available) lives_dict[lid].default_diff = ldid;
         }
         if (ldid < 20000000) {
             lives_dict[lid].is_all_unavailable = (!songdata[ldid].extra_info.is_available) && lives_dict[lid].is_all_unavailable;
             lives_dict[lid].is_any_permanent = songdata[ldid].extra_info.is_permanent || lives_dict[lid].is_any_permanent;
+            if (songdata[ldid].extra_info.is_available) lives_dict[lid].default_diff = lives_dict[lid].default_diff || ldid;
         }
 
         if (ldid < 30000000) {
@@ -154,7 +158,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         } else {
             // Sort Story Stages by chapter and mode, not LDI (LDIs are only in the same order from Chapter 8 onwards)
             return (songdata[a].extra_info.story_chapter * 1000 + songdata[a].extra_info.story_stage * 10 +
-                (songdata[a].extra_info.story_is_hard_mode ? 1 : 0)) -
+                    (songdata[a].extra_info.story_is_hard_mode ? 1 : 0)) -
                 (songdata[b].extra_info.story_chapter * 1000 + songdata[b].extra_info.story_stage * 10 +
                     (songdata[b].extra_info.story_is_hard_mode ? 1 : 0));
         }
@@ -234,21 +238,22 @@ Object.keys(lives_dict).sort(function (a, b) {
             live_pages_built++;
         }
 
-        // Mark the Advanced difficulty as the initially open tab
+        // If no default diff was set, use Advanced
         let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
-            (live_diff.song_difficulty === 30 && live_difficulty_id < 30000000 ? ' class="active"' : '') + ' tabindex="-1">';
+            ((live.default_diff == live_difficulty_id || (live.default_diff === null && live_diff.song_difficulty === 30 && live_difficulty_id < 30000000)) ?
+                ' class="active"' : '') + ' tabindex="-1">';
 
         if (live_difficulty_id < 30000000) {
             // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
             this_tabbar += notemap.difficulty(live_diff.song_difficulty) + (live_diff.song_attribute != live.attribute ?
-                ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
-                notemap.attribute(live_diff.song_attribute) + '">' : '') +
+                    ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
+                    notemap.attribute(live_diff.song_attribute) + '">' : '') +
                 (live_difficulty_id < 20000000 && !live_diff.extra_info.is_available && !live.is_all_unavailable ?
                     '<i class="material-icons" title="Unavailable">event_busy</i>' : '');
         } else {
             // Shortened difficulty plus location for story stages, always show attribute
             this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :
-                (live_diff.extra_info.story_is_hard_mode ? "Hard" : "Normal") + " ") + live_diff.extra_info.story_chapter +
+                    (live_diff.extra_info.story_is_hard_mode ? "Hard" : "Normal") + " ") + live_diff.extra_info.story_chapter +
                 '-' + live_diff.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live_diff) +
                 ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
                 notemap.attribute(live_diff.song_attribute) + '">)'
