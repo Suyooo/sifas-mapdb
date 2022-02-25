@@ -132,10 +132,11 @@ body:not(.show-unavail) .collapsible.unavail {
 }
 
 .collapsible.temp .collapsible-header b::after {
-    content: "(time-limited, " attr(data-end-formatted) ")";
+    content: "(time-limited)";
 }
 
 .collapsible.temp.has-date .collapsible-header b::after {
+    content: "(time-limited, " attr(data-end-formatted) ")";
     border-bottom: 1px dashed var(--dark-border);
 }
 

@@ -96,7 +96,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
                 "name": songdata[ldid].song_name,
                 "attribute": isEventLive ? 9 : null,
                 "is_all_unavailable": isEventLive ? false : true,
-                "is_any_permanent": isEventLive ? true : null,
+                "is_any_permanent": isEventLive ? true : false,
                 "daily_weekday": null,
                 "default_diff": null
             };

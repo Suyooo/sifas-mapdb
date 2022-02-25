@@ -650,9 +650,15 @@ function absDateFormat(date) {
 
 function setExpiryDates(page, e) {
     let name = $(".collapsible-header > .translatable", e);
-    let d = new Date(Number(name.data("end")));
+    let n = name.data("end");
+    if (n === undefined) {
+        // no end date
+        return;
+    }
+    let d = new Date(Number(n));
     let r = relDateFormat(d);
     if (r === undefined) {
+        // song expired
         $(e).removeClass("temp").addClass("unavail");
     } else {
         name.attr("data-end-formatted", r);
