@@ -132,6 +132,7 @@ function song_name_romaji(live_id) {
     if (lid === "1060") return "WATER BLUE NEW WORLD";
     if (lid === "1036") return "Humming Friend";
     if (lid === "1021") return "Daisuki Dattara Daijoubu!";
+    if (lid === "1057") return "MY Mai☆TONIGHT";
     if (lid === "1022") return "Yume Kataru yori Yume Utaou";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1082") return "Amazing Travel DNA";
