@@ -852,6 +852,9 @@ function notebarSelectionMove(selector, fixedStartpos, notebarPos, notebarWidth,
                     break;
                 }
             }
+            if (count === undefined) {
+                count = notes.length;
+            }
         } else {
             for (let i = 0; i < notes.length; i++) {
                 let notepos = $(notes[i]).offset().left;
