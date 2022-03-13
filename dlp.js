@@ -47,6 +47,13 @@ function tower_name_romaji(tower_id) {
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
 
+function tower_name_year(tower_id) {
+    if (tower_id === 33007) return "2021";
+    if (tower_id === 33021) return "2022";
+
+    return undefined;
+}
+
 function make_reward_string(rewards) {
     let rewardstrings = [];
     Object.keys(rewards).sort(function (a, b) {
@@ -97,9 +104,13 @@ tower_ids.forEach(function (tower_id) {
         ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
         ' loveca stars<br><br>';
 
+    let year = tower_name_year(tower_id);
+    if (year === undefined) year = "";
+    else year = " (" + year + ")";
+
     s += '<ul id="' + tower_id + '" class="collapsible tower" data-collapsible="expandable"><li>' +
-        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + '">' +
-        tower.name + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
+        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + year + '">' +
+        tower.name + year + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
         'Loading...</div></li></ul>';
 
     let tower_hash = hash(tower);
