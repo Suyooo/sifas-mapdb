@@ -938,10 +938,11 @@ function setFocusToFirstFocusable(page) {
 }
 
 function onKeyDown(e) {
-    if (!e.ctrlKey && !e.altKey && !e.shiftKey && e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
+    if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey && e.key === "Enter" && $(document.activeElement).hasClass("has-on-click") && initialized) {
         // Call onClick handler for non-native buttons
         $(document.activeElement).trigger("click");
-    } else if (!e.ctrlKey && !e.altKey && e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
+        e.preventDefault();
+    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight") && initialized) {
         // Switch page tabs
         body.addClass("keyboard-focused");
         let d = e.key === "ArrowLeft" ? -1 : 1;
@@ -960,7 +961,8 @@ function onKeyDown(e) {
             newTab.focus();
         }
         pageTabs.select(tabName.substring(1));
-    } else if (!e.ctrlKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
+        e.preventDefault();
+    } else if (!e.ctrlKey && !e.metaKey && !e.altKey && (!onSearchTab || document.activeElement !== searchInput[0]) &&
         ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 64 && e.keyCode < 91) || (e.keyCode > 95 && e.keyCode < 112))) {
         // Start search
         if (initialized) {
@@ -993,11 +995,12 @@ function onKeyDown(e) {
                 liveDifficulty = liveBody;
             }
 
-            if (!e.ctrlKey && !e.altKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+            if (!e.ctrlKey && !e.metaKey && !e.altKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
                 // Scroll note bar
                 let noteBar = $(".notebarcontainer", liveDifficulty);
                 noteBar.scrollLeft(noteBar.scrollLeft() + (e.key === "ArrowLeft" ? -100 : 100));
-            } else if (liveTabs && e.ctrlKey && !e.altKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+                e.preventDefault();
+            } else if (liveTabs && (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
                 // Switch difficulty tabs
                 let d = e.key === "ArrowLeft" ? -1 : 1;
                 let switchingTabs = storyTabs || liveTabs;
@@ -1008,7 +1011,8 @@ function onKeyDown(e) {
                     newTabIndex = switchingTabs.index - 1;
                 }
                 switchingTabs.select($(switchingTabs.$tabLinks[newTabIndex]).attr("href").substring(1));
-            } else if (e.ctrlKey && !e.altKey && !e.shiftKey && ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 95 && e.keyCode < 112))) {
+                e.preventDefault();
+            } else if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && ((e.keyCode > 47 && e.keyCode < 58) || (e.keyCode > 95 && e.keyCode < 112))) {
                 // Toggle gimmick
                 let gimmickIndex = e.keyCode > 95 ? e.keyCode - 97 : e.keyCode - 49;
                 if (gimmickIndex === -1) {
@@ -1018,12 +1022,13 @@ function onKeyDown(e) {
                 if (gimmick) {
                     $(gimmick).trigger("click");
                 }
+                e.preventDefault();
             }
         }
     }
 }
 
-window.addEventListener("keydown", onKeyDown, {passive: true});
+window.addEventListener("keydown", onKeyDown, {passive: false});
 
 /*
  * ------------------
