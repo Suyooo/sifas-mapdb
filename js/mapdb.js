@@ -169,6 +169,7 @@ $(function () {
     let preferenceUnavailable = cookieGet("mapdb-unavailable");
     if (preferenceTitle === "roma") {
         toggleRomaji(false);
+        setTimeout(function () {aprilnote.addClass("on") }, 15000);
     }
     //if (preferenceUnavailable === "show") {
     toggleUnavailable(false);
@@ -467,6 +468,7 @@ function showLinkedDlpFloor2(hash, responseText, textStatus) {
 let btnPreferences = $("#show_preferences");
 let stopApril = false;
 let btnApril = $("#toggle_april");
+let aprilnote = $(".aprilnote");
 let showRomaji = false;
 let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
@@ -475,6 +477,7 @@ let btnUnavailable = $("#toggle_unavailable");
 function registerHeaderButtons() {
     btnPreferences.on("click", showPreferences);
     btnApril.on("click", function () {
+        aprilnote.addClass("forceoff");
         stopApril = !stopApril;
         if (stopApril) {
             btnApril.removeClass("on");
@@ -504,6 +507,7 @@ function toggleRomaji(showToast) {
         } else {
             $(".translatable").each(makeApril);
             if (showToast) M.toast({html: "Showing automatically translated titles"});
+            setTimeout(function () {aprilnote.addClass("on") }, 15000);
         }
         btnRomaji.addClass("on");
         btnApril.show();
