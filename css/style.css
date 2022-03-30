@@ -90,6 +90,13 @@ a:not(.btn):hover, a:not(.btn):focus {
 
 nav {
     margin-bottom: 1em;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+}
+
+body {
+    padding-top: 120px;
 }
 
 nav .brand-logo {
