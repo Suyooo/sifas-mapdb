@@ -375,10 +375,10 @@ function song_name_april(live_id) {
     if (lid === "2086") return "Dreamland! Dream world!";
     if (lid === "2087") return "Sing and laugh!";
     if (lid === "2034") return "TOKIMEKI Runners Chapter 17 Ver.";
-    if (lid === "2037") return "Love my friends";
+    if (lid === "2037") return "My beloved friend";
     if (lid === "2039") return "Invincible * followers";
     if (lid === "2040") return "Rainbow colored passion!";
-    if (lid === "2041") return "NEO SKY, NEO MAP!";
+    if (lid === "2041") return "New sky, new map!";
     if (lid === "2042") return "Dream with you";
     if (lid === "2043") return "Poppin'Up!";
     if (lid === "2044") return "Lonely rain";
@@ -418,7 +418,7 @@ function song_name_april(live_id) {
     if (lid === "2055") return "night pearl";
     if (lid === "2056") return "Giant girl";
     if (lid === "2058") return "New sky, new map!";
-    if (lid === "2059") return "Dreams start here";
+    if (lid === "2059") return "The dream starts here";
     if (lid === "1036") return "buzzing friend";
     if (lid === "2060") return "Please believe!";
     if (lid === "2069") return "ABC Makeup Class";

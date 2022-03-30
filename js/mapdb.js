@@ -102,8 +102,9 @@ function loadPageFinished(type, page, callback, responseText, textStatus) {
             initPageTop(page);
         }
         if (showRomaji) {
-            $(".translatable", page).each(swapTitles);
-        }
+            if (stopApril) $(".translatable", page).each(makeRom);
+            else $(".translatable", page).each(makeApril);
+        } else $(".translatable", page).each(makeJpn);
         $(".collapsible.temp", page).each(setExpiryDates);
         if (callback !== undefined) callback(page);
     }
@@ -169,9 +170,9 @@ $(function () {
     if (preferenceTitle === "roma") {
         toggleRomaji(false);
     }
-    if (preferenceUnavailable === "show") {
-        toggleUnavailable(false);
-    }
+    //if (preferenceUnavailable === "show") {
+    toggleUnavailable(false);
+    //}
 
     registerHeaderButtons();
     registerSearch();
@@ -295,7 +296,7 @@ function doSearch(search_input) {
 
 function filterCollapsibles(search_terms, e) {
     let song_name_element = $(".collapsible-header > .translatable", e);
-    let song_name_jp = song_name_element.text().toLowerCase();
+    let song_name_jp = song_name_element.data("jpn").toLowerCase();
     let song_name_ro = song_name_element.data("rom").toLowerCase();
 
     let result = true;
@@ -464,6 +465,8 @@ function showLinkedDlpFloor2(hash, responseText, textStatus) {
  *  ----------
  */
 let btnPreferences = $("#show_preferences");
+let stopApril = false;
+let btnApril = $("#toggle_april");
 let showRomaji = false;
 let btnRomaji = $("#toggle_romaji");
 let showUnavailable = false;
@@ -471,26 +474,57 @@ let btnUnavailable = $("#toggle_unavailable");
 
 function registerHeaderButtons() {
     btnPreferences.on("click", showPreferences);
+    btnApril.on("click", function () {
+        stopApril = !stopApril;
+        if (stopApril) {
+            btnApril.removeClass("on");
+            if (showRomaji) {
+                $(".translatable").each(makeRom);
+                M.toast({html: "Showing titles in Romaji"});
+            }
+        } else {
+            btnApril.addClass("on");
+            if (showRomaji) {
+                $(".translatable").each(makeApril);
+                M.toast({html: "Showing automatically translated titles"});
+            }
+        }
+        btnRomaji.addClass("on");
+    });
     btnRomaji.on("click", toggleRomaji.bind(this, true));
     btnUnavailable.on("click", toggleUnavailable.bind(this, true));
 }
 
 function toggleRomaji(showToast) {
     showRomaji = !showRomaji;
-    $(".translatable").each(swapTitles);
     if (showRomaji) {
+        if (stopApril) {
+            $(".translatable").each(makeRom);
+            if (showToast) M.toast({html: "Showing titles in Romaji"});
+        } else {
+            $(".translatable").each(makeApril);
+            if (showToast) M.toast({html: "Showing automatically translated titles"});
+        }
         btnRomaji.addClass("on");
-        if (showToast) M.toast({html: "Showing titles in Romaji"});
+        btnApril.show();
     } else {
+        $(".translatable").each(makeJpn);
         btnRomaji.removeClass("on");
         if (showToast) M.toast({html: "Showing titles in Kana/Kanji"});
+        btnApril.hide();
     }
 }
 
-function swapTitles() {
-    let new_title = $(this).data("rom");
-    $(this).data("rom", $(this).text());
-    $(this).text(new_title);
+function makeRom() {
+    $(this).text($(this).data("rom"));
+}
+
+function makeJpn() {
+    $(this).text($(this).data("jpn"));
+}
+
+function makeApril() {
+    $(this).text($(this).data("apr"));
 }
 
 function toggleUnavailable(showToast) {
@@ -548,10 +582,10 @@ function freeLiveCollapsibleOpen() {
     let location, pagename;
     if (tabs.$activeTabLink.attr("href").endsWith("story")) {
         location = "live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1);
-        pagename = $("b.translatable", this.el).text() + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")";
+        pagename = $("b.translatable", this.el).data(showRomaji ? "rom" : "jpn") + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")";
     } else {
         location = "live" + tabs.$activeTabLink.attr("href").substring(1);
-        pagename = $("b.translatable", this.el).text() + " (" + tabs.$activeTabLink.text() + ")";
+        pagename = $("b.translatable", this.el).data(showRomaji ? "rom" : "jpn") + " (" + tabs.$activeTabLink.text() + ")";
     }
     addHistoryItem(location, pagename);
 
@@ -596,13 +630,13 @@ function freeLiveTabShow(tabs, e) {
             $(e).data("initialized", 1);
             loadNoteMap($(e));
         }
-        addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink.text().trim() + ")");
+        addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent()).data(showRomaji ? "rom" : "jpn") + " (" + tabs.$activeTabLink.text().trim() + ")");
     } else {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
         tabs.forceTabIndicator();
-        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
+        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $("b.translatable", $(e).parent().parent()).data(showRomaji ? "rom" : "jpn") + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -619,7 +653,7 @@ function freeLiveStoryTabShow(tabs, e) {
         loadNoteMap($(e));
     }
     scrollActiveTabLabelIntoView(tabs);
-    addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
+    addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent().parent()).data(showRomaji ? "rom" : "jpn") + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
 }
 
 const relDateFormatObj = new Intl.RelativeTimeFormat("en");
@@ -686,8 +720,9 @@ function loadTowerFinish(responseText, textStatus) {
         $(".collapsible.floor", this).collapsible().each(dlpFloorCollapsibleInit);
         $(this).removeClass("unloaded");
         if (showRomaji) {
-            $(".translatable", this).each(swapTitles);
-        }
+            if (stopApril) $(".translatable", this).each(makeRom);
+            else $(".translatable", this).each(makeApril);
+        } else $(".translatable", this).each(makeJpn);
     }
 }
 
@@ -704,20 +739,20 @@ function dlpTowerCollapsibleInit() {
 function dlpTowerCollapsibleOpen() {
     loadTower($("#tower-floorlist" + this.$el.attr("id")), this.$el.attr("id"), loadTowerFinish);
     let towerLink = "tower" + this.$el.attr("id");
-    addHistoryItem(towerLink, $($("b.translatable", this.$el)[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
+    addHistoryItem(towerLink, $($("b.translatable", this.$el)[0]).data(showRomaji ? "rom" : "jpn").replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
 }
 
 function dlpFloorCollapsibleInit() {
     console.log(this);
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
-    let towerPageName = $($("b.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
+    let towerPageName = $($("b.translatable", $(this).parent().parent().parent())[0]).data(showRomaji ? "rom" : "jpn").replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = dlpFloorCollapsibleOpen.bind(this, towerPageName);
     collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(this, towerLink, towerPageName);
 }
 
 function dlpFloorCollapsibleOpen(towerPageName) {
-    addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $("b.translatable", $(this)).text());
+    addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $("b.translatable", $(this)).data(showRomaji ? "rom" : "jpn"));
     if ($(this).data("initialized") === undefined) {
         $(this).data("initialized", 1);
         loadNoteMap($(".live-difficulty", this));
