@@ -47,6 +47,32 @@ function tower_name_romaji(tower_id) {
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
 
+function tower_name_funny(tower_id) {
+    if (tower_id === 33001) return "dream machine view";
+    if (tower_id === 33002) return "Dream Live Parade Aqours";
+    if (tower_id === 33003) return "Nijiga Kaku live Dreaming Parade ～";
+    if (tower_id === 33004) return "Dream Parade live";
+    if (tower_id === 33005) return "Counting live days in 2020";
+    if (tower_id === 33006) return "Dream Live Parade-R Stage -";
+    if (tower_id === 33007) return "Dream live parade - pure / smiling on stage -";
+    if (tower_id === 33008) return "Dream Live Parade - Nijigatake on stage -";
+    if (tower_id === 33009) return "Dream Live Parade - cool / active on stage -";
+    if (tower_id === 33010) return "Dream Love Parade! 3. Jump up Nijigasaki High School Idol Club! School Idol Festival ～ Start a Dream ～";
+    if (tower_id === 33011) return "Dream Parade - Natural Level / Stylish";
+    if (tower_id === 33012) return "Dream Live Parade - Year 3 Level -";
+    if (tower_id === 33013) return "2021 S Summer Adventure Dream Parade ～";
+    if (tower_id === 33014) return "Dream Life Parade ～ 2nd birthday ～";
+    if (tower_id === 33015) return "Dream Live Parade We are adversaries";
+    if (tower_id === 33016) return "Dream Live Parade ~ SP on stage ~";
+    if (tower_id === 33017) return "Dream Live Parade Gd on stage ～";
+    if (tower_id === 33018) return "Dream Live Parade ~ Vo Bois on stage ~";
+    if (tower_id === 33019) return "All-Star 2021 exclusive live dream";
+    if (tower_id === 33020) return "Dream Live Parade ~ SK boys on stage ~";
+    if (tower_id === 33021) return "Dream live parade - pure / smiling on stage - ";
+
+    throw new Error('Unknown Romaji Tower Name for ' + tower_id);
+}
+
 function tower_name_year(tower_id) {
     if (tower_id === 33007) return "2021";
     if (tower_id === 33021) return "2022";

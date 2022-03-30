@@ -109,7 +109,7 @@ Manual additions: songs that I was unable to dump before they disappeared - but 
 Only Adv note counts though - back then, Adv+ map was the same as Adv, no point is showing them twice in Rankings
 */
 songs_dict["1080"] = {
-    "name": '<span class="translatable" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
+    "name": '<span class="translatable" data-jpn="" data-rom="New Romantic Sailors">New romantic sailor</span>',
     "is_advplus": false,
     "live_id": "1080",
     "attribute": 1,
@@ -120,7 +120,7 @@ songs_dict["1080"] = {
     "linked_live_id": null
 };
 songs_dict["1081"] = {
-    "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart Coaster</span>',
+    "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart coasters</span>',
     "is_advplus": false,
     "live_id": "1081",
     "attribute": 4,
@@ -131,7 +131,7 @@ songs_dict["1081"] = {
     "linked_live_id": null
 };
 songs_dict["1082"] = {
-    "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing Travel DNA</span>',
+    "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing travel DNA</span>',
     "is_advplus": false,
     "live_id": "1082",
     "attribute": 6,
@@ -142,7 +142,7 @@ songs_dict["1082"] = {
     "linked_live_id": null
 };
 songs_dict["2020"] = {
-    "name": '<span class="translatable" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
+    "name": '<span class="translatable" data-rom="Love U my friends(2D)">My beloved friend (2D)</span>',
     "is_advplus": false,
     "live_id": "2020",
     "attribute": 4,
@@ -153,7 +153,7 @@ songs_dict["2020"] = {
     "linked_live_id": null
 };
 songs_dict["2061"] = {
-    "name": '<span class="translatable" data-rom="Mirai Harmony">未来ハーモニー</span>',
+    "name": '<span class="translatable" data-rom="Mirai Harmony">Future harmony</span>',
     "is_advplus": false,
     "live_id": "2061",
     "attribute": 3,

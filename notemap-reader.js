@@ -371,6 +371,9 @@ function song_name_april(live_id) {
     if (lid === "2031") return "Supernova";
     if (lid === "2032") return "Dreamland! Dream world!";
     if (lid === "2033") return "Sing and laugh!";
+    if (lid === "2085") return "Supernova";
+    if (lid === "2086") return "Dreamland! Dream world!";
+    if (lid === "2087") return "Sing and laugh!";
     if (lid === "2034") return "TOKIMEKI Runners Chapter 17 Ver.";
     if (lid === "2037") return "Love my friends";
     if (lid === "2039") return "Invincible * followers";
@@ -397,11 +400,64 @@ function song_name_april(live_id) {
     if (lid === "2066") return "Triangular relationship";
     if (lid === "2067") return "Power spot!";
     if (lid === "2068") return "Kakushiaji!";
-    if (lid === "2998") return "I'm still ...";
-    if (lid === "2999") return "Queen Dam";
+    if (lid === "2998") return "I still...";
+    if (lid === "2999") return "queen";
 
     if (lid === "1089") return "Smile when the ship takes off!";
     if (lid === "0089") return "We are light"; // doesn't come across in this: translator used "light" as in "not heavy"
+
+    if (lid === "1010") return "future voting";
+    if (lid === "2035") return "I still...";
+    if (lid === "2036") return "queen";
+    if (lid === "2038") return "Happy Midori";
+    if (lid === "1021") return "Other than the doctor's love, die the job!";
+    if (lid === "1022") return "Let's sing about dreams instead of talking about them";
+    if (lid === "1025") return "an immature dreamer";
+    if (lid === "0006") return "The dance star is on me!";
+    if (lid === "2054") return "doll toy";
+    if (lid === "2055") return "night pearl";
+    if (lid === "2056") return "Giant girl";
+    if (lid === "2058") return "New sky, new map!";
+    if (lid === "2059") return "Dreams start here";
+    if (lid === "1036") return "buzzing friend";
+    if (lid === "2060") return "Just believe! ! !";
+    if (lid === "2069") return "ABC Makeup Class";
+    if (lid === "2070") return "festive flower -four seasons-";
+    if (lid === "0023") return "Love and security!";
+    if (lid === "2071") return "Good year! Sky";
+    if (lid === "0025") return "sweet feast";
+    if (lid === "2072") return "City of Shining";
+    if (lid === "2073") return "longevity longevity";
+    if (lid === "2074") return "A generation! A generation! A generation! (love our life)";
+    if (lid === "2075") return "GENERAL NOTICE";
+    if (lid === "2076") return "A YEAR";
+    if (lid === "2077") return "yes sir fight";
+    if (lid === "0032") return "I believe you can hear youth";
+    if (lid === "1057") return "Tonight's dance";
+    if (lid === "2078") return "Come!";
+    if (lid === "2079") return "Demon Muriel";
+    if (lid === "1060") return "NEW WORLD BLUE WATER";
+    if (lid === "2080") return "silent flame";
+    if (lid === "2081") return "Yes !";
+    if (lid === "2082") return "Always to you!";
+    if (lid === "2083") return "first love, cover";
+    if (lid === "2084") return "intensity!";
+    if (lid === "0043") return "Sweet leopard";
+    if (lid === "0046") return "Pomonoz";
+    if (lid === "2088") return "THE NIGHT OF ARRIVAL";
+    if (lid === "2089") return "flying in the air";
+    if (lid === "0049") return "From low-grade fever to mystery";
+    if (lid === "2090") return "Labyrinth City";
+    if (lid === "2091") return "Oral tradition ~A love song~";
+    if (lid === "2092") return "Shake!";
+    if (lid === "2093") return "Not angry";
+    if (lid === "3001") return "start is your paradise";
+    if (lid === "3002") return "To start! ! real dream";
+    if (lid === "3003") return "The future is windy";
+    if (lid === "3004") return "Future Predictions Hallelujah!";
+    if (lid === "3007") return "a song of desire";
+    if (lid === "1090") return "fly to the future";
+    if (lid === "0100") return "couple ring ";
 
     console.log('Unknown Funny Name for ' + live_id);
 }
