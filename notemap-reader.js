@@ -420,7 +420,7 @@ function song_name_april(live_id) {
     if (lid === "2058") return "New sky, new map!";
     if (lid === "2059") return "Dreams start here";
     if (lid === "1036") return "buzzing friend";
-    if (lid === "2060") return "Just believe! ! !";
+    if (lid === "2060") return "Please believe!";
     if (lid === "2069") return "ABC Makeup Class";
     if (lid === "2070") return "festive flower -four seasons-";
     if (lid === "0023") return "Love and security!";

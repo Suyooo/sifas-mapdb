@@ -192,7 +192,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
-        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '"' +
+        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '" data-jpn="' + live.name + '" data-apr="' + notemap.song_name_april(live.id) + '"' +
         (live.daily_weekday !== undefined && live.daily_weekday !== null ? " data-weekday=\"" + live.daily_weekday.map(x => WEEKDAYS[x]).join(", ") + "\"" : "") +
         (limitedEnd ? ' data-end="' + limitedEnd + '"' : "") + '>' + live.name + '</b></div><div class="collapsible-body">';
 

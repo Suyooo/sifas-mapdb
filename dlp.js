@@ -47,7 +47,7 @@ function tower_name_romaji(tower_id) {
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
 
-function tower_name_funny(tower_id) {
+function tower_name_april(tower_id) {
     if (tower_id === 33001) return "dream machine view";
     if (tower_id === 33002) return "Dream Live Parade Aqours";
     if (tower_id === 33003) return "Nijiga Kaku live Dreaming Parade ～";
@@ -135,7 +135,7 @@ tower_ids.forEach(function (tower_id) {
     else year = " (" + year + ")";
 
     s += '<ul id="' + tower_id + '" class="collapsible tower" data-collapsible="expandable"><li>' +
-        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + year + '">' +
+        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + year + '" data-jpn="' + tower.name + year + '" data-apr="' + tower_name_april(tower_id) + year + '">' +
         tower.name + year + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
         'Loading...</div></li></ul>';
 
@@ -202,8 +202,7 @@ tower_ids.forEach(function (tower_id) {
             '<div class="row">' +
 
             // Header information
-            '<div class="col l3"><b class="translatable" data-rom="' + notemap.song_name_romaji(floor.live_id) +
-            '"> ' + floor.song_name + ' </b></div>' +
+            '<div class="col l3"><b class="translatable" data-rom="' + notemap.song_name_romaji(floor.live_id) + '" data-jpn="' + floor.song_name + '" data-apr="' + notemap.song_name_april(floor.live_id) + '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
             notemap.is_cleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0])) + '</div>' +
