@@ -71,6 +71,10 @@ body {
     overflow-y: scroll;
 }
 
+body.keyboard-focused :focus {
+    box-shadow: 0 3px 0 var(--key-accented) inset, 3px 0 0 var(--key-accented) inset, 0 -3px 0 var(--key-accented) inset, -3px 0 0 var(--key-accented) inset;
+}
+
 a:not(.btn), a:not(.btn):active, a:not(.btn):visited, a:not(.btn):hover, a:not(.btn):focus {
     color: var(--key-important);
 }
@@ -103,15 +107,6 @@ nav a {
     color: var(--link) !important;
 }
 
-.nav-extended .container {
-    background: url("../image/headericon_light.svg") no-repeat right;
-    background-size: contain;
-}
-
-.dark-mode .nav-extended .container {
-    background-image: url("../image/headericon_dark.svg");
-}
-
 .nav-content {
     overflow: hidden;
     height: 48px;
@@ -120,6 +115,7 @@ nav a {
 .tabs {
     display: flex;
     height: auto;
+    user-select: none;
 }
 
 .tabs.tabs-transparent .indicator {
@@ -156,6 +152,11 @@ nav a {
     margin: 0;
     line-height: 48px;
     z-index: 0;
+}
+
+.collapsible-body .tab .material-icons {
+    padding-top: 0.45em;
+    vertical-align: top;
 }
 
 #notification {
@@ -458,7 +459,7 @@ input[type="radio"]:not(.default-radio):checked + label {
     font-weight: bold;
 }
 
-input[type="radio"]:not(.default-radio):focus + label {
+.keyboard-focused input[type="radio"]:not(.default-radio):focus + label {
     background-color: var(--key-low2);
 }
 
@@ -661,9 +662,10 @@ input[type="checkbox"] + span {
     background-color: var(--background);
 }
 
-.popup-dialog a {
+.popup-dialog .card-action a {
     text-decoration: none !important;
     cursor: pointer;
+    padding: 0.5em;
 }
 
 .popup-dialog ul:not(.browser-default) > li {
@@ -737,4 +739,19 @@ table.striped > tbody > tr:nth-child(2n+1) {
     position: absolute;
     left: calc(1.66rem - 12px);
     top: calc(1.33rem - 12px);
+}
+
+.has-tooltip {
+    position: relative;
+    cursor: default;
+}
+
+.has-tooltip::after {
+    content:'';
+    position:absolute;
+    width: 90%;
+    height: 0;
+    left:0;
+    bottom: 2px;
+    border-bottom: 1px dotted var(--text);
 }

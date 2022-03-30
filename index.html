@@ -5,21 +5,30 @@
     <title>SIFAS Note Map Database</title>
     <meta name="description"
           content="Song information database for SIFAS, including complete note maps, gimmick note timings and AC rewards.">
+    <link rel="canonical" href="https://suyo.be/sifas/mapdb/" />
 
-    <link type="text/css" rel="stylesheet" href="vendor/materialize.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/material/400.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/100.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/300.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/400.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/500.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/700.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/900.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="vendor/materialize.min.css" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="css/style.css" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="css/songdb.css" media="screen,projection"/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    <link rel="icon" type="image/png" sizes="96x96" href="image/launcher-icon-96.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="#ffcc80">
     <meta name="theme-color" content="#ffcc80">
 </head>
-<body>
+<body class="loading">
 <script>
     if (document.cookie.indexOf("dark-mode=yes") !== -1) {
-        document.body.className += 'dark-mode';
+        document.body.className += ' dark-mode';
     }
 </script>
 <div class="font-preload">
@@ -28,101 +37,191 @@
     <span style="font-weight: 400">Regular</span>
     <span style="font-weight: 500">Medium</span>
     <span style="font-weight: 700">Bold</span>
+    <span style="font-weight: 900">Bolder</span>
+    <i class="material-icons">icon</i>
 </div>
-<nav>
-    <div class="nav-wrapper orange lighten-5">
-        <a class="brand-logo center">Notemap DB</a>
-        <ul id="nav-mobile" class="left">
-            <li class="orange lighten-3"><a href="/sifas/index.html"><i
-                    class="material-icons left">keyboard_arrow_left</i>BACK</a></li>
-        </ul>
+<nav class="nav-extended orange lighten-5">
+    <div class="container">
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="left">
+                <li class="lighten-3"><a href="/sifas/index.html" class="waves-effect waves-light">
+                    <i class="material-icons left">keyboard_arrow_left</i>
+                    <span class="hide-on-small-and-down">BACK</span>
+                </a></li>
+            </ul>
+            <a class="brand-logo center hide-on-small-and-down">Note Map DB</a>
+            <ul class="right">
+                <li><a id="show_preferences" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">settings</i></a></li>
+                <li><a id="toggle_romaji" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">translate</i></a></li>
+                <li><a id="toggle_unavailable" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">event_busy</i></a></li>
+            </ul>
+        </div>
+        <div class="nav-content">
+            <ul class="tabs tabs-transparent tabs-fixed-width">
+                <li class="tab" style="flex-grow: 0"><a href="#tab_search"><i style="line-height: 50px" class="material-icons">search</i></a></li>
+                <li class="tab hidden-tab"><a class="active" tabindex="-1" href="#tab_start">Start</a></li>
+                <li class="tab"><a href="#tab_muse">µ's</a></li>
+                <li class="tab"><a href="#tab_aqours">Aqours</a></li>
+                <li class="tab"><a href="#tab_niji">Nijigaku</a></li>
+                <li class="tab"><a href="#tab_liella">Liella!</a></li>
+                <li class="tab"><a href="#tab_dlp">DLP</a></li>
+                <li class="tab"><a href="#tab_rankings">Rankings</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
-<center><a href="tower" style="font-size: 200%">View DLP Stage List &gt;&gt;&gt;</a><br><a href="top" style="font-size: 200%">View Song Rankings &gt;&gt;&gt;</a></center>
-<div class="container show-unavail">
-    <ul class="collapsible" data-collapsible="expandable">
-        <li>
-            <div class="collapsible-header">
-                <i class="material-icons">help</i> What is this?
+<div class="container">
+    <div class="row">
+        <div id="tab_start" class="col s12" data-type="fixed" style="text-align: justify">
+            <p style="font-weight: bold">
+                Welcome to the SIFAS Note Map Database! Click a group above to get started, or see the DLP stage lists
+                and Song Rankings by heading to the respective tabs.
+            </p>
+            <p>
+                In case you're here for the first time and are wondering what this is: This page attempts to give an
+                as-complete-as-possible collection of all the song information in the game. This is done by using note
+                map data, which is downloaded from the server when playing a song in the game, in addition to the usual
+                information from the app database.
+            </p>
+            <p>
+                With the note map data, it is possible to show a full timeline of the song, including note counts,
+                the positions of notes and which gimmicks they are associated with, the amount of notes in an Appeal
+                Chance to see what voltage or skill/crit chances are required, and the rewards and penalties for
+                clearing or failing them.
+            </p>
+            <p>
+                Since note map data is only available when the song is played in game and requires network traffic
+                to be captured, this is a lot of manual work. It might be possible that some songs will be missing
+                for a while until I can unlock them (or just until I stop forgetting to dump them).
+            </p>
+            <p>
+                If there's any note map that is missing, feel free to contact me and I'll add it as soon as
+                possible. If you have any ideas for more features, I'd love to hear them, too! You can find
+                Twitter/Discord/GitHub on the <a href="/sifas/index.html">Hub page</a>.
+            </p>
+            <b>Here's some neat stuff you can do on this page:</b>
+            <ul class="browser-default">
+                <li>
+                    Click the buttons in the top right to set your preferences. Either use the buttons to temporarily
+                    show romanized song names or show songs that are not available anymore, or choose your preferences
+                    by clicking the gear icon to set those by default on each visit. There's also dark mode in there.
+                </li>
+                <li>
+                    Search for a certain song by its name by clicking the Search icon on the left of the group tabs.
+                </li>
+                <li>
+                    Hover over or tap a note gimmick or AC on the timeline to get a popup with the associated
+                    detail information. (It's the same information as the panels below, but without having to scroll
+                    down.)
+                </li>
+                <li>
+                    Click or tap on a Note Gimmick panel to highlight only that gimmick, moving the markers closer
+                    to the timeline and fading out others. Click/tap again to unhide. Good for Adv+ notemaps with
+                    tons of gimmick notes.
+                </li>
+                <li>
+                    Desktop only for now: Hold and drag on the timeline to measure the amount of notes and the time
+                    between any two points. You can use this, for example, to measure how many notes are between two
+                    ACs to see whether there is enough for you to re-charge your SP skill.
+                </li>
+                <li>
+                    Keyboard power users: Use Shift+Left/Right to switch through the tabs, then use Tab/Shift+Tab
+                    and Enter to open up the maps. And most importantly - just start typing anywhere you want, and
+                    you'll immediately jump to the Search tab! Once you're focused on a song, you can use Left/Right to
+                    scroll the note bar, change the displayed difficulty with Ctrl+Left/Right, or press Ctrl+1-9/0 to
+                    highlight note gimmicks. (If you're on Mac, it works the same, with Cmd instead of Ctrl!)
+                </li>
+                <li>
+                    After selecting a difficulty or DLP floor, you can copy the URL from the address bar. Share it with
+                    someone else, and their page will immediately open the correct note map - useful for linking others
+                    who need song information!
+                </li>
+            </ul>
+            <b>The TODO Corner:</b>
+            <ul class="browser-default">
+                <li>
+                    Fix history going a little wack when searching
+                </li>
+                <li>
+                    Make note bar measurement work with touch events
+                </li>
+                <li>
+                    Make location hash handler only force indicator if a collapsible is opened, not if it's already open
+                </li>
+            </ul>
+        </div>
+        <div id="tab_search" class="col s12" data-type="fixed">
+            <div class="input-field" style="width: 100%">
+                <i class="material-icons prefix">search</i>
+                <input id="search_input" type="text">
+                <label for="search_input">Filter By Song Name (Japanese or Romanized)</label>
             </div>
-            <div class="collapsible-body">
-                <p class="nomargin">
-                    This page attempts to give an as-complete-as-possible collection of song information. This is done
-                    by using note map data, which is downloaded from the server when playing a song in the game, in
-                    addition to the usual information from the app database.
-                </p>
-                <p>
-                    With the note map data, it is possible to show a full timeline of the song, including note counts,
-                    the positions of notes and which gimmicks they are associated with, the amount of notes in an Appeal
-                    Chance to see what voltage or skill/crit chances are required, and the rewards and penalties for
-                    clearing or failing them.
-                </p>
-                <p>
-                    Since note map data is only available when the song is played in game and requires network traffic
-                    to be captured, this is a lot of manual work. It might be possible that some songs will be missing
-                    for a while until I can unlock them (or just until I stop forgetting to dump them).
-                </p>
-                <p>
-                    If there's any note map that is missing, feel free to contact me and I'll add it as soon as
-                    possible. If you have any ideas for more features, I'd love to hear them, too! You can find
-                    Twitter/Discord/GitHub on the <a href="/sifas/index.html">Hub page</a>.
-                </p>
-                <b>Here's some neat stuff you can do on this page:</b>
-                <ul class="browser-default">
-                    <li>
-                        Hover over or tap a note gimmick or AC on the timeline to get a popup with the associated
-                        detail information. (It's the same information as the panels below, but without having to scroll
-                        down.)
-                    </li>
-                    <li>
-                        Click or tap on a Note Gimmick panel to highlight only that gimmick, moving the markers closer
-                        to the timeline and fading out others. Click/tap again to unhide. Good for Adv+ notemaps with
-                        tons of gimmick notes.
-                    </li>
-                    <li>
-                        Desktop only for now: Hold and drag on the timeline to measure the amount of notes and the time
-                        between any two points. You can use this, for example, to measure how many notes are between two
-                        ACs to see whether there is enough for you to re-charge your SP skill.
-                    </li>
-                    <li>
-                        After selecting a difficulty, you can copy the URL from the address bar. Share it with someone
-                        else, and their page will immediately open the correct note map - useful for linking others who
-                        need song information!
-                    </li>
-                </ul>
-                <br>
-                <b>Future Plans:</b>
-                <ul class="browser-default">
-                    <li>
-                        Make the romanized names a permanent option instead of a temporary toggle.
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-    <center style="position: sticky; top: 0; background-color: var(--background); padding: 10px; z-index: 999;">
-        <a id="show_romaji" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">click to
-            show normal song names</a>
-        &nbsp;
-        <a id="show_unavail" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">click to
-            hide unavailable songs</a>
-        &nbsp;
-        <a id="dark_mode" class="waves-effect orange lighten-3 waves-light btn" style="color: var(--text)">dark mode toggle</a>
-    </center>
-    <div class="input-field" style="width: 100%">
-        <i class="material-icons prefix">search</i>
-        <input id="filter" type="text">
-        <label for="filter">Filter By Song Name (Japanese or Romanized)</label>
+            <div id="search_loading" class="unloaded">Loading...</div>
+        </div>
+        <div id="tab_muse" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
+        <div id="tab_aqours" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
+        <div id="tab_niji" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
+        <div id="tab_liella" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
+        <div id="tab_dlp" class="col s12 unloaded" data-type="dlp">Loading...</div>
+        <div id="tab_rankings" class="col s12 unloaded" data-type="top">Loading...</div>
     </div>
-    $SONGDB
+</div>
+<div class="popup-background valign-wrapper" id="popUpCookieConsent">
+    <div class="popup-dialog z-depth-5 card">
+        <div class="card-content">
+            <h5>Cookie Policy</h5>
+            SIFAS Map DB uses cookies to store your preferences. It will only do so if you agree to this message.
+            The page is still functional without if you do not allow storage, however, the site will reset to default
+            settings on every visit. No other data is stored, and this information is not saved on the server or used to
+            identify you.<br>
+            You can revoke your consent at any time by removing all cookies saved on your device by this site.<br>
+            <br>
+            Do you agree with the cookie policy and allow this site to store cookies on your device?
+        </div>
+        <div class="card-action right-align">
+            <a class="orange-text has-on-click" id="consentYesButton" tabindex="0">Yes</a>
+            <a class="orange-text has-on-click" id="consentNoButton" tabindex="0">No</a>
+        </div>
+    </div>
+</div>
+<div class="popup-background valign-wrapper" id="popUpPreferences">
+    <div class="popup-dialog z-depth-5 card">
+        <div class="card-content">
+            <h5>Preferences</h5>
+            <span class="form-label">Song Titles</span>
+            <div class="radio-row">
+                <input name="preferencesTitles" type="radio" id="preferencesTitlesKana" value="kana" checked>
+                <label for="preferencesTitlesKana">Kana/Kanji</label>
+                <input name="preferencesTitles" type="radio" id="preferencesTitlesRoma" value="roma">
+                <label for="preferencesTitlesRoma">Romaji</label>
+            </div>
+            <span class="form-label">Unavailable Songs</span>
+            <div class="radio-row">
+                <input name="preferencesUnavailable" type="radio" id="preferencesUnavailableHide" value="hide" checked>
+                <label for="preferencesUnavailableHide">Hide</label>
+                <input name="preferencesUnavailable" type="radio" id="preferencesUnavailableShow" value="show">
+                <label for="preferencesUnavailableShow">Show</label>
+            </div>
+            <span class="form-label">Dark Mode (BETA)</span>
+            <div class="radio-row">
+                <input name="preferencesDarkMode" type="radio" id="preferencesDarkModeOff" value="no" checked>
+                <label for="preferencesDarkModeOff">Off</label>
+                <input name="preferencesDarkMode" type="radio" id="preferencesDarkModeOn" value="yes">
+                <label for="preferencesDarkModeOn">On</label>
+            </div>
+        </div>
+        <div class="card-action right-align">
+            <a class="orange-text has-on-click" id="preferencesSaveButton" tabindex="0">Save</a>
+            <a class="orange-text has-on-click" id="preferencesCancelButton" tabindex="0">Cancel</a>
+        </div>
+    </div>
 </div>
 <div class="tooltip">
     <div class="tooltip-inner"></div>
     <div class="tooltip-arrow">&#9662;</div>
 </div>
-<script type="text/javascript" src="vendor/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="vendor/materialize.js"></script>
-<script>const IS_MAP_DB = true;</script>
+<script type="text/javascript" src="vendor/jquery.min.js"></script>
+<script type="text/javascript" src="vendor/materialize.min.js"></script>
 <script type="text/javascript" src="js/mapdb.js"></script>
 </body>
 </html>

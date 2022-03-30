@@ -3,6 +3,6 @@ api
 build
 doc
 node_modules
-package.json
+vendor
 package-lock.json
 landingpage.html
