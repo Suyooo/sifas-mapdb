@@ -51,7 +51,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
 
         if (json.song_difficulty === 30) {
             songs_dict[lid] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-en="' + notemap.song_name_april(json.live_id) + '" data-jp="' + json.song_name + '">' + notemap.song_name_april(json.live_id) + '</span>',
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-apr="' + notemap.song_name_april(json.live_id) + '" data-jpn="' + json.song_name + '">' + json.song_name + '</span>',
                 "is_advplus": false,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -70,7 +70,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             }
         } else if (json.song_difficulty === 35) {
             songs_dict[lid+"plus"] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-en="' + notemap.song_name_april(json.live_id) + '" data-jp="' + json.song_name + '">' + notemap.song_name_april(json.live_id) + '</span> (Adv+)',
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-apr="' + notemap.song_name_april(json.live_id) + '" data-jpn="' + json.song_name + '">' + json.song_name + '</span> (Adv+)',
                 "is_advplus": true,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -86,7 +86,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             }
         } else if (json.song_difficulty === 37) {
             songs_dict[lid+"ch"] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Ch)',
+                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '" data-apr="' + notemap.song_name_april(json.live_id) + '" data-jpn="' + json.song_name + '">' + json.song_name + '</span> (Ch)',
                 "is_advplus": true,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -109,7 +109,7 @@ Manual additions: songs that I was unable to dump before they disappeared - but 
 Only Adv note counts though - back then, Adv+ map was the same as Adv, no point is showing them twice in Rankings
 */
 songs_dict["1080"] = {
-    "name": '<span class="translatable" data-jpn="" data-rom="New Romantic Sailors">New romantic sailor</span>',
+    "name": '<span class="translatable" data-jpn="New Romantic Sailors" data-apr="New romantic sailor" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
     "is_advplus": false,
     "live_id": "1080",
     "attribute": 1,
@@ -120,7 +120,7 @@ songs_dict["1080"] = {
     "linked_live_id": null
 };
 songs_dict["1081"] = {
-    "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart coasters</span>',
+    "name": '<span class="translatable" data-jpn="Braveheart Coaster" data-apr="Braveheart coasters" data-rom="Braveheart Coaster">Braveheart Coaster</span>',
     "is_advplus": false,
     "live_id": "1081",
     "attribute": 4,
@@ -131,7 +131,7 @@ songs_dict["1081"] = {
     "linked_live_id": null
 };
 songs_dict["1082"] = {
-    "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing travel DNA</span>',
+    "name": '<span class="translatable" data-jpn="Amazing Travel DNA" data-apr="Amazing travel DNA" data-rom="Amazing Travel DNA">Amazing Travel DNA</span>',
     "is_advplus": false,
     "live_id": "1082",
     "attribute": 6,
@@ -142,7 +142,7 @@ songs_dict["1082"] = {
     "linked_live_id": null
 };
 songs_dict["2020"] = {
-    "name": '<span class="translatable" data-rom="Love U my friends(2D)">My beloved friend (2D)</span>',
+    "name": '<span class="translatable" data-jpn="Love U my friends(2D)" data-apr="My beloved friend (2D)" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
     "is_advplus": false,
     "live_id": "2020",
     "attribute": 4,
@@ -153,7 +153,7 @@ songs_dict["2020"] = {
     "linked_live_id": null
 };
 songs_dict["2061"] = {
-    "name": '<span class="translatable" data-rom="Mirai Harmony">Future harmony</span>',
+    "name": '<span class="translatable" data-jpn="未来ハーモニー" data-apr="Future harmony" data-rom="Mirai Harmony">未来ハーモニー</span>',
     "is_advplus": false,
     "live_id": "2061",
     "attribute": 3,
