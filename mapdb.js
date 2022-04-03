@@ -188,7 +188,7 @@ Object.keys(lives_dict).sort(function (a, b) {
         }
     }
 
-    s += '<ul class="collapsible' + (live.is_all_unavailable ? " note unavail" : (!live.is_any_permanent ? " note temp" + (limitedEnd ? " has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
+    s += '<ul class="collapsible' + (live.is_all_unavailable ? " note unavail" : (!live.is_any_permanent ? (limitedEnd ? " note temp has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
         '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
         '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
         'alt="' + notemap.attribute(live.attribute) + '">' +
