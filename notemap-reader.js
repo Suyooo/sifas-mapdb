@@ -172,6 +172,7 @@ function song_name_romaji(live_id) {
     if (lid === "2060") return "Just Believe!!!";
     if (lid === "2074") return "L!L!L! (Love the Life We Live)";
     if (lid === "2109") return "Just Believe!!! (12 Member Ver.)";
+    if (lid === "2099") return "Colorful Dreams! Colorful Smiles!";
     if (lid === "2100") return "Yume ga Bokura no Taiyou sa";
     if (lid === "2073") return "Hurray Hurray";
     if (lid === "2031") return "SUPER NOVA";
