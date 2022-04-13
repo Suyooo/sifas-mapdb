@@ -43,13 +43,16 @@ function tower_name_romaji(tower_id) {
     if (tower_id === 33019) return "All Stars Special Dream Live Parade 2021";
     if (tower_id === 33020) return "Dream Live Parade ~Sk Types On Stage~";
     if (tower_id === 33021) return "Dream Live Parade - Pure / Smile On Stage -";
+    if (tower_id === 33022) return "Dream Live Parade - Cool / Active On Stage -";
 
     throw new Error('Unknown Romaji Tower Name for ' + tower_id);
 }
 
 function tower_name_year(tower_id) {
     if (tower_id === 33007) return "2021";
+    if (tower_id === 33009) return "2021";
     if (tower_id === 33021) return "2022";
+    if (tower_id === 33022) return "2022";
 
     return undefined;
 }
