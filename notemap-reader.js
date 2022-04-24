@@ -182,6 +182,7 @@ function song_name_romaji(live_id) {
     if (lid === "2088") return "THE SECRET NiGHT";
     if (lid === "2089") return "Fly into the sky";
     if (lid === "2085") return "SUPER NOVA";
+    if (lid === "2102") return "Eternal Light";
     if (lid === "2032") return "Dream Land! Dream World!";
     if (lid === "2068") return "Kakushiaji!";
     if (lid === "2065") return "Cheer for you!!";
