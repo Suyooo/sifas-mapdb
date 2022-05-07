@@ -90,6 +90,7 @@ function song_name_romaji(live_id) {
     if (lid === "0032") return "Kitto Seishun ga Kikoeru";
     if (lid === "0023") return "Oh,Love&Peace!";
     if (lid === "0100") return "MOMENT RING";
+    if (lid === "0121") return "A song for You! You? You!!";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0043") return "Cutie Panther";
     if (lid === "0004") return "Shunjou Romantic";
@@ -358,6 +359,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 76) return 'lose ' + format(amount / 100) + '% Skill Activation Chance';
     if (type_id === 78) return 'lose ' + format(amount / 100) + '% Base Skill Activation Chance';
     if (type_id === 81) return 'lose ' + format(amount / 100) + '% Base Appeal';
+    if (type_id === 82) return 'lose ' + format(amount / 100) + '% Base Critical Chance';
     if (type_id === 83) return 'lose ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (type_id === 84) return 'lose ' + format(amount / 100) + '% Base Appeal';
     if (type_id === 85) return 'lose ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
