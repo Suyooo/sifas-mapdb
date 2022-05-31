@@ -255,6 +255,7 @@ function song_name_romaji(live_id) {
     if (lid === "2105") return "EMOTION";
     if (lid === "2035") return "I'm Still...";
     if (lid === "2054") return "Toy Doll";
+    if (lid === "2106") return "stars we chase";
     if (lid === "2036") return "Queendom";
     if (lid === "2055") return "Ye Mingzhu";
     if (lid === "2107") return "Eutopia";
