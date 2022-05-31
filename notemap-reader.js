@@ -91,6 +91,7 @@ function song_name_romaji(live_id) {
     if (lid === "0023") return "Oh,Love&Peace!";
     if (lid === "0100") return "MOMENT RING";
     if (lid === "0121") return "A song for You! You? You!!";
+    if (lid === "0120") return "A song for You! You? You!!";
     if (lid === "0005") return "PSYCHIC FIRE";
     if (lid === "0043") return "Cutie Panther";
     if (lid === "0004") return "Shunjou Romantic";
