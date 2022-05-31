@@ -252,6 +252,7 @@ function song_name_romaji(live_id) {
     if (lid === "2030") return "Ketsui no Hikari";
     if (lid === "2038") return "Aoi Kanaria";
     if (lid === "2084") return "Concentrate!";
+    if (lid === "2105") return "EMOTION";
     if (lid === "2035") return "I'm Still...";
     if (lid === "2054") return "Toy Doll";
     if (lid === "2036") return "Queendom";
