@@ -105,53 +105,8 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
 });
 
 /*
-Manual additions: songs that I was unable to dump before they disappeared - but I still know stuff!
-Only Adv note counts though - back then, Adv+ map was the same as Adv, no point is showing them twice in Rankings
+Non-Free Live songs
 */
-songs_dict["1080"] = {
-    "name": '<span class="translatable" data-rom="New Romantic Sailors">New Romantic Sailors</span>',
-    "is_advplus": false,
-    "live_id": "1080",
-    "attribute": 1,
-    "length": 120838,
-    "notes": 179,
-    "is_available": false,
-    "can_show_on_profile": false,
-    "linked_live_id": null
-};
-songs_dict["1081"] = {
-    "name": '<span class="translatable" data-rom="Braveheart Coaster">Braveheart Coaster</span>',
-    "is_advplus": false,
-    "live_id": "1081",
-    "attribute": 4,
-    "length": 120215,
-    "notes": 182,
-    "is_available": false,
-    "can_show_on_profile": false,
-    "linked_live_id": null
-};
-songs_dict["1082"] = {
-    "name": '<span class="translatable" data-rom="Amazing Travel DNA">Amazing Travel DNA</span>',
-    "is_advplus": false,
-    "live_id": "1082",
-    "attribute": 6,
-    "length": 109635,
-    "notes": 163,
-    "is_available": false,
-    "can_show_on_profile": false,
-    "linked_live_id": null
-};
-songs_dict["2020"] = {
-    "name": '<span class="translatable" data-rom="Love U my friends(2D)">Love U my friends(2D)</span>',
-    "is_advplus": false,
-    "live_id": "2020",
-    "attribute": 4,
-    "length": 105592,
-    "notes": 176,
-    "is_available": false,
-    "can_show_on_profile": false,
-    "linked_live_id": null
-};
 songs_dict["2061"] = {
     "name": '<span class="translatable" data-rom="Mirai Harmony">未来ハーモニー</span>',
     "is_advplus": false,
