@@ -85,6 +85,16 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             ldid == 10011102 || ldid == 10011202 || ldid == 10011302) {
             return;
         }
+        // Filter first version of Hop Step Nonstop
+        if (ldid == 11072101 || ldid == 11072201 || ldid == 11072301) {
+            return;
+        }
+        // Filter Free Live versions of songs that became Dailies
+        if (ldid == 12088101 || ldid == 12088201 || ldid == 12088301 ||
+            ldid == 12090101 || ldid == 12090201 || ldid == 12090301 ||
+            ldid == 12092101 || ldid == 12092201 || ldid == 12092301) {
+            return;
+        }
 
         songdata[ldid] = JSON.parse(fs.readFileSync('mapdb/' + f));
         let lid = songdata[ldid].live_id;
@@ -115,28 +125,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             if (songdata[ldid].extra_info.is_available) lives_dict[lid].default_diff = lives_dict[lid].default_diff || ldid;
         }
 
-        if (ldid < 30000000) {
-            // On Free Live and Event songs, the last digit in the LDID is the version. If it is higher than one, that
-            // means there has been an update to it - so we can filter out older versions to make sure to only show
-            // the newest versions on the map DB
-            let ldidWithoutVer = Math.floor(ldid / 10);
-
-            // Check whether any newer versions already exist
-            if (live_difficulty_ids[lid].filter(function (e) {
-                return Math.floor(e / 10) === ldidWithoutVer && e > ldid;
-            }).length === 0) {
-                // If not, make sure to filter out any older versions if there are
-                if (ldid % 10 > 1) {
-                    live_difficulty_ids[lid] = live_difficulty_ids[lid].filter(function (e) {
-                        return Math.floor(e / 10) !== ldidWithoutVer;
-                    });
-                }
-                live_difficulty_ids[lid].push(ldid);
-            }
-        } else {
-            // Story/SBL/DLP/... songs don't use the last digit as version, always add them
-            live_difficulty_ids[lid].push(ldid);
-        }
+        live_difficulty_ids[lid].push(ldid);
     }
 });
 
