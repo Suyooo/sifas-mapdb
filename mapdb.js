@@ -155,6 +155,7 @@ Object.keys(lives_dict).sort(function (a, b) {
     //console.log(live);
     live_difficulty_ids[live.id] = live_difficulty_ids[live.id].sort(function (a, b) {
         if (a < 30000000 || b < 30000000) {
+            return songdata[a].song_difficulty - songdata[b].song_difficulty;
         } else {
             // Sort Story Stages by chapter and mode, not LDI (LDIs are only in the same order from Chapter 8 onwards)
             return (songdata[a].extra_info.story_chapter * 1000 + songdata[a].extra_info.story_stage * 10 +
