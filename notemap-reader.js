@@ -285,6 +285,9 @@ function skill_target(target_id) {
     if (target_id === 29) return 'µ\'s units ';
     if (target_id === 30) return 'Aqours units ';
     if (target_id === 31) return 'Nijigaku units ';
+    if (target_id === 35) return 'CYaRon units ';
+    if (target_id === 36) return 'AZALEA units ';
+    if (target_id === 37) return 'Guilty Kiss units ';
     if (target_id === 38) return '<span class="t vo">Vo</span> units ';
     if (target_id === 39) return '<span class="t sp">Sp</span> units ';
     if (target_id === 40) return '<span class="t gd">Gd</span> units ';
