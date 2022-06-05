@@ -291,6 +291,8 @@ function doSearch(search_input) {
         collapsibles.each(resetCollapsibleFiltering);
         return;
     }
+    // Fullwidth to Halfwidth -- https://stackoverflow.com/a/47961748
+    search_input = search_input.replace(/[！-～]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace("　"," ");
 
     let res = new Set(fuzzysort.go(search_input, searchindex, {
         "keys": ["romaji", "romaji_clean", "hiragana", "katakana", "kanji", "kanji_clean", "abbr_kn", "abbr_ro"],

@@ -5,6 +5,7 @@ const wanakana = require("wanakana");
 const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 
 const custom_abbreviations_kn = {
+    "0013": "Mスタ",
     "2040": "虹パー",
     "2057": "虹パー"
 }
