@@ -11,6 +11,7 @@ const custom_abbreviations_kn = {
 }
 const custom_abbreviations_ro = {
     "0008": "borarara",
+    "1003": "021",
     "1012": "t1w",
     "2001": "tkmk",
     "2034": "tkmk"
