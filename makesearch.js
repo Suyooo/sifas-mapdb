@@ -1,5 +1,6 @@
 const fs = require("fs");
-const notemap = require("./notemap-reader.js");
+const notemap = require("./notemap-reader");
+const settings = require("./settings");
 const wanakana = require("wanakana");
 const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 
@@ -19,15 +20,32 @@ function clean(s) {
 }
 
 let files = fs.readdirSync("mapdb/.");
+files.sort((a,b) => {
+    if (a < 20000000 && b >= 20000000) return -1;
+    else if (b < 20000000 && a >= 20000000) return -1;
+
+    let aDiff = Number(a.substring(5, a.length - 6));
+    let bDiff = Number(b.substring(5, b.length - 6));
+    if (aDiff === 30 && bDiff !== 30) return -1;
+    else if (bDiff === 30 && aDiff !== 30) return 1;
+    else if (aDiff === 35 && bDiff !== 35) return -1;
+    else if (bDiff === 35 && aDiff !== 35) return 1;
+    else if (aDiff === 37 && bDiff !== 37) return -1;
+    else if (bDiff === 37 && aDiff !== 37) return 1;
+    return 0;
+});
 for (const f of files) {
     if (f.endsWith(".json")) {
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
+        if (f.charAt(0) != "1" && settings.current_event_live_ids.indexOf(json.live_id) === -1) continue;
         let lid = ("" + json.live_id).substring(1);
         if (finishedLiveIds.has(lid)) continue;
         finishedLiveIds.add(lid);
+        let ldid = Number(f.substring(0, f.length - 5));
 
         index.push({
             "lid": lid,
+            "ldid": ldid,
             "kanji": fuzzysort.prepare(json.song_name),
             "kanji_clean": fuzzysort.prepare(clean(json.song_name)),
             "hiragana": fuzzysort.prepare(json.song_pronunciation),
