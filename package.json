@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "frontend-dependencies": "^2.0.0",
+    "fuzzysort": "^2.0.1",
     "html-minifier": "^4.0.0",
     "object-hash": "^2.2.0",
     "pngcrush-bin": "^5.0.1",

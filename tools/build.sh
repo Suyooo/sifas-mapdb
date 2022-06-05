@@ -58,4 +58,7 @@ else
   node rankings.js
 fi
 
+echo "Build Search Index..."
+node makesearch.js
+
 echo "Done."

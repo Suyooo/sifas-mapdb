@@ -60,7 +60,7 @@ function difficulty_short(diff_id) {
 
 
 function song_name_romaji(live_id) {
-    let lid = ("" + live_id).substring(1);
+    let lid = live_id.length == 4 ? "" + live_id : ("" + live_id).substring(1);
 
     // µ's
     if (lid === "0001") return "Sore wa Bokutachi no Kiseki";

@@ -38,6 +38,7 @@ function fixTabIndicator(e) {
     let t = M.Tabs.getInstance(e);
     if (t != undefined) t.forceTabIndicator();
 }
+
 function fixAllTabIndicators() {
     $(".collapsible .tabs").toArray().forEach(fixTabIndicator);
 }
@@ -291,8 +292,12 @@ function doSearch(search_input) {
         return;
     }
 
-    let search_terms = search_input.trim().split(/\s+/);
-    let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, search_terms)).map(M.Collapsible.getInstance);
+    let res = new Set(fuzzysort.go(search_input, searchindex, {
+        "keys": ["romaji", "romaji_clean", "hiragana", "kanji", "kanji_clean"],
+        threshold: -100,
+        scoreFn: a => Math.max(a[0] ? a[0].score : -10000, a[1] ? a[1].score : -10000, a[2] ? a[2].score : -10000, a[3] ? a[3].score : -10000, a[4] ? a[4].score : -10000)
+    }).map(a => a.obj.lid));
+    let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, res)).map(M.Collapsible.getInstance);
 
     if (filtered.length === 1) {
         filtered[0].open();
@@ -301,20 +306,8 @@ function doSearch(search_input) {
     }
 }
 
-function filterCollapsibles(search_terms, e) {
-    let song_name_element = $(".collapsible-header > .translatable", e);
-    let song_name_jp = song_name_element.text().toLowerCase();
-    let song_name_ro = song_name_element.data("rom").toLowerCase();
-
-    let result = true;
-    for (let i = 0; i < search_terms.length; i++) {
-        let term = search_terms[i].toLowerCase();
-        if (result && !song_name_jp.includes(term) && !song_name_ro.includes(term)) {
-            result = false;
-        }
-    }
-
-    if (result) {
+function filterCollapsibles(res, e) {
+    if (res.has(("" + $(e).data("live-id")).substring(1))) {
         // Set to "block" to force unavailable songs to be visible as well
         $(e).css("display", "block");
         return true;
