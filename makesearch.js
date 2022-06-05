@@ -2,6 +2,14 @@ const fs = require("fs");
 const notemap = require("./notemap-reader.js");
 const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 
+const custom_abbreviations_kn = {
+    "2040": "虹パー",
+    "2057": "虹パー"
+}
+const custom_abbreviations_ro = {
+
+}
+
 const index = [];
 const finishedLiveIds = new Set();
 
@@ -23,7 +31,9 @@ for (const f of files) {
             "kanji_clean": fuzzysort.prepare(clean(json.song_name)),
             "hiragana": fuzzysort.prepare(json.song_pronunciation),
             "romaji": fuzzysort.prepare(notemap.song_name_romaji(lid)),
-            "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(lid)))
+            "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(lid))),
+            "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),
+            "abbr_ro": fuzzysort.prepare(custom_abbreviations_ro[lid])
         });
     }
 }

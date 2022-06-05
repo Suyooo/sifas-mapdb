@@ -293,9 +293,9 @@ function doSearch(search_input) {
     }
 
     let res = new Set(fuzzysort.go(search_input, searchindex, {
-        "keys": ["romaji", "romaji_clean", "hiragana", "kanji", "kanji_clean"],
+        "keys": ["romaji", "romaji_clean", "hiragana", "kanji", "kanji_clean", "abbr_kn", "abbr_ro"],
         threshold: -100,
-        scoreFn: a => Math.max(a[0] ? a[0].score : -10000, a[1] ? a[1].score : -10000, a[2] ? a[2].score : -10000, a[3] ? a[3].score : -10000, a[4] ? a[4].score : -10000)
+        scoreFn: a => Math.max(...a.map(x => x ? x.score : -10000))
     }).map(a => a.obj.lid));
     let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, res)).map(M.Collapsible.getInstance);
 
