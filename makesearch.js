@@ -28,7 +28,7 @@ function clean(s) {
 }
 
 let files = fs.readdirSync("mapdb/.");
-files.sort((a,b) => {
+files.sort((a, b) => {
     if (a < 20000000 && b >= 20000000) return -1;
     else if (b < 20000000 && a >= 20000000) return -1;
 
@@ -42,6 +42,7 @@ files.sort((a,b) => {
     else if (bDiff === 37 && aDiff !== 37) return 1;
     return 0;
 });
+
 for (const f of files) {
     if (f.endsWith(".json")) {
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
@@ -58,7 +59,6 @@ for (const f of files) {
             "kanji_clean": fuzzysort.prepare(clean(json.song_name)),
             "hiragana": fuzzysort.prepare(json.song_pronunciation),
             "katakana": fuzzysort.prepare(wanakana.toKatakana(json.song_pronunciation)),
-            "romanized": fuzzysort.prepare(wanakana.toRomaji(wanakana.toHiragana(wanakana.toKatakana(json.song_pronunciation.replace(/[あいうえお-ぢつ-もやゆよ-ろわ-ゔ]/g,c=>" "+c).trim())))),
             "romaji": fuzzysort.prepare(notemap.song_name_romaji(lid)),
             "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(lid))),
             "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),

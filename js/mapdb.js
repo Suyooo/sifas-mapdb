@@ -295,7 +295,7 @@ function doSearch(search_input) {
     search_input = search_input.replace(/[！-～]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace("　"," ");
 
     let res = new Set(fuzzysort.go(search_input, searchindex, {
-        "keys": ["romaji", "romaji_clean", "hiragana", "katakana", "romanized", "kanji", "kanji_clean", "abbr_kn", "abbr_ro", "romanized"],
+        "keys": ["romaji", "romaji_clean", "hiragana", "katakana", "kanji", "kanji_clean", "abbr_kn", "abbr_ro", "romanized"],
         threshold: -500,
         scoreFn: a => Math.max(...a.map(x => x ? x.score : -10000))
     }).map(a => a.obj.lid));
