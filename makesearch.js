@@ -9,7 +9,10 @@ const custom_abbreviations_kn = {
     "2057": "虹パー"
 }
 const custom_abbreviations_ro = {
-    "0008": "borarara"
+    "0008": "borarara",
+    "1012": "t1w",
+    "2001": "tkmk",
+    "2034": "tkmk"
 }
 
 const index = [];
