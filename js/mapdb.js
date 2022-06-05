@@ -293,7 +293,7 @@ function doSearch(search_input) {
     }
 
     let res = new Set(fuzzysort.go(search_input, searchindex, {
-        "keys": ["romaji", "romaji_clean", "hiragana", "kanji", "kanji_clean", "abbr_kn", "abbr_ro"],
+        "keys": ["romaji", "romaji_clean", "hiragana", "katakana", "kanji", "kanji_clean", "abbr_kn", "abbr_ro"],
         threshold: -100,
         scoreFn: a => Math.max(...a.map(x => x ? x.score : -10000))
     }).map(a => a.obj.lid));

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const notemap = require("./notemap-reader.js");
+const wanakana = require("wanakana");
 const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 
 const custom_abbreviations_kn = {
@@ -7,7 +8,7 @@ const custom_abbreviations_kn = {
     "2057": "虹パー"
 }
 const custom_abbreviations_ro = {
-
+    "0008": "borarara"
 }
 
 const index = [];
@@ -30,6 +31,7 @@ for (const f of files) {
             "kanji": fuzzysort.prepare(json.song_name),
             "kanji_clean": fuzzysort.prepare(clean(json.song_name)),
             "hiragana": fuzzysort.prepare(json.song_pronunciation),
+            "katakana": fuzzysort.prepare(wanakana.toKatakana(json.song_pronunciation)),
             "romaji": fuzzysort.prepare(notemap.song_name_romaji(lid)),
             "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(lid))),
             "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),
