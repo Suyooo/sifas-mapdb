@@ -1,6 +1,6 @@
 const fs = require("fs");
 const notemap = require("./notemap-reader.js");
-const fuzzysort = require("fuzzysort");
+const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 
 const index = [];
 const finishedLiveIds = new Set();
