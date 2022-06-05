@@ -6,6 +6,8 @@ const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 
 const custom_abbreviations_kn = {
     "0013": "Mスタ",
+    "0025": "すいほり",
+    "2024": "焼き鳥,焼鳥,やきとり,ヤキトリ",
     "2040": "虹パー",
     "2057": "虹パー"
 }
@@ -14,6 +16,7 @@ const custom_abbreviations_ro = {
     "1003": "021",
     "1012": "t1w",
     "2001": "tkmk",
+    "2024": "yakitori",
     "2034": "tkmk"
 }
 
@@ -55,6 +58,7 @@ for (const f of files) {
             "kanji_clean": fuzzysort.prepare(clean(json.song_name)),
             "hiragana": fuzzysort.prepare(json.song_pronunciation),
             "katakana": fuzzysort.prepare(wanakana.toKatakana(json.song_pronunciation)),
+            "romanized": fuzzysort.prepare(wanakana.toRomaji(wanakana.toHiragana(wanakana.toKatakana(json.song_pronunciation.replace(/[あいうえお-ぢつ-もやゆよ-ろわ-ゔ]/g,c=>" "+c).trim())))),
             "romaji": fuzzysort.prepare(notemap.song_name_romaji(lid)),
             "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(lid))),
             "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),
