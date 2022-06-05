@@ -228,8 +228,10 @@ Object.keys(lives_dict).sort(function (a, b) {
             live_pages_built++;
         }
 
+        let is_unavailable_difficulty = live_difficulty_id < 20000000 && !live_diff.extra_info.is_available && !live.is_all_unavailable;
+
         // If no default diff was set, use Advanced
-        let this_tabbar = '<li class="tab"><a href="#' + live_difficulty_id + '"' +
+        let this_tabbar = '<li class="tab' + (is_unavailable_difficulty ? ' unavail' : '') + '"><a href="#' + live_difficulty_id + '"' +
             ((live.default_diff == live_difficulty_id || (live.default_diff === null && live_diff.song_difficulty === 30 && live_difficulty_id < 30000000)) ?
                 ' class="active"' : '') + ' tabindex="-1">';
 
@@ -238,8 +240,7 @@ Object.keys(lives_dict).sort(function (a, b) {
             this_tabbar += notemap.difficulty(live_diff.song_difficulty) + (live_diff.song_attribute != live.attribute ?
                     ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
                     notemap.attribute(live_diff.song_attribute) + '">' : '') +
-                (live_difficulty_id < 20000000 && !live_diff.extra_info.is_available && !live.is_all_unavailable ?
-                    '<i class="material-icons" title="Unavailable">event_busy</i>' : '');
+                (is_unavailable_difficulty ? '<i class="material-icons" title="Unavailable">event_busy</i>' : '');
         } else {
             // Shortened difficulty plus location for story stages, always show attribute
             this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :

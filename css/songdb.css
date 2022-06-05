@@ -116,13 +116,17 @@ h5 {
     margin-right: 4em;
 }
 
-body:not(.show-unavail) .collapsible.unavail {
+body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unavail {
     display: none;
 }
 
 .collapsible.unavail .collapsible-header {
     background-color: var(--option);
     color: var(--dark-border);
+}
+
+.tab.unavail {
+    background-color: var(--option);
 }
 
 

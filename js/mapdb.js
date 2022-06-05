@@ -34,6 +34,14 @@ M.Tabs.prototype.forceTabIndicator = function () {
     });
 }
 
+function fixTabIndicator(e) {
+    let t = M.Tabs.getInstance(e);
+    if (t != undefined) t.forceTabIndicator();
+}
+function fixAllTabIndicators() {
+    $(".collapsible .tabs").toArray().forEach(fixTabIndicator);
+}
+
 let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
 let body = $("body");
@@ -393,6 +401,9 @@ function showLinkedFreeLive(hash, page) {
         collapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
         liveDiffTabs.instantSelect(liveDiffId);
+        if (!showUnavailable && liveDiffTabs.$activeTabLink.parent().hasClass("unavail")) {
+            toggleUnavailable();
+        }
         scrollToAndFocusCollapsible(collapsible.$el);
         scrollActiveTabLabelIntoView(liveDiffTabs);
     }
@@ -504,6 +515,7 @@ function toggleUnavailable(showToast) {
         body.removeClass("show-unavail");
         if (showToast) M.toast({html: "Hiding unavailable songs"});
     }
+    setTimeout(fixAllTabIndicators, 1);
 }
 
 /*
