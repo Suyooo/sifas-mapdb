@@ -46,11 +46,11 @@ files.sort((a, b) => {
 for (const f of files) {
     if (f.endsWith(".json")) {
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
-        if (f.charAt(0) != "1" && settings.current_event_live_ids.indexOf(json.live_id) === -1) continue;
+        let ldid = Number(f.substring(0, f.length - 5));
+        if (f.charAt(0) != "1" && settings.current_event_live_ids.indexOf(Math.floor(ldid/1000)) === -1) continue;
         let lid = ("" + json.live_id).substring(1);
         if (finishedLiveIds.has(lid)) continue;
         finishedLiveIds.add(lid);
-        let ldid = Number(f.substring(0, f.length - 5));
 
         index.push({
             "lid": lid,

@@ -59,6 +59,7 @@ else
 fi
 
 echo "Build Search Index..."
+mkdir -p build/js
 node makesearch.js
 
 echo "Done."
