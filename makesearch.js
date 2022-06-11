@@ -15,6 +15,7 @@ const custom_abbreviations_ro = {
     "0008": "borarara",
     "1003": "021",
     "1012": "t1w",
+    "1072": "hsns",
     "2001": "tkmk",
     "2024": "yakitori",
     "2034": "tkmk"
@@ -82,8 +83,8 @@ for (const l in lives) {
         "katakana": fuzzysort.prepare(wanakana.toKatakana(live.pronunciation)),
         "romaji": fuzzysort.prepare(notemap.song_name_romaji(l)),
         "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(l))),
-        "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[l]),
-        "abbr_ro": fuzzysort.prepare(custom_abbreviations_ro[l])
+        "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),
+        "abbr_ro": fuzzysort.prepare(custom_abbreviations_ro[lid])
     });
 }
 
