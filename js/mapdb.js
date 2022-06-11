@@ -304,6 +304,12 @@ function doSearch(search_input) {
         threshold: -500,
         scoreFn: a => Math.max(...a.map(x => x ? x.score : -10000))
     }).map(a => a.obj);
+    if (pluses > 0) {
+        let potentialFilteredRes = res.filter(a => (pluses == 1) ? a.ldid_advp != undefined : a.ldid_chal != undefined);
+        if (potentialFilteredRes.length > 0) {
+            res = potentialFilteredRes;
+        }
+    }
     let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, new Set(res.map(a => a.lid)))).map(M.Collapsible.getInstance);
 
     if (filtered.length === 1) {
