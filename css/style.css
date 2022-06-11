@@ -743,3 +743,11 @@ table.striped > tbody > tr:nth-child(2n+1) {
     bottom: 2px;
     border-bottom: 1px dotted var(--text);
 }
+
+.tooltip-content span {
+    background-color: #555;
+    border: 1px solid white;
+    padding: 0 .2em;
+    border-radius: .5em;
+    font-family: monospace;
+}

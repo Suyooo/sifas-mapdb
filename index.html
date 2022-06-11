@@ -5,7 +5,7 @@
     <title>SIFAS Note Map Database</title>
     <meta name="description"
           content="Song information database for SIFAS, including complete note maps, gimmick note timings and AC rewards.">
-    <link rel="canonical" href="https://suyo.be/sifas/mapdb/" />
+    <link rel="canonical" href="https://suyo.be/sifas/mapdb/"/>
 
     <link type="text/css" rel="stylesheet" href="vendor/fonts/material/400.css" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="vendor/fonts/roboto/100.css" media="screen,projection"/>
@@ -51,14 +51,18 @@
             </ul>
             <a class="brand-logo center hide-on-small-and-down">Note Map DB</a>
             <ul class="right">
-                <li><a id="show_preferences" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">settings</i></a></li>
-                <li><a id="toggle_romaji" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">translate</i></a></li>
-                <li><a id="toggle_unavailable" class="has-on-click waves-effect waves-light" tabindex="0"><i class="material-icons">event_busy</i></a></li>
+                <li><a id="show_preferences" class="has-on-click waves-effect waves-light" tabindex="0"><i
+                        class="material-icons">settings</i></a></li>
+                <li><a id="toggle_romaji" class="has-on-click waves-effect waves-light" tabindex="0"><i
+                        class="material-icons">translate</i></a></li>
+                <li><a id="toggle_unavailable" class="has-on-click waves-effect waves-light" tabindex="0"><i
+                        class="material-icons">event_busy</i></a></li>
             </ul>
         </div>
         <div class="nav-content">
             <ul class="tabs tabs-transparent tabs-fixed-width">
-                <li class="tab" style="flex-grow: 0"><a href="#tab_search"><i style="line-height: 50px" class="material-icons">search</i></a></li>
+                <li class="tab" style="flex-grow: 0"><a href="#tab_search"><i style="line-height: 50px"
+                                                                              class="material-icons">search</i></a></li>
                 <li class="tab hidden-tab"><a class="active" tabindex="-1" href="#tab_start">Start</a></li>
                 <li class="tab"><a href="#tab_muse">µ's</a></li>
                 <li class="tab"><a href="#tab_aqours">Aqours</a></li>
@@ -154,7 +158,15 @@
             <div class="input-field" style="width: 100%">
                 <i class="material-icons prefix">search</i>
                 <input id="search_input" type="text">
-                <label for="search_input">Filter By Song Name (Full Title or Abbreviations, Japanese or Romanized)</label>
+                <label for="search_input">
+                    Filter By Song Name (Full Title or Abbreviations, Kana or Romanized)
+                    <span class="explain-button bigger">
+                        <a class="tooltipped" data-position="top" data-delay="0"
+                                                          data-tooltip="You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>You can also add <span>+</span> or <span>++</span> to the end to instantly open the Adv+ or Challenge tab.">
+                            <i class="material-icons">help</i>
+                        </a>
+                    </span>
+                </label>
             </div>
             <div id="search_loading" class="unloaded">Loading...</div>
         </div>
