@@ -21,7 +21,6 @@ const custom_abbreviations_ro = {
 }
 
 const index = [];
-const finishedLiveIds = new Set();
 
 function clean(s) {
     return s.toLowerCase().replaceAll(/[^ 　一-龠ぁ-ゔァ-ヴーa-zA-Z0-9ａ-ｚＡ-Ｚ０-９々〆〤ヶ]/gu, "");
@@ -43,28 +42,49 @@ files.sort((a, b) => {
     return 0;
 });
 
+const lives = {};
 for (const f of files) {
     if (f.endsWith(".json")) {
+        let ldid = f.substring(0, f.length - 5);
         let json = JSON.parse(fs.readFileSync('mapdb/' + f));
-        let ldid = Number(f.substring(0, f.length - 5));
-        if (f.charAt(0) != "1" && settings.current_event_live_ids.indexOf(Math.floor(ldid/1000)) === -1) continue;
-        let lid = ("" + json.live_id).substring(1);
-        if (finishedLiveIds.has(lid)) continue;
-        finishedLiveIds.add(lid);
+        if (f.charAt(0) != "1" && settings.current_event_live_ids.indexOf(Math.floor(ldid / 1000)) === -1) continue;
+        if (!lives.hasOwnProperty(json.live_id)) {
+            lives[json.live_id] = {
+                "name": json.song_name, "pronunciation": json.song_pronunciation,
+                "free": undefined, "freediff": 0, "advplus": undefined, "challenge": undefined
+            };
+        }
 
-        index.push({
-            "lid": lid,
-            "ldid": ldid,
-            "kanji": fuzzysort.prepare(json.song_name),
-            "kanji_clean": fuzzysort.prepare(clean(json.song_name)),
-            "hiragana": fuzzysort.prepare(json.song_pronunciation),
-            "katakana": fuzzysort.prepare(wanakana.toKatakana(json.song_pronunciation)),
-            "romaji": fuzzysort.prepare(notemap.song_name_romaji(lid)),
-            "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(lid))),
-            "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),
-            "abbr_ro": fuzzysort.prepare(custom_abbreviations_ro[lid])
-        });
+        let diff = Number(ldid.substr(5, 2));
+        if (diff == 50) {
+            lives[json.live_id].challenge = Number(ldid);
+        } else if (diff == 40) {
+            lives[json.live_id].advplus = Number(ldid);
+        } else if (diff > lives[json.live_id].freediff) {
+            lives[json.live_id].free = Number(ldid);
+            lives[json.live_id].freediff = diff;
+        }
     }
+}
+
+for (const l in lives) {
+    let live = lives[l];
+    let lid = ("" + l).substring(1);
+
+    index.push({
+        "lid": lid,
+        "ldid": live.free,
+        "ldid_advp": live.advplus,
+        "ldid_chal": live.challenge,
+        "kanji": fuzzysort.prepare(live.name),
+        "kanji_clean": fuzzysort.prepare(clean(live.name)),
+        "hiragana": fuzzysort.prepare(live.pronunciation),
+        "katakana": fuzzysort.prepare(wanakana.toKatakana(live.pronunciation)),
+        "romaji": fuzzysort.prepare(notemap.song_name_romaji(l)),
+        "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(l))),
+        "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[l]),
+        "abbr_ro": fuzzysort.prepare(custom_abbreviations_ro[l])
+    });
 }
 
 fs.writeFileSync("build/js/searchindex.js", "const searchindex=" + JSON.stringify(index));
