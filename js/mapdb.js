@@ -294,7 +294,7 @@ function doSearch(search_input) {
     // Fullwidth to Halfwidth -- https://stackoverflow.com/a/47961748
     search_input = search_input.replace(/[！-～]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace("　", " ");
     let pluses = 0;
-    while (search_input.charAt(search_input.length - 1) == "+") {
+    while (search_input.charAt(search_input.length - 1) === "+") {
         search_input = search_input.substr(0, search_input.length - 1);
         pluses++;
     }
@@ -305,11 +305,11 @@ function doSearch(search_input) {
         scoreFn: a => Math.max(...a.map(x => x ? x.score : -10000))
     }).map(a => a.obj);
     if (pluses > 0) {
-        let potentialFilteredRes = res.filter(a => (pluses == 1) ? a.ldid_advp != undefined : a.ldid_chal != undefined);
+        let potentialFilteredRes = res.filter(a => (pluses === 1) ? a.ldid_advp !== undefined : a.ldid_chal !== undefined);
         if (potentialFilteredRes.length > 0) {
             res = potentialFilteredRes;
         } else {
-            let potentialFilteredRes = res.filter(a => (pluses == 1) ? a.ldid_chal != undefined : a.ldid_advp != undefined);
+            potentialFilteredRes = res.filter(a => (pluses === 1) ? a.ldid_chal !== undefined : a.ldid_advp !== undefined);
             if (potentialFilteredRes.length > 0) {
                 res = potentialFilteredRes;
             }
