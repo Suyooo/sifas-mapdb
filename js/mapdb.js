@@ -292,17 +292,36 @@ function doSearch(search_input) {
         return;
     }
     // Fullwidth to Halfwidth -- https://stackoverflow.com/a/47961748
-    search_input = search_input.replace(/[！-～]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace("　"," ");
+    search_input = search_input.replace(/[！-～]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace("　", " ");
+    let pluses = 0;
+    while (search_input.charAt(search_input.length - 1) == "+") {
+        search_input = search_input.substr(0, search_input.length - 1);
+        pluses++;
+    }
 
-    let res = new Set(fuzzysort.go(search_input, searchindex, {
+    let res = fuzzysort.go(search_input, searchindex, {
         "keys": ["romaji", "romaji_clean", "hiragana", "katakana", "kanji", "kanji_clean", "abbr_kn", "abbr_ro", "romanized"],
         threshold: -500,
         scoreFn: a => Math.max(...a.map(x => x ? x.score : -10000))
-    }).map(a => a.obj.lid));
-    let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, res)).map(M.Collapsible.getInstance);
+    }).map(a => a.obj);
+    let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, new Set(res.map(a => a.lid)))).map(M.Collapsible.getInstance);
 
     if (filtered.length === 1) {
         filtered[0].open();
+        if (pluses > 0) {
+            let toOpen;
+            if (pluses == 1) {
+                // Open Adv+ right away if it exists, otherwise Challenge
+                toOpen = res[0].ldid_advp || res[0].ldid_chal;
+            } else {
+                // Open Challenge right away if it exists, otherwise Adv+
+                toOpen = res[0].ldid_chal || res[0].ldid_advp;
+            }
+            if (toOpen != undefined) {
+                let liveDiffTabs = M.Tabs.getInstance($(".tabs", filtered[0].el)[0]);
+                liveDiffTabs.instantSelect(toOpen);
+            }
+        }
     } else {
         $(filtered).each(M.Collapsible.prototype.close);
     }
