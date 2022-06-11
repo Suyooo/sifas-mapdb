@@ -73,7 +73,7 @@ for (const l in lives) {
 
     index.push({
         "lid": lid,
-        "ldid": live.free,
+        "ldid": live.free || live.advplus || live.challenge,
         "ldid_advp": live.advplus,
         "ldid_chal": live.challenge,
         "kanji": fuzzysort.prepare(live.name),
