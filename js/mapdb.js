@@ -308,6 +308,11 @@ function doSearch(search_input) {
         let potentialFilteredRes = res.filter(a => (pluses == 1) ? a.ldid_advp != undefined : a.ldid_chal != undefined);
         if (potentialFilteredRes.length > 0) {
             res = potentialFilteredRes;
+        } else {
+            let potentialFilteredRes = res.filter(a => (pluses == 1) ? a.ldid_chal != undefined : a.ldid_advp != undefined);
+            if (potentialFilteredRes.length > 0) {
+                res = potentialFilteredRes;
+            }
         }
     }
     let filtered = collapsibles.toArray().filter(filterCollapsibles.bind(this, new Set(res.map(a => a.lid)))).map(M.Collapsible.getInstance);
