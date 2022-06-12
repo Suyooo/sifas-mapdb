@@ -408,7 +408,8 @@ function handleLocationHash() {
     } else {
         // Direct link to a page
         if (hash === "") hash = "#start";
-        pageTabs.select("tab_" + hash.substring(1));
+        if (hash.startsWith("#tab")) pageTabs.select(hash.substring(1));
+        else pageTabs.select("tab_" + hash.substring(1));
         disableHistory = false;
     }
 }
