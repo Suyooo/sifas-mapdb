@@ -104,21 +104,6 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
     }
 });
 
-/*
-Non-Free Live songs
-*/
-songs_dict["2061"] = {
-    "name": '<span class="translatable" data-rom="Mirai Harmony">未来ハーモニー</span>',
-    "is_advplus": false,
-    "live_id": "2061",
-    "attribute": 3,
-    "length": 110058,
-    "notes": 175,
-    "is_available": false,
-    "can_show_on_profile": false,
-    "linked_live_id": null
-};
-
 /* Ignore songs for length ranking: Remove old versions of songs that became permanent later */
 songs_dict["2020"].length = 0;      // Love U my friends(2D)
 songs_dict["2031"].length = 0;      // SUPER NOVA
