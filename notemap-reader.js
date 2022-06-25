@@ -362,10 +362,12 @@ function skill_effect(type_id, amount) {
     if (type_id === 69) return 'discharge SP Gauge by ' + format(amount / 100) + '%';
     if (type_id === 70) return 'lose ' + format(amount) + ' points of shield';
     if (type_id === 71) return 'lose ' + format(amount / 100) + '% Appeal';
+    if (type_id === 72) return 'lose ' + format(amount / 100) + '% Tap Voltage';
     if (type_id === 73) return 'lose ' + format(amount / 100) + '% SP Gauge Fill Rate';
     if (type_id === 75) return 'lose ' + format(amount / 100) + '% Critical Power';
     if (type_id === 76) return 'lose ' + format(amount / 100) + '% Skill Activation Chance';
     if (type_id === 78) return 'lose ' + format(amount / 100) + '% Base Skill Activation Chance';
+    if (type_id === 79) return 'lose ' + format(amount / 100) + '% Base Tap Voltage';
     if (type_id === 81) return 'lose ' + format(amount / 100) + '% Base Appeal';
     if (type_id === 82) return 'lose ' + format(amount / 100) + '% Base Critical Chance';
     if (type_id === 83) return 'lose ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
@@ -412,7 +414,10 @@ function skill_finish(condition_id, amount) {
     if (condition_id === 2) return ' for ' + format(amount) + ' notes'
     if (condition_id === 3) return "" // instant effect (affecting SP charge or stamina)
     if (condition_id === 4) return "" // until AC ends (this is handled in the trigger switch below)
-    if (condition_id === 7) return ' for one time only'
+    if (condition_id === 7) {
+        if (amount == 1) return ' for the next SP Skill'
+        else return ' until ' + amount + ' SP Skills are used'
+    }
     if (condition_id === 8) return ' until the next Strategy switch'
     throw new Error('Unknown Skill Finish Condition ' + condition_id);
 }
@@ -433,7 +438,10 @@ function ac_mission(type_id, goal) {
     if (type_id === 7) return 'Appeal with ' + format(goal) + ' unique Units';
     if (type_id === 8) return 'Get ' + format(goal) + ' Criticals';
     if (type_id === 9) return 'Activate ' + format(goal) + ' Tap Skills';
-    if (type_id === 16) return 'Finish the AC with ' + format(goal / 100) + '% of max Stamina or more';
+    if (type_id === 16) {
+        if (goal === 10000) return 'Finish the AC with ' + format(goal / 100) + '% of max Stamina';
+        else return 'Finish the AC with ' + format(goal / 100) + '% of max Stamina or more';
+    }
     throw new Error('Unknown AC Mission Type ' + type_id);
 }
 
@@ -575,7 +583,7 @@ function make_notemap(live) {
                     skillstr = skillstr.substring(0, skillstr.length - 20);
                 }
                 s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick[i]);
-                if (i+1 < live.gimmick.length) s += '<br>';
+                if (i + 1 < live.gimmick.length) s += '<br>';
             }
         }
         s += '</div></div>';
