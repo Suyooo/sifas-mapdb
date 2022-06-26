@@ -276,9 +276,11 @@ function song_name_romaji(live_id) {
 }
 
 function skill(skill) {
-    return (skill.finish_type === 3 ? "" : skill_target(skill.target)) +
-        skill_effect(skill.effect_type, skill.effect_amount) +
-        skill_finish(skill.finish_type, skill.finish_amount);
+    let eff = skill_effect(skill.effect_type, skill.effect_amount);
+    return (skill.finish_type === 3 ? "" : skill_target(skill.target)) + eff +
+        skill_finish(skill.finish_type, skill.finish_amount, eff.indexOf("SP Voltage Gain") !== -1);
+    // TODO: The parameter for is_sp_voltage_gain_buff is based on the skill effect strings above right now...
+    //  so it's prone to typos and will break if translated
 }
 
 function skill_target(target_id) {
@@ -409,21 +411,26 @@ function skill_effect(type_id, amount) {
     throw new Error('Unknown Skill Effect Type ' + type_id);
 }
 
-function skill_finish(condition_id, amount) {
+function skill_finish(condition_id, amount, is_sp_voltage_gain_buff) {
     if (condition_id === 1) return ' until the song ends'
     if (condition_id === 2) return ' for ' + format(amount) + ' notes'
     if (condition_id === 3) return "" // instant effect (affecting SP charge or stamina)
     if (condition_id === 4) return "" // until AC ends (this is handled in the trigger switch below)
     if (condition_id === 7) {
-        if (amount == 1) return ' for the next SP Skill'
-        else return ' until ' + amount + ' SP Skills are used'
+        if (is_sp_voltage_gain_buff) {
+            if (amount == 1) return ' for the next SP Skill'
+            else return ' for the next ' + amount + ' SP Skills'
+        } else {
+            if (amount == 1) return ' until a SP Skill is used'
+            else return ' until ' + amount + ' SP Skills are used'
+        }
     }
     if (condition_id === 8) return ' until the next Strategy switch'
     throw new Error('Unknown Skill Finish Condition ' + condition_id);
 }
 
 function is_cleansable(skill) {
-    // TODO: This is based on the skill effect strings above right now... subject to typos and will break if translated
+    // TODO: This is based on the skill effect strings above right now... so it's prone to typos and will break if translated
     if (skill === null) return "-";
     return skill_effect(skill.effect_type, 0).indexOf("Base") === -1 ? "Yes" : "No";
 }
