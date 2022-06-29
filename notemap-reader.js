@@ -138,6 +138,7 @@ function song_name_romaji(live_id) {
     if (lid === "1057") return "MY Mai☆TONIGHT";
     if (lid === "1022") return "Yume Kataru yori Yume Utaou";
     if (lid === "1091") return "Aqours☆HEROES";
+    if (lid === "1016") return "Aqours☆HEROES";
     if (lid === "1092") return "Nando Datte Yakusoku!";
     if (lid === "1005") return "Torikoriko PLEASE!!";
     if (lid === "1082") return "Amazing Travel DNA";
