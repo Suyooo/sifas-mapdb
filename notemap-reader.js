@@ -386,7 +386,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 96) return 'restore ' + format(amount / 100) + '% of max Stamina';
     if (type_id === 112) return 'charge SP Gauge by ' + format(amount / 100) + '% of the tapping card\'s Technique';
     if (type_id === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
-    if (type_id === 120) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t gd">Gd</span> unit in the formation';
+    if (type_id === 120) return 'lose ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 128) return 'restore ' + format(amount) + ' points of stamina for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 130) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 132) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sk">Sk</span> unit in the formation';
