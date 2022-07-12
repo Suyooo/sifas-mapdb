@@ -279,9 +279,9 @@ function song_name_romaji(live_id) {
     throw new Error('Unknown Romaji Song Name for ' + live_id);
 }
 
-function skill(skill) {
+function skill(skill, remove_target) {
     let eff = skill_effect(skill.effect_type, skill.effect_amount);
-    return (skill.finish_type === 3 ? "" : skill_target(skill.target)) + eff +
+    return (remove_target ? "" : skill_target(skill.target)) + eff +
         skill_finish(skill.finish_type, skill.finish_amount, eff.indexOf("SP Voltage Gain") !== -1);
     // TODO: The parameter for is_sp_voltage_gain_buff is based on the skill effect strings above right now...
     //  so it's prone to typos and will break if translated
@@ -363,7 +363,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 49) return 'gain ' + format(amount / 100) + '% Base Appeal';
     if (type_id === 50) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '%';
     if (type_id === 51) return 'increase Base Voltage Gain by ' + format(amount / 100) + '%';
-    if (type_id === 52) return 'remove all buffs (excluding those affecting Base values)';
+    if (type_id === 52) return 'lose all buffs (excluding those affecting Base values)';
     if (type_id === 68) return 'take ' + format(amount) + ' points of stamina damage';
     if (type_id === 69) return 'discharge SP Gauge by ' + format(amount / 100) + '%';
     if (type_id === 70) return 'lose ' + format(amount) + ' points of shield';
@@ -588,7 +588,7 @@ function make_notemap(live) {
         } else {
             for (let i = 0; i < live.gimmick.length; i++) {
                 if (live.gimmick.length > 1) s += '<b>' + (i + 1) + ')</b> ';
-                let skillstr = skill(live.gimmick[i]);
+                let skillstr = skill(live.gimmick[i], false);
                 if (live.gimmick[i].finish_type === 1) {
                     // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
                     skillstr = skillstr.substring(0, skillstr.length - 20);
@@ -603,6 +603,7 @@ function make_notemap(live) {
             let noteg = live.note_gimmicks[gi];
 
             s += '<div data-gimmick="' + gi + '" class="gimmick"><div>Note Gimmick ' + format(gi + 1) + '</div><div>';
+            let remove_target = false;
             switch (noteg.trigger) {
                 case 1:
                     s += "If hit, ";
@@ -615,18 +616,21 @@ function make_notemap(live) {
                     break;
                 case 4:
                     s += 'If hit with a <span class="t vo">Vo</span> unit, ';
+                    remove_target = noteg.target == 38;
                     break;
                 case 5:
                     s += 'If hit with a <span class="t sp">Sp</span> unit, ';
+                    remove_target = noteg.target == 39;
                     break;
                 case 7:
                     s += 'If hit with a <span class="t sk">Sk</span> unit, ';
+                    remove_target = noteg.target == 41;
                     break;
                 default:
                     throw new Error('Unknown Note Gimmick Trigger ' + noteg.trigger);
             }
 
-            let skillstr = skill(noteg);
+            let skillstr = skill(noteg, remove_target);
             if (noteg.trigger === 3) {
                 skillstr = capFirstLetter(skillstr);
             }
@@ -662,7 +666,7 @@ function make_notemap(live) {
                     default:
                         throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
                 }
-                s += skill(ac.gimmick) + '<br>';
+                s += skill(ac.gimmick, false) + '<br>';
             }
 
             if (ac.range_note_ids !== null) {
