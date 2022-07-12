@@ -387,6 +387,7 @@ function skill_effect(type_id, amount) {
     if (type_id === 112) return 'charge SP Gauge by ' + format(amount / 100) + '% of the tapping card\'s Technique';
     if (type_id === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 120) return 'lose ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
+    if (type_id === 123) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t sk">Sk</span> unit in the formation';
     if (type_id === 128) return 'restore ' + format(amount) + ' points of stamina for each <span class="t vo">Vo</span> unit in the formation';
     if (type_id === 130) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 132) return 'restore ' + format(amount) + ' points of stamina for each <span class="t sk">Sk</span> unit in the formation';
@@ -409,7 +410,8 @@ function skill_effect(type_id, amount) {
     if (type_id === 210) return 'increase SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 218) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (type_id === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
-    if (type_id === 230) return 'increase the power of their Strategy Switch bonus by ' + format(amount) + ' points';
+    if (type_id === 229) return 'increase the cooldown reduction from their Strategy Switch bonus by ' + format(amount) + ' turns';
+    if (type_id === 230) return 'increase SP gained from their Strategy Switch bonus by ' + format(amount) + ' points';
     if (type_id === 263) return 'take ' + format(amount / 100) + '% of max Stamina as damage, bypassing Shield';
     if (type_id === 265) return 'block Healing';
     throw new Error('Unknown Skill Effect Type ' + type_id);
