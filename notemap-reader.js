@@ -621,11 +621,11 @@ function make_notemap(live) {
                     remove_target = noteg.target == 38;
                     break;
                 case 5:
-                    s += 'If hit with a <span class="t sp">Sp</span> unit, ';
+                    s += 'If hit with an <span class="t sp">Sp</span> unit, ';
                     remove_target = noteg.target == 39;
                     break;
                 case 7:
-                    s += 'If hit with a <span class="t sk">Sk</span> unit, ';
+                    s += 'If hit with an <span class="t sk">Sk</span> unit, ';
                     remove_target = noteg.target == 41;
                     break;
                 default:
