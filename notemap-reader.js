@@ -183,6 +183,7 @@ function song_name_romaji(live_id) {
     if (lid === "2100") return "Yume ga Bokura no Taiyou sa";
     if (lid === "2108") return "Future Parade";
     if (lid === "2110") return "Miracle STAY TUNE!";
+    if (lid === "2097") return "Eien no Isshun";
     if (lid === "2031") return "SUPER NOVA";
     if (lid === "2067") return "POWER SPOT!!";
     if (lid === "2066") return "Love Triangle";
