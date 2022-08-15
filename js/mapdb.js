@@ -634,13 +634,13 @@ function freeLiveTabShow(tabs, e) {
             $(e).data("initialized", 1);
             loadNoteMap($(e));
         }
-        addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink.text().trim() + ")");
+        addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink[0].childNodes[0].data.trim() + ")");
     } else {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
         tabs.forceTabIndicator();
-        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
+        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -657,7 +657,7 @@ function freeLiveStoryTabShow(tabs, e) {
         loadNoteMap($(e));
     }
     scrollActiveTabLabelIntoView(tabs);
-    addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink.text().split(" (")[0].trim() + ")");
+    addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
 }
 
 const relDateFormatObj = new Intl.RelativeTimeFormat("en");
