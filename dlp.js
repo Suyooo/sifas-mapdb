@@ -240,4 +240,4 @@ fs.writeFile('build/towers/hash.json', JSON.stringify(hashes_tower),
             return console.log(err);
         }
     });
-console.log("    Built " + live_pages_built + " Live page(s).");
+console.log("    Building " + live_pages_built + " Live page(s).");

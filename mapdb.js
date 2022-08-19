@@ -287,4 +287,4 @@ fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
             return console.log(err);
         }
     });
-console.log("    Built " + live_pages_built + " Live page(s).");
+console.log("    Building " + live_pages_built + " Live page(s).");
