@@ -198,6 +198,30 @@ body.show-unavail div.group-tab div.no-available-songs {
     vertical-align: text-bottom;
 }
 
+.live-extra-toggle::after {
+    content: "keyboard_arrow_down";
+    font-family: 'Material Icons';
+    font-size: 0.75em;
+    cursor: pointer;
+}
+
+.live-extra-toggle.open::after {
+    content: "keyboard_arrow_up";
+}
+
+.live-extra-container {
+    height: 0;
+    overflow: hidden;
+    transition: height .5s;
+    margin-left: .25em;
+    padding-left: .5em;
+    border-left: 1px var(--dark-border) solid;
+}
+
+.live-extra-toggle.open + .live-extra-container {
+    height: 4.5em;
+}
+
 .notebarcontainer {
     overflow-x: auto;
     overflow-y: hidden;

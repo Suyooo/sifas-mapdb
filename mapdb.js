@@ -16,7 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const fs = require('fs');
+const {promisify} = require('util')
+const render = promisify(require("ejs").renderFile);
+const fs = require("fs");
 const settings = require('./settings.js');
 const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
@@ -205,28 +207,29 @@ Object.keys(lives_dict).sort(function (a, b) {
         if (process.argv[2] === "full" || !hashes.hasOwnProperty(live_difficulty_id) || hashes[live_difficulty_id] !== live_diff_hash) {
             list_update = true;
 
-            let tab_content = '<div class="row nomargin">' +
+            const liveData = {
+                rankS: notemap.format(live_diff.ranks.S),
+                rankA: notemap.format(live_diff.ranks.A),
+                rankB: notemap.format(live_diff.ranks.B),
+                rankC: notemap.format(live_diff.ranks.C),
+                capTap: notemap.format(live_diff.voltage_caps.tap),
+                capSp: notemap.format(live_diff.voltage_caps.sp),
+                capSkill: notemap.format(live_diff.voltage_caps.skill),
+                capSwap: notemap.format(live_diff.voltage_caps.swap),
+                noteDamage: live_diff.note_damage,
+                spGaugeSize: notemap.format(live_diff.sp_gauge_max),
+                noteMap: notemap.make(live_diff)
+            }
 
-                // Top information
-                '<div class="col l6"><b>S Rank: </b>' + notemap.format(live_diff.ranks.S) + '</div>' +
-                '<div class="col l6"><b>A Rank: </b>' + notemap.format(live_diff.ranks.A) + '</div>' +
-                '<div class="col l6"><b>B Rank: </b>' + notemap.format(live_diff.ranks.B) + '</div>' +
-                '<div class="col l6"><b>C Rank: </b>' + notemap.format(live_diff.ranks.C) + '</div>' +
-                '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(live_diff.recommended_stamina) + '</div>' +
-                '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(live_diff.note_damage) + '</div></div>' +
-
-                // Create the note map
-                notemap.make(live_diff);
-
-            fs.writeFile('build/lives/' + live_difficulty_id + '.html', minify(tab_content, {
-                    collapseWhitespace: true
-                }),
-                function (err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                }
-            );
+            render("templates/liveDifficulty.ejs", liveData).then(res => {
+                fs.writeFileSync('build/lives/' + live_difficulty_id + '.html', minify(res, {
+                    collapseWhitespace: true,
+                    minifyCSS: true
+                }));
+            }).catch(e => {
+                console.log(e.message);
+                console.log(e.stack);
+            });
 
             hashes[live_difficulty_id] = live_diff_hash;
             live_pages_built++;

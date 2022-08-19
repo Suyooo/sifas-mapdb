@@ -576,7 +576,6 @@ function make_notemap(live) {
 
             liveInfo.mapInfo = {
                 noteCount: format(live.notes.length),
-                spGaugeSize: format(live.sp_gauge_max),
                 markerLayerCount: stackerGlobal.length,
                 mapLength: mapLength / 98 * 100,
                 hasActualSongLength: live.song_length !== undefined

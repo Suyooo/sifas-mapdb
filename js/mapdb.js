@@ -813,6 +813,11 @@ function loadNoteMapFinish(responseText, textStatus) {
 let selecting = false;
 
 function initNoteMapInteractions(e) {
+    let extraInfoToggles = $(".live-extra-toggle", e);
+    for (let i = 0; i < extraInfoToggles.length; i++) {
+        $(extraInfoToggles[i]).on("click", toggleLiveExtraInfo.bind(extraInfoToggles[i]));
+    }
+
     let notebar = $(".notebar", e);
     notebar.on("mousedown", notebarSelectionStart.bind(notebar));
 
@@ -840,6 +845,10 @@ function initNoteMapInteractions(e) {
             acMarkerMouseover.bind(acmarkers[i], acinfos[$(acmarkers[i]).data("ac")]));
     }
     acmarkers.on("mouseout", closeTooltip);
+}
+
+function toggleLiveExtraInfo() {
+    $(this).toggleClass("open");
 }
 
 function closeTooltip() {
