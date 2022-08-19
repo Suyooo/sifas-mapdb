@@ -1,6 +1,6 @@
 /*
 This file generates the top rankings page from all the files in the mapdb folder.
-Copyright (C) 2020-2021 Suyooo
+Copyright (C) 2020-2022 Suyooo
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 const fs = require('fs');
 const settings = require('./settings.js');
-const notemap = require('./notemap-reader.js');
+const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 

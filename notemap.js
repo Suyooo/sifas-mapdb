@@ -1,6 +1,6 @@
 /*
-This module creates the HTML code for the note map timeline and panels for gimmick/AC info, used for the map DB pages.
-Copyright (C) 2020 Suyooo
+This module creates the HTML code for the note map timeline and panels for gimmick/AC info, used for the Map DB pages.
+Copyright (C) 2020-2022 Suyooo
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

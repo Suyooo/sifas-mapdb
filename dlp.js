@@ -1,6 +1,6 @@
 /*
 This file generates the DLP info page from the tower information in the tower folder.
-Copyright (C) 2020-2021 Suyooo
+Copyright (C) 2020-2022 Suyooo
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 const fs = require('fs');
-const notemap = require('./notemap-reader.js');
+const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 
