@@ -445,7 +445,7 @@ function skill_finish(condition_id, amount, is_sp_voltage_gain_buff) {
 function is_cleansable(skill) {
     // TODO: This is based on the skill effect strings above right now... so it's prone to typos and will break if translated
     if (skill === null) return "-";
-    return skill_effect(skill.effect_type, 0).indexOf("Base") === -1 ? "Yes" : "No";
+    return skill_effect(skill.effect_type, 0).indexOf("Base") === -1;
 }
 
 function ac_mission(type_id, goal) {
@@ -665,7 +665,7 @@ function make_notemap(live) {
 
             const noteGimmickData = {
                 index: gi,
-                skill
+                skill: skillstr
             };
 
             if (liveInfo.hasNoteMap) {
@@ -726,8 +726,8 @@ function make_notemap(live) {
                         + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length * 100))
                         + "% of taps must proc)";
                 }
-                acData.rewardVoltage = live.appeal_chances[ai].reward_voltage;
-                acData.penaltyDamage = live.appeal_chances[ai].penalty_damage;
+                acData.rewardVoltage = format(live.appeal_chances[ai].reward_voltage);
+                acData.penaltyDamage = format(live.appeal_chances[ai].penalty_damage);
             }
             liveInfo.appealChances.push(acData);
         }

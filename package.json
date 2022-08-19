@@ -2,6 +2,7 @@
   "name": "sifas-mapdb",
   "version": "1.0.0",
   "dependencies": {
+    "ejs": "^3.1.8",
     "frontend-dependencies": "^2.0.0",
     "fuzzysort": "^2.0.1",
     "html-minifier": "^4.0.0",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.6",
-    "@types/materialize-css": "^1.0.11"
+    "@types/materialize-css": "^1.0.11",
+    "ejs-lint": "^1.2.2"
   }
 }
