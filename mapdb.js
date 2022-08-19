@@ -26,35 +26,16 @@ const hash = require('object-hash');
 
 const WEEKDAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-function guess_story_stage_difficulty(stage) {
-    let minimum_difference = stage.notes.length;
-    let minimum_difficulty = 10;
-    for (let difficulty = 0; difficulty <= 2; difficulty++) {
-        let live = songdata[live_difficulty_ids[stage.live_id][difficulty]];
-        if (live === undefined || live.notes === null) continue;
-        let difference = Math.abs(stage.notes.length - live.notes.length);
-        if (difference < minimum_difference) {
-            minimum_difference = difference;
-            minimum_difficulty = live.song_difficulty;
-        }
-    }
-    return notemap.difficulty_short(minimum_difficulty);
-}
+async function finishGroupPage(group) {
+    if (!group.hasUpdatedLives) return;
+    await Promise.all(group.savePromises);
 
-function dump(group, s, has) {
-    if (!has) {
-        s += "<div class='no-available-songs'>This group currently has no available songs. Click the button in the " +
-            "header to show data from unavailable songs.</div>"
-    }
-    fs.writeFile('build/' + group + '.html', minify(s, {
-            collapseWhitespace: true
-        }),
-        function (err) {
-            if (err) {
-                return console.log(err);
-            }
-        }
-    );
+    render("templates/groupPage.ejs", group).then(res => {
+        fs.writeFileSync('build/' + group.name + '.html', minify(res, {
+            collapseWhitespace: true,
+            minifyCSS: true
+        }));
+    });
 }
 
 let hashes = {};
@@ -78,8 +59,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             return;
         }
 
-        // Exceptions: Ignore the temporary daily versions from Bonus Costume campaigns
-        // TODO: Probably just replace this with a "prefer permanent versions over dailies" check
+        // Filter temporary daily versions from Bonus Costume campaigns
         if (ldid == 10003102 || ldid == 10003202 || ldid == 10003302 ||
             ldid == 11014102 || ldid == 11014202 || ldid == 11014302 ||
             ldid == 12034102 || ldid == 12034202 || ldid == 12034302 ||
@@ -103,47 +83,49 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
         if (!live_difficulty_ids.hasOwnProperty(lid)) {
             live_difficulty_ids[lid] = [];
             lives_dict[lid] = {
-                "id": lid,
-                "order": songdata[ldid].display_order,
-                "name": songdata[ldid].song_name,
-                "attribute": isEventLive ? 9 : null,
-                "is_all_unavailable": isEventLive ? false : true,
-                "is_any_permanent": isEventLive ? true : false,
-                "daily_weekday": null,
-                "default_diff": null
+                id: lid,
+                order: songdata[ldid].display_order,
+                name: songdata[ldid].song_name,
+                attribute: isEventLive ? 9 : null,
+                isAllUnavailable: !isEventLive,
+                isAnyPermanent: isEventLive,
+                dailyWeekdays: null
             };
         }
 
         if (lives_dict[lid].attribute === null || (ldid < 20000000 && songdata[ldid].song_difficulty !== 35 && songdata[ldid].song_difficulty !== 37)) {
             // prefer info from Free Live, non-Adv+ data
             lives_dict[lid].attribute = songdata[ldid].song_attribute;
-            lives_dict[lid].daily_weekday = songdata[ldid].extra_info.daily_weekday;
+            lives_dict[lid].dailyWeekdays = songdata[ldid].extra_info.daily_weekday;
             // default diff should be Advanced if available
-            if (songdata[ldid].song_difficulty === 30 && songdata[ldid].extra_info.is_available) lives_dict[lid].default_diff = ldid;
+            if (songdata[ldid].song_difficulty === 30 && songdata[ldid].extra_info.is_available) lives_dict[lid].defaultDifficulty = ldid;
         }
         if (ldid < 20000000) {
-            lives_dict[lid].is_all_unavailable = (!songdata[ldid].extra_info.is_available) && lives_dict[lid].is_all_unavailable;
-            lives_dict[lid].is_any_permanent = songdata[ldid].extra_info.is_permanent || lives_dict[lid].is_any_permanent;
-            if (songdata[ldid].extra_info.is_available) lives_dict[lid].default_diff = lives_dict[lid].default_diff || ldid;
+            lives_dict[lid].isAllUnavailable = (!songdata[ldid].extra_info.is_available) && lives_dict[lid].isAllUnavailable;
+            lives_dict[lid].isAnyPermanent = songdata[ldid].extra_info.is_permanent || lives_dict[lid].isAnyPermanent;
+            if (songdata[ldid].extra_info.is_available) lives_dict[lid].defaultDifficulty = Math.max(lives_dict[lid].defaultDifficulty, ldid);
         }
 
         live_difficulty_ids[lid].push(ldid);
     }
 });
 
-let s = ''
-let current_group = 'muse';
-let last_live_id = 0;
-let live_pages_built = 0;
-let list_update = false;
-let has_available_songs = false;
+let currentGroup = {
+    name: "muse",
+    lives: [],
+    savePromises: [],
+    hasUpdatedLives: false,
+    hasAvailableLives: false
+};
+const groupSavePromises = [];
+let lastLiveId = 10000;
+let livePagesBuilt = 0;
 
 Object.keys(lives_dict).sort(function (a, b) {
     return lives_dict[a].order - lives_dict[b].order;
 }).map(function (e) {
     return lives_dict[e];
 }).forEach(function (live) {
-    //console.log(live);
     live_difficulty_ids[live.id] = live_difficulty_ids[live.id].sort(function (a, b) {
         if (a < 30000000 && b < 30000000) {
             return songdata[a].song_difficulty - songdata[b].song_difficulty;
@@ -161,130 +143,136 @@ Object.keys(lives_dict).sort(function (a, b) {
     });
 
     // start new section if the next group is up
-    if (Math.floor(live.id / 1000) !== Math.floor(last_live_id / 1000)) {
-        if (list_update) {
-            dump(current_group, s, has_available_songs);
+    if (Math.floor(live.id / 1000) !== Math.floor(lastLiveId / 1000)) {
+        groupSavePromises.push(finishGroupPage(currentGroup));
+        currentGroup = {
+            lives: [],
+            savePromises: [],
+            hasUpdatedLives: false,
+            hasAvailableLives: false
         }
-        list_update = has_available_songs = false;
-        s = '';
-        if (live.id >= 11000 && last_live_id < 11000) current_group = 'aqours';
-        if (live.id >= 12000 && last_live_id < 12000) current_group = 'niji';
-        if (live.id >= 13000 && last_live_id < 13000) current_group = 'liella';
+        if (live.id >= 11000 && lastLiveId < 11000) currentGroup.name = 'aqours';
+        if (live.id >= 12000 && lastLiveId < 12000) currentGroup.name = 'niji';
+        if (live.id >= 13000 && lastLiveId < 13000) currentGroup.name = 'liella';
     }
-    last_live_id = live.id;
+    lastLiveId = live.id;
 
-    if (!live.is_all_unavailable) {
-        has_available_songs = true;
+    const liveData = {
+        id: live.id,
+        nameKana: notemap.song_name_romaji(live.id),
+        nameRomaji: live.name,
+        attribute: notemap.attribute(live.attribute),
+        isAllUnavailable: live.isAllUnavailable,
+        isAnyPermanent: live.isAnyPermanent,
+        isDaily: live.dailyWeekdays !== null,
+        freeLiveTabs: [],
+        storyStageTabs: []
     }
 
-    let limitedEnd = undefined;
-    if (!live.is_any_permanent && !live.is_all_unavailable) {
+    if (!live.isAllUnavailable) {
+        currentGroup.hasAvailableLives = true;
+    }
+
+    if (!live.isAnyPermanent && !live.isAllUnavailable) {
         if (settings.limited_song_deadlines.hasOwnProperty(live.id)) {
-            limitedEnd = settings.limited_song_deadlines[live.id] * 1000;
+            liveData.limitedEnd = settings.limited_song_deadlines[live.id];
         }
     }
 
-    s += '<ul class="collapsible' + (live.is_all_unavailable ? " note unavail" : (!live.is_any_permanent ? (limitedEnd ? " note temp has-date" : "") : (live.daily_weekday !== undefined && live.daily_weekday !== null ? " note daily" : ""))) +
-        '" data-collapsible="expandable" data-live-id="' + live.id + '"><li>' +
-        '<div class="collapsible-header"><img src="image/icon_' + notemap.attribute(live.attribute) + '.png" ' +
-        'alt="' + notemap.attribute(live.attribute) + '">' +
-        '<b class="translatable" data-rom="' + notemap.song_name_romaji(live.id) + '"' +
-        (live.daily_weekday !== undefined && live.daily_weekday !== null ? " data-weekday=\"" + live.daily_weekday.map(x => WEEKDAYS[x]).join(", ") + "\"" : "") +
-        (limitedEnd ? ' data-end="' + limitedEnd + '"' : "") + '>' + live.name + '</b></div><div class="collapsible-body">';
+    if (liveData.isDaily) {
+        liveData.dailyWeekdays = live.dailyWeekdays.map(x => WEEKDAYS[x]).join(", ");
+    }
 
-    s += '<ul class="tabs tabs-transparent tabs-fixed-width">';
-
-    let live_tabbar = "";
-    let live_tabs = "";
-    let story_tabbar = "";
-    let story_tabs = "";
-
-    live_difficulty_ids[live.id].forEach(function (live_difficulty_id) {
-        //console.log(live_difficulty_id);
-        let live_diff = songdata[live_difficulty_id];
-        let live_diff_hash = hash(live_diff);
+    for (const live_difficulty_id of live_difficulty_ids[live.id]) {
+        const liveDiff = songdata[live_difficulty_id];
+        const live_diff_hash = hash(liveDiff);
 
         if (process.argv[2] === "full" || !hashes.hasOwnProperty(live_difficulty_id) || hashes[live_difficulty_id] !== live_diff_hash) {
-            list_update = true;
+            currentGroup.hasUpdatedLives = true;
 
             const liveData = {
-                rankS: notemap.format(live_diff.ranks.S),
-                rankA: notemap.format(live_diff.ranks.A),
-                rankB: notemap.format(live_diff.ranks.B),
-                rankC: notemap.format(live_diff.ranks.C),
-                capTap: notemap.format(live_diff.voltage_caps.tap),
-                capSp: notemap.format(live_diff.voltage_caps.sp),
-                capSkill: notemap.format(live_diff.voltage_caps.skill),
-                capSwap: notemap.format(live_diff.voltage_caps.swap),
-                noteDamage: live_diff.note_damage,
-                spGaugeSize: notemap.format(live_diff.sp_gauge_max),
-                noteMap: notemap.make(live_diff)
+                rankS: notemap.format(liveDiff.ranks.S),
+                rankA: notemap.format(liveDiff.ranks.A),
+                rankB: notemap.format(liveDiff.ranks.B),
+                rankC: notemap.format(liveDiff.ranks.C),
+                capTap: notemap.format(liveDiff.voltage_caps.tap),
+                capSp: notemap.format(liveDiff.voltage_caps.sp),
+                capSkill: notemap.format(liveDiff.voltage_caps.skill),
+                capSwap: notemap.format(liveDiff.voltage_caps.swap),
+                noteDamage: liveDiff.note_damage,
+                spGaugeSize: notemap.format(liveDiff.sp_gauge_max),
+                noteMap: notemap.make(liveDiff)
             }
 
-            render("templates/liveDifficulty.ejs", liveData).then(res => {
-                fs.writeFileSync('build/lives/' + live_difficulty_id + '.html', minify(res, {
+            currentGroup.savePromises.push(render("templates/liveDifficulty.ejs", liveData).then(res => {
+                fs.writeFileSync("build/lives/" + live_difficulty_id + ".html", minify(res, {
                     collapseWhitespace: true,
                     minifyCSS: true
                 }));
-            }).catch(e => {
-                console.log(e.message);
-                console.log(e.stack);
-            });
+            }));
 
             hashes[live_difficulty_id] = live_diff_hash;
-            live_pages_built++;
+            livePagesBuilt++;
         }
 
-        let is_unavailable_difficulty = live_difficulty_id < 20000000 && !live_diff.extra_info.is_available && !live.is_all_unavailable;
-
-        // If no default diff was set, use Advanced
-        let this_tabbar = '<li class="tab' + (is_unavailable_difficulty ? ' unavail' : '') + '"><a href="#' + live_difficulty_id + '"' +
-            ((live.default_diff == live_difficulty_id || (live.default_diff === null && live_diff.song_difficulty === 30 && live_difficulty_id < 30000000)) ?
-                ' class="active"' : '') + ' tabindex="-1">';
-
-        if (live_difficulty_id < 30000000) {
+        if (live_difficulty_id < 30000000 || live_difficulty_id >= 40000000) {
             // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
-            this_tabbar += notemap.difficulty(live_diff.song_difficulty) + (live_diff.song_attribute != live.attribute ?
-                    ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
-                    notemap.attribute(live_diff.song_attribute) + '">' : '') +
-                (is_unavailable_difficulty ? '<i class="material-icons" title="Unavailable">event_busy</i>' : '');
+            const liveTabData = {
+                id: live_difficulty_id,
+                label: notemap.difficulty(liveDiff.song_difficulty),
+                hasAltAttribute: liveDiff.song_attribute != live.attribute,
+                isUnavailable: live_difficulty_id < 20000000 && !liveDiff.extra_info.is_available && !live.isAllUnavailable,
+                isDefaultDiff: live.defaultDifficulty == live_difficulty_id
+            }
+            if (liveTabData.hasAltAttribute) liveTabData.altAttribute = notemap.attribute(liveDiff.song_attribute);
+            liveData.freeLiveTabs.push(liveTabData);
         } else {
             // Shortened difficulty plus location for story stages, always show attribute
-            this_tabbar += (live_diff.extra_info.story_chapter < 20 ? "" :
-                    (live_diff.extra_info.story_is_hard_mode ? "Hard" : "Normal") + " ") + live_diff.extra_info.story_chapter +
-                '-' + live_diff.extra_info.story_stage + ' (' + guess_story_stage_difficulty(live_diff) +
-                ' <img src="image/icon_' + notemap.attribute(live_diff.song_attribute) + '.png" alt="' +
-                notemap.attribute(live_diff.song_attribute) + '">)'
+            const storyTabData = {
+                id: live_difficulty_id,
+                storyChapter: liveDiff.extra_info.story_chapter,
+                storyStage: liveDiff.extra_info.story_stage,
+                hasCourse: liveDiff.extra_info.story_chapter >= 20,
+                hasChartDifficulty: liveDiff.notes !== null,
+                attribute: notemap.attribute(liveDiff.song_attribute)
+            }
+            if (storyTabData.hasCourse) storyTabData.course = liveDiff.extra_info.story_is_hard_mode ? "Hard" : "Normal";
+
+            // Try to guess chart difficulty by comparing the note count with the free live versions
+            if (storyTabData.hasChartDifficulty) {
+                let minimumDifference = liveDiff.notes.length;
+                let minimumDifficulty = 10;
+                for (const comparisonDiffId of live_difficulty_ids[liveDiff.live_id]) {
+                    const comparisonDiff = songdata[comparisonDiffId];
+                    if (comparisonDiff === undefined || comparisonDiff.notes === null) continue;
+                    const difference = Math.abs(liveDiff.notes.length - comparisonDiff.notes.length);
+                    if (difference < minimumDifference) {
+                        minimumDifference = difference;
+                        minimumDifficulty = comparisonDiff.song_difficulty;
+                    }
+                }
+                storyTabData.chartDifficulty = notemap.difficulty_short(minimumDifficulty);
+            }
+
+            liveData.storyStageTabs.push(storyTabData);
         }
-        this_tabbar += '</a></li>';
-
-        let this_tab = '<div class="live-difficulty unloaded" id="' + live_difficulty_id + '">Loading...</div>';
-
-        if (live_difficulty_id >= 30000000 && live_difficulty_id < 40000000) {
-            story_tabbar += this_tabbar;
-            story_tabs += this_tab;
-        } else {
-            live_tabbar += this_tabbar;
-            live_tabs += this_tab;
-        }
-    });
-
-    if (story_tabs.length > 0) {
-        s += live_tabbar + '<li class="tab"><a href="#' + live.id + '-story" tabindex="-1">Story Stages</a></li></ul>' +
-            live_tabs + '<div id="' + live.id + '-story"><ul class="tabs tabs-transparent tabs-fixed-width" tabindex="-1">' +
-            story_tabbar + '</ul>' + story_tabs + '</div></div></li></ul>';
-    } else {
-        s += live_tabbar + '</ul>' + live_tabs + '</div></li></ul>';
     }
+    currentGroup.lives.push(liveData);
 });
 
-if (list_update) {
-    dump(current_group, s, has_available_songs);
+if (currentGroup.hasUpdatedLives) {
+    groupSavePromises.push(finishGroupPage(currentGroup));
 }
-fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
-    function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-console.log("    Building " + live_pages_built + " Live page(s).");
+
+Promise.all(groupSavePromises).then(() => {
+    fs.writeFile('build/lives/hash.json', JSON.stringify(hashes),
+        function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        });
+    console.log("    Built " + livePagesBuilt + " Live page(s).");
+});
+if (groupSavePromises.length > 0) {
+    console.log("    Building " + livePagesBuilt + " Live page(s)...");
+}
