@@ -1,0 +1,109 @@
+<% if (hasNoteMap) { %>
+    <div class="row nomargin">
+        <div class="col l6">
+            <b>Note Count:</b> <%- mapInfo.noteCount %><br>
+            <b>Notes in ACs:</b> <%- mapInfo.totalACNotes %>
+            <b>Total Note Damage:</b> <%- mapInfo.totalNoteDamage %><br>
+        </div>
+        <div class="col l6">
+            <b>Total AC Reward Voltage:</b> <%- mapInfo.totalACReward %><br>
+            <b>SP Gauge Size:</b> <%- mapInfo.spGaugeSize %>
+            <% if(mapInfo.hasActualSongLength) { %>
+                <br>
+                <b>Actual Song Length:</b> <%- mapInfo.songLength %>
+            <% } %>
+        </div>
+    </div>
+    <div class="notebarcontainer" tabindex="-1">
+        <div class="notebar" style="--markerlayers: <%- mapInfo.markerLayerCount %>"
+             data-totaltime="<%- mapInfo.mapLength %>">
+
+            <% for (const ac of acRanges) { %>
+                <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>"
+                     style="left: <%- ac.startRelative * 98 + 1 %>%; width: <%- ac.lengthRelative * 98 %>%;">&nbsp;
+                </div>
+            <% } %>
+            <% for (const note of notes) { %>
+                <div class="note <%- note.cssClass %> <%- note.hasGimmick ? "gimmicked" : "" %>"
+                     style="left: <%- "calc(" + (note.positionRelative * 98 + 1) + "% - 1px)" %>;">&nbsp;
+                </div>
+
+                <% if (note.isHold) { %>
+                    <div class="hold <%- note.cssClass %>"
+                         style="left: calc(<%- note.positionRelative * 98 + 1 %>% - 1px);
+                                 width: <%- note.holdLengthRelative * 98 %>%;">&nbsp;
+                    </div>
+                <% } %>
+
+                <% if (note.hasGimmick) { %>
+                    <div class="gimmick" data-gimmick="<%- marker.gimmickIndex %>"
+                         data-npos="<%- marker.noteIndex + 1 %>"
+                         style="--gimmicklayer: <%- marker.globalLayer %>; --gimmicklayer-filtered: <%- marker.thisGimmickLayer %>;
+                                 left: <%- marker.positionRelative * 98 + 1 %>%;
+                         <% if (marker.hasLength) { %>width: <%- marker.lengthRelative * 98 + 1 %>%; <% } %>">
+                        <div class="gimmickmarker"><%- marker.gimmickIndex + 1 %></div>
+                        <% if (marker.hasLength) { %>
+                            <div class="gimmicklength">&nbsp;</div>
+                        <% } %>
+                    </div>
+                <% } %>
+
+                <% if ((note.index + 1) % 5 === 0) { %>
+                    <div class="marker <%- ((note.index + 1) % 50 === 0 ? 'fifty' : ((note.index + 1) % 10 !== 0 ? 'five' : '')) %>"
+                         style="left: calc(<%- note.positionRelative * 98 + 1 %>% - 1em);">
+                        |<br><%- ((note.index + 1) % 10 === 0) ? (note.index + 1) : "&nbsp;" %>
+                    </div>;
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+<% } else { %>
+    <div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>
+<% } %>
+
+<div class="row nomargin">
+    <div class="col l6 detailinfo">
+        <h5>Gimmicks</h5>
+        <div>
+            <div>Song Gimmick</div>
+            <div>
+                <% if (hasSongGimmick) { %>
+                    <% for (const songGimmick in live.songGimmicks) { %>
+                        <div class="songgimmick">
+                            <% if (live.songGimmicks > 1) { %>
+                                <div class="number"><%- String.fromCharCode(9312 <%# ① %> + songGimmick.index) %></div>
+                            <% } %>
+                            <div class="text">
+                                <%- songGimmick.skill %><br>
+                                <b>Cleansable:</b> <% songGimmick.isCleansable ? "Yes" : "No" %>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    None
+                <% } %>
+            </div>
+        </div>
+        <% for (const noteGimmick in live.noteGimmicks) { %>
+            <div data-gimmick="<%- noteGimmick.index %>" class="gimmick">
+                <div>Note Gimmick <%- noteGimmick.index + 1 %></div>
+                <div>
+                    <%- noteGimmick.skill %>
+                    <% if (noteGimmick.hasCount) { %>
+                        <br><b>Amount:</b> <%- noteGimmick.count %> note<%- (noteGimmick.count === 1) ? "" : "s" %>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+    <div class="col l6 detailinfo">
+        <h5>Appeal Chances</h5>
+        <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>">
+            <div>AC <%- ac.index + 1 %>: <%- ac.mission %></div>
+            <div>
+                <div class="row nomargin"><div class="col m6 no-padding"><b>Success:</b> ' + format(ac.reward_voltage) +
+                        ' Voltage</div>' + '<div class="col m6 no-padding"><b>Failure:</b> ' + format(ac.penalty_damage) + ' Damage</div></div>
+            </div>
+        </div>
+    </div>
+</div>

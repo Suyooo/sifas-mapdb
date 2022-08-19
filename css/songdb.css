@@ -210,8 +210,8 @@ body.show-unavail div.group-tab div.no-available-songs {
     position: relative;
     height: 1em;
     user-select: none;
-    --gimmicklayers: -999;
-    margin: calc((var(--gimmicklayers) * 0.625 + 0.5) * 1em) 0 1.2em;
+    --markerlayers: 0;
+    margin: calc((var(--markerlayers) * 0.625 + 0.5) * 1em) 0 1.2em;
     z-index: 1;
     font-size: 150%;
 }
@@ -423,6 +423,21 @@ body.show-unavail div.group-tab div.no-available-songs {
     font-weight: normal;
     font-size: 70%;
     margin-top: 0.33em;
+}
+
+.detailinfo .songgimmick {
+    width: 100%;
+    display: flex;
+}
+
+.detailinfo .songgimmick > .number {
+    flex: 0 1 0;
+    font-weight: bold;
+    padding-right: .5em;
+}
+
+.detailinfo .songgimmick > .text {
+    flex: 1 1 0;
 }
 
 .detailinfo > div.filtered > div:first-child {

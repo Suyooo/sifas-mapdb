@@ -17,8 +17,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 const fs = require('fs');
+const NoteType = require("./enums/noteType");
+const SkillFinishType = require("./enums/skillFinishType");
+const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
+const ACGimmickTrigger = require("./enums/acGimmickTrigger");
+const ACMissionType = require("./enums/acMissionType");
 
-function capFirstLetter(s) {
+function capitalizeFirstLetter(s) {
     return s.substring(0, 1).toUpperCase() + s.substring(1);
 }
 
@@ -444,16 +449,16 @@ function is_cleansable(skill) {
 }
 
 function ac_mission(type_id, goal) {
-    if (type_id === 1) return 'Get ' + format(goal) + ' Voltage';
-    if (type_id === 2) return 'Hit ' + format(goal) + ' NICEs';
-    if (type_id === 3) return 'Hit ' + format(goal) + ' GREATs';
-    if (type_id === 4) return 'Hit ' + format(goal) + ' WONDERFULs';
-    if (type_id === 5) return 'Get ' + format(goal) + ' Voltage in one Appeal';
-    if (type_id === 6) return 'Get ' + format(goal) + ' Voltage from SP';
-    if (type_id === 7) return 'Appeal with ' + format(goal) + ' unique Units';
-    if (type_id === 8) return 'Get ' + format(goal) + ' Criticals';
-    if (type_id === 9) return 'Activate ' + format(goal) + ' Tap Skills';
-    if (type_id === 16) {
+    if (type_id === ACMissionType.VOLTAGE_TOTAL) return 'Get ' + format(goal) + ' Voltage';
+    if (type_id === ACMissionType.TIMING_NICE) return 'Hit ' + format(goal) + ' NICEs';
+    if (type_id === ACMissionType.TIMING_GREAT) return 'Hit ' + format(goal) + ' GREATs';
+    if (type_id === ACMissionType.TIMING_WONDERFUL) return 'Hit ' + format(goal) + ' WONDERFULs';
+    if (type_id === ACMissionType.VOLTAGE_SINGLE) return 'Get ' + format(goal) + ' Voltage in one Appeal';
+    if (type_id === ACMissionType.VOLTAGE_SP) return 'Get ' + format(goal) + ' Voltage from SP';
+    if (type_id === ACMissionType.UNIQUE) return 'Appeal with ' + format(goal) + ' unique Units';
+    if (type_id === ACMissionType.CRITICALS) return 'Get ' + format(goal) + ' Criticals';
+    if (type_id === ACMissionType.SKILLS) return 'Activate ' + format(goal) + ' Tap Skills';
+    if (type_id === ACMissionType.STAMINA) {
         if (goal === 10000) return 'Finish the AC with ' + format(goal / 100) + '% of max Stamina';
         else return 'Finish the AC with ' + format(goal / 100) + '% of max Stamina or more';
     }
@@ -461,238 +466,274 @@ function ac_mission(type_id, goal) {
 }
 
 function ac_colour(type_id) {
-    if (type_id === 1) return 'vo';
-    if (type_id === 2) return 'sk';
-    if (type_id === 3) return 'sk';
-    if (type_id === 4) return 'sk';
-    if (type_id === 5) return 'vo';
-    if (type_id === 6) return 'sp';
-    if (type_id === 7) return 'vo';
-    if (type_id === 8) return 'sk';
-    if (type_id === 9) return 'sk';
-    if (type_id === 16) return 'gd';
+    if (type_id === ACMissionType.VOLTAGE_TOTAL) return 'vo';
+    if (type_id === ACMissionType.TIMING_NICE) return 'sk';
+    if (type_id === ACMissionType.TIMING_GREAT) return 'sk';
+    if (type_id === ACMissionType.TIMING_WONDERFUL) return 'sk';
+    if (type_id === ACMissionType.VOLTAGE_SINGLE) return 'vo';
+    if (type_id === ACMissionType.VOLTAGE_SP) return 'sp';
+    if (type_id === ACMissionType.UNIQUE) return 'vo';
+    if (type_id === ACMissionType.CRITICALS) return 'sk';
+    if (type_id === ACMissionType.SKILLS) return 'sk';
+    if (type_id === ACMissionType.STAMINA) return 'gd';
     throw new Error('Unknown AC Mission Type ' + type_id);
 }
 
 function make_notemap(live) {
     try {
-        let s = "";
+        const liveInfo = {
+            hasNoteMap: live.notes !== null,
+            hasSongGimmicks: live.gimmick !== null,
+            noteGimmicks: [],
+            appealChances: []
+        };
+        const gimmickCounts = {};
 
-        if (live.notes !== null) {
-            let firstnote_time = live.notes[0].time;
-            let lastnote_time = live.notes[live.notes.length - 1].time;
+        if (liveInfo.hasNoteMap) {
+            liveInfo.notes = [];
+            liveInfo.acRanges = [];
+
+            const firstNoteTime = live.notes[0].time;
+            const lastNoteTime = live.notes[live.notes.length - 1].time;
             // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
-            let length_notes_only = (lastnote_time - firstnote_time) / 98 * 100;
+            const mapLength = (lastNoteTime - firstNoteTime);
 
-            let total_ac_notes = 0;
-            let total_ac_rewards = 0;
+            let totalACNotes = 0;
+            let totalACReward = 0;
             for (let ai = 0; ai < live.appeal_chances.length; ai++) {
-                let ac = live.appeal_chances[ai];
-                let start = live.notes[ac.range_note_ids[0]].time;
-                let length = live.notes[ac.range_note_ids[1]].time - start;
+                const ac = live.appeal_chances[ai];
+                const start = live.notes[ac.range_note_ids[0]].time;
+                const length = live.notes[ac.range_note_ids[1]].time - start;
+                const noteCount = ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
 
-                s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '" style="' +
-                    'left: ' + ((start - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '%;' +
-                    'width: ' + (length / (lastnote_time - firstnote_time) * 98) + '%;">' +
-                    '&nbsp;</div>';
-                total_ac_notes += ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
-                total_ac_rewards += ac.reward_voltage;
+                totalACNotes += noteCount;
+                totalACReward += ac.reward_voltage;
+
+                liveInfo.acRanges.push({
+                    index: ai,
+                    startRelative: (start - firstNoteTime) / mapLength,
+                    lengthRelative: length / mapLength,
+                    cssClass: ac_colour(ac.mission_type)
+                });
             }
 
-            let stacker_global = [];
-            let stacker_seperate = [];
-            for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
-                stacker_seperate.push([]);
-            }
+            // Stackers to assign the gimmick markers to layers to avoid overlapping
+            // Each stacker is an array, one number per layer, keeping track of the position where the last marker on
+            // that layer ends ("occupied until this position"). When adding a marker, its start position can be
+            // compared with that saved value to find the first free layer.
+            // There is one global stacker (default view) and one per gimmick (filtered gimmick view).
+            const stackerGlobal = [];
+            const stackerPerGimmick = live.note_gimmicks.map(_ => []);
+
             for (let ni = 0; ni < live.notes.length; ni++) {
-                let note = live.notes[ni];
+                const note = live.notes[ni];
+                const noteData = {
+                    index: ni,
+                    positionRelative: (note.time - firstNoteTime) / mapLength,
+                    cssClass: (note.rail == 1 ? 'top' : 'bottom'),
+                    hasGimmick: note.gimmick !== null,
+                    isHold: note.type === NoteType.HOLD_START
+                };
 
-                s += '<div class="note ' + (note.rail == 1 ? 'top' : 'bottom') + (note.gimmick !== null ? ' gimmicked' : '') +
-                    '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1px);">' +
-                    '&nbsp;</div>';
-                if (note.type === 2) {
-                    let ni2 = ni + 1;
-                    while (live.notes[ni2].rail !== note.rail) ni2++;
-                    s += '<div class="hold ' + (note.rail == 1 ? 'top' : 'bottom')
-                        + '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1px);' +
-                        'width: ' + ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98) + '%;">' +
-                        '&nbsp;</div>';
+                if (noteData.isHold) {
+                    let endNi = ni + 1;
+                    while (live.notes[endNi].rail !== note.rail || live.notes[endNi].type !== NoteType.HOLD_END) {
+                        endNi++;
+                    }
+                    noteData.holdLengthRelative = (live.notes[endNi].time - note.time) / mapLength;
                 }
-                if (note.gimmick !== null) {
-                    if (live.note_gimmicks[note.gimmick].counter === undefined) live.note_gimmicks[note.gimmick].counter = 1;
-                    else live.note_gimmicks[note.gimmick].counter += 1;
 
-                    let marker_position = ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1);
-
-                    let stack_layer_global = 0;
-                    while (stack_layer_global < stacker_global.length && stacker_global[stack_layer_global] > marker_position) {
-                        stack_layer_global++;
+                if (noteData.hasGimmick) {
+                    if (gimmickCounts[note.gimmick] === undefined) {
+                        gimmickCounts[note.gimmick] = 0;
                     }
-                    if (stack_layer_global == stacker_global.length) stacker_global.push(0);
+                    gimmickCounts[note.gimmick]++;
 
-                    let stack_layer_seperate = 0;
-                    while (stack_layer_seperate < stacker_seperate[note.gimmick].length &&
-                    stacker_seperate[note.gimmick][stack_layer_seperate] > marker_position) {
-                        stack_layer_seperate++;
+                    const positionRelative = (note.time - firstNoteTime) / mapLength;
+
+                    let globalLayer = 0;
+                    while (globalLayer < stackerGlobal.length
+                    && stackerGlobal[globalLayer] > positionRelative) {
+                        globalLayer++;
                     }
-                    if (stack_layer_seperate == stacker_seperate[note.gimmick].length)
-                        stacker_seperate[note.gimmick].push(0);
+                    if (globalLayer == stackerGlobal.length)
+                        stackerGlobal.push(0); // new layer required
 
-                    let marker_length = 0;
-                    if (live.note_gimmicks[note.gimmick].finish_type === 2) {
-                        let ni2 = ni + live.note_gimmicks[note.gimmick].finish_amount;
-                        if (ni2 >= live.notes.length) ni2 = live.notes.length - 1;
-                        marker_length = ((live.notes[ni2].time - note.time) / (lastnote_time - firstnote_time) * 98);
+                    let thisGimmickLayer = 0;
+                    while (thisGimmickLayer < stackerPerGimmick[note.gimmick].length
+                    && stackerPerGimmick[note.gimmick][thisGimmickLayer] > positionRelative) {
+                        thisGimmickLayer++;
                     }
+                    if (thisGimmickLayer == stackerPerGimmick[note.gimmick].length)
+                        stackerPerGimmick[note.gimmick].push(0); // new layer required
 
-                    s += '<div class="gimmick" data-gimmick="' + note.gimmick + '" data-npos="' + (ni + 1) +
-                        '" style="--gimmicklayer: ' + stack_layer_global + ';' + '--gimmicklayer-filtered: ' +
-                        stack_layer_seperate + '; left: ' + marker_position + '%; ' + 'width:' + marker_length + '%">' +
-                        '<div class="gimmickmarker">' + (note.gimmick + 1) + '</div>';
-                    if (live.note_gimmicks[note.gimmick].finish_type === 2) {
-                        s += '<div class="gimmicklength">&nbsp;</div>';
+                    const gimmickMarkerData = {
+                        gimmickIndex: note.gimmick,
+                        noteIndex: ni,
+                        hasLength: live.note_gimmicks[note.gimmick].finish_type === SkillFinishType.NOTE_COUNT,
+                        positionRelative, globalLayer, thisGimmickLayer
+                    };
 
-                        stacker_global[stack_layer_global] = stacker_seperate[note.gimmick][stack_layer_seperate] = marker_position + marker_length;
+                    if (gimmickMarkerData.hasLength) {
+                        let endNi = ni + live.note_gimmicks[note.gimmick].finish_amount;
+                        if (endNi >= live.notes.length) endNi = live.notes.length - 1;
+                        gimmickMarkerData.lengthRelative = (live.notes[endNi].time - note.time) / mapLength;
+
+                        // magic value (TM) to avoid unneccessary stacks due to float precision loss
+                        stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
+                            = positionRelative + gimmickMarkerData.lengthRelative - 0.0001;
                     } else {
-                        // magic value (TM) to avoid too much overlap of start markers
-                        stacker_global[stack_layer_global] = stacker_seperate[note.gimmick][stack_layer_seperate] = marker_position + 0.75;
+                        // magic value (TM) to avoid too much overlap of no-length markers
+                        stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
+                            = positionRelative + 0.0075;
                     }
-                    s += '</div>';
+
+                    noteData.gimmickMarker = gimmickMarkerData;
                 }
-                if ((ni + 1) % 5 === 0) {
-                    s += '<div class="marker' + ((ni + 1) % 50 === 0 ? ' fifty' : '') + ((ni + 1) % 10 !== 0 ? ' five' : '') +
-                        '" style="left: calc(' + ((note.time - firstnote_time) / (lastnote_time - firstnote_time) * 98 + 1) + '% - 1em);">' +
-                        '|<br>' + (((ni + 1) % 10 === 0) ? format(ni + 1) : "&nbsp;") + '</div>';
-                }
+
+                liveInfo.notes.push(noteData);
             }
 
-            let total_note_damage = live.notes.length * live.note_damage + total_ac_notes * Math.floor(live.note_damage / 10);
+            const totalNoteDamage = live.notes.length * live.note_damage + totalACNotes * Math.floor(live.note_damage / 10);
 
-            let infos = '<div class="col l6"><b>Note Count: </b>' + format(live.notes.length) + '</div>' +
-                '<div class="col l6"><b>Total Note Damage: </b>' + format(total_note_damage) + '</div>' +
-                '<div class="col l6"><b>Notes in ACs: </b>' + format(total_ac_notes) + ' (' +
-                format(Math.round((total_ac_notes / live.notes.length) * 100)) + '%)</div>' +
-                '<div class="col l6"><b>Total AC Reward Voltage: </b>' + format(total_ac_rewards) + '</div>' +
-                '<div class="col l6"><b>SP Gauge Size: </b>' + format(live.sp_gauge_max) + '</div>';
-            if (live.song_length) {
-                let min = Math.floor(live.song_length / 60000);
-                let sec = Math.floor(live.song_length % 60000 / 1000);
-                infos += '<div class="col l6"><b>Actual Song Length: </b>' + min + ':' + (sec < 10 ? '0' : '') + sec + '</div>';
+            liveInfo.mapInfo = {
+                noteCount: format(live.notes.length),
+                totalNoteDamage: format(totalNoteDamage),
+                totalACNotes: format(totalACNotes) + " (" + format(Math.round((totalACNotes / live.notes.length) * 100)) + "%)",
+                totalACReward: format(totalACReward),
+                spGaugeSize: format(live.sp_gauge_max),
+                markerLayerCount: stackerGlobal.length,
+                mapLength: mapLength / 98 * 100,
+                hasActualSongLength: live.song_length !== undefined
+            };
+            if (liveInfo.mapInfo.hasActualSongLength) {
+                const min = Math.floor(live.song_length / 60000);
+                const sec = Math.floor(live.song_length % 60000 / 1000);
+                liveInfo.mapInfo.songLength = min + ':' + (sec < 10 ? '0' : '') + sec;
             }
-            s = '<div class="row nomargin">' + infos + '</div><div class="notebarcontainer" tabindex="-1"><div class="notebar"' +
-                'style="--gimmicklayers: ' + stacker_global.length + '" data-totaltime="' + length_notes_only + '">' + s + '</div></div>';
-        } else {
-            s += '<div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>';
         }
 
-        s += '<div class="row nomargin">'
-        s += '<div class="col l6 detailinfo"><h5>Gimmicks</h5><div><div>Song Gimmick</div><div>';
-        if (live.gimmick === null) {
-            s += "none";
-        } else {
-            for (let i = 0; i < live.gimmick.length; i++) {
-                if (live.gimmick.length > 1) s += '<b>' + (i + 1) + ')</b> ';
-                let skillstr = skill(live.gimmick[i], false);
-                if (live.gimmick[i].finish_type === 1) {
+        if (liveInfo.hasSongGimmicks) {
+            liveInfo.songGimmicks = live.gimmick.map((gimmick, index) => {
+                let skillstr = capitalizeFirstLetter(skill(gimmick, false));
+                if (gimmick.finish_type === SkillFinishType.UNTIL_SONG_END) {
                     // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
                     skillstr = skillstr.substring(0, skillstr.length - 20);
                 }
-                s += capFirstLetter(skillstr) + '<br><b>Cleansable:</b> ' + is_cleansable(live.gimmick[i]);
-                if (i + 1 < live.gimmick.length) s += '<br>';
-            }
+
+                return {
+                    index,
+                    skill: skillstr,
+                    isCleansable: is_cleansable(gimmick)
+                }
+            });
         }
-        s += '</div></div>';
 
         for (let gi = 0; gi < live.note_gimmicks.length; gi++) {
-            let noteg = live.note_gimmicks[gi];
-
-            s += '<div data-gimmick="' + gi + '" class="gimmick"><div>Note Gimmick ' + format(gi + 1) + '</div><div>';
+            let skillstr;
             let remove_target = false;
-            switch (noteg.trigger) {
-                case 1:
-                    s += "If hit, ";
+            switch (live.note_gimmicks[gi].trigger) {
+                case NoteGimmickTrigger.ON_HIT:
+                    skillstr = "If hit, ";
                     break;
-                case 2:
-                    s += "If missed, ";
+                case NoteGimmickTrigger.ON_MISS:
+                    skillstr = "If missed, ";
                     break;
-                case 3:
-                    s += ""; // always
+                case NoteGimmickTrigger.ALWAYS:
+                    skillstr = ""; // always
                     break;
-                case 4:
-                    s += 'If hit with a <span class="t vo">Vo</span> unit, ';
-                    remove_target = noteg.target == 38;
+                case NoteGimmickTrigger.ON_VO_HIT:
+                    skillstr = 'If hit with a <span class="t vo">Vo</span> unit, ';
+                    remove_target = live.note_gimmicks[gi].target == 38;
                     break;
-                case 5:
-                    s += 'If hit with an <span class="t sp">Sp</span> unit, ';
-                    remove_target = noteg.target == 39;
+                case NoteGimmickTrigger.ON_SP_HIT:
+                    skillstr = 'If hit with an <span class="t sp">Sp</span> unit, ';
+                    remove_target = live.note_gimmicks[gi].target == 39;
                     break;
-                case 7:
-                    s += 'If hit with an <span class="t sk">Sk</span> unit, ';
-                    remove_target = noteg.target == 41;
+                case NoteGimmickTrigger.ON_SK_HIT:
+                    skillstr = 'If hit with an <span class="t sk">Sk</span> unit, ';
+                    remove_target = live.note_gimmicks[gi].target == 41;
                     break;
                 default:
-                    throw new Error('Unknown Note Gimmick Trigger ' + noteg.trigger);
+                    throw new Error('Unknown Note Gimmick Trigger ' + live.note_gimmicks[gi].trigger);
             }
 
-            let skillstr = skill(noteg, remove_target);
-            if (noteg.trigger === 3) {
-                skillstr = capFirstLetter(skillstr);
+            skillstr += skill(live.note_gimmicks[gi], remove_target);
+            if (live.note_gimmicks[gi].trigger === NoteGimmickTrigger.ALWAYS) {
+                skillstr = capitalizeFirstLetter(skillstr);
             }
-            s += skillstr;
-            if (noteg.counter !== undefined) {
-                s += '<br><b>Amount:</b> ' + format(noteg.counter) + ' note' + (noteg.counter === 1 ? '' : 's');
+
+            const noteGimmickData = {
+                index: gi,
+                skill
+            };
+
+            if (liveInfo.hasNoteMap) {
+                noteGimmickData.count = gimmickCounts[gi];
             }
-            s += '</div></div>';
+
+            liveInfo.noteGimmicks.push(noteGimmickData);
         }
 
-        s += '</div><div class="col l6 detailinfo"><h5>Appeal Chances</h5>';
         for (let ai = 0; ai < live.appeal_chances.length; ai++) {
-            let ac = live.appeal_chances[ai];
+            const acData = {
+                index: ai,
+                cssClass: ac_colour(live.appeal_chances[ai].mission_type),
+                mission: ac_mission(live.appeal_chances[ai].mission_type, live.appeal_chances[ai].mission_value),
+                hasGimmick: live.appeal_chances[ai].gimmick !== null,
+                hasPerNoteInfo: false
+            };
 
-            s += '<div data-ac="' + ai + '" class="appealchance ' + ac_colour(ac.mission_type) + '"><div>AC ' + format(ai + 1) + ': ' +
-                ac_mission(ac.mission_type, ac.mission_value) + '</div><div>';
-            if (ac.gimmick === null) {
-                s += 'No Gimmick<br>';
-            } else {
-                switch (ac.gimmick.trigger) {
-                    case 1:
-                        s += (ac.gimmick.finish_type === 4) ? "During this AC, " : "When the AC starts, ";
+            let skillstr;
+            if (acData.hasGimmick) {
+                switch (live.appeal_chances[ai].gimmick.trigger) {
+                    case ACGimmickTrigger.ON_START:
+                        skillstr = (live.appeal_chances[ai].gimmick.finish_type === SkillFinishType.UNTIL_AC_END)
+                            ? "During this AC, "
+                            : "When the AC starts, ";
                         break;
-                    case 2:
-                        s += "On AC Success, ";
+                    case ACGimmickTrigger.ON_SUCCESS:
+                        skillstr = "On AC Success, ";
                         break;
-                    case 3:
-                        s += "On AC Failure, ";
+                    case ACGimmickTrigger.ON_FAIL:
+                        skillstr = "On AC Failure, ";
                         break;
-                    case 4:
-                        s += "At the end of the AC, ";
+                    case ACGimmickTrigger.ON_END:
+                        skillstr = "At the end of the AC, ";
                         break;
                     default:
-                        throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
+                        throw new Error('Unknown AC Gimmick Trigger ' + live.appeal_chances[ai].gimmick.trigger);
                 }
-                s += skill(ac.gimmick, false) + '<br>';
+                skillstr += skill(live.appeal_chances[ai].gimmick, false);
+                acData.gimmick = skillstr;
             }
 
-            if (ac.range_note_ids !== null) {
-                let aclength = (ac.range_note_ids[1] - ac.range_note_ids[0] + 1);
-                s += '<b>Length:</b> ' + format(aclength) + ' notes';
-                if (ac.mission_type === 1) {
-                    s += ' (avg. ' + format(Math.ceil(ac.mission_value / aclength)) + ' Voltage per note)';
-                } else if (ac.mission_type === 8) {
-                    s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of notes must crit)';
-                } else if (ac.mission_type === 9) {
-                    s += ' (' + format(Math.ceil(ac.mission_value / aclength * 100)) + '% of taps must proc)';
+            if (liveInfo.hasNoteMap) {
+                acData.length = live.appeal_chances[ai].range_note_ids[1] - live.appeal_chances[ai].range_note_ids[0] + 1;
+                if (live.appeal_chances[ai].mission_type === ACMissionType.VOLTAGE_TOTAL) {
+                    acData.hasPerNoteInfo = true;
+                    acData.perNoteInfo = "(avg. "
+                        + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length))
+                        + " Voltage per note)";
+                } else if (live.appeal_chances[ai].mission_type === ACMissionType.CRITICALS) {
+                    acData.hasPerNoteInfo = true;
+                    acData.perNoteInfo = "("
+                        + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length * 100))
+                        + "% of notes must crit)";
+                } else if (live.appeal_chances[ai].mission_type === ACMissionType.SKILLS) {
+                    acData.hasPerNoteInfo = true;
+                    acData.perNoteInfo = "("
+                        + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length * 100))
+                        + "% of taps must proc)";
                 }
-                s += '<div class="row nomargin"><div class="col m6 no-padding"><b>Success:</b> ' + format(ac.reward_voltage) +
-                    ' Voltage</div>' + '<div class="col m6 no-padding"><b>Failure:</b> ' + (ac.penalty_damage !== null ? format(ac.penalty_damage) : "???") + ' Damage</div></div>';
+                acData.rewardVoltage = live.appeal_chances[ai].reward_voltage;
+                acData.penaltyDamage = live.appeal_chances[ai].penalty_damage;
             }
-
-            s += '</div></div>';
+            liveInfo.appealChances.push(acData);
         }
-
-        return s + "</div></div>";
+        return liveInfo;
     } catch (e) {
-        console.log("In Live " + live.live_id + " (Diff " + live.song_difficulty + "):")
+        console.log("In Live " + live.live_id + " (Diff " + live.song_difficulty + "): " + e.stack);
         throw e;
     }
 }
