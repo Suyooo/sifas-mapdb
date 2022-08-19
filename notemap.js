@@ -491,31 +491,11 @@ function make_notemap(live) {
 
         if (liveInfo.hasNoteMap) {
             liveInfo.notes = [];
-            liveInfo.acRanges = [];
 
             const firstNoteTime = live.notes[0].time;
             const lastNoteTime = live.notes[live.notes.length - 1].time;
             // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
             const mapLength = (lastNoteTime - firstNoteTime);
-
-            let totalACNotes = 0;
-            let totalACReward = 0;
-            for (let ai = 0; ai < live.appeal_chances.length; ai++) {
-                const ac = live.appeal_chances[ai];
-                const start = live.notes[ac.range_note_ids[0]].time;
-                const length = live.notes[ac.range_note_ids[1]].time - start;
-                const noteCount = ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
-
-                totalACNotes += noteCount;
-                totalACReward += ac.reward_voltage;
-
-                liveInfo.acRanges.push({
-                    index: ai,
-                    startRelative: (start - firstNoteTime) / mapLength,
-                    lengthRelative: length / mapLength,
-                    cssClass: ac_colour(ac.mission_type)
-                });
-            }
 
             // Stackers to assign the gimmick markers to layers to avoid overlapping
             // Each stacker is an array, one number per layer, keeping track of the position where the last marker on
@@ -594,13 +574,8 @@ function make_notemap(live) {
                 liveInfo.notes.push(noteData);
             }
 
-            const totalNoteDamage = live.notes.length * live.note_damage + totalACNotes * Math.floor(live.note_damage / 10);
-
             liveInfo.mapInfo = {
                 noteCount: format(live.notes.length),
-                totalNoteDamage: format(totalNoteDamage),
-                totalACNotes: format(totalACNotes) + " (" + format(Math.round((totalACNotes / live.notes.length) * 100)) + "%)",
-                totalACReward: format(totalACReward),
                 spGaugeSize: format(live.sp_gauge_max),
                 markerLayerCount: stackerGlobal.length,
                 mapLength: mapLength / 98 * 100,
@@ -675,20 +650,23 @@ function make_notemap(live) {
             liveInfo.noteGimmicks.push(noteGimmickData);
         }
 
+        let totalACNotes = 0;
+        let totalACReward = 0;
         for (let ai = 0; ai < live.appeal_chances.length; ai++) {
+            const ac = live.appeal_chances[ai];
             const acData = {
                 index: ai,
-                cssClass: ac_colour(live.appeal_chances[ai].mission_type),
-                mission: ac_mission(live.appeal_chances[ai].mission_type, live.appeal_chances[ai].mission_value),
-                hasGimmick: live.appeal_chances[ai].gimmick !== null,
+                cssClass: ac_colour(ac.mission_type),
+                mission: ac_mission(ac.mission_type, ac.mission_value),
+                hasGimmick: ac.gimmick !== null,
                 hasPerNoteInfo: false
             };
 
             let skillstr;
             if (acData.hasGimmick) {
-                switch (live.appeal_chances[ai].gimmick.trigger) {
+                switch (ac.gimmick.trigger) {
                     case ACGimmickTrigger.ON_START:
-                        skillstr = (live.appeal_chances[ai].gimmick.finish_type === SkillFinishType.UNTIL_AC_END)
+                        skillstr = (ac.gimmick.finish_type === SkillFinishType.UNTIL_AC_END)
                             ? "During this AC, "
                             : "When the AC starts, ";
                         break;
@@ -702,35 +680,51 @@ function make_notemap(live) {
                         skillstr = "At the end of the AC, ";
                         break;
                     default:
-                        throw new Error('Unknown AC Gimmick Trigger ' + live.appeal_chances[ai].gimmick.trigger);
+                        throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
                 }
-                skillstr += skill(live.appeal_chances[ai].gimmick, false);
+                skillstr += skill(ac.gimmick, false);
                 acData.gimmick = skillstr;
             }
 
             if (liveInfo.hasNoteMap) {
-                acData.length = live.appeal_chances[ai].range_note_ids[1] - live.appeal_chances[ai].range_note_ids[0] + 1;
-                if (live.appeal_chances[ai].mission_type === ACMissionType.VOLTAGE_TOTAL) {
+                const mapLength = (live.notes[live.notes.length - 1].time - live.notes[0].time);
+                acData.startRelative = (live.notes[ac.range_note_ids[0]].time - live.notes[0].time) / mapLength;
+                acData.lengthRelative
+                    = (live.notes[ac.range_note_ids[1]].time - live.notes[ac.range_note_ids[0]].time) / mapLength;
+
+                acData.length = ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
+                totalACNotes += acData.length;
+                totalACReward += ac.reward_voltage;
+
+                if (ac.mission_type === ACMissionType.VOLTAGE_TOTAL) {
                     acData.hasPerNoteInfo = true;
                     acData.perNoteInfo = "(avg. "
-                        + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length))
+                        + format(Math.ceil(ac.mission_value / acData.length))
                         + " Voltage per note)";
-                } else if (live.appeal_chances[ai].mission_type === ACMissionType.CRITICALS) {
+                } else if (ac.mission_type === ACMissionType.CRITICALS) {
                     acData.hasPerNoteInfo = true;
                     acData.perNoteInfo = "("
-                        + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length * 100))
+                        + format(Math.ceil(ac.mission_value / acData.length * 100))
                         + "% of notes must crit)";
-                } else if (live.appeal_chances[ai].mission_type === ACMissionType.SKILLS) {
+                } else if (ac.mission_type === ACMissionType.SKILLS) {
                     acData.hasPerNoteInfo = true;
                     acData.perNoteInfo = "("
-                        + format(Math.ceil(live.appeal_chances[ai].mission_value / acData.length * 100))
+                        + format(Math.ceil(ac.mission_value / acData.length * 100))
                         + "% of taps must proc)";
                 }
-                acData.rewardVoltage = format(live.appeal_chances[ai].reward_voltage);
-                acData.penaltyDamage = format(live.appeal_chances[ai].penalty_damage);
+                acData.rewardVoltage = format(ac.reward_voltage);
+                acData.penaltyDamage = format(ac.penalty_damage);
             }
             liveInfo.appealChances.push(acData);
         }
+        if (liveInfo.hasNoteMap) {
+            liveInfo.mapInfo.totalACNotes
+                = format(totalACNotes) + " (" + format(Math.round((totalACNotes / live.notes.length) * 100)) + "%)";
+            liveInfo.mapInfo.totalACReward = format(totalACReward);
+            liveInfo.mapInfo.totalNoteDamage
+                = format(live.notes.length * live.note_damage + totalACNotes * Math.floor(live.note_damage / 10));
+        }
+
         return liveInfo;
     } catch (e) {
         console.log("In Live " + live.live_id + " (Diff " + live.song_difficulty + "): " + e.stack);

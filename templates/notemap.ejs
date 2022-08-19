@@ -18,7 +18,7 @@
         <div class="notebar" style="--markerlayers: <%- mapInfo.markerLayerCount %>"
              data-totaltime="<%- mapInfo.mapLength %>">
 
-            <% for (const ac of acRanges) { %>
+            <% for (const ac of appealChances) { %>
                 <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>"
                      style="left: <%- ac.startRelative * 98 + 1 %>%; width: <%- ac.lengthRelative * 98 %>%;">&nbsp;
                 </div>
