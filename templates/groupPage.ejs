@@ -52,11 +52,11 @@
                             <% for (const storyTab of live.storyStageTabs) { %>
                                 <li class="tab">
                                     <a href="#<%- storyTab.id %>" tabindex="-1">
+                                        <%- storyTab.storyChapter %>-<%- storyTab.storyStageNo %>
                                         <% if (storyTab.hasCourse) { %>
                                             <%- storyTab.course %>
                                         <% } %>
-                                        <%- storyTab.storyChapter %>-<%- storyTab.storyStage %>
-                                        (<img src="image/icon_<%- storyTab.attribute %>.png" alt="<%- storyTab.attribute %>"><% if (storyTab.hasChartDifficulty) { %> <%- storyTab.chartDifficulty %><% } %>)
+                                        (<img src="image/icon_<%- storyTab.attribute %>.png" alt="<%- storyTab.attribute %>"><% if (storyTab.hasBaseDifficulty) { %> <%- storyTab.baseDifficulty %><% } %>)
                                     </a>
                                 </li>
                             <% } %>

@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-const fs = require('fs');
 const NoteType = require("./enums/noteType");
 const SkillFinishType = require("./enums/skillFinishType");
 const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
