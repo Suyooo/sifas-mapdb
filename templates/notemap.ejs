@@ -15,7 +15,7 @@
     </div>
     <div class="notebarcontainer" tabindex="-1">
         <div class="notebar" style="--markerlayers: <%- mapInfo.markerLayerCount %>"
-             data-totaltime="<%- mapInfo.mapLength %>">
+             data-totaltime="<%- mapInfo.mapLength / 98 * 100 %>">
 
             <% for (const ac of appealChances) { %>
                 <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>"

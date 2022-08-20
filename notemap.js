@@ -21,6 +21,7 @@ const SkillFinishType = require("./enums/skillFinishType");
 const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
 const ACGimmickTrigger = require("./enums/acGimmickTrigger");
 const ACMissionType = require("./enums/acMissionType");
+const Difficulty = require("./enums/difficulty");
 
 function capitalizeFirstLetter(s) {
     return s.substring(0, 1).toUpperCase() + s.substring(1);
@@ -45,20 +46,20 @@ function attribute(attr_id) {
 }
 
 function difficulty(diff_id) {
-    if (diff_id === 10) return "Beginner";
-    if (diff_id === 20) return "Intermediate";
-    if (diff_id === 30) return "Advanced";
-    if (diff_id === 35) return "Advanced+";
-    if (diff_id === 37) return "Challenge";
+    if (diff_id === Difficulty.BEG) return "Beginner";
+    if (diff_id === Difficulty.INT) return "Intermediate";
+    if (diff_id === Difficulty.ADV) return "Advanced";
+    if (diff_id === Difficulty.ADVPLUS) return "Advanced+";
+    if (diff_id === Difficulty.CHA) return "Challenge";
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
 function difficulty_short(diff_id) {
-    if (diff_id === 10) return "Beg";
-    if (diff_id === 20) return "Int";
-    if (diff_id === 30) return "Adv";
-    if (diff_id === 35) return "Adv+";
-    if (diff_id === 37) return "Ch";
+    if (diff_id === Difficulty.BEG) return "Beg";
+    if (diff_id === Difficulty.INT) return "Int";
+    if (diff_id === Difficulty.ADV) return "Adv";
+    if (diff_id === Difficulty.ADVPLUS) return "Adv+";
+    if (diff_id === Difficulty.CHA) return "Ch";
     throw new Error('Unknown Difficulty ' + diff_id);
 }
 
@@ -576,7 +577,7 @@ function make_notemap(live) {
             liveInfo.mapInfo = {
                 noteCount: format(live.notes.length),
                 markerLayerCount: stackerGlobal.length,
-                mapLength: mapLength / 98 * 100,
+                mapLength: mapLength,
                 hasActualSongLength: live.song_length !== undefined
             };
             if (liveInfo.mapInfo.hasActualSongLength) {
