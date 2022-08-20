@@ -99,8 +99,8 @@ for (const l in lives) {
         "kanji_clean": fuzzysort.prepare(clean(live.name)),
         "hiragana": fuzzysort.prepare(live.pronunciation),
         "katakana": fuzzysort.prepare(wanakana.toKatakana(live.pronunciation)),
-        "romaji": fuzzysort.prepare(notemap.song_name_romaji(l)),
-        "romaji_clean": fuzzysort.prepare(clean(notemap.song_name_romaji(l))),
+        "romaji": fuzzysort.prepare(notemap.songNameRomaji(l)),
+        "romaji_clean": fuzzysort.prepare(clean(notemap.songNameRomaji(l))),
         "abbr_kn": fuzzysort.prepare(custom_abbreviations_kn[lid]),
         "abbr_ro": fuzzysort.prepare(custom_abbreviations_ro[lid])
     });

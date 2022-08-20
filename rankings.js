@@ -51,7 +51,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
 
         if (json.song_difficulty === 30) {
             songs_dict[lid] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span>',
+                "name": '<span class="translatable" data-rom="' + notemap.songNameRomaji(json.live_id) + '">' + json.song_name + '</span>',
                 "is_advplus": false,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -70,7 +70,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             }
         } else if (json.song_difficulty === 35) {
             songs_dict[lid+"plus"] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Adv+)',
+                "name": '<span class="translatable" data-rom="' + notemap.songNameRomaji(json.live_id) + '">' + json.song_name + '</span> (Adv+)',
                 "is_advplus": true,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -86,7 +86,7 @@ fs.readdirSync("mapdb/.").forEach(function (f) {
             }
         } else if (json.song_difficulty === 37) {
             songs_dict[lid+"ch"] = {
-                "name": '<span class="translatable" data-rom="' + notemap.song_name_romaji(json.live_id) + '">' + json.song_name + '</span> (Ch)',
+                "name": '<span class="translatable" data-rom="' + notemap.songNameRomaji(json.live_id) + '">' + json.song_name + '</span> (Ch)',
                 "is_advplus": true,
                 "live_id": lid,
                 "attribute": json.song_attribute,
@@ -173,7 +173,7 @@ songs.filter(function (e) {
     }
 
     short += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
-        "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
+        "</span></td><td style=\"background-image: url('image/icon_" + notemap.attributeName(e.attribute) +
         ".png')\">&nbsp;</td><td>" + la + e.name + lb + "</td><td>" + min + ":" + (sec.toFixed(3) + "").padStart(6, "0") + "</td></tr>";
     last = e.length;
 });
@@ -205,7 +205,7 @@ songs.filter(function (e) {
     }
 
     most += "<tr" + classStr + "><td><span class='notopen'>" + rank_display + "</span><span class='open'>" + fullrank_display +
-        "</span></td><td style=\"background-image: url('image/icon_" + notemap.attribute(e.attribute) +
+        "</span></td><td style=\"background-image: url('image/icon_" + notemap.attributeName(e.attribute) +
         ".png')\">&nbsp;</td><td>" + la + e.name + lb + "</td><td>" + e.notes + "</td></tr>";
     last = e.notes;
 });

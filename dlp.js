@@ -151,7 +151,7 @@ tower_ids.forEach(function (tower_id) {
             let floor_content = '<div class="row nomargin">' +
                 // Top information
                 '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
-                '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
+                '<div class="col l6"><b>Difficulty: </b>' + notemap.difficultyName(floor.song_difficulty) + '</div>' +
                 '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
                 '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
                 '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
@@ -181,17 +181,17 @@ tower_ids.forEach(function (tower_id) {
 
         tower_content += '<ul class="collapsible floor" id="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
             '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
-            '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
-            'alt="' + notemap.attribute(floor.song_attribute) + '">' +
+            '<img src="image/icon_' + notemap.attributeName(floor.song_attribute) + '.png" ' +
+            'alt="' + notemap.attributeName(floor.song_attribute) + '">' +
             '<b class="floorno">' + (floor_no++) + (floor.notemap_live_difficulty_id === null ? "*" : "") + ')</b>' +
             '<div class="row">' +
 
             // Header information
-            '<div class="col l3"><b class="translatable" data-rom="' + notemap.song_name_romaji(floor.live_id) +
+            '<div class="col l3"><b class="translatable" data-rom="' + notemap.songNameRomaji(floor.live_id) +
             '"> ' + floor.song_name + ' </b></div>' +
             '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
             '<div class="col l3"><b>Cleansable:</b> ' +
-            notemap.is_cleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0])) + '</div>' +
+            notemap.isCleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0])) + '</div>' +
             '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
             '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
 
