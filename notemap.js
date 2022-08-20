@@ -22,6 +22,7 @@ const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
 const ACGimmickTrigger = require("./enums/acGimmickTrigger");
 const ACMissionType = require("./enums/acMissionType");
 const Difficulty = require("./enums/difficulty");
+const Attribute = require("./enums/attribute");
 
 function capitalizeFirstLetter(s) {
     return s.substring(0, 1).toUpperCase() + s.substring(1);
@@ -35,13 +36,13 @@ function format(x) {
 }
 
 function attributeName(attrId) {
-    if (attrId === 1) return "smile";
-    if (attrId === 2) return "pure";
-    if (attrId === 3) return "cool";
-    if (attrId === 4) return "active";
-    if (attrId === 5) return "natural";
-    if (attrId === 6) return "elegant";
-    if (attrId === 9) return "none";
+    if (attrId === Attribute.SMILE) return "smile";
+    if (attrId === Attribute.PURE) return "pure";
+    if (attrId === Attribute.COOL) return "cool";
+    if (attrId === Attribute.ACTIVE) return "active";
+    if (attrId === Attribute.NATURAL) return "natural";
+    if (attrId === Attribute.ELEGANT) return "elegant";
+    if (attrId === Attribute.NONE) return "none";
     throw new Error('Unknown Attribute ' + attrId);
 }
 

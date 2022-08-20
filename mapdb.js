@@ -23,6 +23,7 @@ const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 const Difficulty = require("./enums/difficulty");
+const Attribute = require("./enums/attribute");
 
 const WEEKDAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const isFreeLive = (liveDiffId) => liveDiffId < 20000000;
@@ -82,7 +83,7 @@ for (const f of fs.readdirSync("mapdb")) {
                 id: liveId,
                 order: jsonData[liveDiffId].display_order,
                 name: jsonData[liveDiffId].song_name,
-                attribute: isEventLive ? 9 : jsonData[liveDiffId].song_attribute,
+                attribute: isEventLive ? Attribute.NONE : jsonData[liveDiffId].song_attribute,
                 isAllUnavailable: !isEventLive,
                 isAnyPermanent: isEventLive,
                 dailyWeekdays: isFreeLive(liveDiffId) ? jsonData[liveDiffId].extra_info.daily_weekday : null
@@ -290,3 +291,7 @@ Promise.all(groupSavePromises).then(() => {
     fs.writeFileSync('build/lives/hash.json', JSON.stringify(hashes));
     console.log("    Built " + livePageCount + " Live page(s).");
 });
+
+module.exports = {
+    isFreeLive
+}

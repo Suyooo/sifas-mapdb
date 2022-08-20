@@ -589,7 +589,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .striped-manually > tbody > tr.odd {
-    background-color: var(--option);
+    background-color: var(--sneaky);
 }
 
 .rankingtable {
@@ -605,12 +605,17 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .rankingtable thead tr {
-    background-color: var(--key-low) !important;
+    background-color: var(--key-normal) !important;
 }
 
 .rankingtable tr.hidden {
     display: none;
-    background-color: var(--border);
+    background-color: var(--key-low);
+}
+
+.rankingtable tr.hidden.odd {
+    display: none;
+    background-color: var(--key-low2);
 }
 
 .rankingtable.show-all tr.hidden {
