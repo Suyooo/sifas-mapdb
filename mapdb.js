@@ -41,7 +41,7 @@ let liveIdsForGroup = {
     3: []
 };
 let liveDiffIdsForLive = {};
-let songData = {};
+let jsonData = {};
 
 for (const f of fs.readdirSync("mapdb")) {
     if (f.endsWith(".json")) {
@@ -72,43 +72,43 @@ for (const f of fs.readdirSync("mapdb")) {
             continue;
         }
 
-        songData[liveDiffId] = JSON.parse(fs.readFileSync('mapdb/' + f));
-        const liveId = songData[liveDiffId].live_id;
+        jsonData[liveDiffId] = JSON.parse(fs.readFileSync("mapdb/" + f));
+        const liveId = jsonData[liveDiffId].live_id;
         if (!liveDiffIdsForLive.hasOwnProperty(liveId)) {
             liveDiffIdsForLive[liveId] = [];
             // Second digit of the Live ID is the Group ID
             liveIdsForGroup[Math.floor(liveId % 10000 / 1000)].push(liveId);
             livesDict[liveId] = {
                 id: liveId,
-                order: songData[liveDiffId].display_order,
-                name: songData[liveDiffId].song_name,
-                attribute: isEventLive ? 9 : songData[liveDiffId].song_attribute,
+                order: jsonData[liveDiffId].display_order,
+                name: jsonData[liveDiffId].song_name,
+                attribute: isEventLive ? 9 : jsonData[liveDiffId].song_attribute,
                 isAllUnavailable: !isEventLive,
                 isAnyPermanent: isEventLive,
-                dailyWeekdays: isFreeLive(liveDiffId) ? songData[liveDiffId].extra_info.daily_weekday : null
+                dailyWeekdays: isFreeLive(liveDiffId) ? jsonData[liveDiffId].extra_info.daily_weekday : null
             };
-        } else if (isFreeLive(liveDiffId) && songData[liveDiffId].song_difficulty === Difficulty.ADV) {
+        } else if (isFreeLive(liveDiffId) && jsonData[liveDiffId].song_difficulty === Difficulty.ADV) {
             // If we are parsing a song's Adv difficulty after the live data was already read, override that data
             // (In case there's difficulties with different attributes, like SnowHala Adv/Adv+, or a Story Stage was read before)
-            livesDict[liveId].attribute = songData[liveDiffId].song_attribute;
-            livesDict[liveId].dailyWeekdays = songData[liveDiffId].extra_info.daily_weekday;
+            livesDict[liveId].attribute = jsonData[liveDiffId].song_attribute;
+            livesDict[liveId].dailyWeekdays = jsonData[liveDiffId].extra_info.daily_weekday;
 
             // Default difficulty should be Advanced if available
-            if (songData[liveDiffId].song_difficulty === Difficulty.ADV && songData[liveDiffId].extra_info.is_available) {
+            if (jsonData[liveDiffId].song_difficulty === Difficulty.ADV && jsonData[liveDiffId].extra_info.is_available) {
                 livesDict[liveId].defaultDifficulty = liveDiffId;
                 livesDict[liveId].defaultDifficultyId = Difficulty.ADV;
             }
         }
 
         if (isFreeLive(liveDiffId)) {
-            livesDict[liveId].isAllUnavailable = (!songData[liveDiffId].extra_info.is_available) && livesDict[liveId].isAllUnavailable;
-            livesDict[liveId].isAnyPermanent = songData[liveDiffId].extra_info.is_permanent || livesDict[liveId].isAnyPermanent;
+            livesDict[liveId].isAllUnavailable = (!jsonData[liveDiffId].extra_info.is_available) && livesDict[liveId].isAllUnavailable;
+            livesDict[liveId].isAnyPermanent = jsonData[liveDiffId].extra_info.is_permanent || livesDict[liveId].isAnyPermanent;
 
             // If no available Adv difficulty has been read (yet), just set the highest available difficulty as default
-            if (songData[liveDiffId].extra_info.is_available && livesDict[liveId].defaultDifficultyId !== Difficulty.ADV
-                && songData[liveDiffId].song_difficulty > livesDict[liveId].defaultDifficultyId) {
+            if (jsonData[liveDiffId].extra_info.is_available && livesDict[liveId].defaultDifficultyId !== Difficulty.ADV
+                && jsonData[liveDiffId].song_difficulty > livesDict[liveId].defaultDifficultyId) {
                 livesDict[liveId].defaultDifficulty = liveDiffId;
-                livesDict[liveId].defaultDifficultyId = songData[liveDiffId].song_difficulty;
+                livesDict[liveId].defaultDifficultyId = jsonData[liveDiffId].song_difficulty;
             }
         }
 
@@ -174,7 +174,7 @@ for (const groupId in liveIdsForGroup) {
         }
 
         for (const liveDiffId of liveDiffIdsForLive[live.id]) {
-            const liveDiff = songData[liveDiffId];
+            const liveDiff = jsonData[liveDiffId];
             const liveDiffHash = hash(liveDiff);
 
             if (process.argv[2] === "full" || !hashes.hasOwnProperty(liveDiffId) || hashes[liveDiffId] !== liveDiffHash) {
@@ -236,7 +236,7 @@ for (const groupId in liveIdsForGroup) {
                     let minimumDifference = liveDiff.notes.length;
                     let minimumDifficulty;
                     for (const comparisonDiffId of liveDiffIdsForLive[liveDiff.live_id]) {
-                        const comparisonDiff = songData[comparisonDiffId];
+                        const comparisonDiff = jsonData[comparisonDiffId];
                         if (comparisonDiff === undefined || comparisonDiff.notes === null) continue;
                         const difference = Math.abs(liveDiff.notes.length - comparisonDiff.notes.length);
                         if (difference < minimumDifference) {

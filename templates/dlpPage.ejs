@@ -1,0 +1,14 @@
+<% for (const tower of towers) { %>
+    <ul id="<%- tower.id %>" class="collapsible tower" data-collapsible="expandable">
+        <li>
+            <div class="collapsible-header">
+                <b class="translatable" data-rom="<%- tower.nameRomaji %>">
+                    <%- tower.name %><%- tower.year %>
+                </b>
+            </div>
+            <div id="tower-floorlist<%- tower.id %>" class="collapsible-body tower-floor-list unloaded">
+                Loading...
+            </div>
+        </li>
+    </ul>
+<% } %>
