@@ -51,6 +51,10 @@ body:not(.loading) > .container {
     width: 100%;
 }
 
+.song-name {
+    font-weight: bold;
+}
+
 .floorno {
     width: 3em;
 }
@@ -129,27 +133,20 @@ body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unava
     background-color: var(--option);
 }
 
-
-.collapsible.note .collapsible-header b::after {
-    font-weight: normal;
-    margin-left: 0.5em;
+.collapsible-header .postfix, .collapsible-header .note {
+    margin-left: .25em;
 }
 
-.collapsible.temp .collapsible-header b::after {
-    content: "(time-limited)";
+.postfix {
+    font-weight: bold;
 }
 
-.collapsible.temp.has-date .collapsible-header b::after {
-    content: "(time-limited, " attr(data-end-formatted) ")";
+.note {
+    font-style: italic;
+}
+
+.expiry-time {
     border-bottom: 1px dashed var(--dark-border);
-}
-
-.collapsible.unavail .collapsible-header b::after {
-    content: "(unavailable)";
-}
-
-.collapsible.daily .collapsible-header b::after {
-    content: "(daily: " attr(data-weekday) ")";
 }
 
 .collapsible-body .tabs.tabs-transparent {

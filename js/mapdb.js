@@ -113,7 +113,7 @@ function loadPageFinished(type, page, callback, responseText, textStatus) {
         if (showRomaji) {
             $(".translatable", page).each(swapTitles);
         }
-        $(".collapsible.temp", page).each(setExpiryDates);
+        $(".collapsible:has(.expiry-time)", page).each(setExpiryDates);
         if (callback !== undefined) callback(page);
     }
 }
@@ -586,10 +586,10 @@ function freeLiveCollapsibleOpen() {
     let location, pagename;
     if (tabs.$activeTabLink.attr("href").endsWith("story")) {
         location = "live" + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).attr("href").substring(1);
-        pagename = $("b.translatable", this.el).text() + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")";
+        pagename = $(".song-name.translatable", this.el).text() + " (Story " + $(".active", "#" + tabs.$activeTabLink.attr("href").substring(1)).text().split(" (")[0].trim() + ")";
     } else {
         location = "live" + tabs.$activeTabLink.attr("href").substring(1);
-        pagename = $("b.translatable", this.el).text() + " (" + tabs.$activeTabLink.text() + ")";
+        pagename = $(".song-name.translatable", this.el).text() + " (" + tabs.$activeTabLink.text() + ")";
     }
     addHistoryItem(location, pagename);
 
@@ -634,13 +634,13 @@ function freeLiveTabShow(tabs, e) {
             $(e).data("initialized", 1);
             loadNoteMap($(e));
         }
-        addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink[0].childNodes[0].data.trim() + ")");
+        addHistoryItem("live" + $(e).attr("id"), $(".song-name.translatable", $(e).parent().parent()).text() + " (" + tabs.$activeTabLink[0].childNodes[0].data.trim() + ")");
     } else {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
         tabs.forceTabIndicator();
-        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $("b.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
+        addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $(".song-name.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
         if (activetab.hasClass("live-difficulty") && activetab.data("initialized") === undefined) {
@@ -657,7 +657,7 @@ function freeLiveStoryTabShow(tabs, e) {
         loadNoteMap($(e));
     }
     scrollActiveTabLabelIntoView(tabs);
-    addHistoryItem("live" + $(e).attr("id"), $("b.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
+    addHistoryItem("live" + $(e).attr("id"), $(".song-name.translatable", $(e).parent().parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
 }
 
 const relDateFormatObj = new Intl.RelativeTimeFormat("en");
@@ -687,20 +687,17 @@ function absDateFormat(date) {
 }
 
 function setExpiryDates(page, e) {
-    let name = $(".collapsible-header > .translatable", e);
-    let n = name.data("end");
-    if (n === undefined) {
-        // no end date
-        return;
-    }
+    let time = $(".expiry-time", e);
+    let n = time.data("end");
     let d = new Date(parseInt(n));
     let r = relDateFormat(d);
     if (r === undefined) {
         // song expired
-        $(e).removeClass("temp").addClass("unavail");
+        time.parent().text("(unavailable)");
+        $(e).addClass("unavail");
     } else {
-        name.attr("data-end-formatted", r);
-        name.attr("title", absDateFormat(d));
+        time.text(r);
+        time.attr("title", absDateFormat(d));
     }
 }
 
@@ -742,20 +739,20 @@ function dlpTowerCollapsibleInit() {
 function dlpTowerCollapsibleOpen() {
     loadTower($("#tower-floorlist" + this.$el.attr("id")), this.$el.attr("id"), loadTowerFinish);
     let towerLink = "tower" + this.$el.attr("id");
-    addHistoryItem(towerLink, $($("b.translatable", this.$el)[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
+    addHistoryItem(towerLink, $($(".song-name.translatable", this.$el)[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
 }
 
 function dlpFloorCollapsibleInit() {
     console.log(this);
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
-    let towerPageName = $($("b.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
+    let towerPageName = $($(".song-name.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
     collapsible.options.onOpenStart = dlpFloorCollapsibleOpen.bind(this, towerPageName);
     collapsible.options.onCloseStart = dlpFloorCollapsibleClose.bind(this, towerLink, towerPageName);
 }
 
 function dlpFloorCollapsibleOpen(towerPageName) {
-    addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $("b.translatable", $(this)).text());
+    addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $(".song-name.translatable", $(this)).text());
     if ($(this).data("initialized") === undefined) {
         $(this).data("initialized", 1);
         loadNoteMap($(".live-difficulty", this));

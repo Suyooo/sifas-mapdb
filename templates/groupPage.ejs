@@ -1,25 +1,25 @@
 <% for (const live of lives) { %>
     <ul class="collapsible
     <% if (live.isAllUnavailable) { %>
-        note unavail
-    <% } else if (!live.isAnyPermanent) { %>
-        <% if (live.limitedEnd) { %>
-            <%- live.limitedEnd %>
-        <% } %>
-    <% } else if (live.isDaily) { %>
-        note daily
+        unavail
     <% } %>
     " data-collapsible="expandable" data-live-id="<%- live.id %>">
         <li>
             <div class="collapsible-header">
                 <img src="image/icon_<%- live.attribute %>.png" alt="<%- live.attribute %>">
-                <b class="translatable" data-rom="<%- live.nameRomaji %>"
-                <% if (live.isDaily) { %> data-weekday="<%- live.dailyWeekdays %>" <% } %>
-                <% if (live.limitedEnd) { %> data-end="<%- live.limitedEnd %>" <% } %>
-                >
-                    <%- live.nameKana %>
-                </b>
-                <% if (live.namePostfix !== null) { %><span class="postfix">(<%- live.namePostfix %>)</span><% } %>
+                <span class="song-name translatable" data-rom="<%- live.nameRomaji %>"><%- live.nameKana %></span>
+                <% if (live.namePostfix) { %><span class="postfix">(<%- live.namePostfix %>)</span><% } %>
+                <% if (live.isAllUnavailable) { %>
+                    <span class="note">(unavailable)</span>
+                <% } else if (!live.isAnyPermanent) { %>
+                    <% if (live.limitedEnd) { %>
+                        <span class="note">(time-limited, <span class="expiry-time" data-end="<%- live.limitedEnd %>"></span>)</span>
+                    <% } else { %>
+                        <span class="note">(time-limited)</span>
+                    <% } %>
+                <% } else if (live.isDaily) { %>
+                    <span class="note">(daily: <%- live.dailyWeekdays %>)</span>
+                <% } %>
             </div>
             <div class="collapsible-body">
                 <ul class="tabs tabs-transparent tabs-fixed-width">
