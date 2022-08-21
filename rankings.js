@@ -85,7 +85,7 @@ for (const f of fs.readdirSync("mapdb")) {
                 attribute: notemap.attributeName(jsonData.song_attribute),
                 hasNonAdvDifficulty: jsonData.song_difficulty > Difficulty.ADV,
                 noteCount: jsonData.notes.length,
-                showByDefault: isEventLive ? false : jsonData.extra_info.can_show_on_profile
+                showByDefault: isEventLive ? false : (jsonData.extra_info.is_available && jsonData.extra_info.can_show_on_profile)
             };
             if (rankData.hasNonAdvDifficulty) {
                 rankData.difficulty = notemap.difficultyNameShort(jsonData.song_difficulty);
