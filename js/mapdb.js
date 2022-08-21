@@ -693,7 +693,7 @@ function setExpiryDates(page, e) {
         // no end date
         return;
     }
-    let d = new Date(Number(n));
+    let d = new Date(parseInt(n));
     let r = relDateFormat(d);
     if (r === undefined) {
         // song expired

@@ -32,7 +32,7 @@ const noteRanking = [];
 
 for (const f of fs.readdirSync("mapdb")) {
     if (f.endsWith(".json")) {
-        const liveDiffId = Number(f.substring(0, f.length - 5));
+        const liveDiffId = parseInt(f.substring(0, f.length - 5));
         const isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(liveDiffId / 1000));
         if (!isFreeLive(liveDiffId) && !isEventLive) {
             continue;

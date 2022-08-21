@@ -69,7 +69,7 @@ function towerNameYear(towerId) {
 
 function makeRewardString(rewards) {
     return Object.keys(rewards)
-        .sort((a, b) => Number(b) - Number(a)) // Medals first, stars second
+        .sort((a, b) => parseInt(b) - parseInt(a)) // Medals first, stars second
         .map(k => {
             let itemname;
             if (k === "0") itemname = "Star";
@@ -97,7 +97,7 @@ let jsonData = {};
 
 for (const f of fs.readdirSync("tower")) {
     if (f.endsWith(".json")) {
-        let tid = Number(f.substring(0, f.length - 5));
+        let tid = parseInt(f.substring(0, f.length - 5));
         towerIds.push(tid);
         jsonData[tid] = JSON.parse(fs.readFileSync("tower/" + tid + ".json"));
     }
