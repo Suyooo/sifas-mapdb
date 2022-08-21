@@ -131,7 +131,7 @@ const lengthRanking = Object.values(lengthRankingMap).sort((a, b) => {
     else return a.liveId - b.liveId;
 });
 noteRanking.sort((a, b) => {
-    if (a.noteCount !== b.noteCount) return a.noteCount - b.noteCount;
+    if (a.noteCount !== b.noteCount) return b.noteCount - a.noteCount;
     else if (a.showByDefault && !b.showByDefault) return -1;
     else if (!a.showByDefault && b.showByDefault) return 1;
     else return a.liveId - b.liveId;
