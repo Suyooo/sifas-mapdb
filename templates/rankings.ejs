@@ -43,7 +43,8 @@
                 <td style="background-image: url('image/icon_<%- rank.attribute %>.png')">&nbsp;</td>
                 <td>
                     <a href="#live<%- rank.linkTo %>">
-                        <b class="translatable" data-rom="<%- rank.songNameRomaji %>"><%- rank.songName %></b>
+                        <b class="translatable" data-rom="<%- rank.nameRomaji %>"><%- rank.nameKana %></b>
+                        <% if (rank.namePostfix !== null) { %><span class="postfix">(<%- rank.namePostfix %>)</span><% } %>
                     </a>
                 </td>
                 <td><%- Math.floor(rank.length / 60000) %>:<%- ((rank.length % 60000 / 1000).toFixed(3)).padStart(6, "0") %></td>
@@ -103,7 +104,8 @@
                 <td style="background-image: url('image/icon_<%- rank.attribute %>.png')">&nbsp;</td>
                 <td>
                     <a href="#live<%- rank.linkTo %>">
-                        <b class="translatable" data-rom="<%- rank.songNameRomaji %>"><%- rank.songName %></b>
+                        <b class="translatable" data-rom="<%- rank.nameRomaji %>"><%- rank.nameKana %></b>
+                        <% if (rank.namePostfix !== null) { %><span class="postfix">(<%- rank.namePostfix %>)</span><% } %>
                         <% if (rank.hasNonAdvDifficulty) { %>(<%- rank.difficulty %>)<% } %>
                     </a>
                 </td>

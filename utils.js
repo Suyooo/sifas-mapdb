@@ -226,7 +226,7 @@ function songNameRomaji(liveId) {
     throw new Error('Unknown Romaji Song Name for ' + liveId);
 }
 
-function songPostfix(liveId) {
+function songNamePostfix(liveId) {
     if (liveId.length !== 4) liveId = liveId.toString().slice(-4);
 
     // µ's
@@ -255,5 +255,5 @@ function songPostfix(liveId) {
 
 module.exports = {
     isFreeLive, isActiveEventLive, isStoryStage,
-    songNameRomaji, songPostfix
+    songNameRomaji, songNamePostfix
 }

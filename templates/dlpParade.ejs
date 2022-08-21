@@ -15,7 +15,8 @@
                     <b class="floorno"><%- floor.floorNo %>)</b>
                     <div class="row">
                         <div class="col l3">
-                            <b class="translatable" data-rom="<%- floor.songNameRomaji %>"><%- floor.songName %></b>
+                            <b class="translatable" data-rom="<%- floor.nameRomaji %>"><%- floor.nameKana %></b>
+                            <% if (floor.namePostfix !== null) { %><span class="postfix">(<%- floor.namePostfix %>)</span><% } %>
                         </div>
                         <div class="col l3"><b>Target:</b> <%- floor.targetVoltage %></div>
                         <div class="col l3">

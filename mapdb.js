@@ -151,6 +151,7 @@ for (const groupId in liveIdsForGroup) {
             order: live.order,
             nameRomaji: Utils.songNameRomaji(live.id),
             nameKana: live.name,
+            namePostfix: Utils.songNamePostfix(live.id),
             attribute: notemap.attributeName(live.attribute),
             isAllUnavailable: live.isAllUnavailable,
             isAnyPermanent: live.isAnyPermanent,

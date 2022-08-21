@@ -19,6 +19,7 @@
                 >
                     <%- live.nameKana %>
                 </b>
+                <% if (live.namePostfix !== null) { %><span class="postfix">(<%- live.namePostfix %>)</span><% } %>
             </div>
             <div class="collapsible-body">
                 <ul class="tabs tabs-transparent tabs-fixed-width">

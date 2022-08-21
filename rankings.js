@@ -50,8 +50,9 @@ for (const f of fs.readdirSync("mapdb")) {
         if (jsonData.song_length !== null) {
             if (!lengthRankingMap.hasOwnProperty(jsonData.live_id)) {
                 lengthRankingMap[jsonData.live_id] = {
-                    songName: jsonData.song_name,
-                    songNameRomaji: Utils.songNameRomaji(jsonData.live_id),
+                    nameKana: jsonData.song_name,
+                    nameRomaji: Utils.songNameRomaji(jsonData.live_id),
+                    namePostfix: Utils.songNamePostfix(jsonData.live_id),
                     liveId: jsonData.live_id,
                     linkTo: liveDiffId,
                     linkDiffId: jsonData.song_difficulty,
@@ -77,8 +78,9 @@ for (const f of fs.readdirSync("mapdb")) {
 
         if (jsonData.notes !== null && jsonData.song_difficulty >= Difficulty.ADV) {
             const rankData = {
-                songName: jsonData.song_name,
-                songNameRomaji: Utils.songNameRomaji(jsonData.live_id),
+                nameKana: jsonData.song_name,
+                nameRomaji: Utils.songNameRomaji(jsonData.live_id),
+                namePostfix: Utils.songNamePostfix(jsonData.live_id),
                 liveId: jsonData.live_id,
                 linkTo: liveDiffId,
                 attribute: notemap.attributeName(jsonData.song_attribute),
