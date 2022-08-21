@@ -51,6 +51,10 @@ body:not(.loading) > .container {
     width: 100%;
 }
 
+.song-name {
+    font-weight: bold;
+}
+
 .floorno {
     width: 3em;
 }
@@ -129,27 +133,20 @@ body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unava
     background-color: var(--option);
 }
 
-
-.collapsible.note .collapsible-header b::after {
-    font-weight: normal;
-    margin-left: 0.5em;
+.collapsible-header .postfix, .collapsible-header .note {
+    margin-left: .25em;
 }
 
-.collapsible.temp .collapsible-header b::after {
-    content: "(time-limited)";
+.postfix {
+    font-weight: bold;
 }
 
-.collapsible.temp.has-date .collapsible-header b::after {
-    content: "(time-limited, " attr(data-end-formatted) ")";
+.note {
+    font-style: italic;
+}
+
+.expiry-time {
     border-bottom: 1px dashed var(--dark-border);
-}
-
-.collapsible.unavail .collapsible-header b::after {
-    content: "(unavailable)";
-}
-
-.collapsible.daily .collapsible-header b::after {
-    content: "(daily: " attr(data-weekday) ")";
 }
 
 .collapsible-body .tabs.tabs-transparent {
@@ -198,6 +195,30 @@ body.show-unavail div.group-tab div.no-available-songs {
     vertical-align: text-bottom;
 }
 
+.live-extra-toggle::after {
+    content: "keyboard_arrow_down";
+    font-family: 'Material Icons';
+    font-size: 0.75em;
+    cursor: pointer;
+}
+
+.live-extra-toggle.open::after {
+    content: "keyboard_arrow_up";
+}
+
+.live-extra-container {
+    height: 0;
+    overflow: hidden;
+    transition: height .5s;
+    margin-left: .25em;
+    padding-left: .5em;
+    border-left: 1px var(--dark-border) solid;
+}
+
+.live-extra-toggle.open + .live-extra-container {
+    height: 4.5em;
+}
+
 .notebarcontainer {
     overflow-x: auto;
     overflow-y: hidden;
@@ -210,8 +231,8 @@ body.show-unavail div.group-tab div.no-available-songs {
     position: relative;
     height: 1em;
     user-select: none;
-    --gimmicklayers: -999;
-    margin: calc((var(--gimmicklayers) * 0.625 + 0.5) * 1em) 0 1.2em;
+    --markerlayers: 0;
+    margin: calc((var(--markerlayers) * 0.625 + 0.5) * 1em) 0 1.2em;
     z-index: 1;
     font-size: 150%;
 }
@@ -425,6 +446,21 @@ body.show-unavail div.group-tab div.no-available-songs {
     margin-top: 0.33em;
 }
 
+.detailinfo .songgimmick {
+    width: 100%;
+    display: flex;
+}
+
+.detailinfo .songgimmick > .number {
+    flex: 0 1 0;
+    font-weight: bold;
+    padding-right: .5em;
+}
+
+.detailinfo .songgimmick > .text {
+    flex: 1 1 0;
+}
+
 .detailinfo > div.filtered > div:first-child {
     background-color: var(--key-normal);
 }
@@ -550,7 +586,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .striped-manually > tbody > tr.odd {
-    background-color: var(--option);
+    background-color: var(--sneaky);
 }
 
 .rankingtable {
@@ -566,12 +602,17 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .rankingtable thead tr {
-    background-color: var(--key-low) !important;
+    background-color: var(--key-normal) !important;
 }
 
 .rankingtable tr.hidden {
     display: none;
-    background-color: var(--border);
+    background-color: var(--key-low);
+}
+
+.rankingtable tr.hidden.odd {
+    display: none;
+    background-color: var(--key-low2);
 }
 
 .rankingtable.show-all tr.hidden {

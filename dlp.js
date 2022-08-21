@@ -1,6 +1,6 @@
 /*
 This file generates the DLP info page from the tower information in the tower folder.
-Copyright (C) 2020-2021 Suyooo
+Copyright (C) 2020-2022 Suyooo
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,121 +16,136 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+const render = require('util').promisify(require("ejs").renderFile);
 const fs = require('fs');
-const notemap = require('./notemap-reader.js');
+const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
+const Attribute = require("./enums/attribute");
+const Difficulty = require("./enums/difficulty");
+const DLPFloorType = require("./enums/dlpFloorType");
+const Utils = require("./utils");
 
-function tower_name_romaji(tower_id) {
-    if (tower_id === 33001) return "Dream Live Parade";
-    if (tower_id === 33002) return "Dream Live Parade ~Aqours~";
-    if (tower_id === 33003) return "Dream Live Parade ~Nijigaku~";
-    if (tower_id === 33004) return "Dream Live Parade ~μ's~";
-    if (tower_id === 33005) return "2020 Countdown Live";
-    if (tower_id === 33006) return "Dream Live Parade - R On Stage -";
-    if (tower_id === 33007) return "Dream Live Parade - Pure / Smile On Stage -";
-    if (tower_id === 33008) return "Dream Live Parade - Nijigaku On Stage -";
-    if (tower_id === 33009) return "Dream Live Parade - Cool / Active On Stage -";
-    if (tower_id === 33010) return "Dream Live Parade Love Live! Nijigasaki High School Idol Club 3rd Live! School Idol Festival ~ Beginning of The Dream ~";
-    if (tower_id === 33011) return "Dream Live Parade - Natural / Elegant On Stage -";
-    if (tower_id === 33012) return "Dream Live Parade - 3rd Years On Stage -";
-    if (tower_id === 33013) return "Dream Live Parade ~Summer Adventure 2021~";
-    if (tower_id === 33014) return "Dream Live Parade ~2nd Anniversary~";
-    if (tower_id === 33015) return "Dream Live Parade ~We Are Challengers~";
-    if (tower_id === 33016) return "Dream Live Parade ~Sp Types On Stage~";
-    if (tower_id === 33017) return "Dream Live Parade ~Gd Types On Stage~";
-    if (tower_id === 33018) return "Dream Live Parade ~Vo Types On Stage~";
-    if (tower_id === 33019) return "All Stars Special Dream Live Parade 2021";
-    if (tower_id === 33020) return "Dream Live Parade ~Sk Types On Stage~";
-    if (tower_id === 33021) return "Dream Live Parade - Pure / Smile On Stage -";
-    if (tower_id === 33022) return "Dream Live Parade - Cool / Active On Stage -";
-    if (tower_id === 33023) return "Dream Live Parade - Natural / Elegant On Stage -";
-    if (tower_id === 33024) return "Dream Live Parade - 1st Years On Stage -";
-    if (tower_id === 33025) return "Dream Live Parade - 2nd Years On Stage -";
+function towerNameRomaji(towerId) {
+    if (towerId === 33001) return "Dream Live Parade";
+    if (towerId === 33002) return "Dream Live Parade ~Aqours~";
+    if (towerId === 33003) return "Dream Live Parade ~Nijigaku~";
+    if (towerId === 33004) return "Dream Live Parade ~μ's~";
+    if (towerId === 33005) return "2020 Countdown Live";
+    if (towerId === 33006) return "Dream Live Parade - R On Stage -";
+    if (towerId === 33007) return "Dream Live Parade - Pure / Smile On Stage -";
+    if (towerId === 33008) return "Dream Live Parade - Nijigaku On Stage -";
+    if (towerId === 33009) return "Dream Live Parade - Cool / Active On Stage -";
+    if (towerId === 33010) return "Dream Live Parade Love Live! Nijigasaki High School Idol Club 3rd Live! School Idol Festival ~ Beginning of The Dream ~";
+    if (towerId === 33011) return "Dream Live Parade - Natural / Elegant On Stage -";
+    if (towerId === 33012) return "Dream Live Parade - 3rd Years On Stage -";
+    if (towerId === 33013) return "Dream Live Parade ~Summer Adventure 2021~";
+    if (towerId === 33014) return "Dream Live Parade ~2nd Anniversary~";
+    if (towerId === 33015) return "Dream Live Parade ~We Are Challengers~";
+    if (towerId === 33016) return "Dream Live Parade ~Sp Types On Stage~";
+    if (towerId === 33017) return "Dream Live Parade ~Gd Types On Stage~";
+    if (towerId === 33018) return "Dream Live Parade ~Vo Types On Stage~";
+    if (towerId === 33019) return "All Stars Special Dream Live Parade 2021";
+    if (towerId === 33020) return "Dream Live Parade ~Sk Types On Stage~";
+    if (towerId === 33021) return "Dream Live Parade - Pure / Smile On Stage -";
+    if (towerId === 33022) return "Dream Live Parade - Cool / Active On Stage -";
+    if (towerId === 33023) return "Dream Live Parade - Natural / Elegant On Stage -";
+    if (towerId === 33024) return "Dream Live Parade - 1st Years On Stage -";
+    if (towerId === 33025) return "Dream Live Parade - 2nd Years On Stage -";
+    if (towerId === 33026) return "Dream Live Parade - 3rd Years On Stage -";
 
-    throw new Error('Unknown Romaji Tower Name for ' + tower_id);
+    throw new Error('Unknown Romaji Tower Name for ' + towerId);
 }
 
-function tower_name_year(tower_id) {
-    if (tower_id === 33007) return "2021";
-    if (tower_id === 33009) return "2021";
-    if (tower_id === 33011) return "2021";
-    if (tower_id === 33021) return "2022";
-    if (tower_id === 33022) return "2022";
-    if (tower_id === 33023) return "2022";
+function towerNameYear(towerId) {
+    if (towerId === 33007) return "2021";
+    if (towerId === 33009) return "2021";
+    if (towerId === 33011) return "2021";
+    if (towerId === 33012) return "2021";
+    if (towerId === 33021) return "2022";
+    if (towerId === 33022) return "2022";
+    if (towerId === 33023) return "2022";
+    if (towerId === 33026) return "2022";
 
     return undefined;
 }
 
-function make_reward_string(rewards) {
-    let rewardstrings = [];
-    Object.keys(rewards).sort(function (a, b) {
-        // Medals first, stars second
-        return Number(b) - Number(a);
-    }).forEach(function (k) {
-        let itemname;
-        if (k === "0") itemname = "star";
-        else if (k === "19001") itemname = "medal";
-        else if (k === "21041") itemname = "map piece";
-        else if (k === "21044") itemname = "memory fragment";
-        else if (k === "21059") itemname = "star fragment";
-        else throw new Error('Unknown Item ID ' + k);
-        rewardstrings.push(notemap.format(rewards[k]) + " " + itemname + (rewards[k] === 1 ? "" : "s"));
-    })
-    return rewardstrings.join(", ");
+function makeRewardString(rewards) {
+    return Object.keys(rewards)
+        .sort((a, b) => parseInt(b) - parseInt(a)) // Medals first, stars second
+        .map(k => {
+            let itemname;
+            if (k === "0") itemname = "Star";
+            else if (k === "19001") itemname = "Medal";
+            else if (k === "21041") itemname = "Map Piece";
+            else if (k === "21044") itemname = "Memory Fragment";
+            else if (k === "21059") itemname = "Star Fragment";
+            else throw new Error("Unknown Item ID " + k);
+            return notemap.format(rewards[k]) + " " + itemname + (rewards[k] === 1 ? "" : "s");
+        })
+        .join(", ");
 }
 
-let hashes_live = {};
-let hashes_tower = {};
+let hashesLive = {};
+let hashesTower = {};
 if (fs.existsSync("build/lives/hash.json")) {
-    hashes_live = JSON.parse(fs.readFileSync("build/lives/hash.json"));
+    hashesLive = JSON.parse(fs.readFileSync("build/lives/hash.json"));
 }
 if (fs.existsSync("build/towers/hash.json")) {
-    hashes_tower = JSON.parse(fs.readFileSync("build/towers/hash.json"));
+    hashesTower = JSON.parse(fs.readFileSync("build/towers/hash.json"));
 }
 
-let tower_ids = [];
-let towerdata = {};
+let towerIds = [];
+let jsonData = {};
 
-fs.readdirSync("tower/.").forEach(function (f) {
+for (const f of fs.readdirSync("tower")) {
     if (f.endsWith(".json")) {
-        let tid = Number(f.substring(0, f.length - 5));
-        tower_ids.push(tid);
-        towerdata[tid] = JSON.parse(fs.readFileSync('tower/' + tid + '.json'));
+        let tid = parseInt(f.substring(0, f.length - 5));
+        towerIds.push(tid);
+        jsonData[tid] = JSON.parse(fs.readFileSync("tower/" + tid + ".json"));
     }
-});
+}
 
-tower_ids = tower_ids.sort();
+const towerDataList = [];
+const towerSavePromises = [];
+let hasUpdatedTowers = false;
+let livePageCount = 0;
 
-let s = "";
-let list_update = false;
-let live_pages_built = 0;
+for (const towerId of towerIds) {
+    const tower = jsonData[towerId];
 
-tower_ids.forEach(function (tower_id) {
-    let tower = towerdata[tower_id];
-    let tower_content = '<b>Performance Points:</b> ' + tower.pp_at_start +
-        ' (+ ' + tower.pp_recovery_limit + ' recoverable)<br><b>PP Recovery Cost:</b> ' + tower.pp_recovery_cost +
-        ' loveca stars<br><br>';
-
-    let year = tower_name_year(tower_id);
+    let year = towerNameYear(towerId);
     if (year === undefined) year = "";
     else year = " (" + year + ")";
 
-    s += '<ul id="' + tower_id + '" class="collapsible tower" data-collapsible="expandable"><li>' +
-        '<div class="collapsible-header"><b class="translatable" data-rom="' + tower_name_romaji(tower_id) + year + '">' +
-        tower.name + year + '</b></div><div id="tower-floorlist' + tower_id + '" class="collapsible-body tower-floor-list unloaded">' +
-        'Loading...</div></li></ul>';
+    towerDataList.push({
+        id: towerId,
+        name: tower.name,
+        nameRomaji: towerNameRomaji(towerId),
+        year: year
+    });
 
-    let tower_hash = hash(tower);
-    let tower_update = process.argv[2] === "full" || !hashes_tower.hasOwnProperty(tower_id) || hashes_tower[tower_id] !== tower_hash;
+    const towerHash = hash(tower);
+    let hasUpdatedFloors = process.argv[2] === "full" || !hashesTower.hasOwnProperty(towerId) || hashesTower[towerId] !== towerHash;
 
-    let floor_no = 1;
-    tower["floors"].forEach(function (floor) {
-        if (floor.floor_type == 1) {
-            tower_content += '<div class="fake-collapsible-header"><div class="spacer">&nbsp;</div>' +
-                '<b>Story Node: ' + floor.story_title + '</b></div>';
-            tower_content += '<div class="progress">&nbsp;</div>';
-            return;
+    const towerData = {
+        id: towerId,
+        ppAtStart: tower.pp_at_start,
+        ppRecoveryLimit: tower.pp_recovery_limit,
+        ppRecoveryCost: tower.pp_recovery_cost,
+        floors: []
+    }
+
+    const floorSavePromises = [];
+    for (const floor of tower.floors) {
+        if (floor.floor_type === DLPFloorType.STORY) {
+            towerData.floors.push({
+                floorNo: floor.floor_number,
+                isStory: true,
+                storyTitle: floor.story_title,
+                hasProgressReward: false
+            })
+            continue;
         }
 
         // Load referenced note map if available
@@ -140,101 +155,90 @@ tower_ids.forEach(function (tower_id) {
             linked_live.note_damage = floor.note_damage;
         }
 
-        let floor_hash = hash(floor);
-        if (process.argv[2] === "full" || !hashes_live.hasOwnProperty(floor.live_difficulty_id) || hashes_live[floor.live_difficulty_id] !== floor_hash) {
+        const floorData = {
+            floorNo: floor.floor_number,
+            isStory: false,
+            isSuperStage: floor.floor_type === DLPFloorType.SUPER_STAGE,
+            liveDifficultyId: floor.live_difficulty_id,
+            nameKana: floor.song_name,
+            nameRomaji: Utils.songNameRomaji(floor.live_id),
+            namePostfix: Utils.songNamePostfix(floor.live_id),
+            attribute: Attribute.name(floor.song_attribute),
+            targetVoltage: notemap.format(floor.voltage_target),
+            clearReward: makeRewardString(floor.reward_clear),
+            hasProgressReward: floor.reward_progress !== null,
+            noteDamage: notemap.format(floor.note_damage),
+            hasNoteDamageRate: floor.note_damage_rate != undefined,
+            baseDifficulty: Difficulty.name(floor.song_difficulty),
+            capTap: notemap.format(floor.voltage_caps.tap),
+            capSp: notemap.format(floor.voltage_caps.sp),
+            capSkill: notemap.format(floor.voltage_caps.skill),
+            capSwap: notemap.format(floor.voltage_caps.swap),
+            spGaugeSize: notemap.format(floor.sp_gauge_max),
+            noteMap: notemap.make(linked_live === undefined ? floor : linked_live)
+        }
+        if (floorData.hasNoteDamageRate) {
+            floorData.noteDamageRate = notemap.format(Math.round(floor.note_damage_rate * 100));
+        }
+        if (floorData.hasProgressReward) {
+            floorData.progressReward = makeRewardString(floor.reward_progress);
+        }
+        towerData.floors.push(floorData);
+
+        let floorHash = hash(floor);
+        if (process.argv[2] === "full"
+            || !hashesLive.hasOwnProperty(floorData.liveDifficultyId)
+            || hashesLive[floorData.liveDifficultyId] !== floorHash) {
             // Update tower page as well since the header information might have changed
-            tower_update = true;
+            hasUpdatedFloors = true;
 
-            let floor_content = '<div class="row nomargin">' +
-                // Top information
-                '<div class="col l6"><b>Voltage Target: </b>' + notemap.format(floor.voltage_target) + '</div>' +
-                '<div class="col l6"><b>Difficulty: </b>' + notemap.difficulty(floor.song_difficulty) + '</div>' +
-                '<div class="col l6"><b>Clear Reward: </b>' + make_reward_string(floor.reward_clear) + '</div>' +
-                '<div class="col l6"><b>Floor Type: </b>' + (floor.floor_type === 5 ? 'Super Stage' : 'Regular') + '</div>' +
-                '<div class="col l6"><b>Recommended Stamina: </b>' + notemap.format(floor.recommended_stamina) + '</div>' +
-                '<div class="col l6"><b>Base Note Damage: </b>' + notemap.format(floor.note_damage) +
-                (floor.note_damage_rate ? ' (' + notemap.format(Math.round(floor.note_damage_rate * 100)) + '% of Free Live)' : '') +
-                '</div></div>';
+            floorSavePromises.push(render("templates/dlpStage.ejs", floorData).then(res => {
+                fs.writeFileSync("build/lives/" + floorData.liveDifficultyId + ".html", minify(res, {
+                    collapseWhitespace: true,
+                    minifyCSS: true
+                }));
+                console.log("    Built page for Live Diff ID " + floorData.liveDifficultyId);
+            }));
 
-            if (linked_live !== undefined) {
-                floor_content += notemap.make(linked_live);
-            } else {
-                floor_content += notemap.make(floor);
-            }
-
-            fs.writeFile('build/lives/' + floor.live_difficulty_id + '.html', minify(floor_content, {
-                    collapseWhitespace: true
-                }),
-                function (err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                }
-            );
-
-            hashes_live[floor.live_difficulty_id] = floor_hash;
-            live_pages_built++;
+            hashesLive[floorData.liveDifficultyId] = floorHash;
+            livePageCount++;
         }
-
-        tower_content += '<ul class="collapsible floor" id="' + tower_id + '-' + floor.floor_number + '" data-collapsible="expandable"><li>' +
-            '<div class="collapsible-header' + (floor.floor_type === 5 ? ' light-blue lighten-5' : '') + '">' +
-            '<img src="image/icon_' + notemap.attribute(floor.song_attribute) + '.png" ' +
-            'alt="' + notemap.attribute(floor.song_attribute) + '">' +
-            '<b class="floorno">' + (floor_no++) + (floor.notemap_live_difficulty_id === null ? "*" : "") + ')</b>' +
-            '<div class="row">' +
-
-            // Header information
-            '<div class="col l3"><b class="translatable" data-rom="' + notemap.song_name_romaji(floor.live_id) +
-            '"> ' + floor.song_name + ' </b></div>' +
-            '<div class="col l3"><b>Target:</b> ' + notemap.format(floor.voltage_target) + '</div>' +
-            '<div class="col l3"><b>Cleansable:</b> ' +
-            notemap.is_cleansable(linked_live === undefined ? (floor.gimmick === null ? null : floor.gimmick[0]) : (linked_live.gimmick === null ? null : linked_live.gimmick[0])) + '</div>' +
-            '<div class="col l3"><b>Note Damage:</b> ' + notemap.format(floor.note_damage) + '</div>' +
-            '</div></div><div class="collapsible-body live-difficulty unloaded" id="' + floor.live_difficulty_id + '">Loading...</div></li></ul>';
-
-        if (floor.reward_progress !== null) {
-            tower_content += '<div class="progress reward"><b>Progress Reward:</b> ' + make_reward_string(floor.reward_progress) + '</div>';
-        } else {
-            tower_content += '<div class="progress">&nbsp;</div>';
-        }
-    });
-
-    if (tower_update) {
-        list_update = true;
-        fs.writeFile('build/towers/' + tower_id + '.html', minify(tower_content, {
-                collapseWhitespace: true
-            }),
-            function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            }
-        );
-        hashes_tower[tower_id] = tower_hash;
     }
+
+    if (hasUpdatedFloors) {
+        hasUpdatedTowers = true;
+
+        towerSavePromises.push(Promise.all(floorSavePromises)
+            .then(() => render("templates/dlpParade.ejs", towerData))
+            .then(res => {
+                    fs.writeFileSync("build/towers/" + towerId + ".html", minify(res, {
+                        collapseWhitespace: true,
+                        minifyCSS: true
+                    }));
+                    console.log("    Built page for Tower ID " + towerId);
+                }));
+
+        hashesTower[towerId] = towerHash;
+    }
+}
+
+towerDataList.sort((a, b) => a.id - b.id);
+(async () => {
+    if (hasUpdatedTowers) {
+        await Promise.all(towerSavePromises)
+            .then(() => render("templates/dlpPage.ejs", {towers: towerDataList}))
+            .then(res => {
+                fs.writeFileSync('build/dlp.html', minify(res, {
+                    collapseWhitespace: true,
+                    minifyCSS: true
+                }));
+                console.log("    Built DLP Page");
+            });
+    }
+})().then(() => {
+    fs.writeFileSync('build/lives/hash.json', JSON.stringify(hashesLive));
+    fs.writeFileSync('build/towers/hash.json', JSON.stringify(hashesTower));
+    console.log("    Built " + livePageCount + " Live page(s).");
 });
 
-if (list_update) {
-    fs.writeFile('build/dlp.html', minify(s, {
-            collapseWhitespace: true
-        }),
-        function (err) {
-            if (err) {
-                return console.log(err);
-            }
-        }
-    );
-}
-fs.writeFile('build/lives/hash.json', JSON.stringify(hashes_live),
-    function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-fs.writeFile('build/towers/hash.json', JSON.stringify(hashes_tower),
-    function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-console.log("    Built " + live_pages_built + " Live page(s).");
+console.log("    Building " + livePageCount + " Live page(s)...");

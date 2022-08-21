@@ -1,0 +1,78 @@
+<% for (const live of lives) { %>
+    <ul class="collapsible
+    <% if (live.isAllUnavailable) { %>
+        unavail
+    <% } %>
+    " data-collapsible="expandable" data-live-id="<%- live.id %>">
+        <li>
+            <div class="collapsible-header">
+                <img src="image/icon_<%- live.attribute %>.png" alt="<%- live.attribute %>">
+                <span class="song-name translatable" data-rom="<%- live.nameRomaji %>"><%- live.nameKana %></span>
+                <% if (live.namePostfix) { %><span class="postfix">(<%- live.namePostfix %>)</span><% } %>
+                <% if (live.isAllUnavailable) { %>
+                    <span class="note">(unavailable)</span>
+                <% } else if (!live.isAnyPermanent) { %>
+                    <% if (live.limitedEnd) { %>
+                        <span class="note">(time-limited, <span class="expiry-time" data-end="<%- live.limitedEnd %>"></span>)</span>
+                    <% } else { %>
+                        <span class="note">(time-limited)</span>
+                    <% } %>
+                <% } else if (live.isDaily) { %>
+                    <span class="note">(daily: <%- live.dailyWeekdays %>)</span>
+                <% } %>
+            </div>
+            <div class="collapsible-body">
+                <ul class="tabs tabs-transparent tabs-fixed-width">
+                    <% for (const freeLiveTab of live.freeLiveTabs) { %>
+                        <li class="tab <% if (freeLiveTab.isUnavailable) { %>unavail<% } %>">
+                            <a href="#<%- freeLiveTab.id %>"
+                            <% if (freeLiveTab.isDefaultDiff) { %>class="active" <% } %>
+                            tabindex="-1">
+                                <%- freeLiveTab.label %>
+                                <% if (freeLiveTab.hasAltAttribute) { %>
+                                    <img src="image/icon_<%- freeLiveTab.altAttribute %>.png"
+                                         alt="<%- freeLiveTab.altAttribute %>">
+                                <% } %>
+                                <% if (freeLiveTab.isUnavailable) { %>
+                                    <i class="material-icons" title="Unavailable">event_busy</i>
+                                <% } %>
+                            </a>
+                        </li>
+                    <% } %>
+                    <% if (live.storyStageTabs.length > 0) { %>
+                        <li class="tab"><a href="#<%- live.id %>-story" tabindex="-1">Story Stages</a></li>
+                    <% } %>
+                </ul>
+                <% for (const freeLiveTab of live.freeLiveTabs) { %>
+                    <div class="live-difficulty unloaded" id="<%- freeLiveTab.id %>">Loading...</div>
+                <% } %>
+
+                <% if (live.storyStageTabs.length > 0) { %>
+                    <div id="<%- live.id %>-story">
+                        <ul class="tabs tabs-transparent tabs-fixed-width" tabindex="-1">
+                            <% for (const storyTab of live.storyStageTabs) { %>
+                                <li class="tab">
+                                    <a href="#<%- storyTab.id %>" tabindex="-1">
+                                        <%- storyTab.storyChapter %>-<%- storyTab.storyStageNo %>
+                                        <% if (storyTab.hasCourse) { %>
+                                            <%- storyTab.course %>
+                                        <% } %>
+                                        (<img src="image/icon_<%- storyTab.attribute %>.png" alt="<%- storyTab.attribute %>"><% if (storyTab.hasBaseDifficulty) { %> <%- storyTab.baseDifficulty %><% } %>)
+                                    </a>
+                                </li>
+                            <% } %>
+                        </ul>
+                        <% for (const storyTab of live.storyStageTabs) { %>
+                            <div class="live-difficulty unloaded" id="<%- storyTab.id %>">Loading...</div>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        </li>
+    </ul>
+<% } %>
+<% if (!hasAvailableLives) { %>
+    <div class="no-available-songs">
+        This group currently has no available songs. Click the button in the header to show maps for unavailable songs.
+    </div>
+<% } %>
