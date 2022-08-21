@@ -150,8 +150,8 @@ for (const groupId in liveIdsForGroup) {
         const liveData = {
             id: live.id,
             order: live.order,
-            nameKana: notemap.songNameRomaji(live.id),
-            nameRomaji: live.name,
+            nameRomaji: notemap.songNameRomaji(live.id),
+            nameKana: live.name,
             attribute: notemap.attributeName(live.attribute),
             isAllUnavailable: live.isAllUnavailable,
             isAnyPermanent: live.isAnyPermanent,
