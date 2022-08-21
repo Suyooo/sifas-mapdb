@@ -172,11 +172,11 @@ function skillEffect(typeId, amount) {
 }
 
 function skillFinish(conditionId, amount, isSPVoltageGainBuff) {
-    if (conditionId === 1) return ' until the song ends'
-    if (conditionId === 2) return ' for ' + format(amount) + ' notes'
-    if (conditionId === 3) return "" // instant effect (affecting SP charge or stamina)
-    if (conditionId === 4) return "" // until AC ends (this is handled in the trigger switch below)
-    if (conditionId === 7) {
+    if (conditionId === SkillFinishType.UNTIL_SONG_END) return ' until the song ends'
+    if (conditionId === SkillFinishType.NOTE_COUNT) return ' for ' + format(amount) + ' notes'
+    if (conditionId === SkillFinishType.INSTANT) return ""
+    if (conditionId === SkillFinishType.UNTIL_AC_END) return "" // (this is handled in the trigger switch below)
+    if (conditionId === SkillFinishType.SP_COUNT) {
         if (isSPVoltageGainBuff) {
             if (amount == 1) return ' for the next SP Skill'
             else return ' for the next ' + amount + ' SP Skills'
@@ -185,7 +185,7 @@ function skillFinish(conditionId, amount, isSPVoltageGainBuff) {
             else return ' until ' + amount + ' SP Skills are used'
         }
     }
-    if (conditionId === 8) return ' until the next Strategy switch'
+    if (conditionId === SkillFinishType.UNTIL_SWITCH) return ' until the next Strategy switch'
     throw new Error('Unknown Skill Finish Condition ' + conditionId);
 }
 
