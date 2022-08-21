@@ -81,7 +81,7 @@ for (const f of fs.readdirSync("mapdb")) {
                 songName: jsonData.song_name,
                 songNameRomaji: notemap.songNameRomaji(jsonData.live_id),
                 liveId: jsonData.live_id,
-                linkedLiveDiffId: liveDiffId,
+                linkTo: liveDiffId,
                 attribute: notemap.attributeName(jsonData.song_attribute),
                 hasNonAdvDifficulty: jsonData.song_difficulty > Difficulty.ADV,
                 noteCount: jsonData.notes.length,
