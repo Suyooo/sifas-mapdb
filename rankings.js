@@ -24,8 +24,7 @@ const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 const Difficulty = require("./enums/difficulty");
 const Attribute = require("./enums/attribute");
-
-const isFreeLive = (liveDiffId) => liveDiffId < 20000000;
+const Utils = require("./utils");
 
 const lengthRankingMap = {};
 const noteRanking = [];
@@ -33,8 +32,8 @@ const noteRanking = [];
 for (const f of fs.readdirSync("mapdb")) {
     if (f.endsWith(".json")) {
         const liveDiffId = parseInt(f.substring(0, f.length - 5));
-        const isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(liveDiffId / 1000));
-        if (!isFreeLive(liveDiffId) && !isEventLive) {
+        const isEventLive = Utils.isActiveEventLive(liveDiffId);
+        if (!Utils.isFreeLive(liveDiffId) && !isEventLive) {
             continue;
         }
 
@@ -52,7 +51,7 @@ for (const f of fs.readdirSync("mapdb")) {
             if (!lengthRankingMap.hasOwnProperty(jsonData.live_id)) {
                 lengthRankingMap[jsonData.live_id] = {
                     songName: jsonData.song_name,
-                    songNameRomaji: notemap.songNameRomaji(jsonData.live_id),
+                    songNameRomaji: Utils.songNameRomaji(jsonData.live_id),
                     liveId: jsonData.live_id,
                     linkTo: liveDiffId,
                     linkDiffId: jsonData.song_difficulty,
@@ -79,7 +78,7 @@ for (const f of fs.readdirSync("mapdb")) {
         if (jsonData.notes !== null && jsonData.song_difficulty >= Difficulty.ADV) {
             const rankData = {
                 songName: jsonData.song_name,
-                songNameRomaji: notemap.songNameRomaji(jsonData.live_id),
+                songNameRomaji: Utils.songNameRomaji(jsonData.live_id),
                 liveId: jsonData.live_id,
                 linkTo: liveDiffId,
                 attribute: notemap.attributeName(jsonData.song_attribute),
@@ -104,15 +103,6 @@ delete lengthRankingMap["2040"];      // 虹色Passions！
 delete lengthRankingMap["2041"];      // NEO SKY, NEO MAP!
 delete lengthRankingMap["2051"];      // 夢がここからはじまるよ
 delete lengthRankingMap["2053"];      // Just Believe!!!
-
-// Avoid mixups
-/*songs_dict["2031"].name += " (2D)"; // SUPER NOVA
-songs_dict["2032"].name += " (2D)"; // Dream Land, Dream World!
-songs_dict["2033"].name += " (2D)"; // Sing & Smile!!
-songs_dict["2040"].name += " (2D)"; // 虹色Passions！
-songs_dict["2041"].name += " (2D)"; // NEO SKY, NEO MAP!
-songs_dict["2051"].name += " (2D)"; // 夢がここからはじまるよ
-songs_dict["2053"].name += " (2D)"; // Just Believe!!!*/
 
 let rankingsHash = hash([lengthRankingMap, noteRanking]);
 let hashes = {};

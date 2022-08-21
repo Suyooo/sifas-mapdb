@@ -24,10 +24,9 @@ const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 const Difficulty = require("./enums/difficulty");
 const Attribute = require("./enums/attribute");
+const Utils = require("./utils");
 
 const WEEKDAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const isFreeLive = (liveDiffId) => liveDiffId < 20000000;
-const isStoryStage = (liveDiffId) => liveDiffId >= 30000000 && liveDiffId < 40000000;
 
 let hashes = {};
 if (fs.existsSync("build/lives/hash.json")) {
@@ -47,10 +46,10 @@ let jsonData = {};
 for (const f of fs.readdirSync("mapdb")) {
     if (f.endsWith(".json")) {
         const liveDiffId = parseInt(f.substring(0, f.length - 5));
-        const isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(liveDiffId / 1000));
+        const isEventLive = Utils.isActiveEventLive(liveDiffId);
 
         // These pages only contain Free Lives, active Event lives and Story Stages
-        if (!isEventLive && !isFreeLive(liveDiffId) && !isStoryStage(liveDiffId)) {
+        if (!isEventLive && !Utils.isFreeLive(liveDiffId) && !Utils.isStoryStage(liveDiffId)) {
             continue;
         }
 
@@ -86,9 +85,9 @@ for (const f of fs.readdirSync("mapdb")) {
                 attribute: isEventLive ? Attribute.NONE : jsonData[liveDiffId].song_attribute,
                 isAllUnavailable: !isEventLive,
                 isAnyPermanent: isEventLive,
-                dailyWeekdays: isFreeLive(liveDiffId) ? jsonData[liveDiffId].extra_info.daily_weekday : null
+                dailyWeekdays: Utils.isFreeLive(liveDiffId) ? jsonData[liveDiffId].extra_info.daily_weekday : null
             };
-        } else if (isFreeLive(liveDiffId) && jsonData[liveDiffId].song_difficulty === Difficulty.ADV) {
+        } else if (Utils.isFreeLive(liveDiffId) && jsonData[liveDiffId].song_difficulty === Difficulty.ADV) {
             // If we are parsing a song's Adv difficulty after the live data was already read, override that data
             // (In case there's difficulties with different attributes, like SnowHala Adv/Adv+, or a Story Stage was read before)
             livesDict[liveId].attribute = jsonData[liveDiffId].song_attribute;
@@ -101,7 +100,7 @@ for (const f of fs.readdirSync("mapdb")) {
             }
         }
 
-        if (isFreeLive(liveDiffId)) {
+        if (Utils.isFreeLive(liveDiffId)) {
             livesDict[liveId].isAllUnavailable = (!jsonData[liveDiffId].extra_info.is_available) && livesDict[liveId].isAllUnavailable;
             livesDict[liveId].isAnyPermanent = jsonData[liveDiffId].extra_info.is_permanent || livesDict[liveId].isAnyPermanent;
 
@@ -150,7 +149,7 @@ for (const groupId in liveIdsForGroup) {
         const liveData = {
             id: live.id,
             order: live.order,
-            nameRomaji: notemap.songNameRomaji(live.id),
+            nameRomaji: Utils.songNameRomaji(live.id),
             nameKana: live.name,
             attribute: notemap.attributeName(live.attribute),
             isAllUnavailable: live.isAllUnavailable,
@@ -207,14 +206,14 @@ for (const groupId in liveIdsForGroup) {
                 livePageCount++;
             }
 
-            if (!isStoryStage(liveDiffId)) {
+            if (!Utils.isStoryStage(liveDiffId)) {
                 // Full difficulty name for free lives, attribute only if it differs (for example, SnowHala Adv+)
                 const liveTabData = {
                     id: liveDiffId,
                     difficultyId: liveDiff.song_difficulty,
                     label: notemap.difficultyName(liveDiff.song_difficulty),
                     hasAltAttribute: liveDiff.song_attribute != live.attribute,
-                    isUnavailable: isFreeLive(liveDiffId) && !liveDiff.extra_info.is_available && !live.isAllUnavailable,
+                    isUnavailable: Utils.isFreeLive(liveDiffId) && !liveDiff.extra_info.is_available && !live.isAllUnavailable,
                     // If the song is unavailable, defaultDifficulty will not be set - pick Adv as default diff
                     isDefaultDiff: live.isAllUnavailable ? liveDiff.song_difficulty === Difficulty.ADV : live.defaultDifficulty == liveDiffId
                 }
@@ -291,7 +290,3 @@ Promise.all(groupSavePromises).then(() => {
     fs.writeFileSync('build/lives/hash.json', JSON.stringify(hashes));
     console.log("    Built " + livePageCount + " Live page(s).");
 });
-
-module.exports = {
-    isFreeLive
-}

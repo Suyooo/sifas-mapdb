@@ -22,8 +22,7 @@ const settings = require("./settings");
 const wanakana = require("wanakana");
 const fuzzysort = require("./node_modules/fuzzysort/fuzzysort.min");
 const Difficulty = require("./enums/difficulty");
-
-const isFreeLive = (liveDiffId) => liveDiffId < 20000000;
+const Utils = require("./utils");
 
 const customAbbreviationsKn = {
     "10013": "Mスタ",
@@ -53,8 +52,8 @@ for (const f of fs.readdirSync("mapdb")) {
     if (f.endsWith(".json")) {
         const liveDiffId = parseInt(f.substring(0, f.length - 5));
         const json = JSON.parse(fs.readFileSync("mapdb/" + f));
-        const isEventLive = -1 !== settings.current_event_live_ids.indexOf(Math.floor(liveDiffId / 1000));
-        if (!isFreeLive(liveDiffId) && !isEventLive) {
+        const isEventLive = Utils.isActiveEventLive(liveDiffId);
+        if (!Utils.isFreeLive(liveDiffId) && !isEventLive) {
             continue;
         }
 
@@ -91,8 +90,8 @@ for (const liveId in lives) {
         "kanji_clean": fuzzysort.prepare(clean(live.name)),
         "hiragana": fuzzysort.prepare(live.pronunciation),
         "katakana": fuzzysort.prepare(wanakana.toKatakana(live.pronunciation)),
-        "romaji": fuzzysort.prepare(notemap.songNameRomaji(liveId)),
-        "romaji_clean": fuzzysort.prepare(clean(notemap.songNameRomaji(liveId))),
+        "romaji": fuzzysort.prepare(Utils.songNameRomaji(liveId)),
+        "romaji_clean": fuzzysort.prepare(clean(Utils.songNameRomaji(liveId))),
         "abbr_kn": fuzzysort.prepare(customAbbreviationsKn[liveId]),
         "abbr_ro": fuzzysort.prepare(customAbbreviationsRo[liveId])
     });

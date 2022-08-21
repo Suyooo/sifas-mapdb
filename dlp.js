@@ -22,6 +22,7 @@ const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 const DLPFloorType = require("./enums/dlpFloorType");
+const Utils = require("./utils");
 
 function towerNameRomaji(towerId) {
     if (towerId === 33001) return "Dream Live Parade";
@@ -158,7 +159,7 @@ for (const towerId of towerIds) {
             isSuperStage: floor.floor_type === DLPFloorType.SUPER_STAGE,
             liveDifficultyId: floor.live_difficulty_id,
             songName: floor.song_name,
-            songNameRomaji: notemap.songNameRomaji(floor.live_id),
+            songNameRomaji: Utils.songNameRomaji(floor.live_id),
             attribute: notemap.attributeName(floor.song_attribute),
             targetVoltage: notemap.format(floor.voltage_target),
             clearReward: makeRewardString(floor.reward_clear),
