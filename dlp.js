@@ -21,6 +21,8 @@ const fs = require('fs');
 const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
+const Attribute = require("./enums/attribute");
+const Difficulty = require("./enums/difficulty");
 const DLPFloorType = require("./enums/dlpFloorType");
 const Utils = require("./utils");
 
@@ -161,13 +163,13 @@ for (const towerId of towerIds) {
             nameKana: floor.song_name,
             nameRomaji: Utils.songNameRomaji(floor.live_id),
             namePostfix: Utils.songNamePostfix(floor.live_id),
-            attribute: notemap.attributeName(floor.song_attribute),
+            attribute: Attribute.name(floor.song_attribute),
             targetVoltage: notemap.format(floor.voltage_target),
             clearReward: makeRewardString(floor.reward_clear),
             hasProgressReward: floor.reward_progress !== null,
             noteDamage: notemap.format(floor.note_damage),
             hasNoteDamageRate: floor.note_damage_rate != undefined,
-            baseDifficulty: notemap.difficultyName(floor.song_difficulty),
+            baseDifficulty: Difficulty.name(floor.song_difficulty),
             capTap: notemap.format(floor.voltage_caps.tap),
             capSp: notemap.format(floor.voltage_caps.sp),
             capSkill: notemap.format(floor.voltage_caps.skill),

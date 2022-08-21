@@ -18,8 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 const render = require('util').promisify(require("ejs").renderFile);
 const fs = require('fs');
-const settings = require('./settings.js');
-const notemap = require('./notemap.js');
 const minify = require('html-minifier').minify;
 const hash = require('object-hash');
 const Difficulty = require("./enums/difficulty");
@@ -56,7 +54,7 @@ for (const f of fs.readdirSync("mapdb")) {
                     liveId: jsonData.live_id,
                     linkTo: liveDiffId,
                     linkDiffId: jsonData.song_difficulty,
-                    attribute: notemap.attributeName(jsonData.song_attribute),
+                    attribute: Attribute.name(jsonData.song_attribute),
                     length: jsonData.song_length,
                     showByDefault: isEventLive || jsonData.extra_info.is_available
                 };
@@ -70,7 +68,7 @@ for (const f of fs.readdirSync("mapdb")) {
                 }
                 // Prefer attribute of Adv map
                 if (jsonData.song_difficulty === Difficulty.ADV && jsonData.song_attribute !== Attribute.NONE) {
-                    jsonData.attribute = notemap.attributeName(jsonData.song_attribute);
+                    jsonData.attribute = Attribute.name(jsonData.song_attribute);
                 }
                 lengthRankingMap[jsonData.live_id].showByDefault = isEventLive || jsonData.extra_info.is_available || lengthRankingMap[jsonData.live_id].showByDefault;
             }
@@ -83,13 +81,13 @@ for (const f of fs.readdirSync("mapdb")) {
                 namePostfix: Utils.songNamePostfix(jsonData.live_id),
                 liveId: jsonData.live_id,
                 linkTo: liveDiffId,
-                attribute: notemap.attributeName(jsonData.song_attribute),
+                attribute: Attribute.name(jsonData.song_attribute),
                 hasNonAdvDifficulty: jsonData.song_difficulty > Difficulty.ADV,
                 noteCount: jsonData.notes.length,
                 showByDefault: isEventLive ? false : (jsonData.extra_info.is_available && jsonData.extra_info.can_show_on_profile)
             };
             if (rankData.hasNonAdvDifficulty) {
-                rankData.difficulty = notemap.difficultyNameShort(jsonData.song_difficulty);
+                rankData.difficulty = Difficulty.nameShort(jsonData.song_difficulty);
             }
             noteRanking.push(rankData);
         }

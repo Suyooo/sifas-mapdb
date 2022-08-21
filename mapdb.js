@@ -152,7 +152,7 @@ for (const groupId in liveIdsForGroup) {
             nameRomaji: Utils.songNameRomaji(live.id),
             nameKana: live.name,
             namePostfix: Utils.songNamePostfix(live.id),
-            attribute: notemap.attributeName(live.attribute),
+            attribute: Attribute.name(live.attribute),
             isAllUnavailable: live.isAllUnavailable,
             isAnyPermanent: live.isAnyPermanent,
             isDaily: live.dailyWeekdays !== null,
@@ -212,13 +212,13 @@ for (const groupId in liveIdsForGroup) {
                 const liveTabData = {
                     id: liveDiffId,
                     difficultyId: liveDiff.song_difficulty,
-                    label: notemap.difficultyName(liveDiff.song_difficulty),
+                    label: Difficulty.name(liveDiff.song_difficulty),
                     hasAltAttribute: liveDiff.song_attribute != live.attribute,
                     isUnavailable: Utils.isFreeLive(liveDiffId) && !liveDiff.extra_info.is_available && !live.isAllUnavailable,
                     // If the song is unavailable, defaultDifficulty will not be set - pick Adv as default diff
                     isDefaultDiff: live.isAllUnavailable ? liveDiff.song_difficulty === Difficulty.ADV : live.defaultDifficulty == liveDiffId
                 }
-                if (liveTabData.hasAltAttribute) liveTabData.altAttribute = notemap.attributeName(liveDiff.song_attribute);
+                if (liveTabData.hasAltAttribute) liveTabData.altAttribute = Attribute.name(liveDiff.song_attribute);
                 liveData.freeLiveTabs.push(liveTabData);
             } else {
                 // Shortened difficulty plus location for story stages, always show attribute
@@ -228,7 +228,7 @@ for (const groupId in liveIdsForGroup) {
                     storyStageNo: liveDiff.extra_info.story_stage,
                     hasCourse: liveDiff.extra_info.story_chapter >= 20,
                     hasBaseDifficulty: liveDiff.notes !== null,
-                    attribute: notemap.attributeName(liveDiff.song_attribute)
+                    attribute: Attribute.name(liveDiff.song_attribute)
                 }
                 if (storyTabData.hasCourse) storyTabData.course = liveDiff.extra_info.story_is_hard_mode ? "Hard" : "Normal";
 
@@ -245,7 +245,7 @@ for (const groupId in liveIdsForGroup) {
                             minimumDifficulty = comparisonDiff.song_difficulty;
                         }
                     }
-                    storyTabData.baseDifficulty = notemap.difficultyNameShort(minimumDifficulty);
+                    storyTabData.baseDifficulty = Difficulty.nameShort(minimumDifficulty);
                 }
 
                 liveData.storyStageTabs.push(storyTabData);

@@ -21,8 +21,6 @@ const SkillFinishType = require("./enums/skillFinishType");
 const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
 const ACGimmickTrigger = require("./enums/acGimmickTrigger");
 const ACMissionType = require("./enums/acMissionType");
-const Difficulty = require("./enums/difficulty");
-const Attribute = require("./enums/attribute");
 
 function capitalizeFirstLetter(s) {
     return s.substring(0, 1).toUpperCase() + s.substring(1);
@@ -33,35 +31,6 @@ function format(x) {
     let parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "&#8239;");
     return parts.join(".");
-}
-
-function attributeName(attrId) {
-    if (attrId === Attribute.SMILE) return "smile";
-    if (attrId === Attribute.PURE) return "pure";
-    if (attrId === Attribute.COOL) return "cool";
-    if (attrId === Attribute.ACTIVE) return "active";
-    if (attrId === Attribute.NATURAL) return "natural";
-    if (attrId === Attribute.ELEGANT) return "elegant";
-    if (attrId === Attribute.NONE) return "none";
-    throw new Error('Unknown Attribute ' + attrId);
-}
-
-function difficultyName(diffId) {
-    if (diffId === Difficulty.BEG) return "Beginner";
-    if (diffId === Difficulty.INT) return "Intermediate";
-    if (diffId === Difficulty.ADV) return "Advanced";
-    if (diffId === Difficulty.ADVPLUS) return "Advanced+";
-    if (diffId === Difficulty.CHA) return "Challenge";
-    throw new Error('Unknown Difficulty ' + diffId);
-}
-
-function difficultyNameShort(diffId) {
-    if (diffId === Difficulty.BEG) return "Beg";
-    if (diffId === Difficulty.INT) return "Int";
-    if (diffId === Difficulty.ADV) return "Adv";
-    if (diffId === Difficulty.ADVPLUS) return "Adv+";
-    if (diffId === Difficulty.CHA) return "Ch";
-    throw new Error('Unknown Difficulty ' + diffId);
 }
 
 function skill(skill, removeTarget) {
@@ -511,9 +480,6 @@ function makeNotemap(liveData) {
 
 module.exports = {
     make: makeNotemap,
-    attributeName,
-    difficultyName,
-    difficultyNameShort,
     isCleansable,
     format
 };
