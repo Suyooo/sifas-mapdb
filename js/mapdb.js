@@ -1078,6 +1078,14 @@ function onKeyDown(e) {
                     $(gimmick).trigger("click");
                 }
                 e.preventDefault();
+            } else if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key == "a") {
+                // Toggle dropdowns
+                $(".live-extra-toggle", liveDifficulty).toggleClass("open");
+                e.preventDefault();
+            } else if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key == "s") {
+                // Toggle scale
+                $(".scale", liveDifficulty).toggleClass("turnscale");
+                e.preventDefault();
             }
         }
     }
