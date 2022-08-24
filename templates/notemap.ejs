@@ -15,26 +15,28 @@
     </div>
     <div class="notebarcontainer" tabindex="-1">
         <div class="notebar" style="--markerlayers: <%- mapInfo.markerLayerCount %>"
-             data-totaltime="<%- mapInfo.mapLength / 98 * 100 %>">
+             data-totaltime="<%- (mapInfo.mapLength / 98 * 100).toFixed(3) %>">
 
             <% for (const ac of appealChances) { %>
                 <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>"
-                     style="--time-pos: <%- ac.timePosition * 98 + 1 %>%; --time-len: <%- ac.timeLength * 98 %>%;
-                             --turn-pos: <%- ac.turnPosition * 98 + 1 %>%; --turn-len: <%- ac.turnLength * 98 %>%;">&nbsp;
+                     style="--time-pos: <%- (ac.timePosition * 98 + 1).toFixed(3) %>%;
+                             --time-len: <%- (ac.timeLength * 98).toFixed(3) %>%;
+                             --turn-pos: <%- (ac.turnPosition * 98 + 1).toFixed(3) %>%;
+                             --turn-len: <%- (ac.turnLength * 98).toFixed(3) %>%;">&nbsp;
                 </div>
             <% } %>
             <% for (const note of notes) { %>
                 <div class="note <%- note.cssClass %> <%- note.hasGimmick ? "gimmicked" : "" %>"
-                     style="--time-pos: <%- "calc(" + (note.timePosition * 98 + 1) + "% - 1px)" %>;
-                             --turn-pos: <%- "calc(" + (note.turnPosition * 98 + 1) + "% - 1px)" %>;">&nbsp;
+                     style="--time-pos: calc(<%- (note.timePosition * 98 + 1).toFixed(3) %>% - 1px);
+                             --turn-pos: calc(<%- (note.turnPosition * 98 + 1).toFixed(3) %>% - 1px);">&nbsp;
                 </div>
 
                 <% if (note.isHold) { %>
                     <div class="hold <%- note.cssClass %>"
-                         style="--time-pos: calc(<%- note.timePosition * 98 + 1 %>% - 1px);
-                                 --time-len: <%- note.timeLength * 98 %>%;
-                                 --turn-pos: calc(<%- note.turnPosition * 98 + 1 %>% - 1px);
-                                 --turn-len: <%- note.turnLength * 98 %>%;">&nbsp;
+                         style="--time-pos: calc(<%- (note.timePosition * 98 + 1).toFixed(3) %>% - 1px);
+                                 --time-len: <%- (note.timeLength * 98).toFixed(3) %>%;
+                                 --turn-pos: calc(<%- (note.turnPosition * 98 + 1).toFixed(3) %>% - 1px);
+                                 --turn-len: <%- (note.turnLength * 98).toFixed(3) %>%;">&nbsp;
                     </div>
                 <% } %>
 
@@ -43,10 +45,10 @@
                          data-npos="<%- note.gimmickMarker.noteIndex + 1 %>"
                          style="--gimmicklayer: <%- note.gimmickMarker.globalLayer %>;
                                  --gimmicklayer-filtered: <%- note.gimmickMarker.thisGimmickLayer %>;
-                                 --time-pos: <%- note.gimmickMarker.timePosition * 98 + 1 %>%;
-                                 --time-len: <%- note.gimmickMarker.hasLength ? note.gimmickMarker.timeLength * 98 : 0 %>%;
-                                 --turn-pos: <%- note.gimmickMarker.turnPosition * 98 + 1 %>%;
-                                 --turn-len: <%- note.gimmickMarker.hasLength ? note.gimmickMarker.turnLength * 98 : 0 %>%;
+                                 --time-pos: <%- (note.gimmickMarker.timePosition * 98 + 1).toFixed(3) %>%;
+                                 --time-len: <%- note.gimmickMarker.hasLength ? (note.gimmickMarker.timeLength * 98).toFixed(3) : 0 %>%;
+                                 --turn-pos: <%- (note.gimmickMarker.turnPosition * 98 + 1).toFixed(3) %>%;
+                                 --turn-len: <%- note.gimmickMarker.hasLength ? (note.gimmickMarker.turnLength * 98).toFixed(3) : 0 %>%;
                                  ">
                         <div class="gimmickmarker"><%- note.gimmickMarker.gimmickIndex + 1 %></div>
                         <% if (note.gimmickMarker.hasLength) { %>
@@ -57,8 +59,8 @@
 
                 <% if (note.index % 5 === 4) { %>
                     <div class="marker <%- (note.index % 50 === 49) ? 'fifty' : ((note.index % 10 === 9) ? 'ten' : 'five') %>"
-                         style="--time-pos: calc(<%- note.timePosition * 98 + 1 %>% - 1em);
-                                 --turn-pos: calc(<%- (note.index / (mapInfo.noteCount - 1)) * 98 + 1 %>% - 1em)">
+                         style="--time-pos: calc(<%- (note.timePosition * 98 + 1).toFixed(3) %>% - 1em);
+                                 --turn-pos: calc(<%- ((note.index / (mapInfo.noteCount - 1)) * 98 + 1).toFixed(3) %>% - 1em)">
                         |<br><%- ((note.index + 1) % 10 === 0) ? (note.index + 1) : "&nbsp;" %>
                     </div>
                 <% } %>
