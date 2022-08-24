@@ -409,6 +409,30 @@ body.show-unavail div.group-tab div.no-available-songs {
     z-index: 6;
 }
 
+.scale {
+    display: flex;
+    font-size: 70%;
+    color: var(--dark-border);
+    justify-content: end;
+    margin-top: -1.5em;
+}
+
+.scale .header {
+    padding: .2em;
+    font-weight: bold;
+}
+
+.scale .time, .scale .turns {
+    padding: .2em .5em;
+    margin-left: .5em;
+    cursor: pointer;
+}
+
+.scale:not(.turnscale) .time, .scale.turnscale .turns {
+    border-radius: 1em;
+    background-color: var(--key-accented);
+}
+
 .notebar.turnscale .note, .notebar.turnscale .marker, .notebar.turnscale .appealchance, .notebar.turnscale .hold, .notebar.turnscale .gimmick {
     left: var(--turn-pos);
 }
