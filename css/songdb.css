@@ -141,7 +141,7 @@ body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unava
     font-weight: bold;
 }
 
-.note {
+.collapsible-header .note, .rankingtable .note {
     font-style: italic;
 }
 
