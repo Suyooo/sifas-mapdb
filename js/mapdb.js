@@ -743,7 +743,6 @@ function dlpTowerCollapsibleOpen() {
 }
 
 function dlpFloorCollapsibleInit() {
-    console.log(this);
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
     let towerPageName = $($(".song-name.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
