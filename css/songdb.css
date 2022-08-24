@@ -222,6 +222,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 .notebarcontainer {
     overflow-x: auto;
     overflow-y: hidden;
+    clear: both;
 }
 
 .notebar {
@@ -414,7 +415,7 @@ body.show-unavail div.group-tab div.no-available-songs {
     font-size: 70%;
     color: var(--dark-border);
     justify-content: end;
-    margin-top: -1.5em;
+    margin-top: -1.9em;
 }
 
 .scale .header {
@@ -433,11 +434,17 @@ body.show-unavail div.group-tab div.no-available-songs {
     background-color: var(--key-accented);
 }
 
-.notebar.turnscale .note, .notebar.turnscale .marker, .notebar.turnscale .appealchance, .notebar.turnscale .hold, .notebar.turnscale .gimmick {
+.scale.turnscale + .notebarcontainer .note,
+.scale.turnscale + .notebarcontainer .marker,
+.scale.turnscale + .notebarcontainer .appealchance,
+.scale.turnscale + .notebarcontainer .hold,
+.scale.turnscale + .notebarcontainer .gimmick {
     left: var(--turn-pos);
 }
 
-.notebar.turnscale .appealchance, .notebar.turnscale .hold, .notebar.turnscale .gimmick {
+.scale.turnscale + .notebarcontainer .appealchance,
+.scale.turnscale + .notebarcontainer .hold,
+.scale.turnscale + .notebarcontainer .gimmick {
     width: var(--turn-len);
 }
 
