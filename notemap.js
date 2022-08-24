@@ -256,7 +256,8 @@ function makeNotemap(liveData) {
                 const note = liveData.notes[ni];
                 const noteData = {
                     index: ni,
-                    positionRelative: (note.time - firstNoteTime) / mapLength,
+                    timePosition: (note.time - firstNoteTime) / mapLength,
+                    turnPosition: ni / (liveData.notes.length - 1),
                     cssClass: (note.rail == 1 ? 'top' : 'bottom'),
                     hasGimmick: note.gimmick !== null,
                     isHold: note.type === NoteType.HOLD_START
@@ -267,7 +268,8 @@ function makeNotemap(liveData) {
                     while (liveData.notes[endNi].rail !== note.rail || liveData.notes[endNi].type !== NoteType.HOLD_END) {
                         endNi++;
                     }
-                    noteData.holdLengthRelative = (liveData.notes[endNi].time - note.time) / mapLength;
+                    noteData.timeLength = (liveData.notes[endNi].time - note.time) / mapLength;
+                    noteData.turnLength = (endNi - ni) / (liveData.notes.length - 1);
                 }
 
                 if (noteData.hasGimmick) {
@@ -298,17 +300,20 @@ function makeNotemap(liveData) {
                         gimmickIndex: note.gimmick,
                         noteIndex: ni,
                         hasLength: liveData.note_gimmicks[note.gimmick].finish_type === SkillFinishType.NOTE_COUNT,
-                        positionRelative, globalLayer, thisGimmickLayer
+                        timePosition: positionRelative,
+                        turnPosition: ni / (liveData.notes.length - 1),
+                        globalLayer, thisGimmickLayer
                     };
 
                     if (gimmickMarkerData.hasLength) {
                         let endNi = ni + liveData.note_gimmicks[note.gimmick].finish_amount;
                         if (endNi >= liveData.notes.length) endNi = liveData.notes.length - 1;
-                        gimmickMarkerData.lengthRelative = (liveData.notes[endNi].time - note.time) / mapLength;
+                        gimmickMarkerData.timeLength = (liveData.notes[endNi].time - note.time) / mapLength;
+                        gimmickMarkerData.turnLength = (endNi - ni) / (liveData.notes.length - 1);
 
                         // magic value (TM) to avoid unneccessary stacks due to float precision loss
                         stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
-                            = positionRelative + gimmickMarkerData.lengthRelative - 0.0001;
+                            = positionRelative + gimmickMarkerData.timeLength - 0.0001;
                     } else {
                         // magic value (TM) to avoid too much overlap of no-length markers
                         stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
@@ -434,28 +439,30 @@ function makeNotemap(liveData) {
 
             if (liveInfo.hasNoteMap) {
                 const mapLength = (liveData.notes[liveData.notes.length - 1].time - liveData.notes[0].time);
-                acData.startRelative = (liveData.notes[ac.range_note_ids[0]].time - liveData.notes[0].time) / mapLength;
-                acData.lengthRelative
+                acData.timePosition = (liveData.notes[ac.range_note_ids[0]].time - liveData.notes[0].time) / mapLength;
+                acData.timeLength
                     = (liveData.notes[ac.range_note_ids[1]].time - liveData.notes[ac.range_note_ids[0]].time) / mapLength;
+                acData.turnPosition = ac.range_note_ids[0] / (liveData.notes.length - 1);
+                acData.turnLength = (ac.range_note_ids[1] - ac.range_note_ids[0]) / (liveData.notes.length - 1);
 
-                acData.length = ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
-                totalACNotes += acData.length;
+                acData.noteCount = ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
+                totalACNotes += acData.noteCount;
                 totalACReward += ac.reward_voltage;
 
                 if (ac.mission_type === ACMissionType.VOLTAGE_TOTAL) {
                     acData.hasPerNoteInfo = true;
                     acData.perNoteInfo = "(avg. "
-                        + format(Math.ceil(ac.mission_value / acData.length))
+                        + format(Math.ceil(ac.mission_value / acData.noteCount))
                         + " Voltage per note)";
                 } else if (ac.mission_type === ACMissionType.CRITICALS) {
                     acData.hasPerNoteInfo = true;
                     acData.perNoteInfo = "("
-                        + format(Math.ceil(ac.mission_value / acData.length * 100))
+                        + format(Math.ceil(ac.mission_value / acData.noteCount * 100))
                         + "% of notes must crit)";
                 } else if (ac.mission_type === ACMissionType.SKILLS) {
                     acData.hasPerNoteInfo = true;
                     acData.perNoteInfo = "("
-                        + format(Math.ceil(ac.mission_value / acData.length * 100))
+                        + format(Math.ceil(ac.mission_value / acData.noteCount * 100))
                         + "% of taps must proc)";
                 }
                 acData.rewardVoltage = format(ac.reward_voltage);

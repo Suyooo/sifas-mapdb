@@ -222,6 +222,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 .notebarcontainer {
     overflow-x: auto;
     overflow-y: hidden;
+    clear: both;
 }
 
 .notebar {
@@ -256,6 +257,9 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .appealchance {
     position: absolute;
+    left: var(--time-pos);
+    width: var(--time-len);
+    transition: left .3s, width .3s;
     top: 0;
     height: 100%;
     font-size: 70%;
@@ -282,6 +286,8 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .note {
     position: absolute;
+    left: var(--time-pos);
+    transition: left .3s;
     height: 50%;
     background: var(--sidenav);
     width: 2px;
@@ -299,6 +305,9 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .hold {
     position: absolute;
+    left: var(--time-pos);
+    width: var(--time-len);
+    transition: left .3s, width .3s;
     height: 0.25em;
     z-index: 4;
     background: repeating-linear-gradient(to right, var(--sidenav) 0%, var(--sidenav) 50%, transparent 50%, transparent 100%);
@@ -324,10 +333,12 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .gimmick {
     position: absolute;
+    left: var(--time-pos);
+    width: var(--time-len);
+    transition: opacity .2s, top .2s, left .3s, width .3s;
     font-size: 50%;
     --gimmicklayer: -999;
     --gimmicklayer-filtered: -999;
-    transition: opacity .2s, top .2s;
     user-select: none;
     top: calc((-1.45 - var(--gimmicklayer) * 1.25) * 1em);
     background: var(--panel);
@@ -369,6 +380,8 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .notebar .marker {
+    left: var(--time-pos);
+    transition: left .3s;
     width: 2em;
     text-align: center;
     position: absolute;
@@ -395,6 +408,44 @@ body.show-unavail div.group-tab div.no-available-songs {
     position: absolute;
     opacity: 0.5;
     z-index: 6;
+}
+
+.scale {
+    display: flex;
+    font-size: 70%;
+    color: var(--dark-border);
+    justify-content: end;
+    margin-top: -1.9em;
+}
+
+.scale .header {
+    padding: .2em;
+    font-weight: bold;
+}
+
+.scale .time, .scale .turns {
+    padding: .2em .5em;
+    margin-left: .5em;
+    cursor: pointer;
+}
+
+.scale:not(.turnscale) .time, .scale.turnscale .turns {
+    border-radius: 1em;
+    background-color: var(--key-accented);
+}
+
+.scale.turnscale + .notebarcontainer .note,
+.scale.turnscale + .notebarcontainer .marker,
+.scale.turnscale + .notebarcontainer .appealchance,
+.scale.turnscale + .notebarcontainer .hold,
+.scale.turnscale + .notebarcontainer .gimmick {
+    left: var(--turn-pos);
+}
+
+.scale.turnscale + .notebarcontainer .appealchance,
+.scale.turnscale + .notebarcontainer .hold,
+.scale.turnscale + .notebarcontainer .gimmick {
+    width: var(--turn-len);
 }
 
 .detailinfo h5 {

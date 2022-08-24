@@ -842,6 +842,12 @@ function initNoteMapInteractions(e) {
             acMarkerMouseover.bind(acmarkers[i], acinfos[$(acmarkers[i]).data("ac")]));
     }
     acmarkers.on("mouseout", closeTooltip);
+
+    let scale = $(".scale", e);
+    let scaleTime = $(".scale .time", e);
+    scaleTime.on("click", setScale.bind(scale, false));
+    let scaleTurns = $(".scale .turns", e);
+    scaleTurns.on("click", setScale.bind(scale, true));
 }
 
 function toggleLiveExtraInfo() {
@@ -969,6 +975,12 @@ function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
             }
         }
     }
+}
+
+// Scale Setter
+
+function setScale(isTurnScale) {
+    this.toggleClass("turnscale", isTurnScale);
 }
 
 /*
