@@ -718,6 +718,10 @@ body.show-unavail div.group-tab div.no-available-songs {
     .rankingtable.open tr.open-button {
         display: none;
     }
+
+    .scale {
+        margin-top: 0;
+    }
 }
 
 .fake-collapsible-header {
