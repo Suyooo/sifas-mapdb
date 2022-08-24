@@ -109,10 +109,12 @@ let hashes = {};
 if (fs.existsSync("build/lives/hash.json")) {
     hashes = JSON.parse(fs.readFileSync("build/lives/hash.json"));
 }
+
 if (process.argv[2] !== "full" && hashes.hasOwnProperty("rankings") && hashes["rankings"] === rankingsHash) {
-    console.log("    No update needed.")
+    console.log("    No update needed.");
     return;
 }
+hashes["rankings"] = rankingsHash;
 
 const lengthRanking = Object.values(lengthRankingMap).sort((a, b) => {
     if (a.length !== b.length) return a.length - b.length;

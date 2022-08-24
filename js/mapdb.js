@@ -743,7 +743,6 @@ function dlpTowerCollapsibleOpen() {
 }
 
 function dlpFloorCollapsibleInit() {
-    console.log(this);
     let towerLink = "tower" + $(this).parent().parent().parent().attr("id");
     let towerPageName = $($(".song-name.translatable", $(this).parent().parent().parent())[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP");
     let collapsible = M.Collapsible.getInstance(this);
@@ -842,6 +841,12 @@ function initNoteMapInteractions(e) {
             acMarkerMouseover.bind(acmarkers[i], acinfos[$(acmarkers[i]).data("ac")]));
     }
     acmarkers.on("mouseout", closeTooltip);
+
+    let scale = $(".scale", e);
+    let scaleTime = $(".scale .time", e);
+    scaleTime.on("click", setScale.bind(scale, false));
+    let scaleTurns = $(".scale .turns", e);
+    scaleTurns.on("click", setScale.bind(scale, true));
 }
 
 function toggleLiveExtraInfo() {
@@ -971,6 +976,12 @@ function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
     }
 }
 
+// Scale Setter
+
+function setScale(isTurnScale) {
+    this.toggleClass("turnscale", isTurnScale);
+}
+
 /*
  * -------------------
  * KEYBOARD NAVIGATION
@@ -1066,6 +1077,14 @@ function onKeyDown(e) {
                 if (gimmick) {
                     $(gimmick).trigger("click");
                 }
+                e.preventDefault();
+            } else if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key == "a") {
+                // Toggle dropdowns
+                $(".live-extra-toggle", liveDifficulty).toggleClass("open");
+                e.preventDefault();
+            } else if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key == "s") {
+                // Toggle scale
+                $(".scale", liveDifficulty).toggleClass("turnscale");
                 e.preventDefault();
             }
         }

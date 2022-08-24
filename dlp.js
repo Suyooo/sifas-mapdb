@@ -241,4 +241,6 @@ towerDataList.sort((a, b) => a.id - b.id);
     console.log("    Built " + livePageCount + " Live page(s).");
 });
 
-console.log("    Building " + livePageCount + " Live page(s)...");
+if (hasUpdatedTowers) {
+    console.log("    Building " + livePageCount + " Live page(s)...");
+}
