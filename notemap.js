@@ -138,6 +138,7 @@ function skillEffect(typeId, amount) {
     if (typeId === 91) return 'charge SP Gauge by ' + format(amount / 100) + '%';
     if (typeId === 93) return 'gain ' + format(amount / 100) + '% of max Stamina as shield';
     if (typeId === 96) return 'restore ' + format(amount / 100) + '% of max Stamina';
+    if (typeId === 105) return 'increase Stamina Damage by ' + format(amount / 100) + '%';
     if (typeId === 112) return 'charge SP Gauge by ' + format(amount / 100) + '% of the tapping card\'s Technique';
     if (typeId === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 120) return 'lose ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
