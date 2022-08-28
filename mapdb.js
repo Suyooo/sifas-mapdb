@@ -190,7 +190,7 @@ for (const groupId in liveIdsForGroup) {
                     capSp: notemap.format(liveDiff.voltage_caps.sp),
                     capSkill: notemap.format(liveDiff.voltage_caps.skill),
                     capSwap: notemap.format(liveDiff.voltage_caps.swap),
-                    noteDamage: liveDiff.note_damage,
+                    noteDamage: notemap.format(liveDiff.note_damage),
                     spGaugeSize: notemap.format(liveDiff.sp_gauge_max),
                     noteMap: notemap.make(liveDiff)
                 }
