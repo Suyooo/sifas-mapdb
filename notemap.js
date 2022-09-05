@@ -46,6 +46,7 @@ const removeTargetSet = new Set([3, 4, 5, 23, 50, 68, 69, 70, 91, 93, 96, 105, 1
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
+    if (targetId === 19) return 'Ruby units ';
     if (targetId === 29) return 'µ\'s units ';
     if (targetId === 30) return 'Aqours units ';
     if (targetId === 31) return 'Nijigaku units ';
@@ -161,13 +162,16 @@ function skillEffect(typeId, amount) {
     if (typeId === 170) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation';
     if (typeId === 171) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (typeId === 172) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
+    if (typeId === 177) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 179) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (typeId === 185) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 187) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (typeId === 193) return 'gain ' + format(amount / 100) + '% Critical Power for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 210) return 'increase SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
+    if (typeId === 217) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 218) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (typeId === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
+    if (typeId === 228) return 'increase the Voltage gained from their Strategy Switch bonus by ' + format(amount);
     if (typeId === 229) return 'increase the cooldown reduction from their Strategy Switch bonus by ' + format(amount) + ' turns';
     if (typeId === 230) return 'increase SP gained from their Strategy Switch bonus by ' + format(amount) + ' points';
     if (typeId === 263) return 'take ' + format(amount / 100) + '% of max Stamina as damage, bypassing Shield';
