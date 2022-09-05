@@ -33,13 +33,16 @@ function format(x) {
     return parts.join(".");
 }
 
-function skill(skill, removeTarget) {
+function skill(skill) {
     let eff = skillEffect(skill.effect_type, skill.effect_amount);
-    return (removeTarget ? "" : skillTarget(skill.target)) + eff +
+    return (removeTargetSet.has(skill.effect_type) ? "" : skillTarget(skill.target)) + eff +
         skillFinish(skill.finish_type, skill.finish_amount, eff.indexOf("SP Voltage Gain") !== -1);
     // TODO: The parameter for isSPVoltageGainBuff is based on the skill effect strings above right now...
     //  so it's prone to typos and will break if translated
 }
+
+// Skill Effect Types that have no target - never print a target for these, even if one is defined in the live info
+const removeTargetSet = new Set([3, 4, 5, 23, 50, 68, 69, 70, 91, 93, 96, 105, 112, 128, 130, 132, 134, 210, 217, 218, 219, 263]);
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
@@ -342,7 +345,7 @@ function makeNotemap(liveData) {
 
         if (liveInfo.hasSongGimmicks) {
             liveInfo.songGimmicks = liveData.gimmick.map((gimmick, index) => {
-                let skillstr = capitalizeFirstLetter(skill(gimmick, false));
+                let skillstr = capitalizeFirstLetter(skill(gimmick));
                 if (gimmick.finish_type === SkillFinishType.UNTIL_SONG_END) {
                     // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
                     skillstr = skillstr.substring(0, skillstr.length - 20);
@@ -358,7 +361,6 @@ function makeNotemap(liveData) {
 
         for (let gi = 0; gi < liveData.note_gimmicks.length; gi++) {
             let skillstr;
-            let remove_target = false;
             switch (liveData.note_gimmicks[gi].trigger) {
                 case NoteGimmickTrigger.ON_HIT:
                     skillstr = "If hit, ";
@@ -371,21 +373,18 @@ function makeNotemap(liveData) {
                     break;
                 case NoteGimmickTrigger.ON_VO_HIT:
                     skillstr = 'If hit with a <span class="t vo">Vo</span> unit, ';
-                    remove_target = liveData.note_gimmicks[gi].target == 38;
                     break;
                 case NoteGimmickTrigger.ON_SP_HIT:
                     skillstr = 'If hit with an <span class="t sp">Sp</span> unit, ';
-                    remove_target = liveData.note_gimmicks[gi].target == 39;
                     break;
                 case NoteGimmickTrigger.ON_SK_HIT:
                     skillstr = 'If hit with an <span class="t sk">Sk</span> unit, ';
-                    remove_target = liveData.note_gimmicks[gi].target == 41;
                     break;
                 default:
                     throw new Error('Unknown Note Gimmick Trigger ' + liveData.note_gimmicks[gi].trigger);
             }
 
-            skillstr += skill(liveData.note_gimmicks[gi], remove_target);
+            skillstr += skill(liveData.note_gimmicks[gi]);
             if (liveData.note_gimmicks[gi].trigger === NoteGimmickTrigger.ALWAYS) {
                 skillstr = capitalizeFirstLetter(skillstr);
             }
@@ -434,7 +433,7 @@ function makeNotemap(liveData) {
                     default:
                         throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
                 }
-                skillstr += skill(ac.gimmick, false);
+                skillstr += skill(ac.gimmick);
                 acData.gimmick = skillstr;
             }
 
