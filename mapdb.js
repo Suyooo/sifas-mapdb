@@ -178,7 +178,9 @@ for (const groupId in liveIdsForGroup) {
             const liveDiff = jsonData[liveDiffId];
             const liveDiffHash = hash(liveDiff);
 
-            if (process.argv[2] === "full" || !hashes.hasOwnProperty(liveDiffId) || hashes[liveDiffId] !== liveDiffHash) {
+            const liveDiffIdAsString = liveDiffId.toString();
+            if (process.argv[2] === "full" || process.argv.indexOf(liveDiffIdAsString) !== -1
+                || !hashes.hasOwnProperty(liveDiffId) || hashes[liveDiffId] !== liveDiffHash) {
                 currentGroup.hasUpdatedLives = true;
 
                 const liveData = {
