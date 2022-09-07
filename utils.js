@@ -131,6 +131,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2108") return "Future Parade";
     if (liveId === "2110") return "Miracle STAY TUNE!";
     if (liveId === "2097") return "Eien no Isshun";
+    if (liveId === "2111") return "Twilight";
     if (liveId === "2031") return "SUPER NOVA";
     if (liveId === "2067") return "POWER SPOT!!";
     if (liveId === "2066") return "Love Triangle";
