@@ -103,13 +103,15 @@ for (const f of fs.readdirSync("mapdb")) {
         if (Utils.isFreeLive(liveDiffId)) {
             livesDict[liveId].isAllUnavailable = (!jsonData[liveDiffId].extra_info.is_available) && livesDict[liveId].isAllUnavailable;
             livesDict[liveId].isAnyPermanent = jsonData[liveDiffId].extra_info.is_permanent || livesDict[liveId].isAnyPermanent;
+        }
 
-            // If no available Adv difficulty has been read (yet), just set the highest available difficulty as default
-            if (jsonData[liveDiffId].extra_info.is_available && livesDict[liveId].defaultDifficultyId !== Difficulty.ADV
-                && jsonData[liveDiffId].song_difficulty > livesDict[liveId].defaultDifficultyId) {
-                livesDict[liveId].defaultDifficulty = liveDiffId;
-                livesDict[liveId].defaultDifficultyId = jsonData[liveDiffId].song_difficulty;
-            }
+        // If no available Adv difficulty has been read (yet), just set the highest available difficulty as default
+        if ((isEventLive || jsonData[liveDiffId].extra_info.is_available)
+            && (livesDict[liveId].defaultDifficultyId === undefined
+                || (livesDict[liveId].defaultDifficultyId !== Difficulty.ADV
+                    && jsonData[liveDiffId].song_difficulty > livesDict[liveId].defaultDifficultyId))) {
+            livesDict[liveId].defaultDifficulty = liveDiffId;
+            livesDict[liveId].defaultDifficultyId = jsonData[liveDiffId].song_difficulty;
         }
 
         liveDiffIdsForLive[liveId].push(liveDiffId);
