@@ -114,6 +114,7 @@ function skillEffect(typeId, amount) {
     if (typeId === 23) return 'increase SP Voltage Gain by ' + format(amount / 100) + '%';
     if (typeId === 26) return 'gain ' + format(amount / 100) + '% Base Appeal';
     if (typeId === 33) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance';
+    if (typeId === 36) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (typeId === 45) return 'gain ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (typeId === 46) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (typeId === 47) return 'gain ' + format(amount / 100) + '% Base Critical Power';
