@@ -47,6 +47,15 @@ const removeTargetSet = new Set([3, 4, 5, 23, 50, 68, 69, 70, 91, 93, 96, 105, 1
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
     if (targetId === 19) return 'Ruby units ';
+    if (targetId === 20) return 'Ayumu units ';
+    if (targetId === 21) return 'Kasumi units ';
+    if (targetId === 22) return 'Shizuku units ';
+    if (targetId === 23) return 'Ai units ';
+    if (targetId === 24) return 'Karin units ';
+    if (targetId === 25) return 'Kanata units ';
+    if (targetId === 26) return 'Setsuna units ';
+    if (targetId === 27) return 'Emma units ';
+    if (targetId === 28) return 'Rina units ';
     if (targetId === 29) return 'µ\'s units ';
     if (targetId === 30) return 'Aqours units ';
     if (targetId === 31) return 'Nijigaku units ';
@@ -84,6 +93,7 @@ function skillTarget(targetId) {
     if (targetId === 89) return 'non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 90) return 'non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units ';
     if (targetId === 92) return 'non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units ';
+    if (targetId === 93) return '<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
     if (targetId === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
@@ -98,6 +108,9 @@ function skillTarget(targetId) {
     if (targetId === 107) return 'non-DiverDiva units ';
     if (targetId === 108) return 'non-A•ZU•NA units ';
     if (targetId === 109) return 'non-QU4RTZ units ';
+    if (targetId === 112) return 'Shioriko units ';
+    if (targetId === 113) return 'Lanzhu units ';
+    if (targetId === 114) return 'Mia units ';
     throw new Error('Unknown Skill Target ' + targetId);
 }
 
@@ -194,7 +207,10 @@ function skillFinish(conditionId, amount, isSPVoltageGainBuff) {
             else return ' until ' + amount + ' SP Skills are used'
         }
     }
-    if (conditionId === SkillFinishType.UNTIL_SWITCH) return ' until the next Strategy switch'
+    if (conditionId === SkillFinishType.UNTIL_SWITCH) {
+        if (amount == 1) return ' until the next Strategy switch'
+        else return ' until Strategies are switched ' + amount + ' times'
+    }
     throw new Error('Unknown Skill Finish Condition ' + conditionId);
 }
 
