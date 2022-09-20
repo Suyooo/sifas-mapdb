@@ -48,6 +48,7 @@
                 <% if (note.hasGimmick) { %>
                     <div class="gimmick" data-gimmick="<%- note.gimmickMarker.gimmickIndex %>"
                          data-npos="<%- note.gimmickMarker.noteIndex + 1 %>"
+                         <% if (note.gimmickMarker.hasSlotNo) { %>data-slot="<%- note.gimmickMarker.slotNo + 1 %>"<% } %>
                          style="--gimmicklayer: <%- note.gimmickMarker.globalLayer %>;
                                  --gimmicklayer-filtered: <%- note.gimmickMarker.thisGimmickLayer %>;
                                  --time-pos: <%- (note.gimmickMarker.timePosition * 98 + 1).toFixed(3) %>%;
@@ -107,6 +108,11 @@
                     <%- noteGimmick.skill %>
                     <% if (hasNoteMap) { %>
                         <br><b>Amount:</b> <%- noteGimmick.count %> note<%- (noteGimmick.count === 1) ? "" : "s" %>
+                        <% if (noteGimmick.hasSlotCounts) { %>
+                            <%- noteGimmick.slotCounts.map((c, i) => c > 0
+                                    ? "<span class='slot'>Unit " + (i + 1) + " ×" + c + "</span>"
+                                    : null).filter(c => c !== null).join(" ") %>
+                        <% } %>
                     <% } %>
                 </div>
             </div>

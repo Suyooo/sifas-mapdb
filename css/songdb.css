@@ -439,11 +439,15 @@ body.show-unavail div.group-tab div.no-available-songs {
     padding: .2em .5em;
     margin-left: .5em;
     cursor: pointer;
+    border-radius: 1em;
+    background-color: var(--panel);
+    border: 1px solid var(--key-normal);
+    transition: background-color .2s;
 }
 
 .scale:not(.turnscale) .time, .scale.turnscale .turns {
     border-radius: 1em;
-    background-color: var(--key-accented);
+    background-color: var(--key-normal);
 }
 
 .scale.turnscale + .notebarcontainer .note,
@@ -507,6 +511,23 @@ body.show-unavail div.group-tab div.no-available-songs {
     font-weight: normal;
     font-size: 70%;
     margin-top: 0.33em;
+}
+
+.detailinfo > div.gimmick .slot {
+    border-radius: 1em;
+    background-color: var(--panel);
+    border: 1px solid var(--key-normal);
+    transition: background-color .2s;
+    padding: .2em .5em;
+    margin-left: .5em;
+}
+
+.detailinfo > div.gimmick .slot.filtered {
+    background-color: var(--key-normal);
+}
+
+.tooltip .slot {
+    display: none;
 }
 
 .detailinfo .songgimmick {

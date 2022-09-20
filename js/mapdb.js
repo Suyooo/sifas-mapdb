@@ -824,14 +824,17 @@ function initNoteMapInteractions(e) {
         let gi = $(gimmickmarkers[i]).data("gimmick");
         $(gimmickmarkers[i]).on("mouseover touchstart",
             gimmickMarkerMouseover.bind(gimmickmarkers[i], gimmickinfos[gi]));
-        gimmickmarkermap[gi]
-            ? gimmickmarkermap[gi].push(gimmickmarkers[i])
-            : gimmickmarkermap[gi] = [gimmickmarkers[i]];
+        if (gimmickmarkermap[gi]) gimmickmarkermap[gi].push(gimmickmarkers[i])
+        else gimmickmarkermap[gi] = [gimmickmarkers[i]];
     }
     gimmickmarkers.on("mouseout", closeTooltip);
     for (let i = 0; i < gimmickinfos.length; i++) {
         $(gimmickinfos[i]).on("click",
-            gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap));
+            gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, undefined));
+        $(".slot", gimmickinfos[i]).toArray().forEach((b, j) => {
+            $(b).on("click",
+                gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, j));
+        });
     }
 
     let acmarkers = $(".notebar .appealchance", e);
@@ -938,7 +941,9 @@ function notebarSelectionEnd(selector) {
 
 function gimmickMarkerMouseover(gimmickinfo) {
     if (selecting || $(this).hasClass("hidden")) return;
-    tooltipInner.html($("div", gimmickinfo)[1].innerHTML + "<br><b>Note Position: </b>" + $(this).data("npos"));
+    let text = $("div", gimmickinfo)[1].innerHTML + "<br><b>Note Position: </b>" + $(this).data("npos");
+    if ($(this).data("slot")) text += " (Unit " + $(this).data("slot") + ")";
+    tooltipInner.html(text);
     let thismarker = $(".gimmickmarker", this);
     let position = thismarker.offset();
     position.left += thismarker.width() / 2;
@@ -958,22 +963,37 @@ function acMarkerMouseover(acinfo) {
 
 // Gimmick Filter
 
-function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
-    if ($(this).hasClass("filtered")) {
+function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap, filterslot, e) {
+    if ($(this).hasClass("filtered") && (filterslot === undefined
+        || $($(".slot", this)[filterslot]).hasClass("filtered"))) {
         $(this).removeClass("filtered");
         gimmickmarkers.removeClass("hidden filtered");
+        $(".slot", this).removeClass("filtered");
     } else {
         gimmickinfos.removeClass("filtered");
+        $(".slot", gimmickinfos).removeClass("filtered");
         $(this).addClass("filtered");
         let gi = $(this).data("gimmick");
         for (let i = 0; i < gimmickmarkermap.length; i++) {
             if (i === gi) {
-                $(gimmickmarkermap[i]).removeClass("hidden").addClass("filtered");
+                if (filterslot !== undefined) {
+                    $($(".slot", this)[filterslot]).addClass("filtered");
+                    for (const marker of gimmickmarkermap[i]) {
+                        if ($(marker).data("slot") === filterslot + 1) {
+                            $(marker).removeClass("hidden").addClass("filtered");
+                        } else {
+                            $(marker).removeClass("filtered").addClass("hidden");
+                        }
+                    }
+                } else {
+                    $(gimmickmarkermap[i]).removeClass("hidden").addClass("filtered");
+                }
             } else {
                 $(gimmickmarkermap[i]).removeClass("filtered").addClass("hidden");
             }
         }
     }
+    e.stopPropagation();
 }
 
 // Scale Setter

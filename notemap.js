@@ -260,6 +260,7 @@ function makeNotemap(liveData) {
             appealChances: []
         };
         const gimmickCounts = {};
+        const gimmickSlotCounts = {};
 
         if (liveInfo.hasNoteMap) {
             liveInfo.notes = [];
@@ -303,6 +304,14 @@ function makeNotemap(liveData) {
                     }
                     gimmickCounts[note.gimmick]++;
 
+                    const shouldCountSlots = liveData.note_gimmicks[note.gimmick].trigger >= NoteGimmickTrigger.ON_VO_HIT;
+                    if (shouldCountSlots) {
+                        if (gimmickSlotCounts[note.gimmick] === undefined) {
+                            gimmickSlotCounts[note.gimmick] = [0,0,0];
+                        }
+                        gimmickSlotCounts[note.gimmick][ni % 3]++;
+                    }
+
                     const positionRelative = (note.time - firstNoteTime) / mapLength;
 
                     let globalLayer = 0;
@@ -324,11 +333,16 @@ function makeNotemap(liveData) {
                     const gimmickMarkerData = {
                         gimmickIndex: note.gimmick,
                         noteIndex: ni,
+                        hasSlotNo: shouldCountSlots,
                         hasLength: liveData.note_gimmicks[note.gimmick].finish_type === SkillFinishType.NOTE_COUNT,
                         timePosition: positionRelative,
                         turnPosition: ni / (liveData.notes.length - 1),
                         globalLayer, thisGimmickLayer
                     };
+
+                    if (shouldCountSlots) {
+                        gimmickMarkerData.slotNo = ni % 3;
+                    }
 
                     if (gimmickMarkerData.hasLength) {
                         let endNi = ni + liveData.note_gimmicks[note.gimmick].finish_amount;
@@ -417,6 +431,8 @@ function makeNotemap(liveData) {
 
             if (liveInfo.hasNoteMap) {
                 noteGimmickData.count = gimmickCounts[gi];
+                noteGimmickData.hasSlotCounts = gimmickSlotCounts[gi] !== undefined;
+                if (noteGimmickData.hasSlotCounts) noteGimmickData.slotCounts = gimmickSlotCounts[gi];
             }
 
             liveInfo.noteGimmicks.push(noteGimmickData);
