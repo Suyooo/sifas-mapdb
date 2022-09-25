@@ -39,6 +39,7 @@ function songNameRomaji(liveId) {
     if (liveId === "0120") return "A song for You! You? You!!";
     if (liveId === "0078") return "SENTIMENTAL StepS";
     if (liveId === "0007") return "LONELIEST BABY";
+    if (liveId === "0087") return "SUNNY DAY SONG";
     if (liveId === "0005") return "PSYCHIC FIRE";
     if (liveId === "0043") return "Cutie Panther";
     if (liveId === "0004") return "Shunjou Romantic";
