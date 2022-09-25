@@ -23,6 +23,7 @@ const ACGimmickTrigger = require("./enums/acGimmickTrigger");
 const ACMissionType = require("./enums/acMissionType");
 
 function capitalizeFirstLetter(s) {
+    if (s.charAt(0) == "µ") return s; // don't uppercase µ
     return s.substring(0, 1).toUpperCase() + s.substring(1);
 }
 
