@@ -209,7 +209,7 @@ function skillFinish(conditionId, amount, isSPVoltageGainBuff) {
         }
     }
     if (conditionId === SkillFinishType.UNTIL_SWITCH) {
-        if (amount == 1) return ' until the next Strategy switch'
+        if (amount <= 1) return ' until the next Strategy switch'
         else return ' until Strategies are switched ' + amount + ' times'
     }
     throw new Error('Unknown Skill Finish Condition ' + conditionId);
