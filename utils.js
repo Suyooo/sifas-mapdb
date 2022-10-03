@@ -89,6 +89,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1091") return "Aqours☆HEROES";
     if (liveId === "1016") return "Aqours☆HEROES";
     if (liveId === "1092") return "Nando Datte Yakusoku!";
+    if (liveId === "1093") return "BANZAI! digital trippers";
     if (liveId === "1005") return "Torikoriko PLEASE!!";
     if (liveId === "1082") return "Amazing Travel DNA";
     if (liveId === "1044") return "GALAXY HidE and SeeK";
