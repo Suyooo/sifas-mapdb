@@ -155,6 +155,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2086") return "Dream Land! Dream World!";
     if (liveId === "2091") return "Folklore ~Kanki no Uta~";
     if (liveId === "2104") return "Infinity! Our Wings!!";
+    if (liveId === "2118") return "Happy Nyan! Days";
     if (liveId === "2033") return "Sing & Smile!!";
     if (liveId === "2069") return "Make-up session ABC";
     if (liveId === "2064") return "Beautiful Moonlight";
