@@ -290,32 +290,7 @@ class Skyline {
     add(x, y, w) {
         const x1 = x - GIMMICK_MARKER_PADDING;
         const x2 = x + (w || GIMMICK_MARKER_PADDING);
-
-        let i = 0;
-        while (this.skyline[i][0] < x1) {
-            i++;
-        }
-        let newSkyline = this.skyline.slice(0, i);
-
-        if (x1 === this.skyline[i][0]) {
-            newSkyline.push([x1, Math.max(y, this.skyline[i][1])]);
-            i++;
-        } else if (y > newSkyline.at(-1)[1]) {
-            newSkyline.push([x1, y]);
-        }
-
-        while (this.skyline[i][0] < x2) {
-            if (this.skyline[i][1] > y) {
-                newSkyline.push(this.skyline[i]);
-            } else if (newSkyline.at(-1) > y) {
-                newSkyline.push(this.skyline[i][0], y);
-            }
-            i++;
-        }
-
-        newSkyline.push([x2, this.skyline[i - 1][1]]);
-        newSkyline = newSkyline.concat(this.skyline.slice(i));
-        this.skyline = newSkyline;
+        this.merge({skyline: [[x1, y], [x2, -1]]});
     }
 
     merge(other) {

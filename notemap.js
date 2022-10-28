@@ -360,7 +360,7 @@ function makeNotemap(liveData) {
                 // Within the same gimmick, markers can shuffle below - so instead keep track of how long every layer
                 // is blocked, and just place the marker on the first available one
                 const layersBlockedUntil = {};
-                const gimmickSkyline = new Skyline();
+                const skylineGimmick = new Skyline();
 
                 for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
                     let thisGimmickLayer = 0;
@@ -373,11 +373,11 @@ function makeNotemap(liveData) {
                     gimmickMarker.globalLayer =
                         skylineGlobal.get(gimmickMarker.timePosition, gimmickMarker.timeLength) + 1 + thisGimmickLayer;
                     gimmickMarker.thisGimmickLayer = thisGimmickLayer;
-                    gimmickSkyline.add(gimmickMarker.timePosition, gimmickMarker.globalLayer, gimmickMarker.timeLength);
+                    skylineGimmick.add(gimmickMarker.timePosition, gimmickMarker.globalLayer, gimmickMarker.timeLength);
                 }
 
                 for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
-                    skylineGlobal.merge(gimmickSkyline);
+                    skylineGlobal.merge(skylineGimmick);
                 }
             }
 
