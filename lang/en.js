@@ -137,6 +137,6 @@ modules.exports = {
         }
     },
     functions: {
-        numberFormat, skill, items, acRequirement
+        numberFormat, songGimmick, noteGimmick, acGimmick, items, acRequirement
     }
 }

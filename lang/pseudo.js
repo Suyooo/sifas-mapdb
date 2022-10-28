@@ -138,7 +138,9 @@ modules.exports = {
     },
     functions: {
         numberFormat: (n) => `$$$$$numberFormat(${n})$$$$$`,
-        skill: (skillInfo, forceNoTarget) => `skill(${JSON.stringify(skillInfo)},${forceNoTarget})$$$$$`,
+        songGimmick: (skillInfo) => `songGimmick(${JSON.stringify(skillInfo)})$$$$$`,
+        noteGimmick: (trigger, skillInfo) => `noteGimmick(${trigger},${JSON.stringify(skillInfo)})$$$$$`,
+        acGimmick: (trigger, skillInfo) => `acGimmick(${trigger},${JSON.stringify(skillInfo)})$$$$$`,
         items: (itemArray) => `items(${JSON.stringify(itemArray)})$$$$$`,
         acRequirement: (acType, requirement) => `acRequirement(${acType},${requirement})$$$$$`
     }
