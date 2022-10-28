@@ -259,11 +259,89 @@ function songNamePostfix(liveId) {
     if (liveId === "2997") return "MV";       // MONSTER GIRLS (MV version)
     if (liveId === "2998") return "MV";       // I'm Still... (MV version)
     if (liveId === "2999") return "MV";       // Queendom (MV version)
-    
+
     return null;
+}
+
+const GIMMICK_MARKER_PADDING = 0.004;
+
+class Skyline {
+    skyline = [[-0.1, -1], [1.1, -1]];
+
+    get(x, w) {
+        const x1 = x - GIMMICK_MARKER_PADDING;
+        const x2 = x + (w || GIMMICK_MARKER_PADDING);
+
+        let i = 0;
+        while (this.skyline[i][0] < x1) {
+            i++;
+        }
+
+        let maxy = this.skyline[i - 1][1];
+        while (this.skyline[i][0] < x2) {
+            maxy = Math.max(maxy, this.skyline[i][1]);
+            i++;
+        }
+
+        return maxy;
+    }
+
+    add(x, y, w) {
+        const x1 = x - GIMMICK_MARKER_PADDING;
+        const x2 = x + (w || GIMMICK_MARKER_PADDING);
+
+        let i = 0;
+        while (this.skyline[i][0] < x1) {
+            i++;
+        }
+        let newSkyline = this.skyline.slice(0, i);
+
+        if (x1 === this.skyline[i][0]) {
+            newSkyline.push([x1, Math.max(y, this.skyline[i][1])]);
+            i++;
+        } else if (y > newSkyline.at(-1)[1]) {
+            newSkyline.push([x1, y]);
+        }
+
+        while (this.skyline[i][0] < x2) {
+            if (this.skyline[i][1] > y) {
+                newSkyline.push(this.skyline[i]);
+            } else if (newSkyline.at(-1) > y) {
+                newSkyline.push(this.skyline[i][0], y);
+            }
+            i++;
+        }
+
+        newSkyline.push([x2, this.skyline[i - 1][1]]);
+        newSkyline = newSkyline.concat(this.skyline.slice(i));
+        this.skyline = newSkyline;
+    }
+
+    merge(other) {
+        const newSkyline = [[-0.1, -1]];
+        let hThis = -1, hOther = -1, iThis = 0, iOther = 0;
+
+        while (iThis < this.skyline.length && iOther < other.skyline.length) {
+            let x;
+            if (this.skyline[iThis][0] < other.skyline[iOther][0]) {
+                x = this.skyline[iThis][0];
+                hThis = this.skyline[iThis][1];
+                iThis++;
+            } else {
+                x = other.skyline[iOther][0];
+                hOther = other.skyline[iOther][1];
+                iOther++;
+            }
+            const y = Math.max(hThis, hOther);
+            if (y !== newSkyline.at(-1)[1]) newSkyline.push([x, y]);
+        }
+
+        this.skyline = newSkyline.concat(this.skyline.slice(iThis)).concat(other.skyline.slice(iOther));
+    }
 }
 
 module.exports = {
     isFreeLive, isActiveEventLive, isStoryStage,
-    songNameRomaji, songNamePostfix
+    songNameRomaji, songNamePostfix,
+    GIMMICK_MARKER_PADDING, Skyline
 }

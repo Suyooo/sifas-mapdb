@@ -21,6 +21,7 @@ const SkillFinishType = require("./enums/skillFinishType");
 const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
 const ACGimmickTrigger = require("./enums/acGimmickTrigger");
 const ACMissionType = require("./enums/acMissionType");
+const {Skyline, GIMMICK_MARKER_PADDING} = require("./utils");
 
 function capitalizeFirstLetter(s) {
     if (s.charAt(0) == "µ") return s; // don't uppercase µ
@@ -272,13 +273,7 @@ function makeNotemap(liveData) {
             // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
             const mapLength = (lastNoteTime - firstNoteTime);
 
-            // Stackers to assign the gimmick markers to layers to avoid overlapping
-            // Each stacker is an array, one number per layer, keeping track of the position where the last marker on
-            // that layer ends ("occupied until this position"). When adding a marker, its start position can be
-            // compared with that saved value to find the first free layer.
-            // There is one global stacker (default view) and one per gimmick (filtered gimmick view).
-            const stackerGlobal = [];
-            const stackerPerGimmick = liveData.note_gimmicks.map(_ => []);
+            const gimmickMarkersStacksToDo = liveData.note_gimmicks.map(_ => []);
 
             for (let ni = 0; ni < liveData.notes.length; ni++) {
                 const note = liveData.notes[ni];
@@ -309,28 +304,12 @@ function makeNotemap(liveData) {
                     const shouldCountSlots = liveData.note_gimmicks[note.gimmick].trigger >= NoteGimmickTrigger.ON_VO_HIT;
                     if (shouldCountSlots) {
                         if (gimmickSlotCounts[note.gimmick] === undefined) {
-                            gimmickSlotCounts[note.gimmick] = [0,0,0];
+                            gimmickSlotCounts[note.gimmick] = [0, 0, 0];
                         }
                         gimmickSlotCounts[note.gimmick][ni % 3]++;
                     }
 
                     const positionRelative = (note.time - firstNoteTime) / mapLength;
-
-                    let globalLayer = 0;
-                    while (globalLayer < stackerGlobal.length
-                    && stackerGlobal[globalLayer] > positionRelative) {
-                        globalLayer++;
-                    }
-                    if (globalLayer == stackerGlobal.length)
-                        stackerGlobal.push(0); // new layer required
-
-                    let thisGimmickLayer = 0;
-                    while (thisGimmickLayer < stackerPerGimmick[note.gimmick].length
-                    && stackerPerGimmick[note.gimmick][thisGimmickLayer] > positionRelative) {
-                        thisGimmickLayer++;
-                    }
-                    if (thisGimmickLayer == stackerPerGimmick[note.gimmick].length)
-                        stackerPerGimmick[note.gimmick].push(0); // new layer required
 
                     const gimmickMarkerData = {
                         gimmickIndex: note.gimmick,
@@ -338,8 +317,7 @@ function makeNotemap(liveData) {
                         hasSlotNo: shouldCountSlots,
                         hasLength: liveData.note_gimmicks[note.gimmick].finish_type === SkillFinishType.NOTE_COUNT,
                         timePosition: positionRelative,
-                        turnPosition: ni / (liveData.notes.length - 1),
-                        globalLayer, thisGimmickLayer
+                        turnPosition: ni / (liveData.notes.length - 1)
                     };
 
                     if (shouldCountSlots) {
@@ -351,25 +329,60 @@ function makeNotemap(liveData) {
                         if (endNi >= liveData.notes.length) endNi = liveData.notes.length - 1;
                         gimmickMarkerData.timeLength = (liveData.notes[endNi].time - note.time) / mapLength;
                         gimmickMarkerData.turnLength = (endNi - ni) / (liveData.notes.length - 1);
-
-                        // magic value (TM) to avoid unneccessary stacks due to float precision loss
-                        stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
-                            = positionRelative + gimmickMarkerData.timeLength - 0.0001;
-                    } else {
-                        // magic value (TM) to avoid too much overlap of no-length markers
-                        stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
-                            = positionRelative + 0.0075;
                     }
 
                     noteData.gimmickMarker = gimmickMarkerData;
+                    gimmickMarkersStacksToDo[note.gimmick].push(gimmickMarkerData);
                 }
 
                 liveInfo.notes.push(noteData);
             }
 
+            // Skyline to assign the gimmick markers to layers to avoid overlapping
+            // A skyline is used so gimmicks can't stack below lower-numbered ones - that means generally, gimmick
+            // markers should be grouped around the other markers of the same gimmick
+            const skylineGlobal = new Skyline();
+
+            // Note gimmicks with length markers should be farther down in the stack
+            const gimmickMarkersStackOrder = Object.keys(gimmickMarkersStacksToDo).map(i => parseInt(i))
+                .sort((a, b) => {
+                    const aExample = gimmickMarkersStacksToDo[a][0];
+                    const bExample = gimmickMarkersStacksToDo[b][0];
+                    if (aExample && !bExample) return -1; // avoid erroring on unused note gimmicks
+                    if (bExample && !aExample) return 1;
+                    if (aExample.hasLength && !bExample.hasLength) return -1;
+                    if (bExample.hasLength && !aExample.hasLength) return 1;
+                    return a - b;
+                });
+
+            for (const gimmickId of gimmickMarkersStackOrder) {
+                // Within the same gimmick, markers can shuffle below - so instead keep track of how long every layer
+                // is blocked, and just place the marker on the first available one
+                const layersBlockedUntil = {};
+                const gimmickSkyline = new Skyline();
+
+                for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
+                    let thisGimmickLayer = 0;
+                    while ((layersBlockedUntil[thisGimmickLayer] || -1) > gimmickMarker.timePosition - GIMMICK_MARKER_PADDING) {
+                        thisGimmickLayer++;
+                    }
+                    layersBlockedUntil[thisGimmickLayer] =
+                        gimmickMarker.timePosition + (gimmickMarker.timeLength || GIMMICK_MARKER_PADDING);
+
+                    gimmickMarker.globalLayer =
+                        skylineGlobal.get(gimmickMarker.timePosition, gimmickMarker.timeLength) + 1 + thisGimmickLayer;
+                    gimmickMarker.thisGimmickLayer = thisGimmickLayer;
+                    gimmickSkyline.add(gimmickMarker.timePosition, gimmickMarker.globalLayer, gimmickMarker.timeLength);
+                }
+
+                for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
+                    skylineGlobal.merge(gimmickSkyline);
+                }
+            }
+
             liveInfo.mapInfo = {
                 noteCount: format(liveData.notes.length),
-                markerLayerCount: stackerGlobal.length,
+                markerLayerCount: skylineGlobal.get(0, 1) + 1,
                 mapLength: mapLength,
                 hasActualSongLength: liveData.song_length !== undefined
             };
