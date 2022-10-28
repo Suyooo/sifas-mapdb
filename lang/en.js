@@ -412,6 +412,20 @@ modules.exports = {
             label: "Filter By Song Name (Full Title or Abbreviations, Kana or Romanized)",
             tooltip: "You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>You can also add <span>+</span> or <span>++</span> to the end to instantly open the Adv+ or Challenge tab."
         },
+        songlist: {
+            unavailable: "unavailable",
+            daily: "daily",
+            weekdays: {
+                1: "Monday",
+                2: "Tuesday",
+                3: "Wednesday",
+                4: "Thursday",
+                5: "Friday",
+                6: "Saturday",
+                7: "Sunday"
+            },
+            time_limited: "time-limited"
+        },
         songinfo: {
             ranks: {
                 S: "S Rank",

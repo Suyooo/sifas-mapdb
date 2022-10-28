@@ -41,6 +41,20 @@ modules.exports = {
             label: "%%%%%.search.label%%%%%",
             tooltip: "%%%%%.search.tooltip%%%%%"
         },
+        songlist: {
+            unavailable: "%%%%%.songlist.unavailable%%%%%",
+            daily: "%%%%%.songlist.daily%%%%%",
+            weekdays: {
+                1: "%%%%%.songlist.weekdays.1%%%%%",
+                2: "%%%%%.songlist.weekdays.2%%%%%",
+                3: "%%%%%.songlist.weekdays.3%%%%%",
+                4: "%%%%%.songlist.weekdays.4%%%%%",
+                5: "%%%%%.songlist.weekdays.5%%%%%",
+                6: "%%%%%.songlist.weekdays.6%%%%%",
+                7: "%%%%%.songlist.weekdays.7%%%%%"
+            },
+            time_limited: "%%%%%.songlist.time_limited%%%%%"
+        },
         songinfo: {
             ranks: {
                 S: "%%%%%.songinfo.ranks.S%%%%%",
