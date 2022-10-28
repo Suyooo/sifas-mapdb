@@ -163,15 +163,11 @@ $(function () {
     pageTabs.options.onShow = pageTabShow;
     body.removeClass("loading");
 
-    // Small hack to handle redirect from old DLP URL if there's no hash specified, so it still goes directly to DLP
-    // This cookie is set in a rewrite rule in the top-level .htaccess
-    if (cookieGet("tower-redirect") === "yes") {
-        document.cookie = "tower-redirect=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.suyo.be; path=/sifas;"
-        if (window.location.hash === "") window.location.hash = "#dlp";
+    if (window.location.hash) {
+        history.replaceState(undefined, undefined, "?" + window.location.hash.substring(1));
     }
-
-    handleLocationHash();
-    window.addEventListener("hashchange", handleLocationHash, {passive: true});
+    handleLocation();
+    window.addEventListener("popstate", handleLocation);
 
     let preferenceTitle = cookieGet("mapdb-titles");
     let preferenceUnavailable = cookieGet("mapdb-unavailable");
@@ -365,20 +361,24 @@ function resetCollapsibleFiltering() {
 let disableHistory = false;
 
 function addHistoryItem(s, page) {
-    if (!disableHistory) history.pushState(undefined, undefined, "#" + s);
+    if (!disableHistory) {
+        console.log("Writing history:",s,page);
+        history.pushState(undefined, undefined, "?" + s);
+    }
     if (page === undefined) document.title = PAGE_TITLE;
     else document.title = page + PAGE_TITLE_SEP + PAGE_TITLE;
 }
 
-function handleLocationHash() {
+function handleLocation() {
     disableHistory = true;
-    let hash = window.location.hash;
-    if (hash.startsWith("#live")) {
+    let location = window.location.search.substring(1);
+
+    if (location.startsWith("live")) {
         // Direct link to a live difficulty
-        if (hash.charAt(5) === "1" || hash.charAt(5) === "2") {
+        if (location.charAt(4) === "1" || location.charAt(4) === "2") {
             // Free Live or Event Live (has group ID in next position)
-            afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
-            switch (hash.charAt(6)) {
+            afterSwitchCallback = showLinkedFreeLive.bind(this, location);
+            switch (location.charAt(5)) {
                 case "0":
                     pageTabs.select("tab_muse");
                     break;
@@ -399,23 +399,23 @@ function handleLocationHash() {
         } else {
             // Story Stage: Can't read group ID on newer stages, must load all group tabs
             // and search for the correct stage by going through them all
-            loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, pageTabs));
+            loadAllGroupPagesThen(showLinkedStoryStage.bind(this, location, pageTabs));
         }
-    } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
+    } else if (location.startsWith("tower") || location.startsWith("floor")) {
         // Direct link to a DLP tower or floor
-        afterSwitchCallback = showLinkedDlp.bind(this, hash);
+        afterSwitchCallback = showLinkedDlp.bind(this, location);
         pageTabs.select("tab_dlp");
     } else {
         // Direct link to a page
-        if (hash === "") hash = "#start";
-        if (hash.startsWith("#tab")) pageTabs.select(hash.substring(1));
-        else pageTabs.select("tab_" + hash.substring(1));
+        if (location === "") location = "start";
+        if (location.startsWith("tab")) pageTabs.select(location);
+        else pageTabs.select("tab_" + location);
         disableHistory = false;
     }
 }
 
-function showLinkedFreeLive(hash, page) {
-    let liveDiffId = hash.substring(5);
+function showLinkedFreeLive(location, page) {
+    let liveDiffId = location.substring(4);
     let collapsibleBody = $("#" + liveDiffId, page);
     if (collapsibleBody.length) {
         collapsibleBody = collapsibleBody.parent();
@@ -436,8 +436,8 @@ function showLinkedFreeLive(hash, page) {
     disableHistory = false;
 }
 
-function showLinkedStoryStage(hash, tabs, groupPages) {
-    let targetLiveDiff = $("#" + hash.substring(5), groupPages);
+function showLinkedStoryStage(location, tabs, groupPages) {
+    let targetLiveDiff = $("#" + location.substring(4), groupPages);
     if (targetLiveDiff.length) {
         let targetLiveStoryTab = targetLiveDiff.parent();
         let targetLive = targetLiveStoryTab.parent().parent().parent();
@@ -457,14 +457,14 @@ function showLinkedStoryStage(hash, tabs, groupPages) {
     disableHistory = false;
 }
 
-function showLinkedDlp(hash, page) {
-    let towerId = hash.substr(6, 5);
+function showLinkedDlp(location, page) {
+    let towerId = location.substring(5, 10);
     let targetElement = $("#" + towerId, page);
     if (targetElement.length) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
-        if (hash.startsWith("#floor")) {
+        if (location.startsWith("floor")) {
             let floorList = $("#tower-floorlist" + towerId);
-            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, hash, towerCollapsible));
+            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, location, towerCollapsible));
         } else {
             scrollToAndFocusCollapsible(targetElement);
             towerCollapsible.instantOpen(0);
@@ -473,15 +473,15 @@ function showLinkedDlp(hash, page) {
     }
 }
 
-function showLinkedDlpFloor1(hash, towerCollapsible, responseText, textStatus) {
+function showLinkedDlpFloor1(location, towerCollapsible, responseText, textStatus) {
     loadTowerFinish.bind(this, responseText, textStatus)();
     towerCollapsible.instantOpen(0);
-    setTimeout(showLinkedDlpFloor2.bind(this, hash, responseText, textStatus), 1);
+    setTimeout(showLinkedDlpFloor2.bind(this, location, responseText, textStatus), 1);
 }
 
-function showLinkedDlpFloor2(hash, responseText, textStatus) {
+function showLinkedDlpFloor2(location, responseText, textStatus) {
     if (textStatus !== "error") {
-        let targetElement = $("#" + hash.substring(6), this);
+        let targetElement = $("#" + location.substring(5), this);
         if (targetElement.length) {
             let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
             floorCollapsible.instantOpen(0);
