@@ -59,7 +59,7 @@ function loadPageThen(page, callback) {
             page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page, callback));
         }
     } else {
-        if (callback !== undefined) callback(page);
+        if (callback !== undefined) requestAnimationFrame(() => callback(page));
     }
 }
 
@@ -282,6 +282,7 @@ function doSearch(search_input) {
     if (filtered.length === 1) {
         filtered[0].open();
         if (pluses > 0) {
+            replaceHistory = true;
             let toOpen;
             if (pluses == 1) {
                 // Open Adv+ right away if it exists, otherwise Challenge
@@ -294,6 +295,7 @@ function doSearch(search_input) {
                 let liveDiffTabs = M.Tabs.getInstance($(".tabs", filtered[0].el)[0]);
                 liveDiffTabs.select(toOpen);
             }
+            replaceHistory = false;
         }
     } else {
         $(filtered).each(M.Collapsible.prototype.close);
@@ -325,11 +327,13 @@ function resetCollapsibleFiltering() {
  */
 
 let disableHistory = false;
+let replaceHistory = false;
 
 function addHistoryItem(s, page) {
-    if (!disableHistory) {
-        console.log("Writing history:",s,page);
-        history.pushState(undefined, undefined, "?" + s);
+    if (!disableHistory && s !== "search") {
+        console.log("Writing history:", s, page);
+        if (replaceHistory) history.replaceState(undefined, undefined, "?" + s);
+        else history.pushState(undefined, undefined, "?" + s);
     }
     if (page === undefined) document.title = PAGE_TITLE;
     else document.title = page + PAGE_TITLE_SEP + PAGE_TITLE;
@@ -338,6 +342,7 @@ function addHistoryItem(s, page) {
 function handleLocation() {
     disableHistory = true;
     let location = window.location.search.substring(1);
+    console.log("Handling location",location);
 
     if (location.startsWith("live")) {
         // Direct link to a live difficulty
