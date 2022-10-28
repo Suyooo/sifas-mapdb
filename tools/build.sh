@@ -28,7 +28,7 @@ if [ "$1" != "update" ]; then
   mkdir -p build/css
   for F in css/*.css; do
       echo "    ${F}"
-      purifycss ${F} *.html notemap.js mapdb.js dlp.js rankings.js js/mapdb.js vendor/materialize.js templates/* -m -o build/${F}
+      purifycss ${F} *.html notemap.js mapdb.js dlp.js rankings.js js/mapdb.js vendor/materialize.js templates/* -m -w indicator -o build/${F}
   done
 
   echo "Minify Index page..."

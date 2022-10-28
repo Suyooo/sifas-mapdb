@@ -8,40 +8,6 @@ M.Collapsible.prototype.instantOpen = function (i) {
     this.open(i);
     this.options.inDuration = tmp;
 }
-M.Tabs.prototype.instantSelect = function (id) {
-    let tmp = this._animateIndicator;
-    this._animateIndicator = function () {
-    };
-    this.select(id);
-    this.fakeIndicator();
-    setTimeout(this.unfakeIndicator.bind(this), 1000);
-    this._animateIndicator = tmp;
-}
-M.Tabs.prototype.fakeIndicator = function () {
-    this.$el.addClass("fakeindicator");
-    $(this._indicator).addClass("hide");
-}
-M.Tabs.prototype.unfakeIndicator = function () {
-    this.forceTabIndicator();
-    this.$el.removeClass("fakeindicator");
-    $(this._indicator).removeClass("hide");
-}
-M.Tabs.prototype.forceTabIndicator = function () {
-    this._setTabsAndTabWidth();
-    $(".indicator", this.el).css({
-        "left": this._calcLeftPos(this.$activeTabLink) + "px",
-        "right": this._calcRightPos(this.$activeTabLink) + "px"
-    });
-}
-
-function fixTabIndicator(e) {
-    let t = M.Tabs.getInstance(e);
-    if (t != undefined) t.forceTabIndicator();
-}
-
-function fixAllTabIndicators() {
-    $(".collapsible .tabs").toArray().forEach(fixTabIndicator);
-}
 
 let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
@@ -230,7 +196,7 @@ function pageTabShow(e) {
         searchInput.trigger("focus");
 
         // Dumb workaround for Materialize force-hiding the previous tab
-        setTimeout($.prototype.show.bind(groupTabs), 1);
+        requestAnimationFrame($.prototype.show.bind(groupTabs, 0));
     } else if (onSearchTab) {
         for (let i = 0; i < groupTabs.length; i++) {
             if (groupTabs[i] !== e) {
@@ -326,7 +292,7 @@ function doSearch(search_input) {
             }
             if (toOpen != undefined) {
                 let liveDiffTabs = M.Tabs.getInstance($(".tabs", filtered[0].el)[0]);
-                liveDiffTabs.instantSelect(toOpen);
+                liveDiffTabs.select(toOpen);
             }
         }
     } else {
@@ -426,7 +392,7 @@ function showLinkedFreeLive(location, page) {
         let collapsible = M.Collapsible.getInstance(collapsibleEl[0]);
         collapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
-        liveDiffTabs.instantSelect(liveDiffId);
+        liveDiffTabs.select(liveDiffId);
         if (!showUnavailable && liveDiffTabs.$activeTabLink.parent().hasClass("unavail")) {
             toggleUnavailable();
         }
@@ -446,11 +412,11 @@ function showLinkedStoryStage(location, tabs, groupPages) {
         let liveCollapsible = M.Collapsible.getInstance(targetLive[0]);
         liveCollapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", targetLive)[0]);
-        liveDiffTabs.instantSelect(targetLiveStoryTab.attr("id"));
+        liveDiffTabs.select(targetLiveStoryTab.attr("id"));
         let storyTabs = M.Tabs.getInstance($(".tabs", targetLiveStoryTab)[0]);
 
-        tabs.instantSelect(targetPage.attr("id"));
-        storyTabs.instantSelect(targetLiveDiff.attr("id"));
+        tabs.select(targetPage.attr("id"));
+        storyTabs.select(targetLiveDiff.attr("id"));
         scrollToAndFocusCollapsible(liveCollapsible.$el);
         scrollActiveTabLabelIntoView.bind(storyTabs);
     }
@@ -476,7 +442,7 @@ function showLinkedDlp(location, page) {
 function showLinkedDlpFloor1(location, towerCollapsible, responseText, textStatus) {
     loadTowerFinish.bind(this, responseText, textStatus)();
     towerCollapsible.instantOpen(0);
-    setTimeout(showLinkedDlpFloor2.bind(this, location, responseText, textStatus), 1);
+    requestAnimationFrame(showLinkedDlpFloor2.bind(this, location, responseText, textStatus));
 }
 
 function showLinkedDlpFloor2(location, responseText, textStatus) {
@@ -541,7 +507,6 @@ function toggleUnavailable(showToast) {
         body.removeClass("show-unavail");
         if (showToast) M.toast({html: "Hiding unavailable songs"});
     }
-    setTimeout(fixAllTabIndicators, 1);
 }
 
 /*
@@ -571,10 +536,6 @@ function freeLiveCollapsibleOpen() {
         tabs = M.Tabs.getInstance(tabElements[0]);
 
         tabs.options.onShow = freeLiveTabShow.bind(this, tabs);
-
-        // Materialize messes up the indicator position, so we'll fix it ourselves on first open
-        // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
-        setTimeout(tabs.forceTabIndicator.bind(tabs), 1);
 
         if (story_tabs !== undefined) {
             story_tabs.options.onShow = freeLiveStoryTabShow.bind(this, story_tabs);
@@ -639,7 +600,6 @@ function freeLiveTabShow(tabs, e) {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
-        tabs.forceTabIndicator();
         addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $(".song-name.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);

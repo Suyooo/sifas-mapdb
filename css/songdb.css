@@ -167,8 +167,17 @@ body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unava
     text-decoration: none;
 }
 
-.collapsible-body .tabs.tabs-transparent.fakeindicator .tab a.active {
-    border-bottom: 5px solid var(--key-normal);
+.tabs.tabs-transparent .tab a {
+    border-bottom: 0 solid var(--key-normal);
+    transition: border-bottom-width .3s;
+}
+
+.tabs.tabs-transparent .tab a.active {
+    border-bottom-width: 5px;
+}
+
+.indicator {
+    display: none;
 }
 
 div.group-tab {
