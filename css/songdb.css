@@ -522,6 +522,10 @@ body.show-unavail div.group-tab div.no-available-songs {
     margin-top: 0.33em;
 }
 
+.detailinfo > div.gimmick .slotcontainer {
+    display: inline-block;
+}
+
 .detailinfo > div.gimmick .slot {
     border-radius: 1em;
     background-color: var(--panel);
@@ -529,6 +533,7 @@ body.show-unavail div.group-tab div.no-available-songs {
     transition: background-color .2s;
     padding: .2em .5em;
     margin-left: .5em;
+    white-space: nowrap;
 }
 
 .detailinfo > div.gimmick .slot.filtered {
