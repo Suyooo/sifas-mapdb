@@ -1,15 +1,15 @@
 <% if (hasNoteMap) { %>
     <div class="row nomargin">
         <div class="col l6">
-            <b>Note Count:</b> <%- mapInfo.noteCount %><br>
-            <b>Notes in ACs:</b> <%- mapInfo.totalACNotes %><br>
-            <b>Total Note Damage:</b> <%- mapInfo.totalNoteDamage %>
+            <b><%- lang.songinfo.note_count %>:</b> <%- lang.numberFormat(mapInfo.noteCount) %><br>
+            <b><%- lang.songinfo.note_count_ac %>:</b> <%- lang.numberFormat(mapInfo.totalACNotes) %> (<%- mapInfo.totalACNotesPercentage %>)<br>
+            <b><%- lang.songinfo.note_damage_total %>:</b> <%- lang.numberFormat(mapInfo.totalNoteDamage) %>
         </div>
         <div class="col l6">
-            <b>Total AC Reward Voltage:</b> <%- mapInfo.totalACReward %>
+            <b><%- lang.songinfo.ac_reward_total %>:</b> <%- mapInfo.totalACReward %>
             <% if (mapInfo.hasActualSongLength) { %>
                 <br>
-                <b>Actual Song Length:</b> <%- mapInfo.songLength %>
+                <b><%- lang.songinfo.song_length %>:</b> <%- mapInfo.songLength %>
             <% } %>
         </div>
     </div>

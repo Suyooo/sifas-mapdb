@@ -475,7 +475,8 @@ module.exports = {
         song_gimmick_none: "None",
         note_gimmick: "Note Gimmick",
         note_gimmick_amount: "Amount",
-        note_gimmick_by_unit: "Unit"
+        note_gimmick_position: "Position",
+        note_gimmick_unit: "Unit"
     },
     appeal_chances: {
         title: "Appeal Chances",

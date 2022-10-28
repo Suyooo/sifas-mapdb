@@ -104,7 +104,8 @@ module.exports = {
         song_gimmick_none: "%%%%%.gimmicks.song_gimmick_none%%%%%",
         note_gimmick: "%%%%%.gimmicks.note_gimmick%%%%%",
         note_gimmick_amount: "%%%%%.gimmicks.note_gimmick_amount%%%%%",
-        note_gimmick_by_unit: "%%%%%.gimmicks.note_gimmick_by_unit%%%%%"
+        note_gimmick_position: "%%%%%.gimmicks.note_gimmick_position%%%%%",
+        note_gimmick_unit: "%%%%%.gimmicks.note_gimmick_unit%%%%%"
     },
     appeal_chances: {
         title: "%%%%%.appeal_chances.title%%%%%",

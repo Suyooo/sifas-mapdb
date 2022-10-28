@@ -260,8 +260,8 @@ function makeNotemap(liveData) {
             liveInfo.appealChances.push(acData);
         }
         if (liveInfo.hasNoteMap) {
-            liveInfo.mapInfo.totalACNotes
-                = totalACNotes + " (" + Math.round((totalACNotes / liveData.notes.length) * 100) + "%)";
+            liveInfo.mapInfo.totalACNotes = totalACNotes;
+            liveInfo.mapInfo.totalACNotesPercentage = Math.round((totalACNotes / liveData.notes.length) * 100) + "%";
             liveInfo.mapInfo.totalACReward = totalACReward;
             liveInfo.mapInfo.totalNoteDamage
                 = liveData.notes.length * liveData.note_damage + totalACNotes * Math.floor(liveData.note_damage / 10);
