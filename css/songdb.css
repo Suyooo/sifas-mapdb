@@ -596,6 +596,22 @@ body.show-unavail div.group-tab div.no-available-songs {
     width: 100%;
 }
 
+.live-difficulty.active {
+    max-height: 100vh;
+    overflow-y: hidden;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.live-difficulty.active > * {
+    flex-shrink: 0;
+}
+
+.live-difficulty.active > .detailinfo-container {
+    flex: 1 1 100%;
+    overflow-y: auto;
+}
+
 .tower .collapsible-body .collapsible {
     margin-top: 0;
     margin-bottom: 0;
