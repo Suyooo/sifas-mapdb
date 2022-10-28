@@ -138,9 +138,12 @@ modules.exports = {
     },
     functions: {
         numberFormat: (n) => `$$$$$numberFormat(${n})$$$$$`,
-        songGimmick: (skillInfo) => `songGimmick(${JSON.stringify(skillInfo)})$$$$$`,
-        noteGimmick: (trigger, skillInfo) => `noteGimmick(${trigger},${JSON.stringify(skillInfo)})$$$$$`,
-        acGimmick: (trigger, skillInfo) => `acGimmick(${trigger},${JSON.stringify(skillInfo)})$$$$$`,
+        songGimmick: (effectType, effectAmount, targetType, finishType, finishAmount) =>
+            `songGimmick(${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
+        noteGimmick: (trigger, effectType, effectAmount, targetType, finishType, finishAmount) =>
+            `noteGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
+        acGimmick: (trigger, effectType, effectAmount, targetType, finishType, finishAmount) =>
+            `acGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
         items: (itemArray) => `items(${JSON.stringify(itemArray)})$$$$$`,
         acMission: (acType, requirement) => `acMission(${acType},${requirement})$$$$$`,
         acAverage: (acType, scaledRequirement) => `acAverage(${acType},${scaledRequirement})$$$$$`
