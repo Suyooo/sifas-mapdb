@@ -331,7 +331,6 @@ let replaceHistory = false;
 
 function addHistoryItem(s, page) {
     if (!disableHistory && s !== "search") {
-        console.log("Writing history:", s, page);
         if (replaceHistory) history.replaceState(undefined, undefined, "?" + s);
         else history.pushState(undefined, undefined, "?" + s);
     }
@@ -342,7 +341,6 @@ function addHistoryItem(s, page) {
 function handleLocation() {
     disableHistory = true;
     let location = window.location.search.substring(1);
-    console.log("Handling location",location);
 
     if (location.startsWith("live")) {
         // Direct link to a live difficulty
@@ -942,7 +940,7 @@ function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap, fil
         for (let i = 0; i < gimmickmarkermap.length; i++) {
             if (i === gi) {
                 if (filterslot !== undefined) {
-                    $($(".slot", this)[filterslot]).addClass("filtered");
+                    $($(".slot[data-slot='" + filterslot + "']", this)).addClass("filtered");
                     for (const marker of gimmickmarkermap[i]) {
                         if ($(marker).data("slot") === filterslot + 1) {
                             $(marker).removeClass("hidden").addClass("filtered");
