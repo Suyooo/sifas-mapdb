@@ -140,9 +140,9 @@ $(function () {
         localStorage.setItem("mapdb-titles", cookieGet("mapdb-titles"));
         localStorage.setItem("mapdb-unavailable", cookieGet("mapdb-unavailable"));
         localStorage.setItem("dark-mode", cookieGet("dark-mode"));
-        document.cookie = "mapdb-titles=; expires=0; path=/sifas";
-        document.cookie = "mapdb-unavailable=; expires=0; path=/sifas";
-        document.cookie = "dark-mode=; expires=0; path=/sifas";
+        document.cookie = "mapdb-titles=; Max-Age=-99999999; path=/sifas";
+        document.cookie = "mapdb-unavailable=; Max-Age=-99999999; path=/sifas";
+        document.cookie = "dark-mode=; Max-Age=-99999999; path=/sifas";
     }
 
     let preferenceTitle = localStorage.getItem("mapdb-titles");
