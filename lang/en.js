@@ -1,6 +1,7 @@
-const ACGimmickTrigger = require("../enums/acGimmickTrigger");
-const SkillFinishType = require("../enums/skillFinishType");
 const NoteGimmickTrigger = require("../enums/noteGimmickTrigger");
+const ACGimmickTrigger = require("../enums/acGimmickTrigger");
+const SkillTargetType = require("../enums/skillTargetType");
+const SkillFinishType = require("../enums/skillFinishType");
 const ACMissionType = require("../enums/acMissionType");
 
 function capitalize(s) {
@@ -154,75 +155,80 @@ function skillEffect(effectType, effectAmount) {
     throw new Error(`No translation for skill effect type ${effectType}`);
 }
 
+const skillTargetMap = {
+    [SkillTargetType.ALL]: `all units `,
+    [SkillTargetType.CHAR_MARI]: `Mari units `,
+    [SkillTargetType.CHAR_RUBY]: `Ruby units `,
+    [SkillTargetType.CHAR_AYUMU]: `Ayumu units `,
+    [SkillTargetType.CHAR_KASUMI]: `Kasumi units `,
+    [SkillTargetType.CHAR_SHIZUKU]: `Shizuku units `,
+    [SkillTargetType.CHAR_AI]: `Ai units `,
+    [SkillTargetType.CHAR_KARIN]: `Karin units `,
+    [SkillTargetType.CHAR_KANATA]: `Kanata units `,
+    [SkillTargetType.CHAR_SETSUNA]: `Setsuna units `,
+    [SkillTargetType.CHAR_EMMA]: `Emma units `,
+    [SkillTargetType.CHAR_RINA]: `Rina units `,
+    [SkillTargetType.GROUP_MUSE]: `µ's units `,
+    [SkillTargetType.GROUP_AQOURS]: `Aqours units `,
+    [SkillTargetType.GROUP_NIJI]: `Nijigaku units `,
+    [SkillTargetType.SUB_CYARON]: `CYaRon units `,
+    [SkillTargetType.SUB_AZALEA]: `AZALEA units `,
+    [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kiss units `,
+    [SkillTargetType.TYPE_VO]: `<span class="t vo">Vo</span> units `,
+    [SkillTargetType.TYPE_SP]: `<span class="t sp">Sp</span> units `,
+    [SkillTargetType.TYPE_GD]: `<span class="t gd">Gd</span> units `,
+    [SkillTargetType.TYPE_SK]: `<span class="t sk">Sk</span> units `,
+    [SkillTargetType.NONE]: ``,
+    [SkillTargetType.ATTR_SMILE]: `<span class="a smile">Smile</span> units `,
+    [SkillTargetType.ATTR_PURE]: `<span class="a pure">Pure</span> units `,
+    [SkillTargetType.ATTR_COOL]: `<span class="a cool">Cool</span> units `,
+    [SkillTargetType.ATTR_ACTIVE]: `<span class="a active">Active</span> units `,
+    [SkillTargetType.ATTR_NATURAL]: `<span class="a natural">Natural</span> units `,
+    [SkillTargetType.ATTR_ELEGANT]: `<span class="a elegant">Elegant</span> units `,
+    [SkillTargetType.ATTR_NOT_SMILE]: `non-<span class="a smile">Smile</span> units `,
+    [SkillTargetType.TYPE_NOT_VO]: `non-<span class="t vo">Vo</span> units `,
+    [SkillTargetType.YEAR_1]: `1st Year units `,
+    [SkillTargetType.YEAR_2]: `2nd Year units `,
+    [SkillTargetType.YEAR_3]: `3rd Year units `,
+    [SkillTargetType.ATTR_NOT_PURE]: `non-<span class="a pure">Pure</span> units `,
+    [SkillTargetType.ATTR_NOT_COOL]: `non-<span class="a cool">Cool</span> units `,
+    [SkillTargetType.ATTR_NOT_ACTIVE]: `non-<span class="a active">Active</span> units `,
+    [SkillTargetType.ATTR_NOT_NATURAL]: `non-<span class="a natural">Natural</span> units `,
+    [SkillTargetType.ATTR_NOT_ELEGANT]: `non-<span class="a elegant">Elegant</span> units `,
+    [SkillTargetType.TYPE_NOT_SP]: `non-<span class="t sp">Sp</span> units `,
+    [SkillTargetType.TYPE_NOT_GD]: `non-<span class="t gd">Gd</span> units `,
+    [SkillTargetType.TYPE_NOT_SK]: `non-<span class="t sk">Sk</span> units `,
+    [SkillTargetType.STRATEGY]: `units in the current strategy `,
+    [SkillTargetType.GROUP_NOT_MUSE]: `non-µ's units `,
+    [SkillTargetType.TYPE_NOT_VO_GD]: `non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> units `,
+    [SkillTargetType.TYPE_NOT_VO_SP]: `non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units `,
+    [SkillTargetType.TYPE_NOT_VO_SK]: `non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units `,
+    [SkillTargetType.TYPE_NOT_GD_SP]: `non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units `,
+    [SkillTargetType.TYPE_NOT_SP_SK]: `non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units `,
+    [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units `,
+    [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units `,
+    [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units `,
+    [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units `,
+    [SkillTargetType.GROUP_NOT_AQOURS]: `non-Aqours units `,
+    [SkillTargetType.GROUP_NOT_NIJI]: `non-Nijigaku units `,
+    [SkillTargetType.YEAR_NOT_1]: `non-1st Year units `,
+    [SkillTargetType.YEAR_NOT_2]: `non-2nd Year units `,
+    [SkillTargetType.YEAR_NOT_3]: `non-3rd Year units `,
+    [SkillTargetType.SUB_DIVERDIVA]: `DiverDiva units `,
+    [SkillTargetType.SUB_AZUNA]: `A•ZU•NA units `,
+    [SkillTargetType.SUB_QU4RTZ]: `QU4RTZ units `,
+    [SkillTargetType.SUB_NOT_DIVERDIVA]: `non-DiverDiva units `,
+    [SkillTargetType.SUB_NOT_AZUNA]: `non-A•ZU•NA units `,
+    [SkillTargetType.SUB_NOT_QU4RTZ]: `non-QU4RTZ units `,
+    [SkillTargetType.CHAR_SHIORIKO]: `Shioriko units `,
+    [SkillTargetType.CHAR_LANZHU]: `Lanzhu units `,
+    [SkillTargetType.CHAR_MIA]: `Mia units `
+}
+
 function skillTarget(targetType) {
-    if (targetType === 1) return `all units `;
-    if (targetType === 18) return `Mari units `;
-    if (targetType === 19) return `Ruby units `;
-    if (targetType === 20) return `Ayumu units `;
-    if (targetType === 21) return `Kasumi units `;
-    if (targetType === 22) return `Shizuku units `;
-    if (targetType === 23) return `Ai units `;
-    if (targetType === 24) return `Karin units `;
-    if (targetType === 25) return `Kanata units `;
-    if (targetType === 26) return `Setsuna units `;
-    if (targetType === 27) return `Emma units `;
-    if (targetType === 28) return `Rina units `;
-    if (targetType === 29) return `µ's units `;
-    if (targetType === 30) return `Aqours units `;
-    if (targetType === 31) return `Nijigaku units `;
-    if (targetType === 35) return `CYaRon units `;
-    if (targetType === 36) return `AZALEA units `;
-    if (targetType === 37) return `Guilty Kiss units `;
-    if (targetType === 38) return `<span class="t vo">Vo</span> units `;
-    if (targetType === 39) return `<span class="t sp">Sp</span> units `;
-    if (targetType === 40) return `<span class="t gd">Gd</span> units `;
-    if (targetType === 41) return `<span class="t sk">Sk</span> units `;
-    if (targetType === 58) return ``; // no target (affecting SP charge or stamina)
-    if (targetType === 61) return `<span class="a smile">Smile</span> units `;
-    if (targetType === 62) return `<span class="a pure">Pure</span> units `;
-    if (targetType === 63) return `<span class="a cool">Cool</span> units `;
-    if (targetType === 64) return `<span class="a active">Active</span> units `;
-    if (targetType === 65) return `<span class="a natural">Natural</span> units `;
-    if (targetType === 66) return `<span class="a elegant">Elegant</span> units `;
-    if (targetType === 67) return `non-<span class="a smile">Smile</span> units `;
-    if (targetType === 68) return `non-<span class="t vo">Vo</span> units `;
-    if (targetType === 69) return `1st Year units `;
-    if (targetType === 70) return `2nd Year units `;
-    if (targetType === 71) return `3rd Year units `;
-    if (targetType === 72) return `non-<span class="a pure">Pure</span> units `;
-    if (targetType === 73) return `non-<span class="a cool">Cool</span> units `;
-    if (targetType === 74) return `non-<span class="a active">Active</span> units `;
-    if (targetType === 75) return `non-<span class="a natural">Natural</span> units `;
-    if (targetType === 76) return `non-<span class="a elegant">Elegant</span> units `;
-    if (targetType === 77) return `non-<span class="t sp">Sp</span> units `;
-    if (targetType === 78) return `non-<span class="t gd">Gd</span> units `;
-    if (targetType === 79) return `non-<span class="t sk">Sk</span> units `;
-    if (targetType === 83) return `units in the current strategy `;
-    if (targetType === 86) return `non-µ's units `;
-    if (targetType === 87) return `non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> units `;
-    if (targetType === 88) return `non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units `;
-    if (targetType === 89) return `non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units `;
-    if (targetType === 90) return `non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units `;
-    if (targetType === 92) return `non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units `;
-    if (targetType === 93) return `<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units `;
-    if (targetType === 96) return `<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units `;
-    if (targetType === 97) return `<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units `;
-    if (targetType === 98) return `<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units `;
-    if (targetType === 99) return `non-Aqours units `;
-    if (targetType === 100) return `non-Niji units `;
-    if (targetType === 101) return `non-1st Year units `;
-    if (targetType === 102) return `non-2nd Year units `;
-    if (targetType === 103) return `non-3rd Year units `;
-    if (targetType === 104) return `DiverDiva units `;
-    if (targetType === 105) return `A•ZU•NA units `;
-    if (targetType === 106) return `QU4RTZ units `;
-    if (targetType === 107) return `non-DiverDiva units `;
-    if (targetType === 108) return `non-A•ZU•NA units `;
-    if (targetType === 109) return `non-QU4RTZ units `;
-    if (targetType === 112) return `Shioriko units `;
-    if (targetType === 113) return `Lanzhu units `;
-    if (targetType === 114) return `Mia units `;
-    throw new Error(`No translation for skill target type ${targetType}`);
+    const t = skillTargetMap[targetType];
+    if (t === undefined) throw new Error(`No translation for skill target type ${targetType}`);
+    return t;
 }
 
 function skillFinish(finishType, finishAmount, isSPVoltageGainBuff) {
