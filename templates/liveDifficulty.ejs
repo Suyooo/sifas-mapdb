@@ -1,21 +1,21 @@
 <div class="row nomargin">
     <div class="col l6">
-        <b>S Rank:</b> <%- rankS %> <span class="live-extra-toggle"></span>
+        <b><%- lang.songinfo.ranks.S %>:</b> <%- lang.numberFormat(rankS) %> <span class="live-extra-toggle"></span>
         <div class="live-extra-container">
-            <b>A Rank:</b> <%- rankA %><br>
-            <b>B Rank:</b> <%- rankB %><br>
-            <b>C Rank:</b> <%- rankC %>
+            <b><%- lang.songinfo.ranks.A %>:</b> <%- lang.numberFormat(rankA) %><br>
+            <b><%- lang.songinfo.ranks.B %>:</b> <%- lang.numberFormat(rankB) %><br>
+            <b><%- lang.songinfo.ranks.C %>:</b> <%- lang.numberFormat(rankC) %>
         </div>
-        <b>Base Note Damage:</b> <%- noteDamage %>
+        <b><%- lang.songinfo.note_damage %>:</b> <%- lang.numberFormat(noteDamage) %>
     </div>
     <div class="col l6">
-        <b>Appeal Voltage Cap:</b> <%- capTap %> <span class="live-extra-toggle"></span>
+        <b><%- lang.songinfo.voltage_caps.tap %>:</b> <%- lang.numberFormat(capTap) %> <span class="live-extra-toggle"></span>
         <div class="live-extra-container">
-            <b>SP Voltage Cap:</b> <%- capSp %><br>
-            <b>Skill Voltage Cap:</b> <%- capSkill %><br>
-            <b>Swap Bonus Voltage Cap:</b> <%- capSwap %>
+            <b><%- lang.songinfo.voltage_caps.sp %>:</b> <%- lang.numberFormat(capSp) %><br>
+            <b><%- lang.songinfo.voltage_caps.skill %>:</b> <%- lang.numberFormat(capSkill) %><br>
+            <b><%- lang.songinfo.voltage_caps.swap %>:</b> <%- lang.numberFormat(capSwap) %>
         </div>
-        <b>SP Gauge Size:</b> <%- spGaugeSize %>
+        <b><%- lang.songinfo.sp_gauge_max %>:</b> <%- lang.numberFormat(spGaugeSize) %>
     </div>
 </div>
-<%- include('notemap', noteMap); %>
+<%- include('notemap', {...noteMap, lang}); %>

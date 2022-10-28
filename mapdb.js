@@ -25,8 +25,7 @@ const hash = require('object-hash');
 const Difficulty = require("./enums/difficulty");
 const Attribute = require("./enums/attribute");
 const Utils = require("./utils");
-
-const WEEKDAYS = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const pseudo = require("./lang/pseudo");
 
 let hashes = {};
 if (fs.existsSync("build/lives/hash.json")) {
@@ -173,7 +172,7 @@ for (const groupId in liveIdsForGroup) {
         }
 
         if (liveData.isDaily) {
-            liveData.dailyWeekdays = live.dailyWeekdays.map(x => WEEKDAYS[x]).join(", ");
+            liveData.dailyWeekdays = live.dailyWeekdays;
         }
 
         for (const liveDiffId of liveDiffIdsForLive[live.id]) {
@@ -199,13 +198,14 @@ for (const groupId in liveIdsForGroup) {
                     noteMap: notemap.make(liveDiff)
                 }
 
-                currentGroup.savePromises.push(render("templates/liveDifficulty.ejs", liveData).then(res => {
-                    fs.writeFileSync("build/lives/" + liveDiffId + ".html", minify(res, {
-                        collapseWhitespace: true,
-                        minifyCSS: true
+                currentGroup.savePromises.push(render("templates/liveDifficulty.ejs", {...liveData, lang: pseudo})
+                    .then(res => {
+                        fs.writeFileSync("build/lives/" + liveDiffId + ".html", minify(res, {
+                            collapseWhitespace: true,
+                            minifyCSS: true
+                        }));
+                        console.log("    Built page for Live Diff ID " + liveDiffId);
                     }));
-                    console.log("    Built page for Live Diff ID " + liveDiffId);
-                }));
 
                 hashes[liveDiffId] = liveDiffHash;
                 livePageCount++;
@@ -275,7 +275,7 @@ for (const groupId in liveIdsForGroup) {
     if (currentGroup.hasUpdatedLives) {
         groupSavePromises.push(
             Promise.all(currentGroup.savePromises)
-                .then(() => render("templates/groupPage.ejs", currentGroup))
+                .then(() => render("templates/groupPage.ejs", {...currentGroup, lang: pseudo}))
                 .then(res => {
                     fs.writeFileSync('build/' + currentGroup.name + '.html', minify(res, {
                         collapseWhitespace: true,
