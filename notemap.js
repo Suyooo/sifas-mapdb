@@ -359,20 +359,24 @@ function makeNotemap(liveData) {
             for (const gimmickId of gimmickMarkersStackOrder) {
                 // Within the same gimmick, markers can shuffle below - so instead keep track of how long every layer
                 // is blocked, and just place the marker on the first available one
-                const layersBlockedUntil = {};
+                const layersBlockedUntilGlobal = {};
+                const layersBlockedUntilGimmick = {};
                 const skylineGimmick = new Skyline();
 
                 for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
-                    let thisGimmickLayer = 0;
-                    while ((layersBlockedUntil[thisGimmickLayer] || -1) > gimmickMarker.timePosition - GIMMICK_MARKER_PADDING) {
-                        thisGimmickLayer++;
+                    let layerGimmick = 0;
+                    while ((layersBlockedUntilGimmick[layerGimmick] || -1) > gimmickMarker.timePosition - GIMMICK_MARKER_PADDING) {
+                        layerGimmick++;
                     }
-                    layersBlockedUntil[thisGimmickLayer] =
-                        gimmickMarker.timePosition + (gimmickMarker.timeLength || GIMMICK_MARKER_PADDING);
+                    let layerGlobal = skylineGlobal.get(gimmickMarker.timePosition, gimmickMarker.timeLength) + 1 + layerGimmick;
+                    while ((layersBlockedUntilGlobal[layerGlobal] || -1) > gimmickMarker.timePosition - GIMMICK_MARKER_PADDING) {
+                        layerGlobal++;
+                    }
 
-                    gimmickMarker.globalLayer =
-                        skylineGlobal.get(gimmickMarker.timePosition, gimmickMarker.timeLength) + 1 + thisGimmickLayer;
-                    gimmickMarker.thisGimmickLayer = thisGimmickLayer;
+                    layersBlockedUntilGlobal[layerGlobal] = layersBlockedUntilGimmick[layerGimmick] =
+                        gimmickMarker.timePosition + (gimmickMarker.timeLength || GIMMICK_MARKER_PADDING);
+                    gimmickMarker.globalLayer = layerGlobal;
+                    gimmickMarker.thisGimmickLayer = layerGimmick;
                     skylineGimmick.add(gimmickMarker.timePosition, gimmickMarker.globalLayer, gimmickMarker.timeLength);
                 }
 
