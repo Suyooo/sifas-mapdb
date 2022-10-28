@@ -186,16 +186,16 @@ for (const groupId in liveIdsForGroup) {
                 currentGroup.hasUpdatedLives = true;
 
                 const liveData = {
-                    rankS: notemap.format(liveDiff.ranks.S),
-                    rankA: notemap.format(liveDiff.ranks.A),
-                    rankB: notemap.format(liveDiff.ranks.B),
-                    rankC: notemap.format(liveDiff.ranks.C),
-                    capTap: notemap.format(liveDiff.voltage_caps.tap),
-                    capSp: notemap.format(liveDiff.voltage_caps.sp),
-                    capSkill: notemap.format(liveDiff.voltage_caps.skill),
-                    capSwap: notemap.format(liveDiff.voltage_caps.swap),
-                    noteDamage: notemap.format(liveDiff.note_damage),
-                    spGaugeSize: notemap.format(liveDiff.sp_gauge_max),
+                    rankS: liveDiff.ranks.S,
+                    rankA: liveDiff.ranks.A,
+                    rankB: liveDiff.ranks.B,
+                    rankC: liveDiff.ranks.C,
+                    capTap: liveDiff.voltage_caps.tap,
+                    capSp: liveDiff.voltage_caps.sp,
+                    capSkill: liveDiff.voltage_caps.skill,
+                    capSwap: liveDiff.voltage_caps.swap,
+                    noteDamage: liveDiff.note_damage,
+                    spGaugeSize: liveDiff.sp_gauge_max,
                     noteMap: notemap.make(liveDiff)
                 }
 
