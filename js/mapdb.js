@@ -796,9 +796,9 @@ function initNoteMapInteractions(e) {
     for (let i = 0; i < gimmickinfos.length; i++) {
         $(gimmickinfos[i]).on("click",
             gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, undefined));
-        $(".slot", gimmickinfos[i]).toArray().forEach((b, j) => {
+        $(".slot", gimmickinfos[i]).toArray().forEach(b => {
             $(b).on("click",
-                gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, j));
+                gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, $(b).data("slot")));
         });
     }
 

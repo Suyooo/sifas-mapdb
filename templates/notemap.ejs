@@ -110,7 +110,7 @@
                         <br><b>Amount:</b> <%- noteGimmick.count %> note<%- (noteGimmick.count === 1) ? "" : "s" %>
                         <% if (noteGimmick.hasSlotCounts) { %>
                             <%- noteGimmick.slotCounts.map((c, i) => c > 0
-                                    ? "<span class='slot'>Unit " + (i + 1) + " ×" + c + "</span>"
+                                    ? "<span class='slot' data-slot='" + i + "'>Unit " + (i + 1) + " ×" + c + "</span>"
                                     : null).filter(c => c !== null).join(" ") %>
                         <% } %>
                     <% } %>
