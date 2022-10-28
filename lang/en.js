@@ -3,6 +3,7 @@ const ACGimmickTrigger = require("../enums/acGimmickTrigger");
 const SkillTargetType = require("../enums/skillTargetType");
 const SkillFinishType = require("../enums/skillFinishType");
 const ACMissionType = require("../enums/acMissionType");
+const SkillEffectType = require("../enums/skillEffectType");
 
 function capitalize(s) {
     if (s.charAt(0) == "µ") return s; // don't uppercase µ
@@ -64,7 +65,15 @@ function acGimmick(trigger, effectType, effectAmount, targetType, finishType, fi
 }
 
 // Skill Effect Types that have no target - never print a target for these, even if one is defined in the live info
-const removeTargetSet = new Set([3, 4, 5, 23, 50, 68, 69, 70, 91, 93, 96, 101, 105, 112, 128, 130, 132, 134, 210, 217, 218, 219, 263]);
+const removeTargetSet = new Set([
+    SkillEffectType.SP_FILL, SkillEffectType.SHIELD_GAIN, SkillEffectType.STAMINA_HEAL, SkillEffectType.SPVO_BUFF,
+    SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.STAMINA_DAMAGE, SkillEffectType.SP_LOSE,
+    SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE, SkillEffectType.SHIELD_GAIN_PERCENTAGE,
+    SkillEffectType.STAMINA_HEAL_PERCENTAGE, SkillEffectType.DAMAGE_INCREASE, SkillEffectType.DAMAGE_BASE2_INCREASE,
+    SkillEffectType.SP_GAIN_BY_TECH, SkillEffectType.STAMINA_HEAL_BY_VO, SkillEffectType.STAMINA_HEAL_BY_SP,
+    SkillEffectType.STAMINA_HEAL_BY_SK, SkillEffectType.STAMINA_HEAL_BY_GD, SkillEffectType.SPVO_BUFF_BY_SP,
+    SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK,
+    SkillEffectType.STAMINA_DAMAGE_PIERCE]);
 
 function skill(effectType, effectAmount, targetType, finishType, finishAmount) {
     const effect = skillEffect(effectType, effectAmount);
@@ -76,82 +85,159 @@ function skill(effectType, effectAmount, targetType, finishType, finishAmount) {
 }
 
 function skillEffect(effectType, effectAmount) {
-    if (effectType === 3) return `charge SP Gauge by ${numberFormat(effectAmount)} points`;
-    if (effectType === 4) return `gain ${numberFormat(effectAmount)} points of shield`;
-    if (effectType === 5) return `restore ${numberFormat(effectAmount)} points of stamina`;
-    if (effectType === 17) return `gain ${numberFormat(effectAmount / 100)}% Appeal`;
-    if (effectType === 18) return `increase Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 19) return `gain ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
-    if (effectType === 20) return `gain ${numberFormat(effectAmount / 100)}% Critical Chance`;
-    if (effectType === 21) return `gain ${numberFormat(effectAmount / 100)}% Critical Power`;
-    if (effectType === 22) return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
-    if (effectType === 23) return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 26) return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
-    if (effectType === 33) return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
-    if (effectType === 36) return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
-    if (effectType === 45) return `gain ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
-    if (effectType === 46) return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
-    if (effectType === 47) return `gain ${numberFormat(effectAmount / 100)}% Base Critical Power`;
-    if (effectType === 48) return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
-    if (effectType === 49) return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
-    if (effectType === 50) return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 51) return `increase Base Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 52) return `lose all buffs (excluding those affecting Base values)`;
-    if (effectType === 68) return `take ${numberFormat(effectAmount)} points of stamina damage`;
-    if (effectType === 69) return `discharge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 70) return `lose ${numberFormat(effectAmount)} points of shield`;
-    if (effectType === 71) return `lose ${numberFormat(effectAmount / 100)}% Appeal`;
-    if (effectType === 72) return `lose ${numberFormat(effectAmount / 100)}% Tap Voltage`;
-    if (effectType === 73) return `lose ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
-    if (effectType === 75) return `lose ${numberFormat(effectAmount / 100)}% Critical Power`;
-    if (effectType === 76) return `lose ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
-    if (effectType === 78) return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
-    if (effectType === 79) return `lose ${numberFormat(effectAmount / 100)}% Base Tap Voltage`;
-    if (effectType === 81) return `lose ${numberFormat(effectAmount / 100)}% Base Appeal`;
-    if (effectType === 82) return `lose ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
-    if (effectType === 83) return `lose ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
-    if (effectType === 84) return `lose ${numberFormat(effectAmount / 100)}% Base Appeal`;
-    if (effectType === 85) return `lose ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
-    if (effectType === 86) return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
-    if (effectType === 87) return `lose ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
-    if (effectType === 91) return `charge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 93) return `gain ${numberFormat(effectAmount / 100)}% of max Stamina as shield`;
-    if (effectType === 96) return `restore ${numberFormat(effectAmount / 100)}% of max Stamina`;
-    if (effectType === 101) return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 105) return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
-    if (effectType === 112) return `charge SP Gauge by ${numberFormat(effectAmount / 100)}% of the tapping card\`s Technique`;
-    if (effectType === 119) return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 120) return `lose ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 123) return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 128) return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 130) return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sp">Sp</span> unit in the formation`;
-    if (effectType === 132) return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 134) return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t gd">Gd</span> unit in the formation`;
-    if (effectType === 137) return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 139) return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sp">Sp</span> unit in the formation`;
-    if (effectType === 141) return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 143) return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t gd">Gd</span> unit in the formation`;
-    if (effectType === 161) return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 163) return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 164) return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
-    if (effectType === 169) return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 170) return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation`;
-    if (effectType === 171) return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 172) return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
-    if (effectType === 177) return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 179) return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 185) return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 187) return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 193) return `gain ${numberFormat(effectAmount / 100)}% Critical Power for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 210) return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
-    if (effectType === 217) return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t vo">Vo</span> unit in the formation`;
-    if (effectType === 218) return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
-    if (effectType === 219) return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === 228) return `increase the Voltage gained from their Strategy Switch bonus by ${numberFormat(effectAmount)}`;
-    if (effectType === 229) return `increase the cooldown reduction from their Strategy Switch bonus by ${numberFormat(effectAmount)} turns`;
-    if (effectType === 230) return `increase SP gained from their Strategy Switch bonus by ${numberFormat(effectAmount)} points`;
-    if (effectType === 263) return `take ${numberFormat(effectAmount / 100)}% of max Stamina as damage, bypassing Shield`;
-    if (effectType === 265) return `block Healing`;
+    if (effectType === SkillEffectType.SP_FILL)
+        return `charge SP Gauge by ${numberFormat(effectAmount)} points`;
+    if (effectType === SkillEffectType.SHIELD_GAIN)
+        return `gain ${numberFormat(effectAmount)} points of shield`;
+    if (effectType === SkillEffectType.STAMINA_HEAL)
+        return `restore ${numberFormat(effectAmount)} points of stamina`;
+    if (effectType === SkillEffectType.APPEAL_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Appeal`;
+    if (effectType === SkillEffectType.VOGAIN_BUFF)
+        return `increase Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.SPGAIN_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
+    if (effectType === SkillEffectType.CRITCHANCE_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance`;
+    if (effectType === SkillEffectType.CRITPOWER_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Power`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
+    if (effectType === SkillEffectType.SPVO_BUFF)
+        return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.APPEAL_BASE_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+    if (effectType === SkillEffectType.CRITCHANCE_BASE_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+    if (effectType === SkillEffectType.SPGAIN_BASE2_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
+    if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+    if (effectType === SkillEffectType.CRITPOWER_BASE2_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Power`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+    if (effectType === SkillEffectType.APPEAL_BASE2_BUFF)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
+    if (effectType === SkillEffectType.SPVO_BASE2_BUFF)
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.VOGAIN_BASE2_BUFF)
+        return `increase Base Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.CLEANSE_BUFFS)
+        return `lose all buffs (excluding those affecting Base values)`;
+    if (effectType === SkillEffectType.STAMINA_DAMAGE)
+        return `take ${numberFormat(effectAmount)} points of stamina damage`;
+    if (effectType === SkillEffectType.SP_LOSE)
+        return `discharge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.SHIELD_LOSE)
+        return `lose ${numberFormat(effectAmount)} points of shield`;
+    if (effectType === SkillEffectType.APPEAL_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Appeal`;
+    if (effectType === SkillEffectType.VOGAIN_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Tap Voltage`;
+    if (effectType === SkillEffectType.SPGAIN_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
+    if (effectType === SkillEffectType.CRITPOWER_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Critical Power`;
+    if (effectType === SkillEffectType.SKILLCHANCE_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE2_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+    if (effectType === SkillEffectType.VOGAIN_BASE2_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Tap Voltage`;
+    if (effectType === SkillEffectType.APPEAL_BASE2_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Appeal`;
+    if (effectType === SkillEffectType.CRITCHANCE_BASE2_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+    if (effectType === SkillEffectType.SPGAIN_BASE2_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
+    if (effectType === SkillEffectType.APPEAL_BASE_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Appeal`;
+    if (effectType === SkillEffectType.SPGAIN_BASE_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+    if (effectType === SkillEffectType.CRITCHANCE_BASE_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+    if (effectType === SkillEffectType.SP_GAIN_PERCENTAGE)
+        return `charge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.SHIELD_GAIN_PERCENTAGE)
+        return `gain ${numberFormat(effectAmount / 100)}% of max Stamina as shield`;
+    if (effectType === SkillEffectType.STAMINA_HEAL_PERCENTAGE)
+        return `restore ${numberFormat(effectAmount / 100)}% of max Stamina`;
+    if (effectType === SkillEffectType.DAMAGE_INCREASE)
+        return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.DAMAGE_BASE2_INCREASE)
+        return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
+    if (effectType === SkillEffectType.SP_GAIN_BY_TECH)
+        return `charge SP Gauge by ${numberFormat(effectAmount / 100)}% of the appealing card's Technique`;
+    if (effectType === SkillEffectType.APPEAL_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.APPEAL_DEBUFF_BY_VO)
+        return `lose ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.APPEAL_BUFF_BY_SK)
+        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.STAMINA_HEAL_BY_VO)
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.STAMINA_HEAL_BY_SP)
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sp">Sp</span> unit in the formation`;
+    if (effectType === SkillEffectType.STAMINA_HEAL_BY_SK)
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.STAMINA_HEAL_BY_GD)
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t gd">Gd</span> unit in the formation`;
+    if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_SP)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sp">Sp</span> unit in the formation`;
+    if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_SK)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_GD)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t gd">Gd</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_SK)
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_GD)
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_SP)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_SK)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_GD)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
+    if (effectType === SkillEffectType.CRITCHANCE_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.CRITCHANCE_BUFF_BY_SK)
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF_BY_SK)
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.CRITPOWER_BUFF_BY_VO)
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Power for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.SPVO_BUFF_BY_SP)
+        return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
+    if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_VO)
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t vo">Vo</span> unit in the formation`;
+    if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SP)
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
+    if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SK)
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> unit in the formation`;
+    if (effectType === SkillEffectType.SWITCH_VO_BUFF)
+        return `increase the Voltage gained from their Strategy Switch bonus by ${numberFormat(effectAmount)}`;
+    if (effectType === SkillEffectType.SWITCH_SK_BUFF)
+        return `increase the cooldown reduction from their Strategy Switch bonus by ${numberFormat(effectAmount)} turns`;
+    if (effectType === SkillEffectType.SWITCH_SP_BUFF)
+        return `increase SP gained from their Strategy Switch bonus by ${numberFormat(effectAmount)} points`;
+    if (effectType === SkillEffectType.STAMINA_DAMAGE_PIERCE)
+        return `take ${numberFormat(effectAmount / 100)}% of max Stamina as damage, bypassing Shield`;
+    if (effectType === SkillEffectType.STAMINA_HEAL_BLOCK)
+        return `block healing`;
+
     throw new Error(`No translation for skill effect type ${effectType}`);
 }
 
