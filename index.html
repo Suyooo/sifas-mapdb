@@ -27,8 +27,8 @@
 </head>
 <body class="loading">
 <script>
-    if (document.cookie.indexOf("dark-mode=yes") !== -1) {
-        document.body.className += ' dark-mode';
+    if (localStorage.getItem("dark-mode") === "yes") {
+        document.body.className += " dark-mode";
     }
 </script>
 <div class="font-preload">
@@ -142,15 +142,6 @@
                     who need song information!
                 </li>
             </ul>
-            <b>The TODO Corner:</b>
-            <ul class="browser-default">
-                <li>
-                    Fix history going a little wack when searching
-                </li>
-                <li>
-                    Make location hash handler only force indicator if a collapsible is opened, not if it's already open
-                </li>
-            </ul>
         </div>
         <div id="tab_search" class="col s12" data-type="fixed">
             <div class="input-field" style="width: 100%">
@@ -174,24 +165,6 @@
         <div id="tab_liella" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_dlp" class="col s12 unloaded" data-type="dlp">Loading...</div>
         <div id="tab_rankings" class="col s12 unloaded" data-type="top">Loading...</div>
-    </div>
-</div>
-<div class="popup-background valign-wrapper" id="popUpCookieConsent">
-    <div class="popup-dialog z-depth-5 card">
-        <div class="card-content">
-            <h5>Cookie Policy</h5>
-            SIFAS Map DB uses cookies to store your preferences. It will only do so if you agree to this message.
-            The page is still functional without if you do not allow storage, however, the site will reset to default
-            settings on every visit. No other data is stored, and this information is not saved on the server or used to
-            identify you.<br>
-            You can revoke your consent at any time by removing all cookies saved on your device by this site.<br>
-            <br>
-            Do you agree with the cookie policy and allow this site to store cookies on your device?
-        </div>
-        <div class="card-action right-align">
-            <a class="orange-text has-on-click" id="consentYesButton" tabindex="0">Yes</a>
-            <a class="orange-text has-on-click" id="consentNoButton" tabindex="0">No</a>
-        </div>
     </div>
 </div>
 <div class="popup-background valign-wrapper" id="popUpPreferences">

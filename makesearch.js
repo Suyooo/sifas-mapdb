@@ -33,11 +33,14 @@ const customAbbreviationsKn = {
 }
 const customAbbreviationsRo = {
     "10008": "borarara",
+    "10046": "takaramonos",
     "11003": "021",
     "11012": "t1w",
     "11072": "hsns",
+    "11102": "aao",
     "12001": "tkmk",
     "12024": "yakitori",
+    "12026": "marchen star",
     "12034": "tkmk"
 }
 

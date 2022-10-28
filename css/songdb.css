@@ -167,8 +167,17 @@ body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unava
     text-decoration: none;
 }
 
-.collapsible-body .tabs.tabs-transparent.fakeindicator .tab a.active {
-    border-bottom: 5px solid var(--key-normal);
+.tabs.tabs-transparent .tab a {
+    border-bottom: 0 solid var(--key-normal);
+    transition: border-bottom-width .3s;
+}
+
+.tabs.tabs-transparent .tab a.active {
+    border-bottom-width: 5px;
+}
+
+.indicator {
+    display: none;
 }
 
 div.group-tab {
@@ -439,11 +448,15 @@ body.show-unavail div.group-tab div.no-available-songs {
     padding: .2em .5em;
     margin-left: .5em;
     cursor: pointer;
+    border-radius: 1em;
+    background-color: var(--panel);
+    border: 1px solid var(--key-normal);
+    transition: background-color .2s;
 }
 
 .scale:not(.turnscale) .time, .scale.turnscale .turns {
     border-radius: 1em;
-    background-color: var(--key-accented);
+    background-color: var(--key-normal);
 }
 
 .scale.turnscale + .notebarcontainer .note,
@@ -509,6 +522,28 @@ body.show-unavail div.group-tab div.no-available-songs {
     margin-top: 0.33em;
 }
 
+.detailinfo > div.gimmick .slotcontainer {
+    display: inline-block;
+}
+
+.detailinfo > div.gimmick .slot {
+    border-radius: 1em;
+    background-color: var(--panel);
+    border: 1px solid var(--key-normal);
+    transition: background-color .2s;
+    padding: .2em .5em;
+    margin-left: .5em;
+    white-space: nowrap;
+}
+
+.detailinfo > div.gimmick .slot.filtered {
+    background-color: var(--key-normal);
+}
+
+.tooltip .slot {
+    display: none;
+}
+
 .detailinfo .songgimmick {
     width: 100%;
     display: flex;
@@ -564,6 +599,22 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .tooltip .col.m6 {
     width: 100%;
+}
+
+.live-difficulty.active {
+    max-height: 100vh;
+    overflow-y: hidden;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.live-difficulty.active > * {
+    flex-shrink: 0;
+}
+
+.live-difficulty.active > .detailinfo-container {
+    flex: 1 1 100%;
+    overflow-y: auto;
 }
 
 .tower .collapsible-body .collapsible {

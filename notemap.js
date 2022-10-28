@@ -21,8 +21,10 @@ const SkillFinishType = require("./enums/skillFinishType");
 const NoteGimmickTrigger = require("./enums/noteGimmickTrigger");
 const ACGimmickTrigger = require("./enums/acGimmickTrigger");
 const ACMissionType = require("./enums/acMissionType");
+const {Skyline, GIMMICK_MARKER_PADDING} = require("./utils");
 
 function capitalizeFirstLetter(s) {
+    if (s.charAt(0) == "µ") return s; // don't uppercase µ
     return s.substring(0, 1).toUpperCase() + s.substring(1);
 }
 
@@ -33,16 +35,30 @@ function format(x) {
     return parts.join(".");
 }
 
-function skill(skill, removeTarget) {
+function skill(skill) {
     let eff = skillEffect(skill.effect_type, skill.effect_amount);
-    return (removeTarget ? "" : skillTarget(skill.target)) + eff +
+    return (removeTargetSet.has(skill.effect_type) ? "" : skillTarget(skill.target)) + eff +
         skillFinish(skill.finish_type, skill.finish_amount, eff.indexOf("SP Voltage Gain") !== -1);
     // TODO: The parameter for isSPVoltageGainBuff is based on the skill effect strings above right now...
     //  so it's prone to typos and will break if translated
 }
 
+// Skill Effect Types that have no target - never print a target for these, even if one is defined in the live info
+const removeTargetSet = new Set([3, 4, 5, 23, 50, 68, 69, 70, 91, 93, 96, 101, 105, 112, 128, 130, 132, 134, 210, 217, 218, 219, 263]);
+
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
+    if (targetId === 18) return 'Mari units ';
+    if (targetId === 19) return 'Ruby units ';
+    if (targetId === 20) return 'Ayumu units ';
+    if (targetId === 21) return 'Kasumi units ';
+    if (targetId === 22) return 'Shizuku units ';
+    if (targetId === 23) return 'Ai units ';
+    if (targetId === 24) return 'Karin units ';
+    if (targetId === 25) return 'Kanata units ';
+    if (targetId === 26) return 'Setsuna units ';
+    if (targetId === 27) return 'Emma units ';
+    if (targetId === 28) return 'Rina units ';
     if (targetId === 29) return 'µ\'s units ';
     if (targetId === 30) return 'Aqours units ';
     if (targetId === 31) return 'Nijigaku units ';
@@ -80,6 +96,7 @@ function skillTarget(targetId) {
     if (targetId === 89) return 'non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 90) return 'non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units ';
     if (targetId === 92) return 'non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units ';
+    if (targetId === 93) return '<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
     if (targetId === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
@@ -94,6 +111,9 @@ function skillTarget(targetId) {
     if (targetId === 107) return 'non-DiverDiva units ';
     if (targetId === 108) return 'non-A•ZU•NA units ';
     if (targetId === 109) return 'non-QU4RTZ units ';
+    if (targetId === 112) return 'Shioriko units ';
+    if (targetId === 113) return 'Lanzhu units ';
+    if (targetId === 114) return 'Mia units ';
     throw new Error('Unknown Skill Target ' + targetId);
 }
 
@@ -110,6 +130,7 @@ function skillEffect(typeId, amount) {
     if (typeId === 23) return 'increase SP Voltage Gain by ' + format(amount / 100) + '%';
     if (typeId === 26) return 'gain ' + format(amount / 100) + '% Base Appeal';
     if (typeId === 33) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance';
+    if (typeId === 36) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (typeId === 45) return 'gain ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (typeId === 46) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (typeId === 47) return 'gain ' + format(amount / 100) + '% Base Critical Power';
@@ -138,6 +159,8 @@ function skillEffect(typeId, amount) {
     if (typeId === 91) return 'charge SP Gauge by ' + format(amount / 100) + '%';
     if (typeId === 93) return 'gain ' + format(amount / 100) + '% of max Stamina as shield';
     if (typeId === 96) return 'restore ' + format(amount / 100) + '% of max Stamina';
+    if (typeId === 101) return 'increase Stamina Damage by ' + format(amount / 100) + '%';
+    if (typeId === 105) return 'increase Stamina Damage by ' + format(amount / 100) + '%';
     if (typeId === 112) return 'charge SP Gauge by ' + format(amount / 100) + '% of the tapping card\'s Technique';
     if (typeId === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 120) return 'lose ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
@@ -157,13 +180,16 @@ function skillEffect(typeId, amount) {
     if (typeId === 170) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation';
     if (typeId === 171) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (typeId === 172) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation';
+    if (typeId === 177) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 179) return 'gain ' + format(amount / 100) + '% Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (typeId === 185) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 187) return 'gain ' + format(amount / 100) + '% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation';
     if (typeId === 193) return 'gain ' + format(amount / 100) + '% Critical Power for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 210) return 'increase SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
+    if (typeId === 217) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 218) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (typeId === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
+    if (typeId === 228) return 'increase the Voltage gained from their Strategy Switch bonus by ' + format(amount);
     if (typeId === 229) return 'increase the cooldown reduction from their Strategy Switch bonus by ' + format(amount) + ' turns';
     if (typeId === 230) return 'increase SP gained from their Strategy Switch bonus by ' + format(amount) + ' points';
     if (typeId === 263) return 'take ' + format(amount / 100) + '% of max Stamina as damage, bypassing Shield';
@@ -185,7 +211,10 @@ function skillFinish(conditionId, amount, isSPVoltageGainBuff) {
             else return ' until ' + amount + ' SP Skills are used'
         }
     }
-    if (conditionId === SkillFinishType.UNTIL_SWITCH) return ' until the next Strategy switch'
+    if (conditionId === SkillFinishType.UNTIL_SWITCH) {
+        if (amount <= 1) return ' until the next Strategy switch'
+        else return ' until Strategies are switched ' + amount + ' times'
+    }
     throw new Error('Unknown Skill Finish Condition ' + conditionId);
 }
 
@@ -235,6 +264,7 @@ function makeNotemap(liveData) {
             appealChances: []
         };
         const gimmickCounts = {};
+        const gimmickSlotCounts = {};
 
         if (liveInfo.hasNoteMap) {
             liveInfo.notes = [];
@@ -244,13 +274,7 @@ function makeNotemap(liveData) {
             // notes are placed in the center 98% of the timeline, but we need the total time covered for timing
             const mapLength = (lastNoteTime - firstNoteTime);
 
-            // Stackers to assign the gimmick markers to layers to avoid overlapping
-            // Each stacker is an array, one number per layer, keeping track of the position where the last marker on
-            // that layer ends ("occupied until this position"). When adding a marker, its start position can be
-            // compared with that saved value to find the first free layer.
-            // There is one global stacker (default view) and one per gimmick (filtered gimmick view).
-            const stackerGlobal = [];
-            const stackerPerGimmick = liveData.note_gimmicks.map(_ => []);
+            const gimmickMarkersStacksToDo = liveData.note_gimmicks.map(_ => []);
 
             for (let ni = 0; ni < liveData.notes.length; ni++) {
                 const note = liveData.notes[ni];
@@ -278,57 +302,92 @@ function makeNotemap(liveData) {
                     }
                     gimmickCounts[note.gimmick]++;
 
+                    const shouldCountSlots = liveData.note_gimmicks[note.gimmick].trigger >= NoteGimmickTrigger.ON_VO_HIT;
+                    if (shouldCountSlots) {
+                        if (gimmickSlotCounts[note.gimmick] === undefined) {
+                            gimmickSlotCounts[note.gimmick] = [0, 0, 0];
+                        }
+                        gimmickSlotCounts[note.gimmick][ni % 3]++;
+                    }
+
                     const positionRelative = (note.time - firstNoteTime) / mapLength;
-
-                    let globalLayer = 0;
-                    while (globalLayer < stackerGlobal.length
-                    && stackerGlobal[globalLayer] > positionRelative) {
-                        globalLayer++;
-                    }
-                    if (globalLayer == stackerGlobal.length)
-                        stackerGlobal.push(0); // new layer required
-
-                    let thisGimmickLayer = 0;
-                    while (thisGimmickLayer < stackerPerGimmick[note.gimmick].length
-                    && stackerPerGimmick[note.gimmick][thisGimmickLayer] > positionRelative) {
-                        thisGimmickLayer++;
-                    }
-                    if (thisGimmickLayer == stackerPerGimmick[note.gimmick].length)
-                        stackerPerGimmick[note.gimmick].push(0); // new layer required
 
                     const gimmickMarkerData = {
                         gimmickIndex: note.gimmick,
                         noteIndex: ni,
+                        hasSlotNo: shouldCountSlots,
                         hasLength: liveData.note_gimmicks[note.gimmick].finish_type === SkillFinishType.NOTE_COUNT,
                         timePosition: positionRelative,
-                        turnPosition: ni / (liveData.notes.length - 1),
-                        globalLayer, thisGimmickLayer
+                        turnPosition: ni / (liveData.notes.length - 1)
                     };
+
+                    if (shouldCountSlots) {
+                        gimmickMarkerData.slotNo = ni % 3;
+                    }
 
                     if (gimmickMarkerData.hasLength) {
                         let endNi = ni + liveData.note_gimmicks[note.gimmick].finish_amount;
                         if (endNi >= liveData.notes.length) endNi = liveData.notes.length - 1;
                         gimmickMarkerData.timeLength = (liveData.notes[endNi].time - note.time) / mapLength;
                         gimmickMarkerData.turnLength = (endNi - ni) / (liveData.notes.length - 1);
-
-                        // magic value (TM) to avoid unneccessary stacks due to float precision loss
-                        stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
-                            = positionRelative + gimmickMarkerData.timeLength - 0.0001;
-                    } else {
-                        // magic value (TM) to avoid too much overlap of no-length markers
-                        stackerGlobal[globalLayer] = stackerPerGimmick[note.gimmick][thisGimmickLayer]
-                            = positionRelative + 0.0075;
                     }
 
                     noteData.gimmickMarker = gimmickMarkerData;
+                    gimmickMarkersStacksToDo[note.gimmick].push(gimmickMarkerData);
                 }
 
                 liveInfo.notes.push(noteData);
             }
 
+            // Skyline to assign the gimmick markers to layers to avoid overlapping
+            // A skyline is used so gimmicks can't stack below lower-numbered ones - that means generally, gimmick
+            // markers should be grouped around the other markers of the same gimmick
+            const skylineGlobal = new Skyline();
+
+            // Note gimmicks with length markers should be farther down in the stack
+            const gimmickMarkersStackOrder = Object.keys(gimmickMarkersStacksToDo).map(i => parseInt(i))
+                .sort((a, b) => {
+                    const aExample = gimmickMarkersStacksToDo[a][0];
+                    const bExample = gimmickMarkersStacksToDo[b][0];
+                    if (aExample && !bExample) return -1; // avoid erroring on unused note gimmicks
+                    if (bExample && !aExample) return 1;
+                    if (aExample.hasLength && !bExample.hasLength) return -1;
+                    if (bExample.hasLength && !aExample.hasLength) return 1;
+                    return a - b;
+                });
+
+            for (const gimmickId of gimmickMarkersStackOrder) {
+                // Within the same gimmick, markers can shuffle below - so instead keep track of how long every layer
+                // is blocked, and just place the marker on the first available one
+                const layersBlockedUntilGlobal = {};
+                const layersBlockedUntilGimmick = {};
+                const skylineGimmick = new Skyline();
+
+                for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
+                    let layerGimmick = 0;
+                    while ((layersBlockedUntilGimmick[layerGimmick] || -1) > gimmickMarker.timePosition - GIMMICK_MARKER_PADDING) {
+                        layerGimmick++;
+                    }
+                    let layerGlobal = skylineGlobal.get(gimmickMarker.timePosition, gimmickMarker.timeLength) + 1 + layerGimmick;
+                    while ((layersBlockedUntilGlobal[layerGlobal] || -1) > gimmickMarker.timePosition - GIMMICK_MARKER_PADDING) {
+                        layerGlobal++;
+                    }
+
+                    layersBlockedUntilGlobal[layerGlobal] = layersBlockedUntilGimmick[layerGimmick] =
+                        gimmickMarker.timePosition + (gimmickMarker.timeLength || GIMMICK_MARKER_PADDING);
+                    gimmickMarker.globalLayer = layerGlobal;
+                    gimmickMarker.thisGimmickLayer = layerGimmick;
+                    skylineGimmick.add(gimmickMarker.timePosition, gimmickMarker.globalLayer, gimmickMarker.timeLength);
+                }
+
+                for (const gimmickMarker of gimmickMarkersStacksToDo[gimmickId]) {
+                    skylineGlobal.merge(skylineGimmick);
+                }
+            }
+
             liveInfo.mapInfo = {
                 noteCount: format(liveData.notes.length),
-                markerLayerCount: stackerGlobal.length,
+                markerLayerCount: skylineGlobal.get(0, 1) + 1,
                 mapLength: mapLength,
                 hasActualSongLength: liveData.song_length !== undefined
             };
@@ -341,7 +400,7 @@ function makeNotemap(liveData) {
 
         if (liveInfo.hasSongGimmicks) {
             liveInfo.songGimmicks = liveData.gimmick.map((gimmick, index) => {
-                let skillstr = capitalizeFirstLetter(skill(gimmick, false));
+                let skillstr = capitalizeFirstLetter(skill(gimmick));
                 if (gimmick.finish_type === SkillFinishType.UNTIL_SONG_END) {
                     // remove " until the song ends" if that is the condition - pretty much implied through being the song gimmick
                     skillstr = skillstr.substring(0, skillstr.length - 20);
@@ -357,7 +416,6 @@ function makeNotemap(liveData) {
 
         for (let gi = 0; gi < liveData.note_gimmicks.length; gi++) {
             let skillstr;
-            let remove_target = false;
             switch (liveData.note_gimmicks[gi].trigger) {
                 case NoteGimmickTrigger.ON_HIT:
                     skillstr = "If hit, ";
@@ -370,21 +428,18 @@ function makeNotemap(liveData) {
                     break;
                 case NoteGimmickTrigger.ON_VO_HIT:
                     skillstr = 'If hit with a <span class="t vo">Vo</span> unit, ';
-                    remove_target = liveData.note_gimmicks[gi].target == 38;
                     break;
                 case NoteGimmickTrigger.ON_SP_HIT:
                     skillstr = 'If hit with an <span class="t sp">Sp</span> unit, ';
-                    remove_target = liveData.note_gimmicks[gi].target == 39;
                     break;
                 case NoteGimmickTrigger.ON_SK_HIT:
                     skillstr = 'If hit with an <span class="t sk">Sk</span> unit, ';
-                    remove_target = liveData.note_gimmicks[gi].target == 41;
                     break;
                 default:
                     throw new Error('Unknown Note Gimmick Trigger ' + liveData.note_gimmicks[gi].trigger);
             }
 
-            skillstr += skill(liveData.note_gimmicks[gi], remove_target);
+            skillstr += skill(liveData.note_gimmicks[gi]);
             if (liveData.note_gimmicks[gi].trigger === NoteGimmickTrigger.ALWAYS) {
                 skillstr = capitalizeFirstLetter(skillstr);
             }
@@ -396,6 +451,8 @@ function makeNotemap(liveData) {
 
             if (liveInfo.hasNoteMap) {
                 noteGimmickData.count = gimmickCounts[gi];
+                noteGimmickData.hasSlotCounts = gimmickSlotCounts[gi] !== undefined;
+                if (noteGimmickData.hasSlotCounts) noteGimmickData.slotCounts = gimmickSlotCounts[gi];
             }
 
             liveInfo.noteGimmicks.push(noteGimmickData);
@@ -433,7 +490,7 @@ function makeNotemap(liveData) {
                     default:
                         throw new Error('Unknown AC Gimmick Trigger ' + ac.gimmick.trigger);
                 }
-                skillstr += skill(ac.gimmick, false);
+                skillstr += skill(ac.gimmick);
                 acData.gimmick = skillstr;
             }
 

@@ -37,6 +37,9 @@ function songNameRomaji(liveId) {
     if (liveId === "0100") return "MOMENT RING";
     if (liveId === "0121") return "A song for You! You? You!!";
     if (liveId === "0120") return "A song for You! You? You!!";
+    if (liveId === "0078") return "SENTIMENTAL StepS";
+    if (liveId === "0007") return "LONELIEST BABY";
+    if (liveId === "0087") return "SUNNY DAY SONG";
     if (liveId === "0005") return "PSYCHIC FIRE";
     if (liveId === "0043") return "Cutie Panther";
     if (liveId === "0004") return "Shunjou Romantic";
@@ -82,9 +85,11 @@ function songNameRomaji(liveId) {
     if (liveId === "1021") return "Daisuki Dattara Daijoubu!";
     if (liveId === "1057") return "MY Mai☆TONIGHT";
     if (liveId === "1022") return "Yume Kataru yori Yume Utaou";
+    if (liveId === "1083") return "Jump up HIGH!!";
     if (liveId === "1091") return "Aqours☆HEROES";
     if (liveId === "1016") return "Aqours☆HEROES";
     if (liveId === "1092") return "Nando Datte Yakusoku!";
+    if (liveId === "1093") return "BANZAI! digital trippers";
     if (liveId === "1005") return "Torikoriko PLEASE!!";
     if (liveId === "1082") return "Amazing Travel DNA";
     if (liveId === "1044") return "GALAXY HidE and SeeK";
@@ -103,6 +108,8 @@ function songNameRomaji(liveId) {
     if (liveId === "1062") return "Oyasuminasan!";
     if (liveId === "1069") return "New winding road";
     if (liveId === "1068") return "RED GEM WINK";
+    if (liveId === "1101") return "Shiny Racers";
+    if (liveId === "1102") return "Cotton Candy Ei Ei Oh!";
 
     // Nijigaku
     if (liveId === "2001") return "TOKIMEKI Runners";
@@ -129,6 +136,9 @@ function songNameRomaji(liveId) {
     if (liveId === "2108") return "Future Parade";
     if (liveId === "2110") return "Miracle STAY TUNE!";
     if (liveId === "2097") return "Eien no Isshun";
+    if (liveId === "2111") return "Twilight";
+    if (liveId === "2112") return "Ryouran! Victory Road (Type A)";
+    if (liveId === "2113") return "Ryouran! Victory Road (Type B)";
     if (liveId === "2031") return "SUPER NOVA";
     if (liveId === "2067") return "POWER SPOT!!";
     if (liveId === "2066") return "Love Triangle";
@@ -146,6 +156,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2086") return "Dream Land! Dream World!";
     if (liveId === "2091") return "Folklore ~Kanki no Uta~";
     if (liveId === "2104") return "Infinity! Our Wings!!";
+    if (liveId === "2118") return "Happy Nyan! Days";
     if (liveId === "2033") return "Sing & Smile!!";
     if (liveId === "2069") return "Make-up session ABC";
     if (liveId === "2064") return "Beautiful Moonlight";
@@ -244,16 +255,69 @@ function songNamePostfix(liveId) {
     if (liveId === "2041") return "2D";       // NEO SKY, NEO MAP! (limited version)
     if (liveId === "2051") return "2D";       // 夢がここからはじまるよ (limited version)
     if (liveId === "2053") return "2D";       // Just Believe!!! (limited version)
-    if (liveId === "2070") return "2D";       // 祭花 -saika- (limited version)
     if (liveId === "2109") return "Event";    // Just Believe!!! （12人Ver.） (event prerelease version)
+    if (liveId === "2117") return "Event";    // 祭花 -saika- (event prerelease version)
     if (liveId === "2997") return "MV";       // MONSTER GIRLS (MV version)
     if (liveId === "2998") return "MV";       // I'm Still... (MV version)
     if (liveId === "2999") return "MV";       // Queendom (MV version)
-    
+
     return null;
+}
+
+const GIMMICK_MARKER_PADDING = 0.004;
+
+class Skyline {
+    skyline = [[-0.1, -1], [1.1, -1]];
+
+    get(x, w) {
+        const x1 = x - GIMMICK_MARKER_PADDING;
+        const x2 = x + (w || GIMMICK_MARKER_PADDING);
+
+        let i = 0;
+        while (this.skyline[i][0] < x1) {
+            i++;
+        }
+
+        let maxy = this.skyline[i - 1][1];
+        while (this.skyline[i][0] < x2) {
+            maxy = Math.max(maxy, this.skyline[i][1]);
+            i++;
+        }
+
+        return maxy;
+    }
+
+    add(x, y, w) {
+        const x1 = x - GIMMICK_MARKER_PADDING;
+        const x2 = x + (w || GIMMICK_MARKER_PADDING);
+        this.merge({skyline: [[x1, y], [x2, -1]]});
+    }
+
+    merge(other) {
+        const newSkyline = [[-0.1, -1]];
+        let hThis = -1, hOther = -1, iThis = 0, iOther = 0;
+
+        while (iThis < this.skyline.length && iOther < other.skyline.length) {
+            let x;
+            if (this.skyline[iThis][0] < other.skyline[iOther][0]) {
+                x = this.skyline[iThis][0];
+                hThis = this.skyline[iThis][1];
+                iThis++;
+            } else {
+                x = other.skyline[iOther][0];
+                hOther = other.skyline[iOther][1];
+                iOther++;
+            }
+            const y = Math.max(hThis, hOther);
+            if (y !== newSkyline.at(-1)[1]) newSkyline.push([x, y]);
+        }
+
+        this.skyline = newSkyline.concat(this.skyline.slice(iThis)).concat(other.skyline.slice(iOther));
+    }
 }
 
 module.exports = {
     isFreeLive, isActiveEventLive, isStoryStage,
-    songNameRomaji, songNamePostfix
+    songNameRomaji, songNamePostfix,
+    GIMMICK_MARKER_PADDING, Skyline
 }

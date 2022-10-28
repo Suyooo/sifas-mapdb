@@ -48,6 +48,7 @@
                 <% if (note.hasGimmick) { %>
                     <div class="gimmick" data-gimmick="<%- note.gimmickMarker.gimmickIndex %>"
                          data-npos="<%- note.gimmickMarker.noteIndex + 1 %>"
+                         <% if (note.gimmickMarker.hasSlotNo) { %>data-slot="<%- note.gimmickMarker.slotNo + 1 %>"<% } %>
                          style="--gimmicklayer: <%- note.gimmickMarker.globalLayer %>;
                                  --gimmicklayer-filtered: <%- note.gimmickMarker.thisGimmickLayer %>;
                                  --time-pos: <%- (note.gimmickMarker.timePosition * 98 + 1).toFixed(3) %>%;
@@ -76,7 +77,7 @@
     <div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>
 <% } %>
 
-<div class="row nomargin">
+<div class="row nomargin detailinfo-container">
     <div class="col l6 detailinfo">
         <h5>Gimmicks</h5>
         <div>
@@ -107,6 +108,13 @@
                     <%- noteGimmick.skill %>
                     <% if (hasNoteMap) { %>
                         <br><b>Amount:</b> <%- noteGimmick.count %> note<%- (noteGimmick.count === 1) ? "" : "s" %>
+                        <% if (noteGimmick.hasSlotCounts) { %>
+                            <div class="slotcontainer">
+                                <%- noteGimmick.slotCounts.map((c, i) => c > 0
+                                        ? "<span class='slot' data-slot='" + i + "'>Unit " + (i + 1) + " ×" + c + "</span>"
+                                        : null).filter(c => c !== null).join(" ") %>
+                            </div>
+                        <% } %>
                     <% } %>
                 </div>
             </div>

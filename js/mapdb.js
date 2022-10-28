@@ -8,40 +8,6 @@ M.Collapsible.prototype.instantOpen = function (i) {
     this.open(i);
     this.options.inDuration = tmp;
 }
-M.Tabs.prototype.instantSelect = function (id) {
-    let tmp = this._animateIndicator;
-    this._animateIndicator = function () {
-    };
-    this.select(id);
-    this.fakeIndicator();
-    setTimeout(this.unfakeIndicator.bind(this), 1000);
-    this._animateIndicator = tmp;
-}
-M.Tabs.prototype.fakeIndicator = function () {
-    this.$el.addClass("fakeindicator");
-    $(this._indicator).addClass("hide");
-}
-M.Tabs.prototype.unfakeIndicator = function () {
-    this.forceTabIndicator();
-    this.$el.removeClass("fakeindicator");
-    $(this._indicator).removeClass("hide");
-}
-M.Tabs.prototype.forceTabIndicator = function () {
-    this._setTabsAndTabWidth();
-    $(".indicator", this.el).css({
-        "left": this._calcLeftPos(this.$activeTabLink) + "px",
-        "right": this._calcRightPos(this.$activeTabLink) + "px"
-    });
-}
-
-function fixTabIndicator(e) {
-    let t = M.Tabs.getInstance(e);
-    if (t != undefined) t.forceTabIndicator();
-}
-
-function fixAllTabIndicators() {
-    $(".collapsible .tabs").toArray().forEach(fixTabIndicator);
-}
 
 let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
@@ -93,7 +59,7 @@ function loadPageThen(page, callback) {
             page.load((DEBUG_MODE ? "build/" : "") + page.attr("id").substring(4) + ".html", loadPageFinished.bind(this, type, page, callback));
         }
     } else {
-        if (callback !== undefined) callback(page);
+        if (callback !== undefined) requestAnimationFrame(() => callback(page));
     }
 }
 
@@ -163,18 +129,24 @@ $(function () {
     pageTabs.options.onShow = pageTabShow;
     body.removeClass("loading");
 
-    // Small hack to handle redirect from old DLP URL if there's no hash specified, so it still goes directly to DLP
-    // This cookie is set in a rewrite rule in the top-level .htaccess
-    if (cookieGet("tower-redirect") === "yes") {
-        document.cookie = "tower-redirect=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.suyo.be; path=/sifas;"
-        if (window.location.hash === "") window.location.hash = "#dlp";
+    if (window.location.hash) {
+        history.replaceState(undefined, undefined, "?" + window.location.hash.substring(1));
+    }
+    handleLocation();
+    window.addEventListener("popstate", handleLocation);
+
+    if (cookieGet("mapdb-titles")) {
+        // Move saved preferences from cookies to localStorage - to be removed in a month or so
+        localStorage.setItem("mapdb-titles", cookieGet("mapdb-titles"));
+        localStorage.setItem("mapdb-unavailable", cookieGet("mapdb-unavailable"));
+        localStorage.setItem("dark-mode", cookieGet("dark-mode"));
+        document.cookie = "mapdb-titles=; Max-Age=-99999999; path=/sifas";
+        document.cookie = "mapdb-unavailable=; Max-Age=-99999999; path=/sifas";
+        document.cookie = "dark-mode=; Max-Age=-99999999; path=/sifas";
     }
 
-    handleLocationHash();
-    window.addEventListener("hashchange", handleLocationHash, {passive: true});
-
-    let preferenceTitle = cookieGet("mapdb-titles");
-    let preferenceUnavailable = cookieGet("mapdb-unavailable");
+    let preferenceTitle = localStorage.getItem("mapdb-titles");
+    let preferenceUnavailable = localStorage.getItem("mapdb-unavailable");
     if (preferenceTitle === "roma") {
         toggleRomaji(false);
     }
@@ -234,7 +206,7 @@ function pageTabShow(e) {
         searchInput.trigger("focus");
 
         // Dumb workaround for Materialize force-hiding the previous tab
-        setTimeout($.prototype.show.bind(groupTabs), 1);
+        requestAnimationFrame($.prototype.show.bind(groupTabs, 0));
     } else if (onSearchTab) {
         for (let i = 0; i < groupTabs.length; i++) {
             if (groupTabs[i] !== e) {
@@ -320,6 +292,7 @@ function doSearch(search_input) {
     if (filtered.length === 1) {
         filtered[0].open();
         if (pluses > 0) {
+            replaceHistory = true;
             let toOpen;
             if (pluses == 1) {
                 // Open Adv+ right away if it exists, otherwise Challenge
@@ -330,8 +303,9 @@ function doSearch(search_input) {
             }
             if (toOpen != undefined) {
                 let liveDiffTabs = M.Tabs.getInstance($(".tabs", filtered[0].el)[0]);
-                liveDiffTabs.instantSelect(toOpen);
+                liveDiffTabs.select(toOpen);
             }
+            replaceHistory = false;
         }
     } else {
         $(filtered).each(M.Collapsible.prototype.close);
@@ -363,22 +337,27 @@ function resetCollapsibleFiltering() {
  */
 
 let disableHistory = false;
+let replaceHistory = false;
 
 function addHistoryItem(s, page) {
-    if (!disableHistory) history.pushState(undefined, undefined, "#" + s);
+    if (!disableHistory && s !== "search") {
+        if (replaceHistory) history.replaceState(undefined, undefined, "?" + s);
+        else history.pushState(undefined, undefined, "?" + s);
+    }
     if (page === undefined) document.title = PAGE_TITLE;
     else document.title = page + PAGE_TITLE_SEP + PAGE_TITLE;
 }
 
-function handleLocationHash() {
+function handleLocation() {
     disableHistory = true;
-    let hash = window.location.hash;
-    if (hash.startsWith("#live")) {
+    let location = window.location.search.substring(1);
+
+    if (location.startsWith("live")) {
         // Direct link to a live difficulty
-        if (hash.charAt(5) === "1" || hash.charAt(5) === "2") {
+        if (location.charAt(4) === "1" || location.charAt(4) === "2") {
             // Free Live or Event Live (has group ID in next position)
-            afterSwitchCallback = showLinkedFreeLive.bind(this, hash);
-            switch (hash.charAt(6)) {
+            afterSwitchCallback = showLinkedFreeLive.bind(this, location);
+            switch (location.charAt(5)) {
                 case "0":
                     pageTabs.select("tab_muse");
                     break;
@@ -399,23 +378,23 @@ function handleLocationHash() {
         } else {
             // Story Stage: Can't read group ID on newer stages, must load all group tabs
             // and search for the correct stage by going through them all
-            loadAllGroupPagesThen(showLinkedStoryStage.bind(this, hash, pageTabs));
+            loadAllGroupPagesThen(showLinkedStoryStage.bind(this, location, pageTabs));
         }
-    } else if (hash.startsWith("#tower") || hash.startsWith("#floor")) {
+    } else if (location.startsWith("tower") || location.startsWith("floor")) {
         // Direct link to a DLP tower or floor
-        afterSwitchCallback = showLinkedDlp.bind(this, hash);
+        afterSwitchCallback = showLinkedDlp.bind(this, location);
         pageTabs.select("tab_dlp");
     } else {
         // Direct link to a page
-        if (hash === "") hash = "#start";
-        if (hash.startsWith("#tab")) pageTabs.select(hash.substring(1));
-        else pageTabs.select("tab_" + hash.substring(1));
+        if (location === "") location = "start";
+        if (location.startsWith("tab")) pageTabs.select(location);
+        else pageTabs.select("tab_" + location);
         disableHistory = false;
     }
 }
 
-function showLinkedFreeLive(hash, page) {
-    let liveDiffId = hash.substring(5);
+function showLinkedFreeLive(location, page) {
+    let liveDiffId = location.substring(4);
     let collapsibleBody = $("#" + liveDiffId, page);
     if (collapsibleBody.length) {
         collapsibleBody = collapsibleBody.parent();
@@ -426,7 +405,7 @@ function showLinkedFreeLive(hash, page) {
         let collapsible = M.Collapsible.getInstance(collapsibleEl[0]);
         collapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", collapsibleBody)[0]);
-        liveDiffTabs.instantSelect(liveDiffId);
+        liveDiffTabs.select(liveDiffId);
         if (!showUnavailable && liveDiffTabs.$activeTabLink.parent().hasClass("unavail")) {
             toggleUnavailable();
         }
@@ -436,8 +415,8 @@ function showLinkedFreeLive(hash, page) {
     disableHistory = false;
 }
 
-function showLinkedStoryStage(hash, tabs, groupPages) {
-    let targetLiveDiff = $("#" + hash.substring(5), groupPages);
+function showLinkedStoryStage(location, tabs, groupPages) {
+    let targetLiveDiff = $("#" + location.substring(4), groupPages);
     if (targetLiveDiff.length) {
         let targetLiveStoryTab = targetLiveDiff.parent();
         let targetLive = targetLiveStoryTab.parent().parent().parent();
@@ -446,25 +425,25 @@ function showLinkedStoryStage(hash, tabs, groupPages) {
         let liveCollapsible = M.Collapsible.getInstance(targetLive[0]);
         liveCollapsible.instantOpen(0);
         let liveDiffTabs = M.Tabs.getInstance($(".tabs", targetLive)[0]);
-        liveDiffTabs.instantSelect(targetLiveStoryTab.attr("id"));
+        liveDiffTabs.select(targetLiveStoryTab.attr("id"));
         let storyTabs = M.Tabs.getInstance($(".tabs", targetLiveStoryTab)[0]);
 
-        tabs.instantSelect(targetPage.attr("id"));
-        storyTabs.instantSelect(targetLiveDiff.attr("id"));
+        tabs.select(targetPage.attr("id"));
+        storyTabs.select(targetLiveDiff.attr("id"));
         scrollToAndFocusCollapsible(liveCollapsible.$el);
         scrollActiveTabLabelIntoView.bind(storyTabs);
     }
     disableHistory = false;
 }
 
-function showLinkedDlp(hash, page) {
-    let towerId = hash.substr(6, 5);
+function showLinkedDlp(location, page) {
+    let towerId = location.substring(5, 10);
     let targetElement = $("#" + towerId, page);
     if (targetElement.length) {
         let towerCollapsible = M.Collapsible.getInstance(targetElement[0]);
-        if (hash.startsWith("#floor")) {
+        if (location.startsWith("floor")) {
             let floorList = $("#tower-floorlist" + towerId);
-            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, hash, towerCollapsible));
+            loadTower(floorList, towerId, showLinkedDlpFloor1.bind(floorList, location, towerCollapsible));
         } else {
             scrollToAndFocusCollapsible(targetElement);
             towerCollapsible.instantOpen(0);
@@ -473,15 +452,15 @@ function showLinkedDlp(hash, page) {
     }
 }
 
-function showLinkedDlpFloor1(hash, towerCollapsible, responseText, textStatus) {
+function showLinkedDlpFloor1(location, towerCollapsible, responseText, textStatus) {
     loadTowerFinish.bind(this, responseText, textStatus)();
     towerCollapsible.instantOpen(0);
-    setTimeout(showLinkedDlpFloor2.bind(this, hash, responseText, textStatus), 1);
+    requestAnimationFrame(showLinkedDlpFloor2.bind(this, location, responseText, textStatus));
 }
 
-function showLinkedDlpFloor2(hash, responseText, textStatus) {
+function showLinkedDlpFloor2(location, responseText, textStatus) {
     if (textStatus !== "error") {
-        let targetElement = $("#" + hash.substring(6), this);
+        let targetElement = $("#" + location.substring(5), this);
         if (targetElement.length) {
             let floorCollapsible = M.Collapsible.getInstance(targetElement[0]);
             floorCollapsible.instantOpen(0);
@@ -541,7 +520,6 @@ function toggleUnavailable(showToast) {
         body.removeClass("show-unavail");
         if (showToast) M.toast({html: "Hiding unavailable songs"});
     }
-    setTimeout(fixAllTabIndicators, 1);
 }
 
 /*
@@ -571,10 +549,6 @@ function freeLiveCollapsibleOpen() {
         tabs = M.Tabs.getInstance(tabElements[0]);
 
         tabs.options.onShow = freeLiveTabShow.bind(this, tabs);
-
-        // Materialize messes up the indicator position, so we'll fix it ourselves on first open
-        // Must wait the minimum possible time, since the library will set it's own (broken) indicator animation
-        setTimeout(tabs.forceTabIndicator.bind(tabs), 1);
 
         if (story_tabs !== undefined) {
             story_tabs.options.onShow = freeLiveStoryTabShow.bind(this, story_tabs);
@@ -639,7 +613,6 @@ function freeLiveTabShow(tabs, e) {
         // Story Stages tab
         let tabElement = $(".tabs", e)[0];
         let tabs = M.Tabs.getInstance(tabElement);
-        tabs.forceTabIndicator();
         addHistoryItem("live" + tabs.$activeTabLink.attr("href").substring(1), $(".song-name.translatable", $(e).parent().parent()).text() + " (Story " + tabs.$activeTabLink[0].childNodes[0].data.split(" (")[0].trim() + ")");
 
         let activetab = $(tabs.$activeTabLink.attr("href"), e);
@@ -824,14 +797,17 @@ function initNoteMapInteractions(e) {
         let gi = $(gimmickmarkers[i]).data("gimmick");
         $(gimmickmarkers[i]).on("mouseover touchstart",
             gimmickMarkerMouseover.bind(gimmickmarkers[i], gimmickinfos[gi]));
-        gimmickmarkermap[gi]
-            ? gimmickmarkermap[gi].push(gimmickmarkers[i])
-            : gimmickmarkermap[gi] = [gimmickmarkers[i]];
+        if (gimmickmarkermap[gi]) gimmickmarkermap[gi].push(gimmickmarkers[i])
+        else gimmickmarkermap[gi] = [gimmickmarkers[i]];
     }
     gimmickmarkers.on("mouseout", closeTooltip);
     for (let i = 0; i < gimmickinfos.length; i++) {
         $(gimmickinfos[i]).on("click",
-            gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap));
+            gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, undefined));
+        $(".slot", gimmickinfos[i]).toArray().forEach(b => {
+            $(b).on("click",
+                gimmickFilterToggle.bind(gimmickinfos[i], gimmickinfos, gimmickmarkers, gimmickmarkermap, $(b).data("slot")));
+        });
     }
 
     let acmarkers = $(".notebar .appealchance", e);
@@ -938,7 +914,9 @@ function notebarSelectionEnd(selector) {
 
 function gimmickMarkerMouseover(gimmickinfo) {
     if (selecting || $(this).hasClass("hidden")) return;
-    tooltipInner.html($("div", gimmickinfo)[1].innerHTML + "<br><b>Note Position: </b>" + $(this).data("npos"));
+    let text = $("div", gimmickinfo)[1].innerHTML + "<br><b>Note Position: </b>" + $(this).data("npos");
+    if ($(this).data("slot")) text += " (Unit " + $(this).data("slot") + ")";
+    tooltipInner.html(text);
     let thismarker = $(".gimmickmarker", this);
     let position = thismarker.offset();
     position.left += thismarker.width() / 2;
@@ -958,22 +936,37 @@ function acMarkerMouseover(acinfo) {
 
 // Gimmick Filter
 
-function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap) {
-    if ($(this).hasClass("filtered")) {
+function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap, filterslot, e) {
+    if ($(this).hasClass("filtered") && (filterslot === undefined
+        || $($(".slot", this)[filterslot]).hasClass("filtered"))) {
         $(this).removeClass("filtered");
         gimmickmarkers.removeClass("hidden filtered");
+        $(".slot", this).removeClass("filtered");
     } else {
         gimmickinfos.removeClass("filtered");
+        $(".slot", gimmickinfos).removeClass("filtered");
         $(this).addClass("filtered");
         let gi = $(this).data("gimmick");
         for (let i = 0; i < gimmickmarkermap.length; i++) {
             if (i === gi) {
-                $(gimmickmarkermap[i]).removeClass("hidden").addClass("filtered");
+                if (filterslot !== undefined) {
+                    $($(".slot[data-slot='" + filterslot + "']", this)).addClass("filtered");
+                    for (const marker of gimmickmarkermap[i]) {
+                        if ($(marker).data("slot") === filterslot + 1) {
+                            $(marker).removeClass("hidden").addClass("filtered");
+                        } else {
+                            $(marker).removeClass("filtered").addClass("hidden");
+                        }
+                    }
+                } else {
+                    $(gimmickmarkermap[i]).removeClass("hidden").addClass("filtered");
+                }
             } else {
                 $(gimmickmarkermap[i]).removeClass("filtered").addClass("hidden");
             }
         }
     }
+    e.stopPropagation();
 }
 
 // Scale Setter
@@ -1100,7 +1093,6 @@ window.addEventListener("keydown", onKeyDown, {passive: false});
  */
 
 let popUpPreferences = $('#popUpPreferences');
-let popUpCookieConsent = $('#popUpCookieConsent');
 
 function initPopUps(initialPreferenceTitle, initialPreferenceUnavailable) {
     if (initialPreferenceTitle === "roma") {
@@ -1109,14 +1101,12 @@ function initPopUps(initialPreferenceTitle, initialPreferenceUnavailable) {
     if (initialPreferenceUnavailable === "show") {
         $('#preferencesUnavailableShow').prop("checked", true);
     }
-    if (cookieGet("dark-mode") === "yes") {
+    if (localStorage.getItem("dark-mode") === "yes") {
         $('#preferencesDarkModeOn').prop("checked", true);
     }
 
     $('#preferencesSaveButton').on("click", savePreferences);
     $('#preferencesCancelButton').on("click", closePopUp.bind(this, popUpPreferences));
-
-    $('#consentNoButton').on("click", closePopUp.bind(this, popUpCookieConsent));
 }
 
 function openPopUp(popUp) {
@@ -1149,11 +1139,13 @@ function savePreferences() {
     if ((titlesSet === "roma") !== showRomaji) {
         toggleRomaji(false);
     }
+    localStorage.setItem("mapdb-titles", titlesSet);
 
     let unavailableSet = $("input:radio[name=preferencesUnavailable]:checked").val();
     if ((unavailableSet === "show") !== showUnavailable) {
         toggleUnavailable(false);
     }
+    localStorage.setItem("mapdb-unavailable", unavailableSet);
 
     let darkModeSet = $("input:radio[name=preferencesDarkMode]:checked").val();
     if (darkModeSet === "yes") {
@@ -1161,53 +1153,14 @@ function savePreferences() {
     } else {
         body.removeClass("dark-mode");
     }
-
-    cookieSet(["mapdb-titles", "mapdb-unavailable", "dark-mode"],
-        [titlesSet, unavailableSet, darkModeSet], 365);
+    localStorage.setItem("dark-mode", darkModeSet);
 }
 
 /*
  * ---------------
- * COOKIE HANDLING
+ * COOKIE HANDLING (to be removed in a month or so)
  * ---------------
  */
-
-function cookieSet(keys, values, days, createConsentCookie) {
-    if (document.cookie === "" && (createConsentCookie === undefined || createConsentCookie === false)) {
-        openPopUp(popUpCookieConsent);
-        $('#consentYesButton').off("click")
-            .on("click", cookieSet.bind(this, keys, values, days, true))[0].focus();
-        return false;
-    } else {
-        if (createConsentCookie === true) {
-            closePopUp(popUpCookieConsent);
-            let expiryDate = new Date();
-            expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
-            document.cookie = "cookieConsent=1; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-            if (cookieGet("cookieConsent") === undefined) {
-                alert("Unable to store cookies. Your browser might be blocking cookie " +
-                    "storage. Please check your browser's privacy and storage settings, then try again.");
-                return false;
-            }
-        }
-        let expiryDate = new Date();
-        expiryDate.setTime(expiryDate.getTime() + (days * 24 * 60 * 60 * 1000));
-        if (Array.isArray(keys)) {
-            for (let i = 0; i < keys.length; i++) {
-                document.cookie = keys[i] + "=" + values[i] + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-                if (DEBUG_MODE) {
-                    console.log("Set cookie " + keys[i] + " to " + values[i]);
-                }
-            }
-        } else {
-            document.cookie = keys + "=" + values + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-            if (DEBUG_MODE) {
-                console.log("Set cookie " + keys + " to " + values);
-            }
-        }
-        return true;
-    }
-}
 
 function cookieGet(key) {
     let cookies = document.cookie.split(";");
