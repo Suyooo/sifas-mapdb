@@ -135,8 +135,18 @@ $(function () {
     handleLocation();
     window.addEventListener("popstate", handleLocation);
 
-    let preferenceTitle = cookieGet("mapdb-titles");
-    let preferenceUnavailable = cookieGet("mapdb-unavailable");
+    if (cookieGet("mapdb-titles")) {
+        // Move saved preferences from cookies to localStorage - to be removed in a month or so
+        localStorage.setItem("mapdb-titles", cookieGet("mapdb-titles"));
+        localStorage.setItem("mapdb-unavailable", cookieGet("mapdb-unavailable"));
+        localStorage.setItem("dark-mode", cookieGet("dark-mode"));
+        document.cookie = "mapdb-titles=; expires=0; path=/sifas";
+        document.cookie = "mapdb-unavailable=; expires=0; path=/sifas";
+        document.cookie = "dark-mode=; expires=0; path=/sifas";
+    }
+
+    let preferenceTitle = localStorage.getItem("mapdb-titles");
+    let preferenceUnavailable = localStorage.getItem("mapdb-unavailable");
     if (preferenceTitle === "roma") {
         toggleRomaji(false);
     }
@@ -1083,7 +1093,6 @@ window.addEventListener("keydown", onKeyDown, {passive: false});
  */
 
 let popUpPreferences = $('#popUpPreferences');
-let popUpCookieConsent = $('#popUpCookieConsent');
 
 function initPopUps(initialPreferenceTitle, initialPreferenceUnavailable) {
     if (initialPreferenceTitle === "roma") {
@@ -1092,14 +1101,12 @@ function initPopUps(initialPreferenceTitle, initialPreferenceUnavailable) {
     if (initialPreferenceUnavailable === "show") {
         $('#preferencesUnavailableShow').prop("checked", true);
     }
-    if (cookieGet("dark-mode") === "yes") {
+    if (localStorage.getItem("dark-mode") === "yes") {
         $('#preferencesDarkModeOn').prop("checked", true);
     }
 
     $('#preferencesSaveButton').on("click", savePreferences);
     $('#preferencesCancelButton').on("click", closePopUp.bind(this, popUpPreferences));
-
-    $('#consentNoButton').on("click", closePopUp.bind(this, popUpCookieConsent));
 }
 
 function openPopUp(popUp) {
@@ -1132,11 +1139,13 @@ function savePreferences() {
     if ((titlesSet === "roma") !== showRomaji) {
         toggleRomaji(false);
     }
+    localStorage.setItem("mapdb-titles", titlesSet);
 
     let unavailableSet = $("input:radio[name=preferencesUnavailable]:checked").val();
     if ((unavailableSet === "show") !== showUnavailable) {
         toggleUnavailable(false);
     }
+    localStorage.setItem("mapdb-unavailable", unavailableSet);
 
     let darkModeSet = $("input:radio[name=preferencesDarkMode]:checked").val();
     if (darkModeSet === "yes") {
@@ -1144,53 +1153,14 @@ function savePreferences() {
     } else {
         body.removeClass("dark-mode");
     }
-
-    cookieSet(["mapdb-titles", "mapdb-unavailable", "dark-mode"],
-        [titlesSet, unavailableSet, darkModeSet], 365);
+    localStorage.setItem("dark-mode", darkModeSet);
 }
 
 /*
  * ---------------
- * COOKIE HANDLING
+ * COOKIE HANDLING (to be removed in a month or so)
  * ---------------
  */
-
-function cookieSet(keys, values, days, createConsentCookie) {
-    if (document.cookie === "" && (createConsentCookie === undefined || createConsentCookie === false)) {
-        openPopUp(popUpCookieConsent);
-        $('#consentYesButton').off("click")
-            .on("click", cookieSet.bind(this, keys, values, days, true))[0].focus();
-        return false;
-    } else {
-        if (createConsentCookie === true) {
-            closePopUp(popUpCookieConsent);
-            let expiryDate = new Date();
-            expiryDate.setTime(expiryDate.getTime() + (5 * 60 * 1000));
-            document.cookie = "cookieConsent=1; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-            if (cookieGet("cookieConsent") === undefined) {
-                alert("Unable to store cookies. Your browser might be blocking cookie " +
-                    "storage. Please check your browser's privacy and storage settings, then try again.");
-                return false;
-            }
-        }
-        let expiryDate = new Date();
-        expiryDate.setTime(expiryDate.getTime() + (days * 24 * 60 * 60 * 1000));
-        if (Array.isArray(keys)) {
-            for (let i = 0; i < keys.length; i++) {
-                document.cookie = keys[i] + "=" + values[i] + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-                if (DEBUG_MODE) {
-                    console.log("Set cookie " + keys[i] + " to " + values[i]);
-                }
-            }
-        } else {
-            document.cookie = keys + "=" + values + "; expires=" + expiryDate.toUTCString() + "; path=/sifas; SameSite=Lax";
-            if (DEBUG_MODE) {
-                console.log("Set cookie " + keys + " to " + values);
-            }
-        }
-        return true;
-    }
-}
 
 function cookieGet(key) {
     let cookies = document.cookie.split(";");
