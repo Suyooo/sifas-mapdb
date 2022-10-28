@@ -142,6 +142,7 @@ modules.exports = {
         noteGimmick: (trigger, skillInfo) => `noteGimmick(${trigger},${JSON.stringify(skillInfo)})$$$$$`,
         acGimmick: (trigger, skillInfo) => `acGimmick(${trigger},${JSON.stringify(skillInfo)})$$$$$`,
         items: (itemArray) => `items(${JSON.stringify(itemArray)})$$$$$`,
-        acRequirement: (acType, requirement) => `acRequirement(${acType},${requirement})$$$$$`
+        acMission: (acType, requirement) => `acMission(${acType},${requirement})$$$$$`,
+        acAverage: (acType, scaledRequirement) => `acAverage(${acType},${scaledRequirement})$$$$$`
     }
 }
