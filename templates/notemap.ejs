@@ -121,13 +121,19 @@
                     <% if (hasNoteMap) { %>
                         <br><b><%- lang.gimmicks.note_gimmick_amount %>:</b> <%- lang.noteCount(noteGimmick.count) %>
                         <% if (noteGimmick.hasSlotCounts) { %>
-                            <div class="slotcontainer">
+                            <div class="ng-slotbutton-container">
                                 <%- noteGimmick.slotCounts.map((c, i) => c > 0
                                         ? "<span class='slot' data-slot='" + i + "'>" + lang.gimmicks.note_gimmick_unit
                                         + " " + (i + 1) + " ×" + c + "</span>"
                                         : null).filter(c => c !== null).join(" ") %>
                             </div>
                         <% } %>
+                        <div class="ng-position-container">
+                            <b><%- lang.gimmicks.note_gimmick_position %></b>: <span class="ng-position"></span>
+                            <div class="ng-slot-container">
+                                (<%- lang.gimmicks.note_gimmick_unit %> <span class="ng-slot"></span>)
+                            </div>
+                        </div>
                     <% } %>
                 </div>
             </div>

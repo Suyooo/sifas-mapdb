@@ -480,7 +480,7 @@ module.exports = {
         song_gimmick_cleansable_no: "No",
         note_gimmick: "Note Gimmick",
         note_gimmick_amount: "Amount",
-        note_gimmick_position: "Position",
+        note_gimmick_position: "Note Position",
         note_gimmick_unit: "Unit",
         no_gimmick: "No Gimmick"
     },

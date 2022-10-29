@@ -914,9 +914,16 @@ function notebarSelectionEnd(selector) {
 
 function gimmickMarkerMouseover(gimmickinfo) {
     if (selecting || $(this).hasClass("hidden")) return;
-    let text = $("div", gimmickinfo)[1].innerHTML + "<br><b>Note Position: </b>" + $(this).data("npos");
-    if ($(this).data("slot")) text += " (Unit " + $(this).data("slot") + ")";
+    let text = $("div", gimmickinfo)[1].innerHTML;
+
     tooltipInner.html(text);
+    $(".ng-position", tooltipInner).text($(this).data("npos"));
+    if ($(this).data("slot")) {
+        $(".ng-slot", tooltipInner).text($(this).data("slot"));
+    } else {
+        $(".ng-slot-container", tooltipInner).remove();
+    }
+
     let thismarker = $(".gimmickmarker", this);
     let position = thismarker.offset();
     position.left += thismarker.width() / 2;

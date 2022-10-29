@@ -522,7 +522,7 @@ body.show-unavail div.group-tab div.no-available-songs {
     margin-top: 0.33em;
 }
 
-.detailinfo > div.gimmick .slotcontainer {
+.detailinfo > div.gimmick .ng-slotbutton-container {
     display: inline-block;
 }
 
@@ -540,7 +540,11 @@ body.show-unavail div.group-tab div.no-available-songs {
     background-color: var(--key-normal);
 }
 
-.tooltip .slot {
+.tooltip .ng-slotbutton-container {
+    display: none;
+}
+
+.detailinfo > div.gimmick .ng-position-container {
     display: none;
 }
 
