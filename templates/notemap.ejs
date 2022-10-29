@@ -1,8 +1,9 @@
 <% if (hasNoteMap) { %>
     <div class="row nomargin">
         <div class="col l6">
-            <b><%- lang.songinfo.note_count %>:</b> <%- lang.numberFormat(mapInfo.noteCount) %><br>
-            <b><%- lang.songinfo.note_count_ac %>:</b> <%- lang.numberFormat(mapInfo.totalACNotes) %> (<%- mapInfo.totalACNotesPercentage %>)<br>
+            <b><%- lang.songinfo.note_count %>:</b> <%- lang.noteCount(mapInfo.noteCount) %><br>
+            <b><%- lang.songinfo.note_count_ac %>:</b> <%- lang.noteCount(mapInfo.totalACNotes) %>
+            (<%- mapInfo.totalACNotesPercentage %>)<br>
             <b><%- lang.songinfo.note_damage_total %>:</b> <%- lang.numberFormat(mapInfo.totalNoteDamage) %>
         </div>
         <div class="col l6">
@@ -14,9 +15,9 @@
         </div>
     </div>
     <div class="scale">
-        <div class="header">Scale:</div>
-        <div class="time">Time</div>
-        <div class="turns">Turns</div>
+        <div class="header"><%- lang.scale.label %></div>
+        <div class="time"><%- lang.scale.time %></div>
+        <div class="turns"><%- lang.scale.turns %></div>
     </div>
     <div class="notebarcontainer" tabindex="-1">
         <div class="notebar" style="--markerlayers: <%- mapInfo.markerLayerCount %>"
@@ -48,7 +49,8 @@
                 <% if (note.hasGimmick) { %>
                     <div class="gimmick" data-gimmick="<%- note.gimmickMarker.gimmickIndex %>"
                          data-npos="<%- note.gimmickMarker.noteIndex + 1 %>"
-                         <% if (note.gimmickMarker.hasSlotNo) { %>data-slot="<%- note.gimmickMarker.slotNo + 1 %>"<% } %>
+                         <% if (note.gimmickMarker.hasSlotNo) { %>data-slot="<%- note.gimmickMarker.slotNo + 1 %>"
+                            <% } %>
                          style="--gimmicklayer: <%- note.gimmickMarker.globalLayer %>;
                                  --gimmicklayer-filtered: <%- note.gimmickMarker.thisGimmickLayer %>;
                                  --time-pos: <%- (note.gimmickMarker.timePosition * 98 + 1).toFixed(3) %>%;
@@ -74,14 +76,18 @@
         </div>
     </div>
 <% } else { %>
-    <div class="row" style="margin-top: 1em; text-align: center">(no note map available)</div>
+    <div class="row" style="margin-top: 1em; text-align: center">(<%- lang.songinfo.no_map %>)</div>
 <% } %>
 
 <div class="row nomargin detailinfo-container">
     <div class="col l6 detailinfo">
-        <h5>Gimmicks</h5>
+        <h5><%- lang.gimmicks.title %></h5>
         <div>
-            <div>Song Gimmick</div>
+            <div>
+                <%- (hasSongGimmicks && songGimmicks.length > 1)
+                        ? lang.gimmicks.song_gimmick
+                        : lang.gimmicks.song_gimmick_multiple %>
+            </div>
             <div>
                 <% if (hasSongGimmicks) { %>
                     <% for (const songGimmick of songGimmicks) { %>
@@ -90,28 +96,35 @@
                                 <div class="number"><%- String.fromCharCode(9312 /* ① */ + songGimmick.index) %></div>
                             <% } %>
                             <div class="text">
-                                <%- songGimmick.skill %><br>
-                                <b>Cleansable:</b>
-                                <%- songGimmick.isCleansable ? "Yes" : "No" %>
+                                <%- lang.songGimmick(songGimmick.gimmick.effect_type,
+                                        songGimmick.gimmick.effect_amount, songGimmick.gimmick.target,
+                                        songGimmick.gimmick.finish_type, songGimmick.gimmick.finish_amount) %><br>
+                                <b><%- lang.gimmicks.song_gimmick_cleansable %>:</b>
+                                <%- songGimmick.isCleansable
+                                        ? lang.gimmicks.song_gimmick_cleansable_yes
+                                        : lang.gimmicks.song_gimmick_cleansable_no %>
                             </div>
                         </div>
                     <% } %>
                 <% } else { %>
-                    None
+                    <%- lang.gimmicks.no_gimmick %>
                 <% } %>
             </div>
         </div>
         <% for (const noteGimmick of noteGimmicks) { %>
             <div data-gimmick="<%- noteGimmick.index %>" class="gimmick">
-                <div>Note Gimmick <%- noteGimmick.index + 1 %></div>
+                <div><%- lang.gimmicks.note_gimmick %> <%- noteGimmick.index + 1 %></div>
                 <div>
-                    <%- noteGimmick.skill %>
+                    <%- lang.noteGimmick(noteGimmick.gimmick.trigger, noteGimmick.gimmick.effect_type,
+                            noteGimmick.gimmick.effect_amount, noteGimmick.gimmick.target,
+                            noteGimmick.gimmick.finish_type, noteGimmick.gimmick.finish_amount) %>
                     <% if (hasNoteMap) { %>
-                        <br><b>Amount:</b> <%- noteGimmick.count %> note<%- (noteGimmick.count === 1) ? "" : "s" %>
+                        <br><b><%- lang.gimmicks.note_gimmick_amount %>:</b> <%- lang.noteCount(noteGimmick.count) %>
                         <% if (noteGimmick.hasSlotCounts) { %>
                             <div class="slotcontainer">
                                 <%- noteGimmick.slotCounts.map((c, i) => c > 0
-                                        ? "<span class='slot' data-slot='" + i + "'>Unit " + (i + 1) + " ×" + c + "</span>"
+                                        ? "<span class='slot' data-slot='" + i + "'>" + lang.gimmicks.note_gimmick_unit
+                                        + " " + (i + 1) + " ×" + c + "</span>"
                                         : null).filter(c => c !== null).join(" ") %>
                             </div>
                         <% } %>
@@ -121,21 +134,26 @@
         <% } %>
     </div>
     <div class="col l6 detailinfo">
-        <h5>Appeal Chances</h5>
+        <h5><%- lang.appeal_chances.title %></h5>
         <% for (const ac of appealChances) { %>
             <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>">
-                <div>AC <%- ac.index + 1 %>: <%- ac.mission %></div>
+                <div><%- lang.appeal_chances.ac %> <%- ac.index + 1 %>: <%- ac.mission %></div>
                 <div>
-                    <%- ac.hasGimmick ? ac.gimmick : "No Gimmick" %>
+                    <%- ac.hasGimmick
+                            ? lang.acGimmick(ac.gimmick.trigger, ac.gimmick.effect_type, ac.gimmick.effect_amount,
+                                    ac.gimmick.target, ac.gimmick.finish_type, ac.gimmick.finish_amount)
+                            : lang.gimmicks.no_gimmick %>
                     <% if (hasNoteMap) { %>
                         <br>
-                        <b>Length:</b> <%- ac.noteCount %> notes
+                        <b><%- lang.appeal_chances.ac_length %>:</b> <%- lang.noteCount(ac.noteCount) %>
                         <% if (ac.hasPerNoteInfo) { %>
                             <%- ac.perNoteInfo %>
                         <% } %>
                         <div class="row nomargin">
-                            <div class="col m6 no-padding"><b>Success:</b> <%- ac.rewardVoltage %> Voltage</div>
-                            <div class="col m6 no-padding"><b>Failure:</b> <%- ac.penaltyDamage %> Damage</div>
+                            <div class="col m6 no-padding"><b><%- lang.appeal_chances.ac_reward_voltage_label %>:</b>
+                                <%- ac.rewardVoltage %> <%- lang.appeal_chances.ac_reward_voltage %></div>
+                            <div class="col m6 no-padding"><b><%- lang.appeal_chances.ac_penalty_damage_label %>:</b>
+                                <%- ac.penaltyDamage %> <%- lang.appeal_chances.ac_penalty_damage %> </div>
                         </div>
                     <% } %>
                 </div>

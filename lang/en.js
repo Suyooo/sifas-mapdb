@@ -17,6 +17,10 @@ function numberFormat(n) {
     return parts.join(".");
 }
 
+function noteCount(n) {
+    return `${numberFormat(n)} note` + (n===1 ? `` : `s`);
+}
+
 function songGimmick(effectType, effectAmount, targetType, finishType, finishAmount) {
     if (finishType === SkillFinishType.UNTIL_SONG_END) {
         // replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
@@ -445,7 +449,8 @@ module.exports = {
         note_damage_total: "Total Note Damage",
         ac_reward_total: "Total AC Rewards",
         song_length: "Song Length",
-        story_stages: "Story Stages"
+        story_stages: "Story Stages",
+        no_map: "no note map available"
     },
     dlp: {
         performance_points: "Performance Points",
@@ -463,20 +468,21 @@ module.exports = {
     },
     scale: {
         label: "Scale",
-        option_time: "Time",
-        option_turn: "Turns"
+        time: "Time",
+        turns: "Turns"
     },
     gimmicks: {
         title: "Gimmicks",
         song_gimmick: "Song Gimmick",
+        song_gimmick_multiple: "Song Gimmicks",
         song_gimmick_cleansable: "Cleansable",
         song_gimmick_cleansable_yes: "Yes",
         song_gimmick_cleansable_no: "No",
-        song_gimmick_none: "None",
         note_gimmick: "Note Gimmick",
         note_gimmick_amount: "Amount",
         note_gimmick_position: "Position",
-        note_gimmick_unit: "Unit"
+        note_gimmick_unit: "Unit",
+        no_gimmick: "No Gimmick"
     },
     appeal_chances: {
         title: "Appeal Chances",
@@ -520,5 +526,5 @@ module.exports = {
         elegant: "Elegant",
         none: "None"
     },
-    numberFormat, songGimmick, noteGimmick, acGimmick, items, acMission, acAverage
+    numberFormat, noteCount, songGimmick, noteGimmick, acGimmick, items, acMission, acAverage
 }

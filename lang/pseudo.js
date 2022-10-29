@@ -74,7 +74,8 @@ module.exports = {
         note_damage_total: "%%%%%.songinfo.note_damage_total%%%%%",
         ac_reward_total: "%%%%%.songinfo.ac_reward_total%%%%%",
         song_length: "%%%%%.songinfo.song_length%%%%%",
-        story_stages: "%%%%%.songinfo.story_stages%%%%%"
+        story_stages: "%%%%%.songinfo.story_stages%%%%%",
+        no_map: "%%%%%.songinfo.no_map%%%%%"
     },
     dlp: {
         performance_points: "%%%%%.dlp.performance_points%%%%%",
@@ -92,20 +93,21 @@ module.exports = {
     },
     scale: {
         label: "%%%%%.scale.label%%%%%",
-        option_time: "%%%%%.scale.option_time%%%%%",
-        option_turn: "%%%%%.scale.option_turn%%%%%"
+        time: "%%%%%.scale.option_time%%%%%",
+        turns: "%%%%%.scale.option_turns%%%%%"
     },
     gimmicks: {
         title: "%%%%%.gimmicks.title%%%%%",
         song_gimmick: "%%%%%.gimmicks.song_gimmick%%%%%",
+        song_gimmick_multiple: "%%%%%.gimmicks.song_gimmick_multiple%%%%%",
         song_gimmick_cleansable: "%%%%%.gimmicks.song_gimmick_cleansable%%%%%",
         song_gimmick_cleansable_yes: "%%%%%.gimmicks.song_gimmick_cleansable_yes%%%%%",
         song_gimmick_cleansable_no: "%%%%%.gimmicks.song_gimmick_cleansable_no%%%%%",
-        song_gimmick_none: "%%%%%.gimmicks.song_gimmick_none%%%%%",
         note_gimmick: "%%%%%.gimmicks.note_gimmick%%%%%",
         note_gimmick_amount: "%%%%%.gimmicks.note_gimmick_amount%%%%%",
         note_gimmick_position: "%%%%%.gimmicks.note_gimmick_position%%%%%",
-        note_gimmick_unit: "%%%%%.gimmicks.note_gimmick_unit%%%%%"
+        note_gimmick_unit: "%%%%%.gimmicks.note_gimmick_unit%%%%%",
+        no_gimmick: "%%%%%.gimmicks.no_gimmick%%%%%"
     },
     appeal_chances: {
         title: "%%%%%.appeal_chances.title%%%%%",
@@ -150,13 +152,14 @@ module.exports = {
         none: "%%%%%.attribute.none%%%%%"
     },
     numberFormat: (n) => `$$$$$numberFormat(${n})$$$$$`,
+    noteCount: (n) => `$$$$$noteCount(${n})$$$$$`,
     songGimmick: (effectType, effectAmount, targetType, finishType, finishAmount) =>
-        `songGimmick(${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
+        `$$$$$songGimmick(${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
     noteGimmick: (trigger, effectType, effectAmount, targetType, finishType, finishAmount) =>
-        `noteGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
+        `$$$$$noteGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
     acGimmick: (trigger, effectType, effectAmount, targetType, finishType, finishAmount) =>
-        `acGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
-    items: (itemArray) => `items(${JSON.stringify(itemArray)})$$$$$`,
-    acMission: (acType, requirement) => `acMission(${acType},${requirement})$$$$$`,
-    acAverage: (acType, scaledRequirement) => `acAverage(${acType},${scaledRequirement})$$$$$`
+        `$$$$$acGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
+    items: (itemArray) => `$$$$$items(${JSON.stringify(itemArray)})$$$$$`,
+    acMission: (acType, requirement) => `$$$$$acMission(${acType},${requirement})$$$$$`,
+    acAverage: (acType, scaledRequirement) => `$$$$$acAverage(${acType},${scaledRequirement})$$$$$`
 }
