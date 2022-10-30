@@ -139,6 +139,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2111") return "Twilight";
     if (liveId === "2112") return "Ryouran! Victory Road (Type A)";
     if (liveId === "2113") return "Ryouran! Victory Road (Type B)";
+    if (liveId === "2098") return "Mirai Harmony";
     if (liveId === "2031") return "SUPER NOVA";
     if (liveId === "2067") return "POWER SPOT!!";
     if (liveId === "2066") return "Love Triangle";
@@ -254,6 +255,7 @@ function songNamePostfix(liveId) {
     if (liveId === "2040") return "2D";       // 虹色Passions！ (limited version)
     if (liveId === "2041") return "2D";       // NEO SKY, NEO MAP! (limited version)
     if (liveId === "2051") return "2D";       // 夢がここからはじまるよ (limited version)
+    if (liveId === "2061") return "2D";       // 未来ハーモニー (2D version)
     if (liveId === "2053") return "2D";       // Just Believe!!! (limited version)
     if (liveId === "2109") return "Event";    // Just Believe!!! （12人Ver.） (event prerelease version)
     if (liveId === "2117") return "Event";    // 祭花 -saika- (event prerelease version)

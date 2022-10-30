@@ -95,6 +95,7 @@ function skillTarget(targetId) {
     if (targetId === 88) return 'non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units ';
     if (targetId === 89) return 'non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 90) return 'non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units ';
+    if (targetId === 91) return 'non-<span class="t gd">Gd</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 92) return 'non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 93) return '<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
