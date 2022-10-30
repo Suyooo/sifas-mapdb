@@ -14,7 +14,10 @@ const config = {
 			fallback: null,
 			precompress: false,
 			strict: true
-		})
+		}),
+		alias: {
+			"$mapdb": "mapdb",
+		}
 	}
 };
 
