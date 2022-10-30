@@ -230,7 +230,7 @@ for (const groupId in liveIdsForGroup) {
                     id: liveDiffId,
                     storyChapter: liveDiff.extra_info.story_chapter,
                     storyStageNo: liveDiff.extra_info.story_stage,
-                    hasCourse: liveDiff.extra_info.story_chapter >= 20,
+                    hasCourse: liveDiff.extra_info.story_chapter >= 20 && liveDiff.extra_info.story_chapter <= 43,
                     hasBaseDifficulty: liveDiff.notes !== null,
                     attribute: Attribute.name(liveDiff.song_attribute)
                 }

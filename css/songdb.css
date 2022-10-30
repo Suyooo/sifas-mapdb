@@ -602,7 +602,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .live-difficulty.active {
-    max-height: calc(99vh - 5rem - 68px);
+    max-height: calc(100vh - 5rem - 78px);
     overflow-y: hidden;
     display: flex !important;
     flex-direction: column;
