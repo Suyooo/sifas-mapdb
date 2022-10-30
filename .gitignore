@@ -7,5 +7,6 @@ node_modules
 .env.*
 !.env.example
 .idea
+vendor
 /old/vendor
 package-lock.json
