@@ -18,7 +18,7 @@ function scrollToAndFocusCollapsible(e, behavior="auto") {
     body.css({"padding-bottom": "100vh", "transition": ""});
     setTimeout(function () {
         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
-    }, 300);
+    }, 1000);
     window.scrollTo({top: e.position().top - 10, behavior});
     $("> li > .collapsible-header", e)[0].focus();
 }
@@ -711,6 +711,7 @@ function dlpTowerCollapsibleInit() {
 }
 
 function dlpTowerCollapsibleOpen() {
+    scrollToAndFocusCollapsible(this.$el, "smooth");
     loadTower($("#tower-floorlist" + this.$el.attr("id")), this.$el.attr("id"), loadTowerFinish);
     let towerLink = "tower" + this.$el.attr("id");
     addHistoryItem(towerLink, $($(".song-name.translatable", this.$el)[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
