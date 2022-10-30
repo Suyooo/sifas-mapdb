@@ -13,13 +13,13 @@ let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
 let body = $("body");
 
-function scrollToAndFocusCollapsible(e) {
+function scrollToAndFocusCollapsible(e, behavior="auto") {
     // add padding at bottom to successfully scroll to divs at the end of the page
     body.css({"padding-bottom": "100vh"});
     setTimeout(function () {
         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
     }, 300);
-    window.scrollTo(0, e.position().top);
+    window.scrollTo({top: e.position().top - 10, behavior});
     $("> li > .collapsible-header", e)[0].focus();
 }
 
@@ -540,6 +540,7 @@ function freeLiveCollapsibleInit() {
 }
 
 function freeLiveCollapsibleOpen() {
+    scrollToAndFocusCollapsible(this.$el, "smooth");
     let tabElements = $(".tabs", this.el);
     let tabs;
     if (this.$el.data("initialized") === undefined) {
