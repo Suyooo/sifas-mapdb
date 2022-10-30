@@ -1,28 +1,28 @@
 <script lang="ts">
-    export let data;
+    import type {LiveData} from "../../types";
+    import NotebarNote from "./NotebarNote.svelte";
+
+    export let data: LiveData;
+    const notes = data.notes!;
+    const start = notes[0].time;
+    const end = notes.at(-1).time;
+    const length = end - start;
 </script>
 
-<div class="notebar">
-    {#each data.notes as note}
-        <div class="note" class:top={note.rail === 1} class:bottom={note.rail === 2}
-             style:left={note.time/100+"px"}></div>
-    {/each}
+<div class="outer">
+    <div class="inner">
+        {#each notes as noteData}
+            <NotebarNote {noteData} notebarStart={start} notebarLength={length}
+                         nextNoteData={notes.find(n => n.rail === noteData.rail && n.time > noteData.time)}/>
+        {/each}
+    </div>
 </div>
 
 <style lang="postcss">
-    .notebar {
-        @apply bg-black w-full h-6 relative;
+    .outer {
+        @apply bg-black w-full h-6 px-6;
     }
-
-    .note {
-        @apply absolute w-[2px] h-3 bg-white;
-    }
-
-    .note.top {
-        @apply top-0;
-    }
-
-    .note.top {
-        @apply top-3;
+    .inner {
+        @apply w-full h-full relative;
     }
 </style>

@@ -10,7 +10,9 @@
 <a href="/">Back.</a>
 <slot/><br><br>
 
-<Notebar {data}/>
+{#if data.notes !== undefined}
+    <Notebar {data}/>
+{/if}
 
 {#each data.appeal_chances as acData}
     <AC {acData}/>

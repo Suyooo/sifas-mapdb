@@ -1,6 +1,6 @@
-import type { PageLoad } from "./$types";
+import type { LayoutLoad } from "./$types";
 
-export const load: PageLoad = async ({ params, fetch }) => {
+export const load: LayoutLoad = async ({ params, fetch }) => {
     const res = await fetch(`/json/live/${params.id}.json`);
     return res.json();
 }
