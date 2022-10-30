@@ -15,7 +15,7 @@ let body = $("body");
 
 function scrollToAndFocusCollapsible(e, behavior="auto") {
     // add padding at bottom to successfully scroll to divs at the end of the page
-    body.css({"padding-bottom": "100vh"});
+    body.css({"padding-bottom": "100vh", "transition": ""});
     setTimeout(function () {
         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
     }, 300);
@@ -725,6 +725,7 @@ function dlpFloorCollapsibleInit() {
 }
 
 function dlpFloorCollapsibleOpen(towerPageName) {
+    scrollToAndFocusCollapsible($(this), "smooth");
     addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $(".song-name.translatable", $(this)).text());
     if ($(this).data("initialized") === undefined) {
         $(this).data("initialized", 1);
