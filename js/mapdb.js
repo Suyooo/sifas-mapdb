@@ -939,7 +939,7 @@ function acMarkerMouseover(acinfo) {
 
 function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap, filterslot, e) {
     if ($(this).hasClass("filtered") && (filterslot === undefined
-        || $($(".slot", this)[filterslot]).hasClass("filtered"))) {
+        || $($(".slot[data-slot='" + filterslot + "']", this)).hasClass("filtered"))) {
         $(this).removeClass("filtered");
         gimmickmarkers.removeClass("hidden filtered");
         $(".slot", this).removeClass("filtered");
