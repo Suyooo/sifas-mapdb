@@ -1,8 +1,5 @@
 .idea
-api
 build
-doc
 node_modules
-vendor
+old/vendor
 package-lock.json
-landingpage.html
