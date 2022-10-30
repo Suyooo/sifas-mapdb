@@ -1,14 +1,20 @@
 <script lang="ts">
-    import type {PageData} from "./$types";
+    import type {LiveData} from "../../types";
     import AC from "./AC.svelte";
+    import Notebar from "./Notebar.svelte";
 
-    export let data: PageData;
+    export let data: LiveData;
 </script>
 <svelte:options immutable={true}/>
 
 <a href="/">Back.</a>
 <slot/><br><br>
-{#each data.appeal_chances as ac}
-    <AC {ac}/>
+
+<Notebar {data}/>
+
+{#each data.appeal_chances as acData}
+    <AC {acData}/>
 {/each}
-<pre>{JSON.stringify(data, null, 4)}</pre>
+
+<style lang="postcss">
+</style>

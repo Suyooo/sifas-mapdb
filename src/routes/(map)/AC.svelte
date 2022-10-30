@@ -1,5 +1,6 @@
-<script>
-    export let ac;
+<script lang="ts">
+    import type {LiveDataAC} from "../../types";
+    export let acData: LiveDataAC;
 </script>
 
-<div><pre>{JSON.stringify(ac,null,4)}</pre></div>
+<div class="">{acData.mission_type}: {acData.mission_value}</div>
