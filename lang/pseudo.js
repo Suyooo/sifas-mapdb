@@ -161,5 +161,5 @@ module.exports = {
         `$$$$$acGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
     items: (itemArray) => `$$$$$items(${JSON.stringify(itemArray)})$$$$$`,
     acMission: (acType, requirement) => `$$$$$acMission(${acType},${requirement})$$$$$`,
-    acAverage: (acType, scaledRequirement) => `$$$$$acAverage(${acType},${scaledRequirement})$$$$$`
+    acAverage: (acType, requirement, notes) => `$$$$$acAverage(${acType},${requirement},${notes})$$$$$`
 }

@@ -237,23 +237,9 @@ function makeNotemap(liveData) {
                 acData.noteCount = ac.range_note_ids[1] - ac.range_note_ids[0] + 1;
                 totalACNotes += acData.noteCount;
                 totalACReward += ac.reward_voltage;
+                acData.hasAverage = acData.missionType === ACMissionType.VOLTAGE_TOTAL
+                    || acData.missionType === ACMissionType.CRITICALS || acData.missionType === ACMissionType.SKILLS;
 
-                if (ac.mission_type === ACMissionType.VOLTAGE_TOTAL) {
-                    acData.hasPerNoteInfo = true;
-                    acData.perNoteInfo = "(avg. "
-                        + Math.ceil(ac.mission_value / acData.noteCount)
-                        + " Voltage per note)";
-                } else if (ac.mission_type === ACMissionType.CRITICALS) {
-                    acData.hasPerNoteInfo = true;
-                    acData.perNoteInfo = "("
-                        + Math.ceil(ac.mission_value / acData.noteCount * 100)
-                        + "% of notes must crit)";
-                } else if (ac.mission_type === ACMissionType.SKILLS) {
-                    acData.hasPerNoteInfo = true;
-                    acData.perNoteInfo = "("
-                        + Math.ceil(ac.mission_value / acData.noteCount * 100)
-                        + "% of taps must proc)";
-                }
                 acData.rewardVoltage = ac.reward_voltage;
                 acData.penaltyDamage = ac.penalty_damage;
             }

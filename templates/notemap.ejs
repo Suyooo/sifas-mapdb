@@ -143,7 +143,8 @@
         <h5><%- lang.appeal_chances.title %></h5>
         <% for (const ac of appealChances) { %>
             <div data-ac="<%- ac.index %>" class="appealchance <%- ac.cssClass %>">
-                <div><%- lang.appeal_chances.ac %> <%- ac.index + 1 %>: <%- ac.mission %></div>
+                <div><%- lang.appeal_chances.ac %> <%- ac.index + 1 %>:
+                    <%- lang.acMission(ac.missionType, ac.missionValue) %></div>
                 <div>
                     <%- ac.hasGimmick
                             ? lang.acGimmick(ac.gimmick.trigger, ac.gimmick.effect_type, ac.gimmick.effect_amount,
@@ -152,8 +153,8 @@
                     <% if (hasNoteMap) { %>
                         <br>
                         <b><%- lang.appeal_chances.ac_length %>:</b> <%- lang.noteCount(ac.noteCount) %>
-                        <% if (ac.hasPerNoteInfo) { %>
-                            <%- ac.perNoteInfo %>
+                        <% if (ac.hasAverage) { %>
+                            <%- lang.acAverage(ac.missionType, ac.missionValue, ac.noteCount) %>
                         <% } %>
                         <div class="row nomargin">
                             <div class="col m6 no-padding"><b><%- lang.appeal_chances.ac_reward_voltage_label %>:</b>

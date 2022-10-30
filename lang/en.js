@@ -370,7 +370,18 @@ function acMission(acType, requirement) {
         if (requirement === 10000) return `Finish the AC with ${numberFormat(requirement / 100)}% of max Stamina`;
         else return `Finish the AC with ${numberFormat(requirement / 100)}% of max Stamina or more`;
     }
-    throw new Error(`No translation for AC mission type ${acType}`);
+    throw new Error(`No translation for mission title of AC mission type ${acType}`);
+}
+
+function acAverage(acType, requirement, notes) {
+    if (acType === ACMissionType.VOLTAGE_TOTAL) {
+        return `(avg. ${Math.ceil(requirement / notes)} Voltage per note)`;
+    } else if (acType === ACMissionType.CRITICALS) {
+        return `(${Math.ceil(requirement / notes * 100)}% of notes must crit)`;
+    } else if (acType === ACMissionType.SKILLS) {
+        return `(${Math.ceil(requirement / notes * 100)}% of taps must proc)`;
+    }
+    throw new Error(`No translation for requirement average of AC mission type ${acType}`);
 }
 
 module.exports = {
