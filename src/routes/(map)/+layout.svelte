@@ -1,4 +1,5 @@
 <script lang="ts">
+    import T from "../../lib/T.svelte";
     import type {LiveData} from "../../types";
     import AC from "./AC.svelte";
     import Notebar from "./Notebar.svelte";
@@ -16,7 +17,7 @@
 
 <div class="flex flex-col md:flex-row">
     <div class="flex-1">
-        <h5>Gimmicks</h5>
+        <h5><T key="gimmicks.title" /></h5>
         {#each data.note_gimmicks as noteGimmickData}
             <div>
                 {noteGimmickData.effect_amount}
@@ -24,7 +25,7 @@
         {/each}
     </div>
     <div class="flex-1">
-        <h5>Appeal Chances</h5>
+        <h5><T key="appeal_chances.title"/></h5>
         {#each data.appeal_chances as acData}
             <AC {acData}/>
         {/each}
