@@ -3,7 +3,7 @@ export interface LiveData {
     display_order: number,
     song_name: string,
     song_pronunciation: string,
-    song_length?: number,
+    song_length: number | null,
     song_attribute: Attribute,
     song_difficulty: Difficulty
     ranks: { S: number, A: number, B: number, C: number },
@@ -12,8 +12,8 @@ export interface LiveData {
     voltage_caps: { tap: number, sp: number, skill: number, swap: number },
     sp_gauge_max: number,
     extra_info: LiveDataExtraFree | LiveDataExtraStory | LiveDataExtraSBL | LiveDataExtraDLP,
-    notes?: LiveDataNote[],
-    gimmick?: LiveDataGimmick[],
+    notes: LiveDataNote[] | null,
+    gimmick: LiveDataGimmick[] | null,
     note_gimmicks: LiveDataGimmickNote[],
     appeal_chances: LiveDataAC[]
 }
@@ -23,16 +23,16 @@ export interface LiveDataNote {
     rail: 1 | 2,
     type: NoteType,
     action: NoteAction,
-    gimmick?: number
+    gimmick: number | null
 }
 
 export interface LiveDataAC {
     mission_type: ACMissionType,
     mission_value: number,
-    penalty_damage?: number,
-    reward_voltage?: number,
+    penalty_damage: number | null,
+    reward_voltage: number | null,
     range_note_ids: [number, number],
-    gimmick?: LiveDataGimmickAC
+    gimmick: LiveDataGimmickAC | null
 }
 
 export interface LiveDataGimmick {
@@ -57,7 +57,7 @@ export interface LiveDataExtraFree {
     is_available: boolean,
     is_permanent: boolean,
     can_show_on_profile: boolean,
-    daily_weekday?: (1 | 2 | 3 | 4 | 5 | 6 | 7)[]
+    daily_weekday: (1 | 2 | 3 | 4 | 5 | 6 | 7)[] | null
 }
 
 export interface LiveDataExtraStory {

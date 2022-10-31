@@ -14,9 +14,25 @@
     <Notebar {data}/>
 {/if}
 
-{#each data.appeal_chances as acData}
-    <AC {acData}/>
-{/each}
+<div class="flex flex-col md:flex-row">
+    <div class="flex-1">
+        <h5>Gimmicks</h5>
+        {#each data.note_gimmicks as noteGimmickData}
+            <div>
+                {noteGimmickData.effect_amount}
+            </div>
+        {/each}
+    </div>
+    <div class="flex-1">
+        <h5>Appeal Chances</h5>
+        {#each data.appeal_chances as acData}
+            <AC {acData}/>
+        {/each}
+    </div>
+</div>
 
 <style lang="postcss">
+    h5 {
+        @apply text-accent-700 text-xl tracking-widest uppercase mt-4 mb-1
+    }
 </style>

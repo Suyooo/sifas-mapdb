@@ -1,36 +1,40 @@
-export enum Attribute {
+export const enum Attribute {
     SMILE = 1, PURE, COOL, ACTIVE, NATURAL, ELEGANT, NONE
 }
 
-export enum Difficulty {
+export const enum Difficulty {
     BEGINNER = 10, INTERMEDIATE = 20, ADVANCED = 30, ADVANCED_PLUS = 35, CHALLENGE = 37
 }
 
-export enum NoteType {
+export const enum NoteType {
     NORMAL = 1, HOLD_START, HOLD_END, AC_START, AC_END
 }
 
-export enum NoteAction {
+export const enum NoteAction {
     TAP = 1, SWIPE_UP = 4, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT
 }
 
-type ACMissionType = number;
-type SkillEffectType = number;
-type SkillTargetType = number;
-type SkillFinishType = number;
+export const enum ACMissionType {
+    VOLTAGE_TOTAL = 1, TIMING_NICE, TIMING_GREAT, TIMING_WONDERFUL, VOLTAGE_SINGLE,
+    VOLTAGE_SP, UNIQUE, CRITICALS, SKILLS, STAMINA = 16
+};
 
-export enum SkillCalcType {
+export type SkillEffectType = number;
+export type SkillTargetType = number;
+export type SkillFinishType = number;
+
+export const enum SkillCalcType {
     ADD = 1, SCALE_A, SCALE_B
 }
 
-export enum SkillScaleType {
+export const enum SkillScaleType {
     MAX = 1, CURRENT, SMALLER, BIGGER, SPECIAL
 }
 
-export enum SkillTriggerNote {
+export const enum SkillTriggerNote {
     HIT = 1, MISS, ALWAYS, HIT_VO, HIT_SP, HIT_GD, HIT_SK
 }
 
-export enum SkillTriggerAC {
+export const enum SkillTriggerAC {
     START = 1, SUCCESS, FAILURE, END
 }
