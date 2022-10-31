@@ -7,7 +7,7 @@
     export let data: LiveData;
     const notes = data.notes!;
     const start = notes[0].time;
-    const end = notes.at(-1).time;
+    const end = notes.at(-1)!.time;
     const length = end - start;
 
     setContext("notebar", { start, end, length, notes });

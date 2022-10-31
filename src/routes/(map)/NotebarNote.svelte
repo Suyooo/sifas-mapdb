@@ -4,13 +4,21 @@
     import {NoteType} from "../../enums";
 
     export let noteData: LiveDataNote;
-    export let nextNoteData: LiveDataNote;
-    const { start: notebarStart, length: notebarLength } = getContext("notebar");
+    export let nextNoteData: LiveDataNote | undefined;
+    const {
+        start: notebarStart,
+        length: notebarLength
+    } = getContext<{ start: number, length: number }>("notebar");
+
+    const gimmickCount = getContext<number[]>("gimmickCount");
+    if (noteData.gimmick !== null) {
+        gimmickCount[noteData.gimmick]++;
+    }
 </script>
 
 <div class="note" class:top={noteData.rail === 1} class:bottom={noteData.rail === 2}
      class:gimmick={noteData.gimmick !== null} style:left={(noteData.time-notebarStart)/notebarLength*100+"%"}></div>
-{#if noteData.type === NoteType.HOLD_START}
+{#if noteData.type === NoteType.HOLD_START && nextNoteData}
     <div class="hold" class:top={noteData.rail === 1} class:bottom={noteData.rail === 2}
          style:left={(noteData.time-notebarStart)/notebarLength*100+"%"}
          style:width={(nextNoteData.time-noteData.time)/notebarLength*100+"%"}></div>

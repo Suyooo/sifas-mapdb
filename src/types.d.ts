@@ -31,7 +31,7 @@ export interface LiveDataAC {
     mission_value: number,
     penalty_damage: number | null,
     reward_voltage: number | null,
-    range_note_ids: [number, number],
+    range_note_ids: [number, number] | null,
     gimmick: LiveDataGimmickAC | null
 }
 
@@ -49,7 +49,7 @@ export interface LiveDataGimmickNote extends LiveDataGimmick {
     trigger: SkillTriggerNote
 }
 
-export interface LiveDataGimmickNote extends LiveDataAC {
+export interface LiveDataGimmickAC extends LiveDataGimmick {
     trigger: SkillTriggerAC
 }
 

@@ -192,3 +192,8 @@ export const enum SkillTriggerNote {
 export const enum SkillTriggerAC {
     START = 1, SUCCESS, FAILURE, END
 }
+
+export const enum Item {
+    LOVECA_STARS = 0,
+    DLP_MEDAL = 19001
+}

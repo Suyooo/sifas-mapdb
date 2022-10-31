@@ -1,10 +1,14 @@
 <script lang="ts">
     import {getContext} from "svelte";
     import {ACMissionType} from "../../enums.js";
-    import type {LiveDataAC} from "../../types";
+    import type {LiveDataAC, LiveDataNote} from "../../types";
 
     export let acData: LiveDataAC;
-    const {start: notebarStart, length: notebarLength, notes} = getContext("notebar");
+    const {
+        start: notebarStart,
+        length: notebarLength,
+        notes
+    } = <{ start: number, length: number, notes: LiveDataNote[] }>getContext("notebar");
     const startTime = notes[acData.range_note_ids[0]].time;
     const endTime = notes[acData.range_note_ids[1]].time;
 
@@ -28,15 +32,19 @@
     .ac {
         @apply absolute h-6;
     }
+
     .ac.vo {
         @apply bg-types-vo-dark;
     }
+
     .ac.sp {
         @apply bg-types-sp-dark;
     }
+
     .ac.gd {
         @apply bg-types-gd-dark;
     }
+
     .ac.sk {
         @apply bg-types-sk-dark;
     }

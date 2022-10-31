@@ -1,3 +1,6 @@
+import type {Item} from "../enums";
+import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
+
 export default {
     meta: {
         title: "%%%%%.meta.title%%%%%",
@@ -98,12 +101,16 @@ export default {
     },
     gimmicks: {
         title: "%%%%%.gimmicks.title%%%%%",
-        song_gimmick: "%%%%%.gimmicks.song_gimmick%%%%%",
-        song_gimmick_multiple: "%%%%%.gimmicks.song_gimmick_multiple%%%%%",
+        song_gimmick_label: "%%%%%.gimmicks.song_gimmick%%%%%",
+        song_gimmick_label_multiple: "%%%%%.gimmicks.song_gimmick_multiple%%%%%",
+        song_gimmick: ({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) =>
+            `$$$$$.gimmicks.song_gimmick(${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
         song_gimmick_cleansable: "%%%%%.gimmicks.song_gimmick_cleansable%%%%%",
         song_gimmick_cleansable_yes: "%%%%%.gimmicks.song_gimmick_cleansable_yes%%%%%",
         song_gimmick_cleansable_no: "%%%%%.gimmicks.song_gimmick_cleansable_no%%%%%",
-        note_gimmick: "%%%%%.gimmicks.note_gimmick%%%%%",
+        note_gimmick_label: "%%%%%.gimmicks.note_gimmick%%%%%",
+        note_gimmick: ({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickNote) =>
+            `$$$$$.gimmicks.note_gimmick(${trigger},${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
         note_gimmick_amount: "%%%%%.gimmicks.note_gimmick_amount%%%%%",
         note_gimmick_position: "%%%%%.gimmicks.note_gimmick_position%%%%%",
         note_gimmick_unit: "%%%%%.gimmicks.note_gimmick_unit%%%%%",
@@ -111,12 +118,18 @@ export default {
     },
     appeal_chances: {
         title: "%%%%%.appeal_chances.title%%%%%",
-        ac: "%%%%%.appeal_chances.ac%%%%%",
-        ac_length: "%%%%%.appeal_chances.ac_length%%%%%",
-        ac_reward_voltage_label: "%%%%%.appeal_chances.ac_reward_voltage_label%%%%%",
-        ac_reward_voltage: "%%%%%.appeal_chances.ac_reward_voltage%%%%%",
-        ac_penalty_damage_label: "%%%%%.appeal_chances.ac_penalty_damage_label%%%%%",
-        ac_penalty_damage: "%%%%%.appeal_chances.ac_penalty_damage%%%%%"
+        label: "%%%%%.appeal_chances.label%%%%%",
+        gimmick: ({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickAC) =>
+            `$$$$$.appeal_chances.gimmick(${trigger},${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
+        mission: ({mission_type, mission_value}: LiveDataAC) =>
+            `$$$$$.appeal_chances.mission(${mission_type},${mission_value}})$$$$$`,
+        length: "%%%%%.appeal_chances.length%%%%%",
+        average: ({mission_type, mission_value}: LiveDataAC, notes: number) =>
+            `$$$$$.appeal_chances.average(${mission_type},${mission_value},${notes})$$$$$`,
+        reward_voltage_label: "%%%%%.appeal_chances.reward_voltage_label%%%%%",
+        reward_voltage: "%%%%%.appeal_chances.reward_voltage%%%%%",
+        penalty_damage_label: "%%%%%.appeal_chances.penalty_damage_label%%%%%",
+        penalty_damage: "%%%%%.appeal_chances.penalty_damage%%%%%"
     },
     rankings: {
         length_title: "%%%%%.rankings.length_title%%%%%",
@@ -151,15 +164,9 @@ export default {
         elegant: "%%%%%.attribute.elegant%%%%%",
         none: "%%%%%.attribute.none%%%%%"
     },
-    numberFormat: (n) => `$$$$$numberFormat(${n})$$$$$`,
-    noteCount: (n) => `$$$$$noteCount(${n})$$$$$`,
-    songGimmick: (effectType, effectAmount, targetType, finishType, finishAmount) =>
-        `$$$$$songGimmick(${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
-    noteGimmick: (trigger, effectType, effectAmount, targetType, finishType, finishAmount) =>
-        `$$$$$noteGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
-    acGimmick: (trigger, effectType, effectAmount, targetType, finishType, finishAmount) =>
-        `$$$$$acGimmick(${trigger},${effectType},${effectAmount},${targetType},${finishType},${finishAmount})$$$$$`,
-    items: (itemArray) => `$$$$$items(${JSON.stringify(itemArray)})$$$$$`,
-    acMission: (acType, requirement) => `$$$$$acMission(${acType},${requirement})$$$$$`,
-    acAverage: (acType, requirement, notes) => `$$$$$acAverage(${acType},${requirement},${notes})$$$$$`
+    format: {
+        number: (n: number) => `$$$$$.format.number(${n})$$$$$`,
+        note_count: (n: number) => `$$$$$.format.note_count(${n})$$$$$`,
+    },
+    items: (itemDict: { (itemId: Item): number }) => `$$$$$items(${JSON.stringify(itemDict)})$$$$$`
 };

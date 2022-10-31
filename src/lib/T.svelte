@@ -1,17 +1,17 @@
 <script lang="ts">
-    import lang from "../lang/pseudo";
+    import lang from "../lang/en";
 
-    export let key;
-    export let params = [];
+    export let key: string;
+    export let params: any[] = [];
 
-    let item = lang;
+    let item: any = lang;
     for (const keyPart of key.split(".")) {
         item = item[keyPart];
     }
 </script>
 
 {#if typeof item === "function"}
-    {item(...params)}
+    {@html item(...params)}
 {:else}
-    {item}
+    {@html item}
 {/if}

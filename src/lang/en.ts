@@ -6,33 +6,34 @@ import {
     SkillTriggerNote,
     SkillTriggerAC
 } from "../enums";
+import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
-function capitalize(s) {
+function capitalize(s: string) {
     if (s.charAt(0) == "µ") return s; // don't uppercase µ
     return s.substring(0, 1).toUpperCase() + s.substring(1);
 }
 
-function numberFormat(n) {
+function numberFormat(n: number) {
     // https://stackoverflow.com/a/2901298
     let parts = n.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "&#8239;"); // non-break space
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "&#8239;"); // no-break space
     return parts.join(".");
 }
 
-function noteCount(n) {
+function noteCount(n: number) {
     return `${numberFormat(n)} note` + (n === 1 ? `` : `s`);
 }
 
-function songGimmick(effectType, effectAmount, targetType, finishType, finishAmount) {
-    if (finishType === SkillFinishType.UNTIL_SONG_END) {
+function songGimmick({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) {
+    if (finish_type === SkillFinishType.UNTIL_SONG_END) {
         // replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
-        finishType = SkillFinishType.INSTANT;
+        finish_type = SkillFinishType.INSTANT;
     }
-    return capitalize(skill(effectType, effectAmount, targetType, finishType, finishAmount));
+    return capitalize(skill(effect_type, effect_amount, target, finish_type, finish_amount));
 }
 
-function noteGimmick(trigger, effectType, effectAmount, targetType, finishType, finishAmount) {
-    const skillString = skill(effectType, effectAmount, targetType, finishType, finishAmount);
+function noteGimmick({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickNote) {
+    const skillString = skill(effect_type, effect_amount, target, finish_type, finish_amount);
 
     if (trigger === SkillTriggerNote.HIT)
         return `If hit, ${skillString}`;
@@ -50,11 +51,11 @@ function noteGimmick(trigger, effectType, effectAmount, targetType, finishType, 
     throw new Error(`No translation for note gimmick trigger type ${trigger}`);
 }
 
-function acGimmick(trigger, effectType, effectAmount, targetType, finishType, finishAmount) {
-    const skillString = skill(effectType, effectAmount, targetType, finishType, finishAmount);
+function acGimmick({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickAC) {
+    const skillString = skill(effect_type, effect_amount, target, finish_type, finish_amount);
 
     if (trigger === SkillTriggerAC.START) {
-        if (finishType === SkillFinishType.UNTIL_AC_END) {
+        if (finish_type === SkillFinishType.UNTIL_AC_END) {
             return `During this AC, ${skillString}`;
         } else {
             return `When the AC starts, ${skillString}`;
@@ -81,16 +82,17 @@ const removeTargetSet = new Set([
     SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK,
     SkillEffectType.STAMINA_DAMAGE_PIERCE]);
 
-function skill(effectType, effectAmount, targetType, finishType, finishAmount) {
+function skill(effectType: SkillEffectType, effectAmount: number, targetType: SkillTargetType,
+               finishType: SkillFinishType, finishAmount: number) {
     const effect = skillEffect(effectType, effectAmount);
-    const target = removeTargetSet.has(skill.effect_type) ? "" : skillTarget(targetType);
+    const target = removeTargetSet.has(effectType) ? "" : skillTarget(targetType);
     // TODO: The parameter for isSPVoltageGainBuff is based on the skill effect strings above right now...
     //  so it's prone to typos and will break if translated
     const finish = skillFinish(finishType, finishAmount, effect.indexOf("SP Voltage Gain") !== -1);
     return `${target}${effect}${finish}`;
 }
 
-function skillEffect(effectType, effectAmount) {
+function skillEffect(effectType: SkillEffectType, effectAmount: number) {
     if (effectType === SkillEffectType.SP_FILL)
         return `charge SP Gauge by ${numberFormat(effectAmount)} points`;
     if (effectType === SkillEffectType.SHIELD_GAIN)
@@ -317,13 +319,13 @@ const skillTargetMap = {
     [SkillTargetType.CHAR_MIA]: `Mia units `
 }
 
-function skillTarget(targetType) {
+function skillTarget(targetType: SkillTargetType) {
     const t = skillTargetMap[targetType];
     if (t === undefined) throw new Error(`No translation for skill target type ${targetType}`);
     return t;
 }
 
-function skillFinish(finishType, finishAmount, isSPVoltageGainBuff) {
+function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVoltageGainBuff: boolean) {
     if (finishType === SkillFinishType.UNTIL_SONG_END)
         return ` until the song ends`;
     if (finishType === SkillFinishType.NOTE_COUNT)
@@ -349,41 +351,41 @@ function skillFinish(finishType, finishAmount, isSPVoltageGainBuff) {
     throw new Error(`No translation for skill finish type ${finishType}`);
 }
 
-function acMission(acType, requirement) {
-    if (acType === ACMissionType.VOLTAGE_TOTAL)
-        return `Get ${numberFormat(requirement)} Voltage`;
-    if (acType === ACMissionType.TIMING_NICE)
-        return `Hit ${numberFormat(requirement)} NICEs`;
-    if (acType === ACMissionType.TIMING_GREAT)
-        return `Hit ${numberFormat(requirement)} GREATs`;
-    if (acType === ACMissionType.TIMING_WONDERFUL)
-        return `Hit ${numberFormat(requirement)} WONDERFULs`;
-    if (acType === ACMissionType.VOLTAGE_SINGLE)
-        return `Get ${numberFormat(requirement)} Voltage in one Appeal`;
-    if (acType === ACMissionType.VOLTAGE_SP)
-        return `Get ${numberFormat(requirement)} Voltage from SP`;
-    if (acType === ACMissionType.UNIQUE)
-        return `Appeal with ${numberFormat(requirement)} unique Units`;
-    if (acType === ACMissionType.CRITICALS)
-        return `Get ${numberFormat(requirement)} Criticals`;
-    if (acType === ACMissionType.SKILLS)
-        return `Activate ${numberFormat(requirement)} Tap Skills`;
-    if (acType === ACMissionType.STAMINA) {
-        if (requirement === 10000) return `Finish the AC with ${numberFormat(requirement / 100)}% of max Stamina`;
-        else return `Finish the AC with ${numberFormat(requirement / 100)}% of max Stamina or more`;
+function acMission({mission_type, mission_value}: LiveDataAC) {
+    if (mission_type === ACMissionType.VOLTAGE_TOTAL)
+        return `Get ${numberFormat(mission_value)} Voltage`;
+    if (mission_type === ACMissionType.TIMING_NICE)
+        return `Hit ${numberFormat(mission_value)} NICEs`;
+    if (mission_type === ACMissionType.TIMING_GREAT)
+        return `Hit ${numberFormat(mission_value)} GREATs`;
+    if (mission_type === ACMissionType.TIMING_WONDERFUL)
+        return `Hit ${numberFormat(mission_value)} WONDERFULs`;
+    if (mission_type === ACMissionType.VOLTAGE_SINGLE)
+        return `Get ${numberFormat(mission_value)} Voltage in one Appeal`;
+    if (mission_type === ACMissionType.VOLTAGE_SP)
+        return `Get ${numberFormat(mission_value)} Voltage from SP`;
+    if (mission_type === ACMissionType.UNIQUE)
+        return `Appeal with ${numberFormat(mission_value)} unique Units`;
+    if (mission_type === ACMissionType.CRITICALS)
+        return `Get ${numberFormat(mission_value)} Criticals`;
+    if (mission_type === ACMissionType.SKILLS)
+        return `Activate ${numberFormat(mission_value)} Tap Skills`;
+    if (mission_type === ACMissionType.STAMINA) {
+        if (mission_value === 10000) return `Finish the AC with ${numberFormat(mission_value / 100)}% of max Stamina`;
+        else return `Finish the AC with ${numberFormat(mission_value / 100)}% of max Stamina or more`;
     }
-    throw new Error(`No translation for mission title of AC mission type ${acType}`);
+    throw new Error(`No translation for mission title of AC mission type ${mission_type}`);
 }
 
-function acAverage(acType, requirement, notes) {
-    if (acType === ACMissionType.VOLTAGE_TOTAL) {
-        return `(avg. ${Math.ceil(requirement / notes)} Voltage per note)`;
-    } else if (acType === ACMissionType.CRITICALS) {
-        return `(${Math.ceil(requirement / notes * 100)}% of notes must crit)`;
-    } else if (acType === ACMissionType.SKILLS) {
-        return `(${Math.ceil(requirement / notes * 100)}% of taps must proc)`;
+function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
+    if (mission_type === ACMissionType.VOLTAGE_TOTAL) {
+        return `(avg. ${Math.ceil(mission_value / notes)} Voltage per note)`;
+    } else if (mission_type === ACMissionType.CRITICALS) {
+        return `(${Math.ceil(mission_value / notes * 100)}% of notes must crit)`;
+    } else if (mission_type === ACMissionType.SKILLS) {
+        return `(${Math.ceil(mission_value / notes * 100)}% of taps must proc)`;
     }
-    throw new Error(`No translation for requirement average of AC mission type ${acType}`);
+    throw new Error(`No translation for requirement average of AC mission type ${mission_type}`);
 }
 
 export default {
@@ -486,12 +488,14 @@ export default {
     },
     gimmicks: {
         title: "Gimmicks",
-        song_gimmick: "Song Gimmick",
-        song_gimmick_multiple: "Song Gimmicks",
+        song_gimmick_label: "Song Gimmick",
+        song_gimmick_label_multiple: "Song Gimmicks",
+        song_gimmick: songGimmick,
         song_gimmick_cleansable: "Cleansable",
         song_gimmick_cleansable_yes: "Yes",
         song_gimmick_cleansable_no: "No",
-        note_gimmick: "Note Gimmick",
+        note_gimmick_label: "Note Gimmick",
+        note_gimmick: noteGimmick,
         note_gimmick_amount: "Amount",
         note_gimmick_position: "Note Position",
         note_gimmick_unit: "Unit",
@@ -499,12 +503,15 @@ export default {
     },
     appeal_chances: {
         title: "Appeal Chances",
-        ac: "AC",
-        ac_length: "Length",
-        ac_reward_voltage_label: "Success",
-        ac_reward_voltage: "Voltage",
-        ac_penalty_damage_label: "Failure",
-        ac_penalty_damage: "Damage"
+        label: "AC",
+        gimmick: acGimmick,
+        mission: acMission,
+        length: "Length",
+        average: acAverage,
+        reward_voltage_label: "Success",
+        reward_voltage: "Voltage",
+        penalty_damage_label: "Failure",
+        penalty_damage: "Damage"
     },
     rankings: {
         length_title: "Shortest Song Lengths",
@@ -539,5 +546,9 @@ export default {
         elegant: "Elegant",
         none: "None"
     },
-    numberFormat, noteCount, songGimmick, noteGimmick, acGimmick, items: () => "", acMission, acAverage
+    format: {
+        number: numberFormat,
+        note_count: noteCount
+    },
+    items: () => ""
 };
