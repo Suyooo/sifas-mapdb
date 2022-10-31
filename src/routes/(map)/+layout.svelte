@@ -1,5 +1,6 @@
 <script lang="ts">
     import {setContext} from "svelte";
+    import {writable} from 'svelte/store';
     import T from "../../lib/T.svelte";
     import type {LiveData} from "../../types";
     import DetailAC from "./DetailAC.svelte";
@@ -9,6 +10,8 @@
 
     export let data: LiveData;
     setContext("gimmickCount", new Array(data.note_gimmicks.length).fill(0));
+    const gimmickFilter = writable<{ gimmick?: number, slot?: 1 | 2 | 3 }>({gimmick: null, slot: null});
+    setContext("gimmickFilter", gimmickFilter);
 </script>
 <svelte:options immutable={true}/>
 
@@ -27,7 +30,7 @@
             <T key="gimmicks.title"/>
         </h5>
         <div>
-            <div>
+            <div class="bg-accent-100">
                 {#if data.gimmick && data.gimmick.length > 1}
                     <T key="gimmicks.song_gimmick_label_multiple"/>
                 {:else}
@@ -73,13 +76,13 @@
 
     .boxes > :global(div) {
         @apply w-full mb-4 border border-neutral-200;
-    }
 
-    .boxes > :global(div > div:first-child) {
-        @apply w-full px-2 py-1 bg-accent-100 border-b border-neutral-200 font-bold;
-    }
+        & > :global(div:first-child) {
+            @apply w-full px-2 py-1 border-b border-neutral-200 font-bold;
+        }
 
-    .boxes > :global(div > div:last-child) {
-        @apply w-full px-2 py-1;
+        & > :global(div:last-child) {
+            @apply w-full px-2 py-1;
+        }
     }
 </style>

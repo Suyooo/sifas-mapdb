@@ -27,31 +27,31 @@
 <style lang="postcss">
     .note {
         @apply absolute w-[2px] ml-[-1px] h-3 bg-notebar-note pointer-events-none;
-    }
 
-    .note.top {
-        @apply top-0;
-    }
+        &.top {
+            @apply top-0;
+        }
 
-    .note.bottom {
-        @apply top-3;
-    }
+        &.bottom {
+            @apply top-3;
+        }
 
-    .note.gimmick {
-        @apply bg-notebar-note-gimmick;
+        &.gimmick {
+            @apply bg-notebar-note-gimmick;
+        }
     }
 
     .hold {
         @apply absolute h-1 w-10 pointer-events-none;
         background: repeating-linear-gradient(
                 to right, white 0, white 1px, rgba(255, 225, 255, 0) 1px, rgba(255, 225, 255, 0) 2px);
-    }
 
-    .hold.top {
-        @apply top-1;
-    }
+        &.top {
+            @apply top-1;
+        }
 
-    .hold.bottom {
-        @apply top-4;
+        &.bottom {
+            @apply top-4;
+        }
     }
 </style>

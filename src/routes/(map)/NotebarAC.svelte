@@ -31,21 +31,21 @@
 <style lang="postcss">
     .ac {
         @apply absolute h-6;
-    }
 
-    .ac.vo {
-        @apply bg-types-vo-acbar;
-    }
+        &.vo {
+            @apply bg-types-vo-acbar;
+        }
 
-    .ac.sp {
-        @apply bg-types-sp-acbar;
-    }
+        &.sp {
+            @apply bg-types-sp-acbar;
+        }
 
-    .ac.gd {
-        @apply bg-types-gd-acbar;
-    }
+        &.gd {
+            @apply bg-types-gd-acbar;
+        }
 
-    .ac.sk {
-        @apply bg-types-sk-acbar;
+        &.sk {
+            @apply bg-types-sk-acbar;
+        }
     }
 </style>

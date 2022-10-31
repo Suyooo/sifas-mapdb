@@ -7,7 +7,7 @@
 </script>
 
 <div>
-    <div>
+    <div class="bg-accent-100">
         <T key="appeal_chances.label"/> {i + 1}:
         <T key="appeal_chances.mission" params={[acData]}/>
     </div>
@@ -43,9 +43,9 @@
 <style lang="postcss">
     .reward {
         @apply flex flex-col xl:flex-row;
-    }
 
-    .reward > div {
-        @apply flex-1;
+        & > div {
+            @apply flex-1;
+        }
     }
 </style>

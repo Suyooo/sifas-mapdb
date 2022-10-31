@@ -10,13 +10,13 @@
     const end = notes.at(-1)!.time;
     const length = end - start;
 
-    setContext("notebar", { start, end, length, notes });
+    setContext("notebar", {start, end, length, notes});
 </script>
 
-<div class="outer">
-    <div class="inner">
+<div class="notebar">
+    <div>
         {#each data.appeal_chances as acData}
-            <NotebarAC {acData} />
+            <NotebarAC {acData}/>
         {/each}
         {#each notes as noteData}
             <NotebarNote {noteData} nextNoteData={notes.find(n => n.rail === noteData.rail && n.time > noteData.time)}/>
@@ -25,10 +25,11 @@
 </div>
 
 <style lang="postcss">
-    .outer {
+    .notebar {
         @apply bg-notebar w-full h-6 px-6;
-    }
-    .inner {
-        @apply w-full h-full relative;
+
+        & > div {
+            @apply w-full h-full relative;
+        }
     }
 </style>
