@@ -12,19 +12,41 @@ module.exports = {
                 "types": {
                     "vo": {
                         DEFAULT: "#cf403d",
-                        dark: "#c43331"
+                        acbar: "#c43331"
                     },
                     "sp": {
                         DEFAULT: "#248ecf",
-                        dark: "#1c6ea0"
+                        acbar: "#1c6ea0"
                     },
                     "gd": {
                         DEFAULT: "#3ea15b",
-                        dark: "#2e7643"
+                        acbar: "#2e7643"
                     },
                     "sk": {
                         DEFAULT: "#e4b642",
-                        dark: "#826212"
+                        dark: "#bb8e1b",
+                        acbar: "#826212"
+                    }
+                },
+                "attributes": {
+                    "smile": {
+                        DEFAULT: "#dd4aa5"
+                    },
+                    "pure": {
+                        DEFAULT: "#39a85d"
+                    },
+                    "cool": {
+                        DEFAULT: "#0099ee"
+                    },
+                    "active": {
+                        DEFAULT: "#db3e3e"
+                    },
+                    "natural": {
+                        DEFAULT: "#edbb3e",
+                        dark: "#bb8b11"
+                    },
+                    "elegant": {
+                        DEFAULT: "#85519c"
                     }
                 },
 

@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.t {
+    @apply font-semibold;
+
+    &.vo {
+        @apply text-types-vo;
+    }
+
+    &.sp {
+        @apply text-types-sp;
+    }
+
+    &.gd {
+        @apply text-types-gd;
+    }
+
+    &.sk {
+        @apply text-types-sk-dark;
+    }
+}
+
+.a {
+    @apply font-semibold;
+
+    &.smile {
+        @apply text-attributes-smile;
+    }
+
+    &.pure {
+        @apply text-attributes-pure;
+    }
+
+    &.cool {
+        @apply text-attributes-cool;
+    }
+
+    &.active {
+        @apply text-attributes-active;
+    }
+
+    &.natural {
+        @apply text-attributes-natural-dark;
+    }
+
+    &.elegant {
+        @apply text-attributes-elegant;
+    }
+}

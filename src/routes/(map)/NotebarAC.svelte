@@ -34,18 +34,18 @@
     }
 
     .ac.vo {
-        @apply bg-types-vo-dark;
+        @apply bg-types-vo-acbar;
     }
 
     .ac.sp {
-        @apply bg-types-sp-dark;
+        @apply bg-types-sp-acbar;
     }
 
     .ac.gd {
-        @apply bg-types-gd-dark;
+        @apply bg-types-gd-acbar;
     }
 
     .ac.sk {
-        @apply bg-types-sk-dark;
+        @apply bg-types-sk-acbar;
     }
 </style>
