@@ -1,6 +1,7 @@
 <script lang="ts">
     import T from "$lib/T.svelte";
     import {getContext} from "svelte";
+    import type {Writable} from "svelte/store";
     import type {LiveDataGimmickNote} from "../../types";
     import {shortcut} from "../../actions/shortcut";
 
@@ -8,7 +9,7 @@
     export let i: number;
 
     const thisGimmickCount = getContext<number[]>("gimmickCount")[i];
-    const gimmickFilter = getContext<{ gimmick?: number, slot?: 1 | 2 | 3 }>("gimmickFilter");
+    const gimmickFilter = getContext<Writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null }>>("gimmickFilter");
 
     $: isFilteredTarget = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick === i;
     $: isFilteredOut = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick !== i;

@@ -9,8 +9,8 @@
         length: notebarLength,
         notes
     } = <{ start: number, length: number, notes: LiveDataNote[] }>getContext("notebar");
-    const startTime = notes[acData.range_note_ids[0]].time;
-    const endTime = notes[acData.range_note_ids[1]].time;
+    const startTime = notes[acData.range_note_ids![0]].time;
+    const endTime = notes[acData.range_note_ids![1]].time;
 
     const vo = acData.mission_type === ACMissionType.VOLTAGE_TOTAL
         || acData.mission_type === ACMissionType.VOLTAGE_SINGLE

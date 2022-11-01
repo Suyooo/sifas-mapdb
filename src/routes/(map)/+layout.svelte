@@ -10,7 +10,7 @@
 
     export let data: LiveData;
     setContext("gimmickCount", new Array(data.note_gimmicks.length).fill(0));
-    const gimmickFilter = writable<{ gimmick?: number, slot?: 1 | 2 | 3 }>({gimmick: null, slot: null});
+    const gimmickFilter = writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null }>({gimmick: null, slot: null});
     setContext("gimmickFilter", gimmickFilter);
 </script>
 
