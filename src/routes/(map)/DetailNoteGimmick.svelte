@@ -33,7 +33,7 @@
             {#if isFilteredTarget}
                 <T key="gimmicks.note_gimmick.filter_remove"/>
             {:else}
-                <T key="gimmicks.note_gimmick.filter_remove"/>
+                <T key="gimmicks.note_gimmick.filter"/>
             {/if}
         </div>
     </div>

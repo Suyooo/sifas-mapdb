@@ -24,12 +24,12 @@
         || acData.mission_type === ACMissionType.SKILLS;
 </script>
 
-<div class="ac" class:vo class:sp class:gd class:sk style:left={(startTime-notebarStart)/notebarLength*100+"%"}
+<div class:vo class:sp class:gd class:sk style:left={(startTime-notebarStart)/notebarLength*100+"%"}
      style:width={(endTime-startTime)/notebarLength*100+"%"}>
 </div>
 
 <style lang="postcss">
-    .ac {
+    div {
         @apply absolute h-6;
 
         &.vo {

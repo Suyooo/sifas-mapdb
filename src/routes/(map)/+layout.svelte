@@ -13,7 +13,6 @@
     const gimmickFilter = writable<{ gimmick?: number, slot?: 1 | 2 | 3 }>({gimmick: null, slot: null});
     setContext("gimmickFilter", gimmickFilter);
 </script>
-<svelte:options immutable={true}/>
 
 <a href="/">Back.</a>
 <slot/><br><br>
