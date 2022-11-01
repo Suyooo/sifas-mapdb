@@ -27,23 +27,23 @@
      class:opacity-50={isFilteredOut}>
     <div class:bg-accent-300={isFilteredTarget} class:bg-accent-100={!isFilteredTarget}>
         <div>
-            <T key="gimmicks.note_gimmick_label"/> {i + 1}
+            <T key="gimmicks.note_gimmick.label"/> {i + 1}
         </div>
         <div class:hidden={!isFilteredTarget}>
             {#if isFilteredTarget}
-                (click to remove filter)
+                <T key="gimmicks.note_gimmick.filter_remove"/>
             {:else}
-                (click to filter)
+                <T key="gimmicks.note_gimmick.filter_remove"/>
             {/if}
         </div>
     </div>
     <div>
         <div>
-            <T key="gimmicks.note_gimmick" params={[noteGimmickData]}/>
+            <T key="gimmicks.note_gimmick.gimmick" params={[noteGimmickData]}/>
         </div>
         {#if thisGimmickCount > 0}
             <div>
-                <b><T key="gimmicks.note_gimmick_amount"/>:</b>
+                <b><T key="gimmicks.note_gimmick.amount"/>:</b>
                 <T key="format.note_count" params={[thisGimmickCount]}/>
             </div>
         {/if}

@@ -101,19 +101,25 @@ export default {
     },
     gimmicks: {
         title: "%%%%%.gimmicks.title%%%%%",
-        song_gimmick_label: "%%%%%.gimmicks.song_gimmick%%%%%",
-        song_gimmick_label_multiple: "%%%%%.gimmicks.song_gimmick_multiple%%%%%",
-        song_gimmick: ({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) =>
-            `$$$$$.gimmicks.song_gimmick(${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
-        song_gimmick_cleansable: "%%%%%.gimmicks.song_gimmick_cleansable%%%%%",
-        song_gimmick_cleansable_yes: "%%%%%.gimmicks.song_gimmick_cleansable_yes%%%%%",
-        song_gimmick_cleansable_no: "%%%%%.gimmicks.song_gimmick_cleansable_no%%%%%",
-        note_gimmick_label: "%%%%%.gimmicks.note_gimmick%%%%%",
-        note_gimmick: ({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickNote) =>
-            `$$$$$.gimmicks.note_gimmick(${trigger},${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
-        note_gimmick_amount: "%%%%%.gimmicks.note_gimmick_amount%%%%%",
-        note_gimmick_position: "%%%%%.gimmicks.note_gimmick_position%%%%%",
-        note_gimmick_unit: "%%%%%.gimmicks.note_gimmick_unit%%%%%",
+        song_gimmick: {
+            label: "%%%%%.gimmicks.song_gimmick.label%%%%%",
+            label_multiple: "%%%%%.gimmicks.song_gimmick.label_multiple%%%%%",
+            gimmick: ({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) =>
+                `$$$$$.gimmicks.song_gimmick.gimmick(${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
+            cleansable: "%%%%%.gimmicks.song_gimmick.cleansable%%%%%",
+            cleansable_yes: "%%%%%.gimmicks.song_gimmick.cleansable_yes%%%%%",
+            cleansable_no: "%%%%%.gimmicks.song_gimmick.cleansable_no%%%%%",
+        },
+        note_gimmick: {
+            label: "%%%%%.gimmicks.note_gimmick.label%%%%%",
+            gimmick: ({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickNote) =>
+                `$$$$$.gimmicks.note_gimmick.gimmick(${trigger},${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
+            amount: "%%%%%.gimmicks.note_gimmick.amount%%%%%",
+            position: "%%%%%.gimmicks.note_gimmick.position%%%%%",
+            slot: "%%%%%.gimmicks.note_gimmick.slot%%%%%",
+            filter: "%%%%%.gimmicks.note_gimmick.filter%%%%%",
+            filter_remove: "%%%%%.gimmicks.note_gimmick.filter_remove%%%%%",
+        },
         no_gimmick: "%%%%%.gimmicks.no_gimmick%%%%%"
     },
     appeal_chances: {

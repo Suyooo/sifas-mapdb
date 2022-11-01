@@ -488,17 +488,23 @@ export default {
     },
     gimmicks: {
         title: "Gimmicks",
-        song_gimmick_label: "Song Gimmick",
-        song_gimmick_label_multiple: "Song Gimmicks",
-        song_gimmick: songGimmick,
-        song_gimmick_cleansable: "Cleansable",
-        song_gimmick_cleansable_yes: "Yes",
-        song_gimmick_cleansable_no: "No",
-        note_gimmick_label: "Note Gimmick",
-        note_gimmick: noteGimmick,
-        note_gimmick_amount: "Amount",
-        note_gimmick_position: "Note Position",
-        note_gimmick_unit: "Unit",
+        song_gimmick: {
+            label: "Song Gimmick",
+            label_multiple: "Song Gimmicks",
+            gimmick: songGimmick,
+            cleansable: "Cleansable",
+            cleansable_yes: "Yes",
+            cleansable_no: "No"
+        },
+        note_gimmick: {
+            label: "Note Gimmick",
+            gimmick: noteGimmick,
+            amount: "Amount",
+            position: "Note Position",
+            slot: "Slot",
+            filter: "click to filter",
+            filter_remove: "click to remove filter"
+        },
         no_gimmick: "No Gimmick"
     },
     appeal_chances: {

@@ -32,9 +32,9 @@
         <div>
             <div class="bg-accent-100">
                 {#if data.gimmick && data.gimmick.length > 1}
-                    <T key="gimmicks.song_gimmick_label_multiple"/>
+                    <T key="gimmicks.song_gimmick.label_multiple"/>
                 {:else}
-                    <T key="gimmicks.song_gimmick_label"/>
+                    <T key="gimmicks.song_gimmick.label"/>
                 {/if}
             </div>
             <div>

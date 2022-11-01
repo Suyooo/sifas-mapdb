@@ -15,11 +15,11 @@
     {/if}
     <div>
         <div>
-            <T key="gimmicks.song_gimmick" params={[gimmickData]}/>
+            <T key="gimmicks.song_gimmick.gimmick" params={[gimmickData]}/>
         </div>
         <div>
-            <b><T key="gimmicks.song_gimmick_cleansable"/>:</b>
-            <T key="gimmicks.song_gimmick_cleansable_no"/>
+            <b><T key="gimmicks.song_gimmick.cleansable"/>:</b>
+            <T key="gimmicks.song_gimmick.cleansable_no"/>
         </div>
     </div>
 </div>
