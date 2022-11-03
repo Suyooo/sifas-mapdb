@@ -1,9 +1,14 @@
 <script lang="ts">
     import T from "$lib/T.svelte";
-    import type {LiveDataAC} from "../../types";
+    import {getContext} from "svelte";
+    import type {LiveData} from "../../types";
+
+    const {data} = getContext<{
+        data: LiveData
+    }>("mapData");
 
     export let i: number;
-    export let acData: LiveDataAC;
+    const acData = data.appeal_chances[i];
 </script>
 
 <div>

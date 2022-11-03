@@ -2,13 +2,18 @@
     import T from "$lib/T.svelte";
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import type {LiveDataGimmickNote} from "../../types";
+    import type {LiveData} from "../../types";
     import {shortcut} from "../../actions/shortcut";
 
-    export let noteGimmickData: LiveDataGimmickNote;
-    export let i: number;
+    const {data, gimmickCount} = getContext<{
+        data: LiveData,
+        gimmickCount: number[]
+    }>("mapData");
 
-    const thisGimmickCount = getContext<number[]>("gimmickCount")[i];
+    export let i: number;
+    const noteGimmickData = data.note_gimmicks[i];
+
+    const thisGimmickCount = gimmickCount[i];
     const gimmickFilter = getContext<Writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null }>>("gimmickFilter");
 
     $: isFilteredTarget = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick === i;

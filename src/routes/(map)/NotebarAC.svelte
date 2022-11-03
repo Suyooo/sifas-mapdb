@@ -1,16 +1,20 @@
 <script lang="ts">
     import {getContext} from "svelte";
     import {ACMissionType} from "../../enums.js";
-    import type {LiveDataAC, LiveDataNote} from "../../types";
+    import type {LiveData} from "../../types";
 
-    export let acData: LiveDataAC;
-    const {
-        start: notebarStart,
-        length: notebarLength,
-        notes
-    } = <{ start: number, length: number, notes: LiveDataNote[] }>getContext("notebar");
-    const startTime = notes[acData.range_note_ids![0]].time;
-    const endTime = notes[acData.range_note_ids![1]].time;
+    const {data, notebarSize} = getContext<{
+        data: LiveData,
+        notebarSize: { start: number, end: number, length: number }
+    }>("mapData");
+
+    export let i: number;
+    const acData = data.appeal_chances[i];
+    const startTime = data.notes[acData.range_note_ids![0]].time;
+    const endTime = data.notes[acData.range_note_ids![1]].time;
+
+    const relativeStart = (startTime - notebarSize.start) / notebarSize.length;
+    const relativeLength = (endTime - startTime) / notebarSize.length;
 
     const vo = acData.mission_type === ACMissionType.VOLTAGE_TOTAL
         || acData.mission_type === ACMissionType.VOLTAGE_SINGLE
@@ -24,8 +28,7 @@
         || acData.mission_type === ACMissionType.SKILLS;
 </script>
 
-<div class:vo class:sp class:gd class:sk style:left={(startTime-notebarStart)/notebarLength*100+"%"}
-     style:width={(endTime-startTime)/notebarLength*100+"%"}>
+<div class:vo class:sp class:gd class:sk style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}>
 </div>
 
 <style lang="postcss">

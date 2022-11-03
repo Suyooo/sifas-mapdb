@@ -1,14 +1,18 @@
 <script lang="ts">
     import T from "$lib/T.svelte";
-    import type {LiveDataGimmick} from "../../types";
+    import {getContext} from "svelte";
+    import type {LiveData} from "../../types";
 
-    export let gimmickData: LiveDataGimmick;
+    const {data} = getContext<{
+        data: LiveData
+    }>("mapData");
+
     export let i: number;
-    export let singleGimmick: boolean;
+    const gimmickData = data.gimmick[i];
 </script>
 
 <div class="gimmick">
-    {#if !singleGimmick}
+    {#if data.gimmick.length > 1}
         <div class="num">
             {String.fromCharCode(9312 /* ① */ + i)}
         </div>

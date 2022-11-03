@@ -9,7 +9,10 @@
     import Notebar from "./Notebar.svelte";
 
     export let data: LiveData;
-    setContext("gimmickCount", new Array(data.note_gimmicks.length).fill(0));
+    setContext<{ data: LiveData, gimmickCount: number[] }>("mapData", {
+        data,
+        gimmickCount: new Array(data.note_gimmicks.length).fill(0)
+    });
     const gimmickFilter = writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null }>({gimmick: null, slot: null});
     setContext("gimmickFilter", gimmickFilter);
 </script>
@@ -18,7 +21,7 @@
 <slot/><br><br>
 
 {#if data.notes !== undefined}
-    <Notebar {data}/>
+    <Notebar/>
 {:else}
     <T key="songinfo.no_map"/>
 {/if}
@@ -38,24 +41,24 @@
             </div>
             <div>
                 {#if data.gimmick}
-                    {#each data.gimmick as gimmickData, i}
-                        <DetailSongGimmick {gimmickData} {i} singleGimmick={data.gimmick.length === 1}/>
+                    {#each data.gimmick as _, i}
+                        <DetailSongGimmick {i} />
                     {/each}
                 {:else}
                     <T key="gimmicks.no_gimmick"/>
                 {/if}
             </div>
         </div>
-        {#each data.note_gimmicks as noteGimmickData, i}
-            <DetailNoteGimmick {noteGimmickData} {i}/>
+        {#each data.note_gimmicks as _, i}
+            <DetailNoteGimmick {i}/>
         {/each}
     </div>
     <div class="boxes">
         <h5>
             <T key="appeal_chances.title"/>
         </h5>
-        {#each data.appeal_chances as acData,i}
-            <DetailAC {acData} {i}/>
+        {#each data.appeal_chances as _, i}
+            <DetailAC {i}/>
         {/each}
     </div>
 </div>

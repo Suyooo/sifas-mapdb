@@ -1,25 +1,36 @@
 <script lang="ts">
-    import {setContext} from "svelte";
+    import {getContext} from "svelte";
+    import type {Writable} from "svelte/store";
+    import {writable} from "svelte/store";
+    import {MarkerTracker} from "../../lib/markerTracker";
     import type {LiveData} from "../../types";
     import NotebarAC from "./NotebarAC.svelte";
     import NotebarNote from "./NotebarNote.svelte";
 
-    export let data: LiveData;
-    const notes = data.notes!;
-    const start = notes[0].time;
-    const end = notes.at(-1)!.time;
-    const length = end - start;
+    const mapData = getContext<{
+        data: LiveData,
+        gimmickCount: number[],
+        notebarSize: { start: number, end: number, length: number },
+        gimmickMarkerTrackers: Writable<{ [k: number | "global"]: MarkerTracker }>
+    }>("mapData");
 
-    setContext("notebar", {start, end, length, notes});
+    const start = mapData.data.notes[0].time;
+    const end = mapData.data.notes.at(-1).time;
+    const length = end - start;
+    mapData.notebarSize = {start, end, length};
+
+    const gimmickMarkerTrackers = writable<{ [k: number | "global"]: MarkerTracker }>({global: new MarkerTracker()});
+    mapData.data.note_gimmicks.forEach((_, i) => $gimmickMarkerTrackers[i] = new MarkerTracker());
+    mapData.gimmickMarkerTrackers = gimmickMarkerTrackers;
 </script>
 
-<div class="notebar">
+<div class="notebar" style:margin-top={$gimmickMarkerTrackers["global"].size() + "rem"}>
     <div>
-        {#each data.appeal_chances as acData}
-            <NotebarAC {acData}/>
+        {#each mapData.data.appeal_chances as _, i}
+            <NotebarAC {i}/>
         {/each}
-        {#each notes as noteData}
-            <NotebarNote {noteData} nextNoteData={notes.find(n => n.rail === noteData.rail && n.time > noteData.time)}/>
+        {#each mapData.data.notes as _, i}
+            <NotebarNote {i}/>
         {/each}
     </div>
 </div>
