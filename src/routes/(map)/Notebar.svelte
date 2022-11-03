@@ -33,7 +33,6 @@
         return a - b;
     });
     gimmickMarkerOrder.unshift(null);
-    console.log(gimmickMarkerOrder);
 
     const noteIdxsSortedByGimmick = mapData.data.notes.map((_, i) => i);
     noteIdxsSortedByGimmick.sort((a, b) => {

@@ -63,10 +63,10 @@
 
 <style lang="postcss">
     .notecont {
-        @apply relative w-full pointer-events-none;
+        @apply relative w-full pointer-events-none select-none;
 
         & > .note {
-            @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note;
+            @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note pointer-events-auto;
 
             &.bottom {
                 @apply top-3;
@@ -83,22 +83,21 @@
                     to right, white 0, white 1px, rgba(255, 225, 255, 0) 1px, rgba(255, 225, 255, 0) 2px);
 
             &.bottom {
-                @apply mt-3;
+                @apply top-4;
             }
         }
 
         & > .marker {
-            @apply absolute flex items-center justify-center -left-1.5 -top-3 w-3 h-3 bg-white border border-black
-            rounded-full pointer-events-auto select-none;
+            @apply absolute flex items-center justify-center -left-1.5 w-3 h-3 bg-white border border-black rounded-full
+            pointer-events-auto tracking-tighter box-content;
 
             & > span {
-                @apply text-[.5rem];
+                @apply text-[.5rem] tracking-tighter;
             }
         }
 
         & > .markertail {
-            @apply absolute left-0 -top-3.5 -z-10 h-2 bg-white rounded-full border border-black pointer-events-auto
-            select-none;
+            @apply absolute left-0 -z-10 h-2 bg-white rounded-full border border-black pointer-events-auto box-content;
         }
     }
 </style>
