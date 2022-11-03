@@ -5,9 +5,9 @@
 const MARKER_PADDING = 0.002;
 
 class LayerTracker {
-    ranges: [number, number][] = [];
+    ranges: [number, number, number][] = [];
 
-    addRange(start: number, end: number) {
+    addRange(gimmickNo: number, start: number, end: number) {
         const merged: Set<number> = new Set();
         let i = 0;
         for (const other of this.ranges) {
@@ -22,14 +22,14 @@ class LayerTracker {
         }
 
         const newRanges = this.ranges.filter((_, i) => !merged.has(i));
-        newRanges.push([start, end]);
+        newRanges.push([start, end, gimmickNo]);
         newRanges.sort((a, b) => a[0] - b[0]);
         this.ranges = newRanges;
     }
 
-    isRangeFree(start: number, end: number) {
+    isRangeFree(ignoreGimmickNo: number | null, start: number, end: number) {
         for (const other of this.ranges) {
-            if (other[1] < start) continue;
+            if (other[1] < start || other[2] === ignoreGimmickNo) continue;
             else if (other[0] > end) return true;
 
             if (other[0] <= end && other[1] >= start) {
@@ -43,21 +43,24 @@ class LayerTracker {
 export class MarkerTracker {
     layers: LayerTracker[] = [new LayerTracker()];
 
-    addMarker(start: number, end?: number): number {
+    addMarker(gimmickNo: number, start: number, end?: number): number {
         end = (end === undefined ? start : end) + MARKER_PADDING;
         start = start - MARKER_PADDING;
 
         let i = this.layers.length - 1;
-        while (i >= 0 && this.layers[i].isRangeFree(start, end)) {
+        while (i >= 0 && this.layers[i].isRangeFree(gimmickNo, start, end)) {
             i--;
         }
+        i += 1;
+        while (i < this.layers.length && !this.layers[i].isRangeFree(null, start, end)) {
+            i++;
+        }
 
-        const layer = i + 1;
-        if (layer >= this.layers.length) {
+        if (i >= this.layers.length) {
             this.layers.push(new LayerTracker());
         }
-        this.layers[layer].addRange(start, end);
-        return layer;
+        this.layers[i].addRange(gimmickNo, start, end);
+        return i;
     }
 
     size(): number {

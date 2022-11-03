@@ -39,8 +39,8 @@
             relativeGimmickEnd = (data.notes[lastGimmickNoteIndex].time - notebarSize.start) / notebarSize.length;
         }
 
-        layerGlobal = $gimmickMarkerTrackers.global.addMarker(relativeTime, relativeGimmickEnd);
-        layerLocal = $gimmickMarkerTrackers[noteData.gimmick].addMarker(relativeTime, relativeGimmickEnd);
+        layerGlobal = $gimmickMarkerTrackers.global.addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
+        layerLocal = $gimmickMarkerTrackers[noteData.gimmick].addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
     }
 </script>
 

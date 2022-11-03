@@ -2,6 +2,7 @@
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
     import {writable} from "svelte/store";
+    import {SkillFinishType} from "../../enums";
     import {MarkerTracker} from "../../lib/markerTracker";
     import type {LiveData} from "../../types";
     import NotebarAC from "./NotebarAC.svelte";
@@ -22,6 +23,23 @@
     const gimmickMarkerTrackers = writable<{ [k: number | "global"]: MarkerTracker }>({global: new MarkerTracker()});
     mapData.data.note_gimmicks.forEach((_, i) => $gimmickMarkerTrackers[i] = new MarkerTracker());
     mapData.gimmickMarkerTrackers = gimmickMarkerTrackers;
+
+    const gimmickMarkerOrder = mapData.data.note_gimmicks.map((_, i) => i);
+    gimmickMarkerOrder.sort((a, b) => {
+        const aHasLength = mapData.data.note_gimmicks[a].finish_type === SkillFinishType.NOTE_COUNT;
+        const bHasLength = mapData.data.note_gimmicks[b].finish_type === SkillFinishType.NOTE_COUNT;
+        if (aHasLength && !bHasLength) return -1;
+        if (!aHasLength && bHasLength) return 1;
+        return a - b;
+    });
+    gimmickMarkerOrder.unshift(null);
+    console.log(gimmickMarkerOrder);
+
+    const noteIdxsSortedByGimmick = mapData.data.notes.map((_, i) => i);
+    noteIdxsSortedByGimmick.sort((a, b) => {
+        return gimmickMarkerOrder.indexOf(mapData.data.notes[a].gimmick)
+            - gimmickMarkerOrder.indexOf(mapData.data.notes[b].gimmick);
+    });
 </script>
 
 <div class="notebar" style:margin-top={$gimmickMarkerTrackers["global"].size() + "rem"}>
@@ -29,7 +47,7 @@
         {#each mapData.data.appeal_chances as _, i}
             <NotebarAC {i}/>
         {/each}
-        {#each mapData.data.notes as _, i}
+        {#each noteIdxsSortedByGimmick as i}
             <NotebarNote {i}/>
         {/each}
     </div>
