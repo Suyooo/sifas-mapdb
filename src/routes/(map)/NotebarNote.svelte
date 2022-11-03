@@ -51,13 +51,13 @@
              style:left={relativeTime*100+"%"} style:width={relativeHoldLength*100+"%"}></div>
     {/if}
     {#if noteData.gimmick !== null}
-        <div class="marker" style:top={"-" + (layerGlobal + 1) + "rem"}>
-            <span>{noteData.gimmick + 1}</span>
+        <div class="markercontainer" style:top={"-" + (layerGlobal + 1) + "rem"}
+             style:width={"calc("+(relativeGimmickLength*100)+"% + 0.375rem)"}>
+            <div class="marker"><span>{noteData.gimmick + 1}</span></div>
+            {#if relativeGimmickLength}
+                <div class="markertail"></div>
+            {/if}
         </div>
-        {#if relativeGimmickLength}
-            <div class="markertail" style:top={"-" + (layerGlobal + 0.875) + "rem"}
-                 style:width={"calc("+(relativeGimmickLength*100)+"% + 0.25rem)"}></div>
-        {/if}
     {/if}
 </div>
 
@@ -87,17 +87,22 @@
             }
         }
 
-        & > .marker {
-            @apply absolute flex items-center justify-center -left-1.5 w-3 h-3 bg-white border border-black rounded-full
-            pointer-events-auto tracking-tighter box-content;
+        & > .markercontainer {
+            @apply absolute -left-1.5 ml-[-1px] w-3 h-3 box-content border border-transparent pointer-events-auto;
 
-            & > span {
-                @apply text-[.5rem] tracking-tighter;
+            & > .marker {
+                @apply absolute m-[-1px] flex items-center justify-center left-0 top-0 w-3 h-3 bg-white border
+                border-black rounded-full pointer-events-none tracking-tighter box-content;
+
+                & > span {
+                    @apply text-[.5rem] tracking-tighter;
+                }
             }
-        }
 
-        & > .markertail {
-            @apply absolute left-0 -z-10 h-2 bg-white rounded-full border border-black pointer-events-auto box-content;
+            & > .markertail {
+                @apply absolute left-0 top-1 -z-10 w-full h-1 m-[-1px] bg-white rounded-full border border-black
+                pointer-events-none box-content;
+            }
         }
     }
 </style>
