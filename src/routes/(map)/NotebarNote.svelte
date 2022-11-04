@@ -23,9 +23,9 @@
     const noteData: LiveDataNote = data.notes[i];
     const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
-    let relativeHoldLength: number | undefined;
+    let releaseNoteIndex: number | undefined, relativeHoldLength: number | undefined;
     if (noteData.type === NoteType.HOLD_START) {
-        let releaseNoteIndex = i + 1;
+        releaseNoteIndex = i + 1;
         while (data.notes[releaseNoteIndex].rail !== noteData.rail) {
             releaseNoteIndex++;
         }
@@ -60,26 +60,31 @@
     $: lowlight = ($gimmickFilter.note !== null)
         ? !($gimmickFilter.note === i || $highlightByNote[$gimmickFilter.note]?.has(i))
         : ($gimmickFilter.gimmick !== null)
-            ? !(noteData.gimmick === $gimmickFilter.gimmick|| $highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
+            ? !(noteData.gimmick === $gimmickFilter.gimmick || $highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
+            : false;
+    $: lowlightNext = ($gimmickFilter.note !== null)
+        ? !($highlightByNote[$gimmickFilter.note]?.has(releaseNoteIndex))
+        : ($gimmickFilter.gimmick !== null)
+            ? !($highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
             : false;
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
-    <div class="notecont" class:bottom={noteData.rail === 2} class:opacity-30={lowlight}
+    <div class="notecont" class:bottom={noteData.rail === 2}
          style:width={relativeHoldLength ? (relativeHoldLength*100+"%") : null}>
-        <div class="note" class:gimmick={noteData.gimmick !== null}></div>
         {#if noteData.type === NoteType.HOLD_START}
-            <div class="hold"></div>
+            <div class="hold" class:opacity-30={lowlight || lowlightNext}></div>
         {/if}
+        <div class="note" class:gimmick={noteData.gimmick !== null} class:opacity-30={lowlight}></div>
     </div>
     {#if noteData.gimmick !== null}
         <div class="markercont" style:top={"-" + (layerGlobal + 1) + "rem"}
              on:mouseenter={() => $gimmickFilter.note = i} on:mouseleave={() => $gimmickFilter.note = null}
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}>
-            <div class="marker"><span>{noteData.gimmick + 1}</span></div>
             {#if relativeGimmickLength}
                 <div class="markertail"></div>
             {/if}
+            <div class="marker"><span>{noteData.gimmick + 1}</span></div>
         </div>
     {/if}
 </div>
@@ -89,10 +94,10 @@
         @apply relative w-full pointer-events-none select-none;
 
         & > .notecont {
-            @apply absolute top-0 w-[2px] h-3 transition-opacity;
+            @apply absolute top-0 w-[2px] h-3;
 
             & > .note {
-                @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note pointer-events-auto;
+                @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note transition-opacity;
 
                 &.gimmick {
                     @apply bg-notebar-note-gimmick;
@@ -100,7 +105,7 @@
             }
 
             & > .hold {
-                @apply absolute left-0 top-1 h-1 w-full;
+                @apply absolute left-0 top-1 h-1 w-full transition-opacity;
                 background: repeating-linear-gradient(
                         to right, white 0, white 1px, rgba(255, 225, 255, 0) 1px, rgba(255, 225, 255, 0) 2px);
             }
@@ -123,7 +128,7 @@
             }
 
             & > .markertail {
-                @apply absolute left-0 top-1 -z-10 w-full h-1 m-[-1px] bg-white rounded-full border border-black
+                @apply absolute left-0 top-1 w-full h-1 m-[-1px] bg-white rounded-full border border-black
                 pointer-events-none box-content;
             }
         }
