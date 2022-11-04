@@ -10,10 +10,14 @@
         gimmickCount: number[],
         notebarSize: { start: number, end: number, length: number },
         gimmickMarkerTrackers: Writable<{ [k: number | "global"]: MarkerTracker }>
-        highlightByGimmick: Writable<{ [k: number]: [Set<number>, Set<number>] }>,
+        highlightByGimmick: Writable<{ [k: number]: Set<number> }>,
         highlightByNote: Writable<{ [k: number]: Set<number> }>
     }>("mapData");
-    const gimmickFilter = getContext<Writable<{ note: number | null }>>("gimmickFilter");
+    const gimmickFilter = getContext<Writable<{
+        gimmick: number | null,
+        slot: 1 | 2 | 3 | null,
+        note: number | null
+    }>>("gimmickFilter");
 
     export let i: number;
     const noteData: LiveDataNote = data.notes[i];
@@ -32,7 +36,6 @@
     let layerGlobal: number | undefined, layerLocal: number | undefined, relativeGimmickLength: number | undefined;
     if (noteData.gimmick !== null) {
         gimmickCount[noteData.gimmick]++;
-        $highlightByGimmick[noteData.gimmick][0].add(i);
 
         let relativeGimmickEnd: number | undefined;
         if (data.note_gimmicks[noteData.gimmick].finish_type === SkillFinishType.NOTE_COUNT) {
@@ -40,10 +43,9 @@
                 Math.min(data.notes.length - 1, i + data.note_gimmicks[noteData.gimmick].finish_amount);
             $highlightByNote[i] = new Set();
             for (let j = i + 1; j <= lastGimmickNoteIndex; j++) {
-                $highlightByGimmick[noteData.gimmick][1].add(j);
+                $highlightByGimmick[noteData.gimmick].add(j);
                 $highlightByNote[i].add(j);
             }
-            console.log($highlightByNote[i]);
 
             const absoluteGimmickLength = data.notes[lastGimmickNoteIndex].time - noteData.time;
             relativeGimmickLength = absoluteGimmickLength / notebarSize.length;
@@ -55,8 +57,11 @@
             .addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
     }
 
-    $: lowlight = $gimmickFilter.note !== null
-        && !($gimmickFilter.note === i || $highlightByNote[$gimmickFilter.note]?.has(i))
+    $: lowlight = ($gimmickFilter.note !== null)
+        ? !($gimmickFilter.note === i || $highlightByNote[$gimmickFilter.note]?.has(i))
+        : ($gimmickFilter.gimmick !== null)
+            ? !(noteData.gimmick === $gimmickFilter.gimmick|| $highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
+            : false;
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
