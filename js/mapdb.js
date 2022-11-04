@@ -349,6 +349,7 @@ function addHistoryItem(s, page) {
 }
 
 function handleLocation() {
+    if (window.location.hash) return;
     disableHistory = true;
     let location = window.location.search.substring(1);
 
