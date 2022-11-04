@@ -12,7 +12,9 @@
         data: LiveData,
         gimmickCount: number[],
         notebarSize: { start: number, end: number, length: number },
-        gimmickMarkerTrackers: Writable<{ [k: number | "global"]: MarkerTracker }>
+        gimmickMarkerTrackers: Writable<{ [k: number | "global"]: MarkerTracker }>,
+        highlightByGimmick: Writable<{ [k: number]: [Set<number>, Set<number>] }>,
+        highlightByNote: Writable<{ [k: number]: Set<number> }>
     }>("mapData");
 
     const start = mapData.data.notes[0].time;
@@ -20,8 +22,18 @@
     const length = end - start;
     mapData.notebarSize = {start, end, length};
 
-    const gimmickMarkerTrackers = writable<{ [k: number | "global"]: MarkerTracker }>({global: new MarkerTracker()});
-    mapData.data.note_gimmicks.forEach((_, i) => $gimmickMarkerTrackers[i] = new MarkerTracker());
+    const highlightByGimmickData = {};
+    const gimmickMarkerTrackersData = {global: new MarkerTracker()};
+    mapData.data.note_gimmicks.forEach((_, i) => {
+        highlightByGimmickData[i] = [new Set(), new Set()];
+        gimmickMarkerTrackersData[i] = new MarkerTracker()
+    });
+
+    const highlightByGimmick = writable<{ [k: number]: [Set<number>, Set<number>] }>(highlightByGimmickData);
+    const highlightByNote = writable<{ [k: number]: Set<number> }>({});
+    const gimmickMarkerTrackers = writable<{ [k: number | "global"]: MarkerTracker }>(gimmickMarkerTrackersData);
+    mapData.highlightByGimmick = highlightByGimmick;
+    mapData.highlightByNote = highlightByNote;
     mapData.gimmickMarkerTrackers = gimmickMarkerTrackers;
 
     const gimmickMarkerOrder = mapData.data.note_gimmicks.map((_, i) => i);
