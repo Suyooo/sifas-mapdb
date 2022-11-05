@@ -8,11 +8,12 @@
     }>("mapData");
 
     export let i: number;
-    const gimmickData = data.gimmick[i];
+    const gimmickData = data.gimmick![i];
+    const showNum = data.gimmick!.length > 1
 </script>
 
 <div class="gimmick">
-    {#if data.gimmick.length > 1}
+    {#if showNum}
         <div class="num">
             {String.fromCharCode(9312 /* ① */ + i)}
         </div>

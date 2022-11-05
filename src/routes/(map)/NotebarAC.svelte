@@ -10,8 +10,8 @@
 
     export let i: number;
     const acData = data.appeal_chances[i];
-    const startTime = data.notes[acData.range_note_ids![0]].time;
-    const endTime = data.notes[acData.range_note_ids![1]].time;
+    const startTime = data.notes![acData.range_note_ids![0]].time;
+    const endTime = data.notes![acData.range_note_ids![1]].time;
 
     const relativeStart = (startTime - notebarSize.start) / notebarSize.length;
     const relativeLength = (endTime - startTime) / notebarSize.length;

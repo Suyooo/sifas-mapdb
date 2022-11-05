@@ -1,7 +1,7 @@
 <script lang="ts">
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import {MarkerTracker} from "../../lib/markerTracker";
+    import type {MarkerTracker} from "../../lib/markerTracker";
     import type {LiveData, LiveDataNote} from "../../types";
     import {NoteType, SkillFinishType} from "../../enums";
 
@@ -9,7 +9,7 @@
         data: LiveData,
         gimmickCount: number[],
         notebarSize: { start: number, end: number, length: number },
-        gimmickMarkerTrackers: Writable<{ [k: number | "global"]: MarkerTracker }>
+        gimmickMarkerTrackers: Writable<{ [k: number]: MarkerTracker, "global": MarkerTracker }>
         highlightByGimmick: Writable<{ [k: number]: Set<number> }>,
         highlightByNote: Writable<{ [k: number]: Set<number> }>
     }>("mapData");
@@ -20,53 +20,54 @@
     }>>("gimmickFilter");
 
     export let i: number;
-    const noteData: LiveDataNote = data.notes[i];
+    const noteData: LiveDataNote = data.notes![i];
     const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
     let releaseNoteIndex: number | undefined, relativeHoldLength: number | undefined;
     if (noteData.type === NoteType.HOLD_START) {
         releaseNoteIndex = i + 1;
-        while (data.notes[releaseNoteIndex].rail !== noteData.rail) {
+        while (data.notes![releaseNoteIndex].rail !== noteData.rail) {
             releaseNoteIndex++;
         }
-        const absoluteHoldLength = data.notes[releaseNoteIndex].time - noteData.time;
+        const absoluteHoldLength = data.notes![releaseNoteIndex].time - noteData.time;
         relativeHoldLength = absoluteHoldLength / notebarSize.length;
     }
 
-    let layerGlobal: number | undefined, layerLocal: number | undefined, relativeGimmickLength: number | undefined;
+    let layerGlobal: number, layerLocal: number, relativeGimmickLength: number;
     if (noteData.gimmick !== null) {
         gimmickCount[noteData.gimmick]++;
 
         let relativeGimmickEnd: number | undefined;
         if (data.note_gimmicks[noteData.gimmick].finish_type === SkillFinishType.NOTE_COUNT) {
             const lastGimmickNoteIndex =
-                Math.min(data.notes.length - 1, i + data.note_gimmicks[noteData.gimmick].finish_amount);
+                    Math.min(data.notes!.length - 1, i + data.note_gimmicks[noteData.gimmick].finish_amount);
             $highlightByNote[i] = new Set();
             for (let j = i + 1; j <= lastGimmickNoteIndex; j++) {
                 $highlightByGimmick[noteData.gimmick].add(j);
                 $highlightByNote[i].add(j);
             }
 
-            const absoluteGimmickLength = data.notes[lastGimmickNoteIndex].time - noteData.time;
+            const absoluteGimmickLength = data.notes![lastGimmickNoteIndex].time - noteData.time;
             relativeGimmickLength = absoluteGimmickLength / notebarSize.length;
-            relativeGimmickEnd = (data.notes[lastGimmickNoteIndex].time - notebarSize.start) / notebarSize.length;
+            relativeGimmickEnd = (data.notes![lastGimmickNoteIndex].time - notebarSize.start) / notebarSize.length;
         }
 
         layerGlobal = $gimmickMarkerTrackers.global.addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
         layerLocal = $gimmickMarkerTrackers[noteData.gimmick]
-            .addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
+                .addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
     }
 
     $: lowlight = ($gimmickFilter.note !== null)
-        ? !($gimmickFilter.note === i || $highlightByNote[$gimmickFilter.note]?.has(i))
-        : ($gimmickFilter.gimmick !== null)
-            ? !(noteData.gimmick === $gimmickFilter.gimmick || $highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
-            : false;
-    $: lowlightNext = ($gimmickFilter.note !== null)
-        ? !($highlightByNote[$gimmickFilter.note]?.has(releaseNoteIndex))
-        : ($gimmickFilter.gimmick !== null)
-            ? !($highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
-            : false;
+            ? !($gimmickFilter.note === i || $highlightByNote[$gimmickFilter.note]?.has(i))
+            : ($gimmickFilter.gimmick !== null)
+                    ? !(noteData.gimmick === $gimmickFilter.gimmick || $highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
+                    : false;
+    $: lowlightNext = releaseNoteIndex === undefined ? false
+            : ($gimmickFilter.note !== null)
+                    ? !($highlightByNote[$gimmickFilter.note]?.has(releaseNoteIndex))
+                    : ($gimmickFilter.gimmick !== null)
+                            ? !($highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
+                            : false;
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
