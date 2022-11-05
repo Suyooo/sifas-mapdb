@@ -34,7 +34,7 @@
         "src": "{dist/js/materialize.min.js,dist/css/materialize.min.css}"
       },
       "fuzzysort": {
-        "version": "^2.0.1",
+        "version": "2.0.3",
         "src": "fuzzysort.min.js"
       }
     }
