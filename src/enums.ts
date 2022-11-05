@@ -98,6 +98,32 @@ export const enum SkillEffectType {
     STAMINA_HEAL_BLOCK = 265
 }
 
+// Skill Effect Types that target player status - don't print a target for these, even if one is defined in the info
+const skillEffectTypeTargetsFormationSet = new Set([
+    SkillEffectType.SP_FILL, SkillEffectType.SHIELD_GAIN, SkillEffectType.STAMINA_HEAL, SkillEffectType.SPVO_BUFF,
+    SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.STAMINA_DAMAGE, SkillEffectType.SP_LOSE,
+    SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE, SkillEffectType.SHIELD_GAIN_PERCENTAGE,
+    SkillEffectType.STAMINA_HEAL_PERCENTAGE, SkillEffectType.DAMAGE_INCREASE, SkillEffectType.DAMAGE_BASE2_INCREASE,
+    SkillEffectType.SP_GAIN_BY_TECH, SkillEffectType.STAMINA_HEAL_BY_VO, SkillEffectType.STAMINA_HEAL_BY_SP,
+    SkillEffectType.STAMINA_HEAL_BY_SK, SkillEffectType.STAMINA_HEAL_BY_GD, SkillEffectType.SPVO_BUFF_BY_SP,
+    SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK,
+    SkillEffectType.STAMINA_DAMAGE_PIERCE
+]);
+
+export function skillEffectTypeTargetsFormation(t: SkillEffectType) {
+    return skillEffectTypeTargetsFormationSet.has(t);
+}
+
+// Skill Effect Types that affect SP Voltage, which might need a different phrasing if their finish type is SP count
+const skillEffectTypeAffectsSPVoltageSet = new Set([
+    SkillEffectType.SPVO_BUFF, SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.SPVO_BUFF_BY_SP,
+    SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK
+]);
+
+export function skillEffectTypeAffectsSPVoltage(t: SkillEffectType) {
+    return skillEffectTypeAffectsSPVoltageSet.has(t);
+}
+
 export const enum SkillTargetType {
     ALL = 1,
     CHAR_MARI = 18,
@@ -175,6 +201,10 @@ export const enum SkillFinishType {
     UNTIL_AC_END = 4,
     SP_COUNT = 7,
     UNTIL_SWITCH = 8
+}
+
+export function skillFinishTypeHasFixedLength(t: SkillFinishType) {
+    return t === SkillFinishType.NOTE_COUNT;
 }
 
 export const enum SkillCalcType {

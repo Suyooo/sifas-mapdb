@@ -4,7 +4,7 @@ import {
     SkillTargetType,
     SkillFinishType,
     SkillTriggerNote,
-    SkillTriggerAC
+    SkillTriggerAC, skillEffectTypeTargetsFormation, skillEffectTypeAffectsSPVoltage
 } from "../enums";
 import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
@@ -26,7 +26,7 @@ function noteCount(n: number) {
 
 function songGimmick({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) {
     if (finish_type === SkillFinishType.UNTIL_SONG_END) {
-        // replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
+        // Replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
         finish_type = SkillFinishType.INSTANT;
     }
     return capitalize(skill(effect_type, effect_amount, target, finish_type, finish_amount));
@@ -71,24 +71,11 @@ function acGimmick({trigger, effect_type, effect_amount, target, finish_type, fi
     throw new Error(`No translation for AC trigger type ${trigger}`);
 }
 
-// Skill Effect Types that have no target - never print a target for these, even if one is defined in the live info
-const removeTargetSet = new Set([
-    SkillEffectType.SP_FILL, SkillEffectType.SHIELD_GAIN, SkillEffectType.STAMINA_HEAL, SkillEffectType.SPVO_BUFF,
-    SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.STAMINA_DAMAGE, SkillEffectType.SP_LOSE,
-    SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE, SkillEffectType.SHIELD_GAIN_PERCENTAGE,
-    SkillEffectType.STAMINA_HEAL_PERCENTAGE, SkillEffectType.DAMAGE_INCREASE, SkillEffectType.DAMAGE_BASE2_INCREASE,
-    SkillEffectType.SP_GAIN_BY_TECH, SkillEffectType.STAMINA_HEAL_BY_VO, SkillEffectType.STAMINA_HEAL_BY_SP,
-    SkillEffectType.STAMINA_HEAL_BY_SK, SkillEffectType.STAMINA_HEAL_BY_GD, SkillEffectType.SPVO_BUFF_BY_SP,
-    SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK,
-    SkillEffectType.STAMINA_DAMAGE_PIERCE]);
-
 function skill(effectType: SkillEffectType, effectAmount: number, targetType: SkillTargetType,
                finishType: SkillFinishType, finishAmount: number) {
     const effect = skillEffect(effectType, effectAmount);
-    const target = removeTargetSet.has(effectType) ? "" : skillTarget(targetType);
-    // TODO: The parameter for isSPVoltageGainBuff is based on the skill effect strings above right now...
-    //  so it's prone to typos and will break if translated
-    const finish = skillFinish(finishType, finishAmount, effect.indexOf("SP Voltage Gain") !== -1);
+    const target = skillEffectTypeTargetsFormation(effectType) ? "" : skillTarget(targetType);
+    const finish = skillFinish(finishType, finishAmount, skillEffectTypeAffectsSPVoltage(effectType));
     return `${target}${effect}${finish}`;
 }
 
@@ -333,7 +320,7 @@ function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVolt
     if (finishType === SkillFinishType.INSTANT)
         return ``;
     if (finishType === SkillFinishType.UNTIL_AC_END)
-        return ``; // (this is handled in the trigger switch in acGimmick)
+        return ``; // (This is handled in the trigger switch in acGimmick)
     if (finishType === SkillFinishType.SP_COUNT) {
         if (isSPVoltageGainBuff) {
             if (finishAmount == 1) return ` for the next SP Skill`;
@@ -344,7 +331,7 @@ function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVolt
         }
     }
     if (finishType === SkillFinishType.UNTIL_SWITCH) {
-        if (finishAmount <= 1) return ` until the next Strategy Swap`;
+        if (finishAmount <= 1) return ` until the next Strategy swap`;
         else return ` until Strategies are swapped ${finishAmount} times`;
     }
 
