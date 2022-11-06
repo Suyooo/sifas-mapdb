@@ -68,6 +68,7 @@
                     : ($gimmickFilter.gimmick !== null)
                             ? !($highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
                             : false;
+    $: lowlightGimmick = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick !== noteData.gimmick;
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
@@ -79,7 +80,8 @@
         <div class="note" class:gimmick={noteData.gimmick !== null} class:opacity-30={lowlight}></div>
     </div>
     {#if noteData.gimmick !== null}
-        <div class="markercont" style:top={"-" + (layerGlobal + 1) + "rem"}
+        <div class="markercont" class:opacity-10={lowlightGimmick} class:pointer-events-auto={!lowlightGimmick}
+             style:top={"-" + (($gimmickFilter.gimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
              on:mouseenter={() => $gimmickFilter.note = i} on:mouseleave={() => $gimmickFilter.note = null}
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}>
             {#if relativeGimmickLength}
@@ -98,7 +100,7 @@
             @apply absolute top-0 w-[2px] h-3;
 
             & > .note {
-                @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note transition-opacity;
+                @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note transition-opacity duration-300;
 
                 &.gimmick {
                     @apply bg-notebar-note-gimmick;
@@ -106,7 +108,7 @@
             }
 
             & > .hold {
-                @apply absolute left-0 top-1 h-1 w-full transition-opacity;
+                @apply absolute left-0 top-1 h-1 w-full transition-opacity duration-300;
                 background: repeating-linear-gradient(
                         to right, white 0, white 1px, rgba(255, 225, 255, 0) 1px, rgba(255, 225, 255, 0) 2px);
             }
@@ -117,7 +119,7 @@
         }
 
         & > .markercont {
-            @apply absolute -left-1.5 ml-[-1px] w-3 h-3 box-content border border-transparent pointer-events-auto;
+            @apply absolute -left-1.5 ml-[-1px] w-3 h-3 box-content border border-transparent transition-[top,opacity];
 
             & > .marker {
                 @apply absolute m-[-1px] flex items-center justify-center left-0 top-0 w-3 h-3 bg-white border
