@@ -1,4 +1,5 @@
 <script lang="ts">
+    import tippy from "$lib/tooltip";
     import {getContext} from "svelte";
     import {ACMissionType} from "../../enums.js";
     import type {LiveData} from "../../types";
@@ -28,7 +29,8 @@
         || acData.mission_type === ACMissionType.SKILLS;
 </script>
 
-<div class:vo class:sp class:gd class:sk style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}>
+<div class:gd class:sk class:sp class:vo style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}
+     use:tippy={{content: "Test", theme: "notebar"}}>
 </div>
 
 <style lang="postcss">

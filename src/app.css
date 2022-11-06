@@ -49,3 +49,42 @@
         @apply text-attributes-elegant;
     }
 }
+
+.tippy-box {
+    opacity: 0;
+    transform: translateY(5px);
+    transition: transform 0.15s, opacity 0.15s;
+    visibility: visible !important;
+
+    /* Have to do a custom animation instead of using the in-built shift-away-subtle, because tippy.js sets transform
+    to none at the end - which results in the svg arrow jumping around by a pixel. translateY(0) fixes that */
+
+    &.shown {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    &[data-placement^="top"] > .tippy-svg-arrow {
+        bottom: 1px;
+    }
+
+
+    &[data-theme="notebar"] {
+        @apply bg-white rounded;
+        border: 1px solid black;
+
+        & > .tippy-content {
+            @apply text-black px-4 py-2;
+        }
+
+        & > .tippy-svg-arrow {
+            & > svg:first-child {
+                fill: black;
+            }
+
+            & > svg:last-child {
+                fill: white;
+            }
+        }
+    }
+}

@@ -22,7 +22,7 @@
     const length = end - start;
     mapData.notebarSize = {start, end, length};
 
-    const highlightByGimmickData: { [k:number]: Set<number> } = {};
+    const highlightByGimmickData: { [k: number]: Set<number> } = {};
     const gimmickMarkerTrackersData: { [k: number]: MarkerTracker, "global": MarkerTracker } =
             {global: new MarkerTracker()};
     mapData.data.note_gimmicks.forEach((_, i) => {
