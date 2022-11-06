@@ -64,18 +64,18 @@
         transform: translateY(0);
     }
 
+    & > .tippy-content {
+        @apply px-4 py-2;
+    }
+
     &[data-placement^="top"] > .tippy-svg-arrow {
         bottom: 1px;
     }
 
 
     &[data-theme="notebar"] {
-        @apply bg-white rounded;
+        @apply bg-white text-black rounded;
         border: 1px solid black;
-
-        & > .tippy-content {
-            @apply text-black px-4 py-2;
-        }
 
         & > .tippy-svg-arrow {
             & > svg:first-child {

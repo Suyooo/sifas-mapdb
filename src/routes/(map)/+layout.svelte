@@ -11,7 +11,7 @@
     export let data: LiveData;
     setContext<{ data: LiveData, gimmickCount: number[] }>("mapData", {
         data,
-        gimmickCount: new Array(data.note_gimmicks.length).fill(0)
+        gimmickCount: new Array(data.note_gimmicks.length).fill(0) // TODO: do this in get_song_json.py so it works even without notes
     });
     const gimmickFilter = writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null, note: number | null }>({
         gimmick: null, slot: null, note: null

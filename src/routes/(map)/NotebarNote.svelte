@@ -1,17 +1,18 @@
 <script lang="ts">
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import type {MarkerTracker} from "../../lib/markerTracker";
+    import {NoteType} from "../../enums";
     import type {LiveData, LiveDataNote} from "../../types";
-    import {NoteType, SkillFinishType} from "../../enums";
 
-    const {data, gimmickCount, notebarSize, gimmickMarkerTrackers, highlightByGimmick, highlightByNote} = getContext<{
+    const {data, notebarSize, gimmickMarkers, highlightByGimmick, highlightByNote} = getContext<{
         data: LiveData,
-        gimmickCount: number[],
         notebarSize: { start: number, end: number, length: number },
-        gimmickMarkerTrackers: Writable<{ [k: number]: MarkerTracker, "global": MarkerTracker }>
-        highlightByGimmick: Writable<{ [k: number]: Set<number> }>,
-        highlightByNote: Writable<{ [k: number]: Set<number> }>
+        gimmickMarkers: {
+            [k: number]:
+                    { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
+        },
+        highlightByGimmick: { [k: number]: Set<number> },
+        highlightByNote: { [k: number]: Set<number> }
     }>("mapData");
     const gimmickFilter = getContext<Writable<{
         gimmick: number | null,
@@ -33,40 +34,22 @@
         relativeHoldLength = absoluteHoldLength / notebarSize.length;
     }
 
-    let layerGlobal: number, layerLocal: number, relativeGimmickLength: number;
+
+    let relativeGimmickLength: number | undefined, layerGlobal: number, layerLocal: number;
     if (noteData.gimmick !== null) {
-        gimmickCount[noteData.gimmick]++;
-
-        let relativeGimmickEnd: number | undefined;
-        if (data.note_gimmicks[noteData.gimmick].finish_type === SkillFinishType.NOTE_COUNT) {
-            const lastGimmickNoteIndex =
-                    Math.min(data.notes!.length - 1, i + data.note_gimmicks[noteData.gimmick].finish_amount);
-            $highlightByNote[i] = new Set();
-            for (let j = i + 1; j <= lastGimmickNoteIndex; j++) {
-                $highlightByGimmick[noteData.gimmick].add(j);
-                $highlightByNote[i].add(j);
-            }
-
-            const absoluteGimmickLength = data.notes![lastGimmickNoteIndex].time - noteData.time;
-            relativeGimmickLength = absoluteGimmickLength / notebarSize.length;
-            relativeGimmickEnd = (data.notes![lastGimmickNoteIndex].time - notebarSize.start) / notebarSize.length;
-        }
-
-        layerGlobal = $gimmickMarkerTrackers.global.addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
-        layerLocal = $gimmickMarkerTrackers[noteData.gimmick]
-                .addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
+        ({layerGlobal, layerLocal, relativeGimmickLength} = gimmickMarkers[i]);
     }
 
     $: lowlight = ($gimmickFilter.note !== null)
-            ? !($gimmickFilter.note === i || $highlightByNote[$gimmickFilter.note]?.has(i))
+            ? !($gimmickFilter.note === i || highlightByNote[$gimmickFilter.note]?.has(i))
             : ($gimmickFilter.gimmick !== null)
-                    ? !(noteData.gimmick === $gimmickFilter.gimmick || $highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
+                    ? !(noteData.gimmick === $gimmickFilter.gimmick || highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
                     : false;
     $: lowlightNext = releaseNoteIndex === undefined ? false
             : ($gimmickFilter.note !== null)
-                    ? !($highlightByNote[$gimmickFilter.note]?.has(releaseNoteIndex))
+                    ? !(highlightByNote[$gimmickFilter.note]?.has(releaseNoteIndex))
                     : ($gimmickFilter.gimmick !== null)
-                            ? !($highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
+                            ? !(highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
                             : false;
     $: lowlightGimmick = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick !== noteData.gimmick;
 </script>
@@ -119,7 +102,8 @@
         }
 
         & > .markercont {
-            @apply absolute -left-1.5 ml-[-1px] w-3 h-3 box-content border border-transparent transition-[top,opacity];
+            @apply absolute -left-1.5 ml-[-1px] w-3 h-3 box-content border border-transparent;
+            transition: top, opacity;
 
             & > .marker {
                 @apply absolute m-[-1px] flex items-center justify-center left-0 top-0 w-3 h-3 bg-white border
