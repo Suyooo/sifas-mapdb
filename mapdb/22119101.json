@@ -1,10 +1,10 @@
 {
-  "live_id": 12072,
-  "display_order": 32203004,
+  "live_id": 12119,
+  "display_order": 32203010,
   "song_name": "Twinkle Town",
   "song_pronunciation": "\u3068\u3045\u3044\u3093\u304f\u308b\u305f\u3046\u3093",
   "song_length": 114718,
-  "song_attribute": 2,
+  "song_attribute": 9,
   "song_difficulty": 10,
   "ranks": {
     "S": 294000,
@@ -21,12 +21,7 @@
     "swap": 30000
   },
   "sp_gauge_max": 3600,
-  "extra_info": {
-    "is_available": false,
-    "is_permanent": true,
-    "can_show_on_profile": true,
-    "daily_weekday": null
-  },
+  "extra_info": null,
   "notes": [
     {
       "time": 4161,
@@ -568,7 +563,7 @@
   ],
   "note_gimmicks": [
     {
-      "target": 62,
+      "target": 1,
       "effect_type": 17,
       "effect_amount": 2000,
       "trigger": 1,
