@@ -18,15 +18,18 @@ export const tooltipNotebar: Action<HTMLElement, { component: SvelteComponentCon
                 duration: 150,
                 theme: "notebar",
                 onTrigger(instance) {
-                    clearTimeout(unmountTimeout);
                     const box = instance.popper.firstElementChild;
                     requestAnimationFrame(() => {
                         box!.classList.add("shown");
                     });
-                    componentInstance = new params!.component({
-                        target: instance.popper.querySelector(".tippy-content"),
-                        props: params!.props
-                    });
+                    if (componentInstance) {
+                        clearTimeout(unmountTimeout);
+                    } else {
+                        componentInstance = new params!.component({
+                            target: instance.popper.querySelector(".tippy-content"),
+                            props: params!.props
+                        });
+                    }
                 },
                 onHide(instance) {
                     const box = instance.popper.firstElementChild;

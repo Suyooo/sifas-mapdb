@@ -3,6 +3,7 @@
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
     import shortcut from "../../actions/shortcut";
+    import {skillTriggerNoteHasSlotCount} from "../../enums.js";
     import type {LiveData} from "../../types";
 
     // Static database data (from +layout.svelte)
@@ -48,6 +49,11 @@
         <div>
             <b><T key="gimmicks.note_gimmick.amount"/>:</b>
             <T key="format.note_count" params={[noteGimmickData.count]}/>
+            {#if skillTriggerNoteHasSlotCount(noteGimmickData.trigger)}
+                {#each noteGimmickData.count_slot as c, i}
+                    (<T key="gimmicks.note_gimmick.slot"/> {i + 1} ×{c})
+                {/each}
+            {/if}
         </div>
     </div>
 </div>

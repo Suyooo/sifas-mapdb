@@ -17,7 +17,7 @@ export const enum NoteAction {
 export const enum ACMissionType {
     VOLTAGE_TOTAL = 1, TIMING_NICE, TIMING_GREAT, TIMING_WONDERFUL, VOLTAGE_SINGLE,
     VOLTAGE_SP, UNIQUE, CRITICALS, SKILLS, STAMINA = 16
-};
+}
 
 export const enum SkillEffectType {
     SP_FILL = 3,
@@ -217,6 +217,10 @@ export const enum SkillScaleType {
 
 export const enum SkillTriggerNote {
     HIT = 1, MISS, ALWAYS, HIT_VO, HIT_SP, HIT_GD, HIT_SK
+}
+
+export function skillTriggerNoteHasSlotCount(t: SkillTriggerNote) {
+    return t >= SkillTriggerNote.HIT_VO && t <= SkillTriggerNote.HIT_SK;
 }
 
 export const enum SkillTriggerAC {

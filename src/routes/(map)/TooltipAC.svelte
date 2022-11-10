@@ -8,9 +8,7 @@
 <b><T key="appeal_chances.mission" params={[acData]}/></b>
 <div>
     {#if acData.gimmick}
-        <b>Gimmick:</b> <T key="appeal_chances.gimmick" params={[acData.gimmick]}/>
-    {:else}
-        <T key="gimmicks.no_gimmick"/>
+        <b><T key="gimmicks.gimmick"/>:</b> <T key="appeal_chances.gimmick" params={[acData.gimmick]}/>
     {/if}
 </div>
 

@@ -23,6 +23,7 @@
     const filterNote = getContext<Writable<number | null>>("filterNote");
 
     export let i: number;
+    //const hitBySlot: number = (i - 1) % 3 + 1;
     const noteData: LiveDataNote = mapData.notes![i];
     const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
@@ -39,10 +40,10 @@
 
     // Get gimmick marker (calculated in Notebar.svelte) if the note has a gimmick
     let relativeGimmickLength: number | undefined, layerGlobal: number, layerLocal: number;
+    const gimmickData = noteData.gimmick !== null ? mapData.note_gimmicks[noteData.gimmick] : null;
     if (noteData.gimmick !== null) {
         ({layerGlobal, layerLocal, relativeGimmickLength} = gimmickMarkers[i]);
     }
-    const gimmickData = noteData.gimmick !== null ? mapData.note_gimmicks[noteData.gimmick] : null;
 
     $: lowlight = ($filterNote !== null)
             ? !($filterNote === i || gimmickHighlightsByNoteId[$filterNote]?.has(i))

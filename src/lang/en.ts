@@ -1,10 +1,12 @@
 import {
     ACMissionType,
     SkillEffectType,
-    SkillTargetType,
+    skillEffectTypeAffectsSPVoltage,
+    skillEffectTypeTargetsFormation,
     SkillFinishType,
-    SkillTriggerNote,
-    SkillTriggerAC, skillEffectTypeTargetsFormation, skillEffectTypeAffectsSPVoltage
+    SkillTargetType,
+    SkillTriggerAC,
+    SkillTriggerNote
 } from "../enums";
 import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
@@ -492,6 +494,7 @@ export default {
             filter: "click to filter",
             filter_remove: "click to remove filter"
         },
+        gimmick: "Gimmick",
         no_gimmick: "No Gimmick"
     },
     appeal_chances: {
