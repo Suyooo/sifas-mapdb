@@ -13,13 +13,13 @@ let tooltip = $(".tooltip");
 let tooltipInner = $(".tooltip-inner");
 let body = $("body");
 
-function scrollToAndFocusCollapsible(e) {
+function scrollToAndFocusCollapsible(e, behavior="auto") {
     // add padding at bottom to successfully scroll to divs at the end of the page
-    body.css({"padding-bottom": "100vh"});
+    body.css({"padding-bottom": "100vh", "transition": ""});
     setTimeout(function () {
         body.css({"padding-bottom": 0, "transition": "padding-bottom .5s"})
-    }, 300);
-    window.scrollTo(0, e.position().top);
+    }, 1000);
+    window.scrollTo({top: e.position().top - 10, behavior});
     $("> li > .collapsible-header", e)[0].focus();
 }
 
@@ -349,6 +349,7 @@ function addHistoryItem(s, page) {
 }
 
 function handleLocation() {
+    if (window.location.hash) return;
     disableHistory = true;
     let location = window.location.search.substring(1);
 
@@ -540,6 +541,7 @@ function freeLiveCollapsibleInit() {
 }
 
 function freeLiveCollapsibleOpen() {
+    scrollToAndFocusCollapsible(this.$el, "smooth");
     let tabElements = $(".tabs", this.el);
     let tabs;
     if (this.$el.data("initialized") === undefined) {
@@ -710,6 +712,7 @@ function dlpTowerCollapsibleInit() {
 }
 
 function dlpTowerCollapsibleOpen() {
+    scrollToAndFocusCollapsible(this.$el, "smooth");
     loadTower($("#tower-floorlist" + this.$el.attr("id")), this.$el.attr("id"), loadTowerFinish);
     let towerLink = "tower" + this.$el.attr("id");
     addHistoryItem(towerLink, $($(".song-name.translatable", this.$el)[0]).text().replaceAll("Dream Live Parade", "DLP").replaceAll("ドリームライブパレード", "DLP"));
@@ -724,6 +727,7 @@ function dlpFloorCollapsibleInit() {
 }
 
 function dlpFloorCollapsibleOpen(towerPageName) {
+    scrollToAndFocusCollapsible($(this), "smooth");
     addHistoryItem("floor" + $(this).attr("id"), towerPageName + " ➔ " + $(".song-name.translatable", $(this)).text());
     if ($(this).data("initialized") === undefined) {
         $(this).data("initialized", 1);
@@ -945,7 +949,7 @@ function acMarkerMouseover(acinfo) {
 
 function gimmickFilterToggle(gimmickinfos, gimmickmarkers, gimmickmarkermap, filterslot, e) {
     if ($(this).hasClass("filtered") && (filterslot === undefined
-        || $($(".slot", this)[filterslot]).hasClass("filtered"))) {
+        || $($(".slot[data-slot='" + filterslot + "']", this)).hasClass("filtered"))) {
         $(this).removeClass("filtered");
         gimmickmarkers.removeClass("hidden filtered");
         $(".slot", this).removeClass("filtered");
