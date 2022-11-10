@@ -23,7 +23,7 @@
     const filterNote = getContext<Writable<number | null>>("filterNote");
 
     export let i: number;
-    //const hitBySlot: number = (i - 1) % 3 + 1;
+    const hitBySlot: number = i % 3 + 1;
     const noteData: LiveDataNote = mapData.notes![i];
     const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
@@ -72,7 +72,7 @@
              style:top={"-" + (($filterGimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}
              on:mouseenter={() => $filterNote = i} on:mouseleave={() => $filterNote = null}
-             use:tooltipNotebar="{{component: TooltipGimmick, props: {gimmickData, i}}}">
+             use:tooltipNotebar="{{component: TooltipGimmick, props: {gimmickData, i, hitBySlot}}}">
             {#if relativeGimmickLength}
                 <div class="markertail"></div>
             {/if}

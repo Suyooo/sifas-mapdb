@@ -51,7 +51,9 @@
             <T key="format.note_count" params={[noteGimmickData.count]}/>
             {#if skillTriggerNoteHasSlotCount(noteGimmickData.trigger)}
                 {#each noteGimmickData.count_slot as c, i}
-                    (<T key="gimmicks.note_gimmick.slot"/> {i + 1} ×{c})
+                    {#if c > 0}
+                        (<T key="gimmicks.note_gimmick.slot"/> {i + 1} ×{c})
+                    {/if}
                 {/each}
             {/if}
         </div>

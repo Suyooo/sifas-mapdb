@@ -5,13 +5,14 @@
 
     export let gimmickData: LiveDataGimmickNote;
     export let i: number;
+    export let hitBySlot: number;
 </script>
 
 <b><T key="gimmicks.note_gimmick.gimmick" params={[gimmickData]}/></b>
 <div>
-    <b><T key="gimmicks.note_gimmick.position"/>:</b> {i}
+    <b><T key="gimmicks.note_gimmick.position"/>:</b> {i+1}
     {#if skillTriggerNoteHasSlotCount(gimmickData.trigger)}
-        (<T key="gimmicks.note_gimmick.slot"/> {(i - 1) % 3 + 1})
+        (<T key="gimmicks.note_gimmick.slot"/> {hitBySlot})
     {/if}
 </div>
 
