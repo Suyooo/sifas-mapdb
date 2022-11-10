@@ -7,14 +7,12 @@
 
     // Static database data (from +layout.svelte)
     const data = getContext<LiveData>("mapData");
-    const gimmickCount = getContext<number[]>("gimmickCount");
 
     // Dynamic data (stores, from +layout.svelte)
     const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
 
     export let i: number;
     const noteGimmickData = data.note_gimmicks[i];
-    const thisGimmickCount = gimmickCount[i];
 
     $: isFilteredTarget = $filterGimmick !== null && $filterGimmick === i;
     $: isFilteredOut = $filterGimmick !== null && $filterGimmick !== i;
@@ -47,12 +45,10 @@
         <div>
             <T key="gimmicks.note_gimmick.gimmick" params={[noteGimmickData]}/>
         </div>
-        {#if thisGimmickCount > 0}
-            <div>
-                <b><T key="gimmicks.note_gimmick.amount"/>:</b>
-                <T key="format.note_count" params={[thisGimmickCount]}/>
-            </div>
-        {/if}
+        <div>
+            <b><T key="gimmicks.note_gimmick.amount"/>:</b>
+            <T key="format.note_count" params={[noteGimmickData.count]}/>
+        </div>
     </div>
 </div>
 

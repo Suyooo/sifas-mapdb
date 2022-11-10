@@ -46,7 +46,9 @@ export interface LiveDataGimmick {
 }
 
 export interface LiveDataGimmickNote extends LiveDataGimmick {
-    trigger: SkillTriggerNote
+    trigger: SkillTriggerNote,
+    count: number,
+    count_slot: [number, number, number]
 }
 
 export interface LiveDataGimmickAC extends LiveDataGimmick {

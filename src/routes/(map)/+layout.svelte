@@ -8,11 +8,9 @@
     import DetailSongGimmick from "./DetailSongGimmick.svelte";
     import Notebar from "./Notebar.svelte";
 
-    // Static database data (no stores neccessary - calculated during initialization)
+    // Static database data (no stores neccessary)
     export let data: LiveData;
     setContext<LiveData>("mapData", data);
-    // TODO: count occurences in m_live_difficulty_note_gimmick in get_song_json.py instead, so it works even without dump
-    setContext<number[]>("gimmickCount", new Array(data.note_gimmicks.length).fill(0));
 
     // Dynamic data (need stores for filters etc.)
     setContext("filterGimmick", writable<number | null>(null));

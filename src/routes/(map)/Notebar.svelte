@@ -8,7 +8,6 @@
 
     // Static database data (from +layout.svelte)
     const mapData = getContext<LiveData>("mapData");
-    const gimmickCount = getContext<number[]>("gimmickCount");
 
     // Static dump data (extra context only available if the notemap was dumped)
     const notebarSize: { start: number, end: number, length: number } = {start: 0, end: 0, length: 0};
@@ -60,8 +59,6 @@
 
         let layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined;
         if (noteData.gimmick !== null) {
-            gimmickCount[noteData.gimmick]++;
-
             let relativeGimmickEnd: number | undefined;
             if (mapData.note_gimmicks[noteData.gimmick].finish_type === SkillFinishType.NOTE_COUNT) {
                 const lastGimmickNoteIndex =
