@@ -2,7 +2,7 @@
     import T from "$lib/T.svelte";
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import {shortcut} from "../../actions/shortcut";
+    import shortcut from "../../actions/shortcut";
     import type {LiveData} from "../../types";
 
     // Static database data (from +layout.svelte)

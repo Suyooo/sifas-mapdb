@@ -1,8 +1,9 @@
 <script lang="ts">
-    import tippy from "$lib/tooltip";
     import {getContext} from "svelte";
+    import {tooltipNotebar} from "../../actions/tooltip";
     import {ACMissionType} from "../../enums.js";
     import type {LiveData} from "../../types";
+    import TooltipAC from "./TooltipAC.svelte";
 
     // Static database data (from +layout.svelte)
     const mapData = getContext<LiveData>("mapData");
@@ -23,14 +24,14 @@
     const sp = acData.mission_type === ACMissionType.VOLTAGE_SP;
     const gd = acData.mission_type === ACMissionType.STAMINA;
     const sk = acData.mission_type === ACMissionType.TIMING_NICE
-        || acData.mission_type === ACMissionType.TIMING_GREAT
-        || acData.mission_type === ACMissionType.TIMING_WONDERFUL
-        || acData.mission_type === ACMissionType.CRITICALS
-        || acData.mission_type === ACMissionType.SKILLS;
+            || acData.mission_type === ACMissionType.TIMING_GREAT
+            || acData.mission_type === ACMissionType.TIMING_WONDERFUL
+            || acData.mission_type === ACMissionType.CRITICALS
+            || acData.mission_type === ACMissionType.SKILLS;
 </script>
 
 <div class:gd class:sk class:sp class:vo style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}
-     use:tippy={{content: "Test", theme: "notebar"}}>
+     use:tooltipNotebar="{{component: TooltipAC, props: {acData}}}">
 </div>
 
 <style lang="postcss">

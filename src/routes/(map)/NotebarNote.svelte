@@ -1,8 +1,10 @@
 <script lang="ts">
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
+    import {tooltipNotebar} from "../../actions/tooltip";
     import {NoteType} from "../../enums";
     import type {LiveData, LiveDataNote} from "../../types";
+    import TooltipGimmick from "./TooltipGimmick.svelte";
 
     // Static database data (from +layout.svelte)
     const mapData = getContext<LiveData>("mapData");
@@ -40,6 +42,7 @@
     if (noteData.gimmick !== null) {
         ({layerGlobal, layerLocal, relativeGimmickLength} = gimmickMarkers[i]);
     }
+    const gimmickData = noteData.gimmick !== null ? mapData.note_gimmicks[noteData.gimmick] : null;
 
     $: lowlight = ($filterNote !== null)
             ? !($filterNote === i || gimmickHighlightsByNoteId[$filterNote]?.has(i))
@@ -67,6 +70,7 @@
         <div class="markercont" class:opacity-10={lowlightmarker} class:pointer-events-auto={!lowlightmarker}
              style:top={"-" + (($filterGimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
              on:mouseenter={() => $filterNote = i} on:mouseleave={() => $filterNote = null}
+             use:tooltipNotebar="{{component: TooltipGimmick, props: {gimmickData, i}}}"
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}>
             {#if relativeGimmickLength}
                 <div class="markertail"></div>
