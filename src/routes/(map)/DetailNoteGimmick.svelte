@@ -2,28 +2,28 @@
     import T from "$lib/T.svelte";
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import type {LiveData} from "../../types";
     import {shortcut} from "../../actions/shortcut";
+    import type {LiveData} from "../../types";
 
-    const {data, gimmickCount} = getContext<{
-        data: LiveData,
-        gimmickCount: number[]
-    }>("mapData");
+    // Static database data (from +layout.svelte)
+    const data = getContext<LiveData>("mapData");
+    const gimmickCount = getContext<number[]>("gimmickCount");
+
+    // Dynamic data (stores, from +layout.svelte)
+    const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
 
     export let i: number;
     const noteGimmickData = data.note_gimmicks[i];
-
     const thisGimmickCount = gimmickCount[i];
-    const gimmickFilter = getContext<Writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null }>>("gimmickFilter");
 
-    $: isFilteredTarget = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick === i;
-    $: isFilteredOut = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick !== i;
+    $: isFilteredTarget = $filterGimmick !== null && $filterGimmick === i;
+    $: isFilteredOut = $filterGimmick !== null && $filterGimmick !== i;
 
     function filter() {
-        if ($gimmickFilter.gimmick === i) {
-            $gimmickFilter.gimmick = null;
+        if ($filterGimmick === i) {
+            $filterGimmick = null;
         } else {
-            $gimmickFilter.gimmick = i;
+            $filterGimmick = i;
         }
     }
 </script>

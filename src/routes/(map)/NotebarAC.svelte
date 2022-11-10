@@ -4,22 +4,22 @@
     import {ACMissionType} from "../../enums.js";
     import type {LiveData} from "../../types";
 
-    const {data, notebarSize} = getContext<{
-        data: LiveData,
-        notebarSize: { start: number, end: number, length: number }
-    }>("mapData");
+    // Static database data (from +layout.svelte)
+    const mapData = getContext<LiveData>("mapData");
+    // Static dump data (from Notebar.svelte)
+    const notebarSize = getContext<{ start: number, end: number, length: number }>("notebarSize");
 
     export let i: number;
-    const acData = data.appeal_chances[i];
-    const startTime = data.notes![acData.range_note_ids![0]].time;
-    const endTime = data.notes![acData.range_note_ids![1]].time;
+    const acData = mapData.appeal_chances[i];
+    const startTime = mapData.notes![acData.range_note_ids![0]].time;
+    const endTime = mapData.notes![acData.range_note_ids![1]].time;
 
     const relativeStart = (startTime - notebarSize.start) / notebarSize.length;
     const relativeLength = (endTime - startTime) / notebarSize.length;
 
     const vo = acData.mission_type === ACMissionType.VOLTAGE_TOTAL
-        || acData.mission_type === ACMissionType.VOLTAGE_SINGLE
-        || acData.mission_type === ACMissionType.UNIQUE;
+            || acData.mission_type === ACMissionType.VOLTAGE_SINGLE
+            || acData.mission_type === ACMissionType.UNIQUE;
     const sp = acData.mission_type === ACMissionType.VOLTAGE_SP;
     const gd = acData.mission_type === ACMissionType.STAMINA;
     const sk = acData.mission_type === ACMissionType.TIMING_NICE

@@ -3,9 +3,8 @@
     import {getContext} from "svelte";
     import type {LiveData} from "../../types";
 
-    const {data} = getContext<{
-        data: LiveData
-    }>("mapData");
+    // Static database data (from +layout.svelte)
+    const data = getContext<LiveData>("mapData");
 
     export let i: number;
     const acData = data.appeal_chances[i];

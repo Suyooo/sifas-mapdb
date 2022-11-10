@@ -1,42 +1,44 @@
 <script lang="ts">
-    import {getContext} from "svelte";
+    import {getContext, setContext} from "svelte";
     import {SkillFinishType} from "../../enums";
     import {MarkerTracker} from "../../lib/markerTracker";
     import type {LiveData} from "../../types";
     import NotebarAC from "./NotebarAC.svelte";
     import NotebarNote from "./NotebarNote.svelte";
 
-    const mapData = getContext<{
-        data: LiveData,
-        gimmickCount: number[],
-        notebarSize: { start: number, end: number, length: number },
-        gimmickMarkers: {
-            [k: number]:
-                    { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
-        },
-        highlightByGimmick: { [k: number]: Set<number> },
-        highlightByNote: { [k: number]: Set<number> }
-    }>("mapData");
-    const notes = mapData.data.notes!;
+    // Static database data (from +layout.svelte)
+    const mapData = getContext<LiveData>("mapData");
+    const gimmickCount = getContext<number[]>("gimmickCount");
 
-    const start = notes[0].time;
-    const end = notes.at(-1)!.time;
-    const length = end - start;
-    mapData.notebarSize = {start, end, length};
+    // Static dump data (extra context only available if the notemap was dumped)
+    const notebarSize: { start: number, end: number, length: number } = {start: 0, end: 0, length: 0};
+    const gimmickMarkers: {
+        [k: number]:
+                { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
+    } = {};
+    const gimmickHighlightsByGimmickId: { [k: number]: Set<number> } = {};
+    const gimmickHighlightsByNoteId: { [k: number]: Set<number> } = {};
+    setContext("notebarSize", notebarSize);
+    setContext("gimmickMarkers", gimmickMarkers);
+    setContext("gimmickHighlightsByGimmickId", gimmickHighlightsByGimmickId);
+    setContext("gimmickHighlightsByNoteId", gimmickHighlightsByNoteId);
 
-    mapData.gimmickMarkers = {};
-    mapData.highlightByGimmick = {};
-    mapData.highlightByNote = {};
+    const notes = mapData.notes!;
+
+    notebarSize.start = notes[0].time;
+    notebarSize.end = notes.at(-1)!.time;
+    notebarSize.length = notebarSize.end - notebarSize.start;
+
     const gimmickMarkerTrackers: { global: MarkerTracker, [k: number]: MarkerTracker } = {global: new MarkerTracker()};
-    mapData.data.note_gimmicks.forEach((_, i) => {
-        mapData.highlightByGimmick[i] = new Set();
+    mapData.note_gimmicks.forEach((_, i) => {
+        gimmickHighlightsByGimmickId[i] = new Set();
         gimmickMarkerTrackers[i] = new MarkerTracker();
     });
 
-    const gimmickMarkerOrder: (number | null)[] = mapData.data.note_gimmicks.map((_, i) => i);
+    const gimmickMarkerOrder: (number | null)[] = mapData.note_gimmicks.map((_, i) => i);
     (<number[]>gimmickMarkerOrder).sort((a, b) => {
-        const aHasLength = mapData.data.note_gimmicks[a].finish_type === SkillFinishType.NOTE_COUNT;
-        const bHasLength = mapData.data.note_gimmicks[b].finish_type === SkillFinishType.NOTE_COUNT;
+        const aHasLength = mapData.note_gimmicks[a].finish_type === SkillFinishType.NOTE_COUNT;
+        const bHasLength = mapData.note_gimmicks[b].finish_type === SkillFinishType.NOTE_COUNT;
         if (aHasLength && !bHasLength) return -1;
         if (!aHasLength && bHasLength) return 1;
         return a - b;
@@ -54,38 +56,38 @@
     // layers, so that number can be used to set margin-top of the note bar, and another for the components
     for (const i of noteIdxsSortedByGimmick) {
         const noteData = notes[i];
-        const relativeTime = (noteData.time - start) / length;
+        const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
         let layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined;
         if (noteData.gimmick !== null) {
-            mapData.gimmickCount[noteData.gimmick]++;
+            gimmickCount[noteData.gimmick]++;
 
             let relativeGimmickEnd: number | undefined;
-            if (mapData.data.note_gimmicks[noteData.gimmick].finish_type === SkillFinishType.NOTE_COUNT) {
+            if (mapData.note_gimmicks[noteData.gimmick].finish_type === SkillFinishType.NOTE_COUNT) {
                 const lastGimmickNoteIndex =
-                        Math.min(notes.length - 1, i + mapData.data.note_gimmicks[noteData.gimmick].finish_amount);
-                mapData.highlightByNote[i] = new Set();
+                        Math.min(notes.length - 1, i + mapData.note_gimmicks[noteData.gimmick].finish_amount);
+                gimmickHighlightsByNoteId[i] = new Set();
                 for (let j = i + 1; j <= lastGimmickNoteIndex; j++) {
-                    mapData.highlightByGimmick[noteData.gimmick].add(j);
-                    mapData.highlightByNote[i].add(j);
+                    gimmickHighlightsByGimmickId[noteData.gimmick].add(j);
+                    gimmickHighlightsByNoteId[i].add(j);
                 }
 
                 const absoluteGimmickLength = notes[lastGimmickNoteIndex].time - noteData.time;
-                relativeGimmickLength = absoluteGimmickLength / length;
-                relativeGimmickEnd = (notes[lastGimmickNoteIndex].time - start) / length;
+                relativeGimmickLength = absoluteGimmickLength / notebarSize.length;
+                relativeGimmickEnd = (notes[lastGimmickNoteIndex].time - notebarSize.start) / notebarSize.length;
             }
 
             layerGlobal = gimmickMarkerTrackers.global.addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
             layerLocal = gimmickMarkerTrackers[noteData.gimmick]
                     .addMarker(noteData.gimmick, relativeTime, relativeGimmickEnd);
-            mapData.gimmickMarkers[i] = {layerGlobal, layerLocal, relativeGimmickLength};
+            gimmickMarkers[i] = {layerGlobal, layerLocal, relativeGimmickLength};
         }
     }
 </script>
 
 <div class="notebar" style:margin-top={gimmickMarkerTrackers.global.size() + "rem"}>
     <div>
-        {#each mapData.data.appeal_chances as _, i}
+        {#each mapData.appeal_chances as _, i}
             <NotebarAC {i}/>
         {/each}
         {#each notes as _, i}

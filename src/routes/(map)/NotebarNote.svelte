@@ -4,54 +4,55 @@
     import {NoteType} from "../../enums";
     import type {LiveData, LiveDataNote} from "../../types";
 
-    const {data, notebarSize, gimmickMarkers, highlightByGimmick, highlightByNote} = getContext<{
-        data: LiveData,
-        notebarSize: { start: number, end: number, length: number },
-        gimmickMarkers: {
-            [k: number]:
-                    { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
-        },
-        highlightByGimmick: { [k: number]: Set<number> },
-        highlightByNote: { [k: number]: Set<number> }
-    }>("mapData");
-    const gimmickFilter = getContext<Writable<{
-        gimmick: number | null,
-        slot: 1 | 2 | 3 | null,
-        note: number | null
-    }>>("gimmickFilter");
+    // Static database data (from +layout.svelte)
+    const mapData = getContext<LiveData>("mapData");
+    // Static dump data (from Notebar.svelte)
+    const notebarSize = getContext<{ start: number, end: number, length: number }>("notebarSize");
+    const gimmickMarkers = getContext<{
+        [k: number]:
+                { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
+    }>("gimmickMarkers");
+    const gimmickHighlightsByGimmickId = getContext<{ [k: number]: Set<number> }>("gimmickHighlightsByGimmickId");
+    const gimmickHighlightsByNoteId = getContext<{ [k: number]: Set<number> }>("gimmickHighlightsByNoteId");
+
+    // Dynamic data (stores, from +layout.svelte)
+    const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
+    //const filterSlot = getContext<Writable<1 | 2 | 3 | null>>("filterSlot");
+    const filterNote = getContext<Writable<number | null>>("filterNote");
 
     export let i: number;
-    const noteData: LiveDataNote = data.notes![i];
+    const noteData: LiveDataNote = mapData.notes![i];
     const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
+    // Is this a hold note?
     let releaseNoteIndex: number | undefined, relativeHoldLength: number | undefined;
     if (noteData.type === NoteType.HOLD_START) {
         releaseNoteIndex = i + 1;
-        while (data.notes![releaseNoteIndex].rail !== noteData.rail) {
+        while (mapData.notes![releaseNoteIndex].rail !== noteData.rail) {
             releaseNoteIndex++;
         }
-        const absoluteHoldLength = data.notes![releaseNoteIndex].time - noteData.time;
+        const absoluteHoldLength = mapData.notes![releaseNoteIndex].time - noteData.time;
         relativeHoldLength = absoluteHoldLength / notebarSize.length;
     }
 
-
+    // Get gimmick marker (calculated in Notebar.svelte) if the note has a gimmick
     let relativeGimmickLength: number | undefined, layerGlobal: number, layerLocal: number;
     if (noteData.gimmick !== null) {
         ({layerGlobal, layerLocal, relativeGimmickLength} = gimmickMarkers[i]);
     }
 
-    $: lowlight = ($gimmickFilter.note !== null)
-            ? !($gimmickFilter.note === i || highlightByNote[$gimmickFilter.note]?.has(i))
-            : ($gimmickFilter.gimmick !== null)
-                    ? !(noteData.gimmick === $gimmickFilter.gimmick || highlightByGimmick[$gimmickFilter.gimmick]?.has(i))
+    $: lowlight = ($filterNote !== null)
+            ? !($filterNote === i || gimmickHighlightsByNoteId[$filterNote]?.has(i))
+            : ($filterGimmick !== null)
+                    ? !(noteData.gimmick === $filterGimmick || gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
                     : false;
     $: lowlightNext = releaseNoteIndex === undefined ? false
-            : ($gimmickFilter.note !== null)
-                    ? !(highlightByNote[$gimmickFilter.note]?.has(releaseNoteIndex))
-                    : ($gimmickFilter.gimmick !== null)
-                            ? !(highlightByGimmick[$gimmickFilter.gimmick]?.has(releaseNoteIndex))
+            : ($filterNote !== null)
+                    ? !(gimmickHighlightsByNoteId[$filterNote]?.has(releaseNoteIndex))
+                    : ($filterGimmick !== null)
+                            ? !(gimmickHighlightsByGimmickId[$filterGimmick]?.has(releaseNoteIndex))
                             : false;
-    $: lowlightGimmick = $gimmickFilter.gimmick !== null && $gimmickFilter.gimmick !== noteData.gimmick;
+    $: lowlightmarker = $filterGimmick !== null && $filterGimmick !== noteData.gimmick;
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
@@ -63,9 +64,9 @@
         <div class="note" class:gimmick={noteData.gimmick !== null} class:opacity-30={lowlight}></div>
     </div>
     {#if noteData.gimmick !== null}
-        <div class="markercont" class:opacity-10={lowlightGimmick} class:pointer-events-auto={!lowlightGimmick}
-             style:top={"-" + (($gimmickFilter.gimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
-             on:mouseenter={() => $gimmickFilter.note = i} on:mouseleave={() => $gimmickFilter.note = null}
+        <div class="markercont" class:opacity-10={lowlightmarker} class:pointer-events-auto={!lowlightmarker}
+             style:top={"-" + (($filterGimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
+             on:mouseenter={() => $filterNote = i} on:mouseleave={() => $filterNote = null}
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}>
             {#if relativeGimmickLength}
                 <div class="markertail"></div>

@@ -8,15 +8,16 @@
     import DetailSongGimmick from "./DetailSongGimmick.svelte";
     import Notebar from "./Notebar.svelte";
 
+    // Static database data (no stores neccessary - calculated during initialization)
     export let data: LiveData;
-    setContext<{ data: LiveData, gimmickCount: number[] }>("mapData", {
-        data,
-        gimmickCount: new Array(data.note_gimmicks.length).fill(0) // TODO: do this in get_song_json.py so it works even without notes
-    });
-    const gimmickFilter = writable<{ gimmick: number | null, slot: 1 | 2 | 3 | null, note: number | null }>({
-        gimmick: null, slot: null, note: null
-    });
-    setContext("gimmickFilter", gimmickFilter);
+    setContext<LiveData>("mapData", data);
+    // TODO: count occurences in m_live_difficulty_note_gimmick in get_song_json.py instead, so it works even without dump
+    setContext<number[]>("gimmickCount", new Array(data.note_gimmicks.length).fill(0));
+
+    // Dynamic data (need stores for filters etc.)
+    setContext("filterGimmick", writable<number | null>(null));
+    setContext("filterSlot", writable<1 | 2 | 3 | null>(null));
+    setContext("filterNote", writable<number | null>(null));
 </script>
 
 <a href="/">Back.</a>
