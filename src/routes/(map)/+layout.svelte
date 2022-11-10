@@ -14,7 +14,7 @@
 
     // Dynamic data (need stores for filters etc.)
     setContext("filterGimmick", writable<number | null>(null));
-    setContext("filterSlot", writable<1 | 2 | 3 | null>(null));
+    setContext("filterSlot", writable<number | null>(null));
     setContext("filterNote", writable<number | null>(null));
 </script>
 

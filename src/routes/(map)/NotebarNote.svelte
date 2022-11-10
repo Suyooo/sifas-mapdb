@@ -19,7 +19,7 @@
 
     // Dynamic data (stores, from +layout.svelte)
     const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
-    //const filterSlot = getContext<Writable<1 | 2 | 3 | null>>("filterSlot");
+    //const filterSlot = getContext<Writable<number | null>>("filterSlot");
     const filterNote = getContext<Writable<number | null>>("filterNote");
 
     export let i: number;
