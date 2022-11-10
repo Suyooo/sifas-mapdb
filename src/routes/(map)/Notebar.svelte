@@ -85,18 +85,24 @@
     }
 </script>
 
-<div class="notebar" style:margin-top={gimmickMarkerTrackers.global.size() + "rem"}>
-    <div>
-        {#each mapData.appeal_chances as _, i}
-            <NotebarAC {i}/>
-        {/each}
-        {#each notes as _, i}
-            <NotebarNote {i}/>
-        {/each}
+<div class="notebarcont" style:padding-top={gimmickMarkerTrackers.global.size() + "rem"}>
+    <div class="notebar">
+        <div>
+            {#each mapData.appeal_chances as _, i}
+                <NotebarAC {i}/>
+            {/each}
+            {#each notes as _, i}
+                <NotebarNote {i}/>
+            {/each}
+        </div>
     </div>
 </div>
 
 <style lang="postcss">
+    .notebarcont {
+        @apply w-full overflow-x-hidden;
+    }
+
     .notebar {
         @apply bg-notebar w-full h-6 px-6;
 
