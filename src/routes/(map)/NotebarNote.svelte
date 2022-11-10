@@ -69,9 +69,9 @@
     {#if noteData.gimmick !== null}
         <div class="markercont" class:opacity-10={lowlightmarker} class:pointer-events-auto={!lowlightmarker}
              style:top={"-" + (($filterGimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
+             style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}
              on:mouseenter={() => $filterNote = i} on:mouseleave={() => $filterNote = null}
-             use:tooltipNotebar="{{component: TooltipGimmick, props: {gimmickData, i}}}"
-             style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}>
+             use:tooltipNotebar="{{component: TooltipGimmick, props: {gimmickData, i}}}">
             {#if relativeGimmickLength}
                 <div class="markertail"></div>
             {/if}
@@ -108,7 +108,7 @@
 
         & > .markercont {
             @apply absolute -left-1.5 ml-[-1px] w-3 h-3 box-content border border-transparent;
-            transition: top, opacity;
+            transition: top 0.3s, opacity 0.3s;
 
             & > .marker {
                 @apply absolute m-[-1px] flex items-center justify-center left-0 top-0 w-3 h-3 bg-white border
