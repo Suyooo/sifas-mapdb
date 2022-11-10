@@ -19,11 +19,11 @@
 
     // Dynamic data (stores, from +layout.svelte)
     const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
-    //const filterSlot = getContext<Writable<number | null>>("filterSlot");
+    const filterSlot = getContext<Writable<number | null>>("filterSlot");
     const filterNote = getContext<Writable<number | null>>("filterNote");
 
     export let i: number;
-    const hitBySlot: number = i % 3 + 1;
+    const hitBySlot: number = i % 3;
     const noteData: LiveDataNote = mapData.notes![i];
     const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
@@ -45,18 +45,28 @@
         ({layerGlobal, layerLocal, relativeGimmickLength} = gimmickMarkers[i]);
     }
 
-    $: lowlight = ($filterNote !== null)
-            ? !($filterNote === i || gimmickHighlightsByNoteId[$filterNote]?.has(i))
-            : ($filterGimmick !== null)
-                    ? !(noteData.gimmick === $filterGimmick || gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
-                    : false;
-    $: lowlightNext = releaseNoteIndex === undefined ? false
-            : ($filterNote !== null)
-                    ? !(gimmickHighlightsByNoteId[$filterNote]?.has(releaseNoteIndex))
-                    : ($filterGimmick !== null)
-                            ? !(gimmickHighlightsByGimmickId[$filterGimmick]?.has(releaseNoteIndex))
-                            : false;
-    $: lowlightmarker = $filterGimmick !== null && $filterGimmick !== noteData.gimmick;
+    let lowlight: boolean, lowlightNext: boolean, lowlightMarker: boolean;
+    $: {
+        if ($filterNote !== null) {
+            lowlight = !($filterNote === i || gimmickHighlightsByNoteId[$filterNote]?.has(i));
+            if (releaseNoteIndex !== undefined) {
+                lowlightNext = !(gimmickHighlightsByNoteId[$filterNote]?.has(releaseNoteIndex));
+            }
+        } else if ($filterGimmick !== null) {
+            console.log(hitBySlot, $filterSlot);
+            lowlight = !(noteData.gimmick === $filterGimmick || gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
+                    || ($filterSlot !== null && hitBySlot !== $filterSlot);
+            if (releaseNoteIndex !== undefined) {
+                lowlightNext = !(gimmickHighlightsByGimmickId[$filterGimmick]?.has(releaseNoteIndex))
+                        || ($filterSlot !== null && ((hitBySlot + 1) % 3) !== $filterSlot);
+            }
+        } else {
+            lowlight = lowlightNext = false;
+        }
+
+        lowlightMarker = $filterGimmick !== null && $filterGimmick !== noteData.gimmick
+                || ($filterSlot !== null && hitBySlot !== $filterSlot);
+    }
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
@@ -68,7 +78,7 @@
         <div class="note" class:gimmick={noteData.gimmick !== null} class:opacity-30={lowlight}></div>
     </div>
     {#if noteData.gimmick !== null}
-        <div class="markercont" class:opacity-10={lowlightmarker} class:pointer-events-auto={!lowlightmarker}
+        <div class="markercont" class:opacity-10={lowlightMarker} class:pointer-events-auto={!lowlightMarker}
              style:top={"-" + (($filterGimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}
              on:mouseenter={() => $filterNote = i} on:mouseleave={() => $filterNote = null}
