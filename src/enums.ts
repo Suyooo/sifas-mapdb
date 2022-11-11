@@ -1,25 +1,40 @@
-export const enum Attribute {
+export enum Attribute {
     SMILE = 1, PURE, COOL, ACTIVE, NATURAL, ELEGANT, NONE
 }
 
-export const enum Difficulty {
+export enum Difficulty {
     BEGINNER = 10, INTERMEDIATE = 20, ADVANCED = 30, ADVANCED_PLUS = 35, CHALLENGE = 37
 }
 
-export const enum NoteType {
+export enum Role {
+    VO = 1, SP = 2, GD = 3, SK = 4
+}
+
+export enum NoteType {
     NORMAL = 1, HOLD_START, HOLD_END, AC_START, AC_END
 }
 
-export const enum NoteAction {
+export enum NoteAction {
     TAP = 1, SWIPE_UP = 4, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT
 }
 
-export const enum ACMissionType {
+export enum ACMissionType {
     VOLTAGE_TOTAL = 1, TIMING_NICE, TIMING_GREAT, TIMING_WONDERFUL, VOLTAGE_SINGLE,
     VOLTAGE_SP, UNIQUE, CRITICALS, SKILLS, STAMINA = 16
 }
 
-export const enum SkillEffectType {
+export function acMissionTypeToRole(t: ACMissionType): Role {
+    if (t === ACMissionType.VOLTAGE_TOTAL || t === ACMissionType.VOLTAGE_SINGLE || t === ACMissionType.UNIQUE)
+        return Role.VO;
+    else if (t === ACMissionType.VOLTAGE_SP)
+        return Role.SP;
+    else if (t === ACMissionType.STAMINA)
+        return Role.GD;
+    else
+        return Role.SK;
+}
+
+export enum SkillEffectType {
     SP_FILL = 3,
     SHIELD_GAIN = 4,
     STAMINA_HEAL = 5,
@@ -124,7 +139,7 @@ export function skillEffectTypeAffectsSPVoltage(t: SkillEffectType) {
     return skillEffectTypeAffectsSPVoltageSet.has(t);
 }
 
-export const enum SkillTargetType {
+export enum SkillTargetType {
     ALL = 1,
     CHAR_MARI = 18,
     CHAR_RUBY = 19,
@@ -194,7 +209,7 @@ export const enum SkillTargetType {
     CHAR_MIA = 114
 }
 
-export const enum SkillFinishType {
+export enum SkillFinishType {
     UNTIL_SONG_END = 1,
     NOTE_COUNT = 2,
     INSTANT = 3,
@@ -207,15 +222,15 @@ export function skillFinishTypeHasFixedLength(t: SkillFinishType) {
     return t === SkillFinishType.NOTE_COUNT;
 }
 
-export const enum SkillCalcType {
+export enum SkillCalcType {
     ADD = 1, SCALE_A, SCALE_B
 }
 
-export const enum SkillScaleType {
+export enum SkillScaleType {
     MAX = 1, CURRENT, SMALLER, BIGGER, SPECIAL
 }
 
-export const enum SkillTriggerNote {
+export enum SkillTriggerNote {
     HIT = 1, MISS, ALWAYS, HIT_VO, HIT_SP, HIT_GD, HIT_SK
 }
 
@@ -223,11 +238,11 @@ export function skillTriggerNoteHasSlotCount(t: SkillTriggerNote) {
     return t >= SkillTriggerNote.HIT_VO && t <= SkillTriggerNote.HIT_SK;
 }
 
-export const enum SkillTriggerAC {
+export enum SkillTriggerAC {
     START = 1, SUCCESS, FAILURE, END
 }
 
-export const enum Item {
+export enum Item {
     LOVECA_STARS = 0,
     DLP_MEDAL = 19001
 }

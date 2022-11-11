@@ -1,6 +1,7 @@
 <script lang="ts">
     import T from "$lib/T.svelte";
     import {getContext} from "svelte";
+    import {acMissionTypeToRole, Role} from "../../enums";
     import type {LiveData} from "../../types";
 
     // Static database data (from +layout.svelte)
@@ -8,10 +9,12 @@
 
     export let i: number;
     const acData = data.appeal_chances[i];
+    const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
 </script>
 
 <div>
-    <div class="bg-accent-100">
+    <div class="title">
+        <div class="indicator {acType}">&nbsp;</div>
         <T key="appeal_chances.label"/> {i + 1}:
         <T key="appeal_chances.mission" params={[acData]}/>
     </div>
@@ -50,6 +53,30 @@
 
         & > div {
             @apply flex-1;
+        }
+    }
+
+    .title {
+        @apply relative bg-accent-100;
+
+        & > .indicator {
+            @apply absolute left-0 top-0 w-1 h-full;
+
+            &.vo {
+                @apply bg-types-vo;
+            }
+
+            &.sp {
+                @apply bg-types-sp;
+            }
+
+            &.gd {
+                @apply bg-types-gd;
+            }
+
+            &.sk {
+                @apply bg-types-sk;
+            }
         }
     }
 </style>

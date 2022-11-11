@@ -1,7 +1,8 @@
 <script lang="ts">
     import {getContext} from "svelte";
     import {tooltipNotebar} from "../../actions/tooltip";
-    import {ACMissionType} from "../../enums.js";
+    import {Role} from "../../enums";
+    import {acMissionTypeToRole} from "../../enums.js";
     import type {LiveData} from "../../types";
     import TooltipAC from "./TooltipAC.svelte";
 
@@ -17,20 +18,10 @@
 
     const relativeStart = (startTime - notebarSize.start) / notebarSize.length;
     const relativeLength = (endTime - startTime) / notebarSize.length;
-
-    const vo = acData.mission_type === ACMissionType.VOLTAGE_TOTAL
-            || acData.mission_type === ACMissionType.VOLTAGE_SINGLE
-            || acData.mission_type === ACMissionType.UNIQUE;
-    const sp = acData.mission_type === ACMissionType.VOLTAGE_SP;
-    const gd = acData.mission_type === ACMissionType.STAMINA;
-    const sk = acData.mission_type === ACMissionType.TIMING_NICE
-            || acData.mission_type === ACMissionType.TIMING_GREAT
-            || acData.mission_type === ACMissionType.TIMING_WONDERFUL
-            || acData.mission_type === ACMissionType.CRITICALS
-            || acData.mission_type === ACMissionType.SKILLS;
+    const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
 </script>
 
-<div class:gd class:sk class:sp class:vo style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}
+<div class="{acType}" style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}
      use:tooltipNotebar="{{component: TooltipAC, props: {acData}}}">
 </div>
 
