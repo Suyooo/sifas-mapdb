@@ -44,7 +44,7 @@ function skill(skill) {
 }
 
 // Skill Effect Types that have no target - never print a target for these, even if one is defined in the live info
-const removeTargetSet = new Set([3, 4, 5, 23, 50, 68, 69, 70, 91, 93, 96, 101, 105, 112, 128, 130, 132, 134, 210, 217, 218, 219, 263]);
+const removeTargetSet = new Set([3, 4, 5, 68, 69, 70, 91, 93, 96, 101, 105, 112, 128, 130, 132, 134, 263]);
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
