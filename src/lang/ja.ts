@@ -374,12 +374,10 @@ function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
 
 export default {
     meta: {
-        title: "スクスタ譜面データベース",
-        description: "Song information database for SIFAS, including complete note maps, gimmick note timings and AC rewards."
+        title: "スクスタ譜面データベース"
     },
     header: {
-        title: "スクスタ譜面DB",
-        back: "Back",
+        title: "スクスタ譜面DB"
     },
     tab: {
         start: "スタート",
@@ -391,42 +389,42 @@ export default {
         rankings: "ランキング"
     },
     preferences: {
-        title: "Preferences",
-        titles: "Song Title Display",
-        titles_toggle: "Toggle Song Title Display",
-        titles_kana: "Kana/Kanji",
-        titles_kana_toggle: "Showing titles in Kana/Kanji",
-        titles_roma: "Romaji",
-        titles_roma_toggle: "Showing titles in Romaji",
-        unavailable: "Unavailable Songs",
-        unavailable_toggle: "Toggle Unavailable Songs",
-        unavailable_hide: "Hide",
-        unavailable_hide_toggle: "Hiding unavailable songs",
-        unavailable_show: "Show",
-        unavailable_show_toggle: "Showing unavailable songs",
-        dark_mode: "Dark Mode",
-        dark_mode_off: "Off",
-        dark_mode_on: "On",
-        save: "Save",
-        cancel: "Cancel"
+        title: "設定",
+        titles: "曲名の表記体系",
+        titles_toggle: "曲名の表記体系を切り替える",
+        titles_kana: "仮名交じり",
+        titles_kana_toggle: "曲名を仮名交じりで表示する",
+        titles_roma: "ローマ字",
+        titles_roma_toggle: "曲名をローマ字で表示する",
+        unavailable: "現在プレイできない楽曲を表示",
+        unavailable_toggle: "現在プレイできない楽曲を表示を切り替える",
+        unavailable_hide: "なし",
+        unavailable_hide_toggle: "現在プレイできない楽曲を表示しない",
+        unavailable_show: "ある",
+        unavailable_show_toggle: "現在プレイできない楽曲を表示する",
+        site_theme: "サイトテーマ",
+        site_theme_light: "ライト",
+        site_theme_dark: "ダーク",
+        save: "変更を保存",
+        cancel: "変更を破棄"
     },
     search: {
-        label: "Filter By Song Name (Full Title or Abbreviations, Kana or Romanized)",
-        tooltip: "You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>You can also add <span>+</span> or <span>++</span> to the end to instantly open the Adv+ or Challenge tab."
+        label: "曲名で絞り込む",
+        tooltip: "<span>ぼららら</span>とか<span>君ここ</span>とか<span>虹パ</span>とか略称もOK<br><span>+</span>/<span>++</span>付けると、上級+/チャレンジの譜面が表示されます。"
     },
     songlist: {
-        unavailable: "unavailable",
-        daily: "daily",
+        unavailable: "現在プレイできない",
+        daily: "日替わり楽曲",
         weekdays: {
-            1: "Monday",
-            2: "Tuesday",
-            3: "Wednesday",
-            4: "Thursday",
-            5: "Friday",
-            6: "Saturday",
-            7: "Sunday"
+            1: "月曜日",
+            2: "火曜日",
+            3: "水曜日",
+            4: "木曜日",
+            5: "金曜日",
+            6: "土曜日",
+            7: "日曜日"
         },
-        time_limited: "time-limited"
+        time_limited: "期間限定"
     },
     songinfo: {
         ranks: {
@@ -435,7 +433,7 @@ export default {
             B: "Bランク条件",
             C: "Cランク条件",
         },
-        note_damage: "ノーツダメージ",
+        note_damage: "基本ノーツダメージ",
         voltage_caps: {
             tap: "アピールボルテージ天井",
             sp: "SPボルテージ天井",
@@ -447,95 +445,93 @@ export default {
         note_count_ac: "ACでノーツ数",
         note_damage_total: "合計ノーツダメージ",
         ac_reward_total: "合計ACクリアボルテージ",
-        song_length: "楽曲の長さ",
+        song_length: "楽曲の時間",
         story_stages: "ストーリーステージ",
-        no_map: "no note map available"
+        no_map: "譜面なし"
     },
     dlp: {
-        performance_points: "Performance Points",
+        performance_points: "PP available",
         performance_points_recoverable: "recoverable",
         performance_points_recovery_cost: "PP Recovery Cost",
         progress_reward: "Progress Reward",
         story_node: "Story Node",
         songinfo: {
             voltage_target: "Target Voltage",
-            song_difficulty: "Base Difficulty",
+            song_difficulty: "基本難易度",
             reward_clear: "Clear Reward",
-            voltage_target_short: "Target",
-            note_damage_short: "Note Damage"
+            voltage_target_short: "ターゲット",
+            note_damage_short: "ノーツダメージ"
         }
     },
     scale: {
-        label: "Scale",
-        time: "Time",
-        turns: "Turns"
+        label: "スケール",
+        time: "時間",
+        turns: "ターン間"
     },
     gimmicks: {
-        title: "Gimmicks",
+        title: "ギミック",
         song_gimmick: {
-            label: "Song Gimmick",
-            label_multiple: "Song Gimmicks",
+            label: "ライブの特徴",
+            label_multiple: "ライブの特徴",
             gimmick: songGimmick,
-            cleansable: "Cleansable",
-            cleansable_yes: "Yes",
-            cleansable_no: "No"
+            cleansable: "効果解除",
+            cleansable_yes: "できる",
+            cleansable_no: "できない"
         },
         note_gimmick: {
-            label: "Note Gimmick",
+            label: "ノーツギミック",
             gimmick: noteGimmick,
-            amount: "Amount",
-            position: "Note Position",
-            slot: "Slot",
-            filter: "click to filter",
-            filter_remove: "click to remove filter"
+            amount: "ノーツ数",
+            position: "ノーツ",
+            slot: (i: number) => `${i}枠目`,
+            filter: "クリックで絞り込む",
+            filter_remove: "クリックでリセット"
         },
-        gimmick: "Gimmick",
-        no_gimmick: "No Gimmick"
+        gimmick: "ギミック",
+        no_gimmick: "ギミックなし"
     },
     appeal_chances: {
-        title: "Appeal Chances",
+        title: "アピールチャンス",
         label: "AC",
         gimmick: acGimmick,
         mission: acMission,
-        length: "Length",
+        length: "ノーツ",
         average: acAverage,
-        reward_voltage_label: "Success",
-        reward_voltage: "Voltage",
-        penalty_damage_label: "Failure",
-        penalty_damage: "Damage"
+        reward_voltage_label: "成功",
+        reward_voltage: "ボルテージ",
+        penalty_damage_label: "失敗",
+        penalty_damage: "ダメージ"
     },
     rankings: {
-        length_title: "Shortest Song Lengths",
-        length_column_song: "Song",
-        length_column_length: "Length",
-        length_show_all_description: "only showing songs currently available on JP - ",
-        length_show_all_link: "click to see all songs",
-        notes_title: "Highest Note Counts",
-        notes_column_song: "Song",
-        notes_column_notes: "Notes",
-        notes_show_all_description: "only showing songs that can be displayed on your profile - ",
-        notes_show_all_link: "click to see all songs"
+        column_song: "楽曲",
+        show_all_link: "クリックで全楽曲表示",
+        length_title: "楽曲の時間ランキング",
+        length_column_length: "時間",
+        length_show_all_description: "現在プレイできる楽曲のみ表示。",
+        notes_title: "ノーツ数ランキング",
+        notes_column_notes: "ノーツ",
+        notes_show_all_description: "プロフィールに載せられる楽曲のみ表示。"
     },
     difficulty: {
-        beginner: "Beginner",
-        beginner_short: "Beg",
-        intermediate: "Intermediate",
-        intermediate_short: "Int",
-        advanced: "Advanced",
-        advanced_short: "Adv",
-        advplus: "Advanced+",
-        advplus_short: "Adv+",
-        challenge: "Challenge",
-        challenge_short: "Ch",
+        beginner: "初級",
+        beginner_short: "初級",
+        intermediate: "中級",
+        intermediate_short: "中級",
+        advanced: "上級",
+        advanced_short: "上級",
+        advplus: "上級+",
+        advplus_short: "上級+",
+        challenge: "チャレンジ",
+        challenge_short: "ﾁｬﾚﾝｼﾞ",
     },
     attribute: {
-        smile: "Smile",
-        pure: "Pure",
-        cool: "Cool",
-        active: "Active",
-        natural: "Natural",
-        elegant: "Elegant",
-        none: "None"
+        smile: "スマイル",
+        pure: "ピュア",
+        cool: "クール",
+        active: "アクティブ",
+        natural: "ナチュラル",
+        elegant: "エレガント",
+        none: "無属性"
     },
     format: {
         number: numberFormat,

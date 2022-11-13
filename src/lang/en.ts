@@ -379,12 +379,10 @@ function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
 
 export default {
     meta: {
-        title: "SIFAS Note Map Database",
-        description: "Song information database for SIFAS, including complete note maps, gimmick note timings and AC rewards."
+        title: "SIFAS Note Map Database"
     },
     header: {
-        title: "Note Map DB",
-        back: "Back",
+        title: "Note Map DB"
     },
     tab: {
         start: "Start",
@@ -409,14 +407,14 @@ export default {
         unavailable_hide_toggle: "Hiding unavailable songs",
         unavailable_show: "Show",
         unavailable_show_toggle: "Showing unavailable songs",
-        dark_mode: "Dark Mode",
-        dark_mode_off: "Off",
-        dark_mode_on: "On",
+        site_theme: "Site Theme",
+        site_theme_light: "Light",
+        site_theme_dark: "Dark",
         save: "Save",
         cancel: "Cancel"
     },
     search: {
-        label: "Filter By Song Name (Full Title or Abbreviations, Kana or Romanized)",
+        label: "Filter By Song Name",
         tooltip: "You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>You can also add <span>+</span> or <span>++</span> to the end to instantly open the Adv+ or Challenge tab."
     },
     songlist: {
@@ -457,7 +455,7 @@ export default {
         no_map: "no note map available"
     },
     dlp: {
-        performance_points: "Performance Points",
+        performance_points: "PP available",
         performance_points_recoverable: "recoverable",
         performance_points_recovery_cost: "PP Recovery Cost",
         progress_reward: "Progress Reward",
@@ -490,7 +488,7 @@ export default {
             gimmick: noteGimmick,
             amount: "Amount",
             position: "Note Position",
-            slot: "Slot",
+            slot: (i: number) => `Slot ${i}`,
             filter: "click to filter",
             filter_remove: "click to remove filter"
         },
@@ -510,16 +508,14 @@ export default {
         penalty_damage: "Damage"
     },
     rankings: {
+        column_song: "Song",
+        show_all_link: "click to see all songs",
         length_title: "Shortest Song Lengths",
-        length_column_song: "Song",
         length_column_length: "Length",
         length_show_all_description: "only showing songs currently available on JP - ",
-        length_show_all_link: "click to see all songs",
         notes_title: "Highest Note Counts",
-        notes_column_song: "Song",
         notes_column_notes: "Notes",
-        notes_show_all_description: "only showing songs that can be displayed on your profile - ",
-        notes_show_all_link: "click to see all songs"
+        notes_show_all_description: "only showing songs that can be displayed on your profile - "
     },
     difficulty: {
         beginner: "Beginner",

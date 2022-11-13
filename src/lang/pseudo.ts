@@ -3,12 +3,10 @@ import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote
 
 export default {
     meta: {
-        title: "%%%%%.meta.title%%%%%",
-        description: "%%%%%.meta.description%%%%%"
+        title: "%%%%%.meta.title%%%%%"
     },
     header: {
-        title: "%%%%%.header.title%%%%%",
-        back: "%%%%%.header.back%%%%%"
+        title: "%%%%%.header.title%%%%%"
     },
     tab: {
         start: "%%%%%.tab.start%%%%%",
@@ -33,9 +31,9 @@ export default {
         unavailable_hide_toggle: "%%%%%.preferences.unavailable_hide_toggle%%%%%",
         unavailable_show: "%%%%%.preferences.unavailable_show%%%%%",
         unavailable_show_toggle: "%%%%%.preferences.unavailable_show_toggle%%%%%",
-        dark_mode: "%%%%%.preferences.dark_mode%%%%%",
-        dark_mode_off: "%%%%%.preferences.dark_mode_off%%%%%",
-        dark_mode_on: "%%%%%.preferences.dark_mode_on%%%%%",
+        site_theme: "%%%%%.preferences.site_theme%%%%%",
+        site_theme_light: "%%%%%.preferences.site_theme_light%%%%%",
+        site_theme_dark: "%%%%%.preferences.site_theme_dark%%%%%",
         save: "%%%%%.preferences.save%%%%%",
         cancel: "%%%%%.preferences.cancel%%%%%"
     },
@@ -116,7 +114,7 @@ export default {
                 `$$$$$.gimmicks.note_gimmick.gimmick(${trigger},${effect_type},${effect_amount},${target},${finish_type},${finish_amount})$$$$$`,
             amount: "%%%%%.gimmicks.note_gimmick.amount%%%%%",
             position: "%%%%%.gimmicks.note_gimmick.position%%%%%",
-            slot: "%%%%%.gimmicks.note_gimmick.slot%%%%%",
+            slot: (n: number) => `$$$$$.gimmicks.note_gimmick.slot(${n})$$$$$`,
             filter: "%%%%%.gimmicks.note_gimmick.filter%%%%%",
             filter_remove: "%%%%%.gimmicks.note_gimmick.filter_remove%%%%%",
         },
@@ -138,16 +136,14 @@ export default {
         penalty_damage: "%%%%%.appeal_chances.penalty_damage%%%%%"
     },
     rankings: {
+        column_song: "%%%%%.rankings.column_song%%%%%",
+        show_all_link: "%%%%%.rankings.show_all_link%%%%%",
         length_title: "%%%%%.rankings.length_title%%%%%",
-        length_column_song: "%%%%%.rankings.length_column_song%%%%%",
         length_column_length: "%%%%%.rankings.length_column_length%%%%%",
         length_show_all_description: "%%%%%.rankings.length_show_all_description%%%%%",
-        length_show_all_link: "%%%%%.rankings.length_show_all_link%%%%%",
         notes_title: "%%%%%.rankings.notes_title%%%%%",
-        notes_column_song: "%%%%%.rankings.notes_column_song%%%%%",
         notes_column_notes: "%%%%%.rankings.notes_column_notes%%%%%",
-        notes_show_all_description: "%%%%%.rankings.notes_show_all_description%%%%%",
-        notes_show_all_link: "%%%%%.rankings.notes_show_all_link%%%%%"
+        notes_show_all_description: "%%%%%.rankings.notes_show_all_description%%%%%"
     },
     difficulty: {
         beginner: "%%%%%.difficulty.beginner%%%%%",

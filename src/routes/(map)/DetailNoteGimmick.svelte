@@ -62,7 +62,7 @@
                         {#if slotCount > 0}
                             <div class:bg-accent-300={isFilteredTarget && $filterSlot === slotIdx}
                                  on:click|stopPropagation={() => filter(slotIdx)}>
-                                <T key="gimmicks.note_gimmick.slot"/> {slotIdx + 1} ×{slotCount}
+                                <T key="gimmicks.note_gimmick.slot" params={[slotIdx + 1]}/> ×{slotCount}
                             </div>
                         {/if}
                     {/each}

@@ -12,7 +12,7 @@
 <div>
     <b><T key="gimmicks.note_gimmick.position"/>:</b> {i + 1}
     {#if skillTriggerNoteHasSlotCount(gimmickData.trigger)}
-        (<T key="gimmicks.note_gimmick.slot"/> {hitBySlot + 1})
+        (<T key="gimmicks.note_gimmick.slot" params={[hitBySlot + 1]}/>)
     {/if}
 </div>
 
