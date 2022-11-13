@@ -115,13 +115,11 @@ export enum SkillEffectType {
 
 // Skill Effect Types that target player status - don't print a target for these, even if one is defined in the info
 const skillEffectTypeTargetsFormationSet = new Set([
-    SkillEffectType.SP_FILL, SkillEffectType.SHIELD_GAIN, SkillEffectType.STAMINA_HEAL, SkillEffectType.SPVO_BUFF,
-    SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.STAMINA_DAMAGE, SkillEffectType.SP_LOSE,
-    SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE, SkillEffectType.SHIELD_GAIN_PERCENTAGE,
-    SkillEffectType.STAMINA_HEAL_PERCENTAGE, SkillEffectType.DAMAGE_INCREASE, SkillEffectType.DAMAGE_BASE2_INCREASE,
-    SkillEffectType.SP_GAIN_BY_TECH, SkillEffectType.STAMINA_HEAL_BY_VO, SkillEffectType.STAMINA_HEAL_BY_SP,
-    SkillEffectType.STAMINA_HEAL_BY_SK, SkillEffectType.STAMINA_HEAL_BY_GD, SkillEffectType.SPVO_BUFF_BY_SP,
-    SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK,
+    SkillEffectType.SP_FILL, SkillEffectType.SHIELD_GAIN, SkillEffectType.STAMINA_HEAL, SkillEffectType.STAMINA_DAMAGE,
+    SkillEffectType.SP_LOSE, SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE,
+    SkillEffectType.SHIELD_GAIN_PERCENTAGE, SkillEffectType.STAMINA_HEAL_PERCENTAGE, SkillEffectType.DAMAGE_INCREASE,
+    SkillEffectType.DAMAGE_BASE2_INCREASE, SkillEffectType.SP_GAIN_BY_TECH, SkillEffectType.STAMINA_HEAL_BY_VO,
+    SkillEffectType.STAMINA_HEAL_BY_SP, SkillEffectType.STAMINA_HEAL_BY_SK, SkillEffectType.STAMINA_HEAL_BY_GD,
     SkillEffectType.STAMINA_DAMAGE_PIERCE
 ]);
 
