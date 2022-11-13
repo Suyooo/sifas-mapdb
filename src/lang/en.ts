@@ -368,11 +368,11 @@ function acMission({mission_type, mission_value}: LiveDataAC) {
 
 function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
     if (mission_type === ACMissionType.VOLTAGE_TOTAL) {
-        return `(avg. ${Math.ceil(mission_value / notes)} Voltage per note)`;
+        return `avg. ${numberFormat(Math.ceil(mission_value / notes))} Voltage per note`;
     } else if (mission_type === ACMissionType.CRITICALS) {
-        return `(${Math.ceil(mission_value / notes * 100)}% of notes must crit)`;
+        return `${numberFormat(Math.ceil(mission_value / notes * 100))}% of notes must crit`;
     } else if (mission_type === ACMissionType.SKILLS) {
-        return `(${Math.ceil(mission_value / notes * 100)}% of taps must proc)`;
+        return `${numberFormat(Math.ceil(mission_value / notes * 100))}% of taps must proc`;
     }
     throw new Error(`No translation for requirement average of AC mission type ${mission_type}`);
 }

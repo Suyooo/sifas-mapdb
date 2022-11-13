@@ -34,6 +34,15 @@ export function acMissionTypeToRole(t: ACMissionType): Role {
         return Role.SK;
 }
 
+// Skill Effect Types that affect SP Voltage, which might need a different phrasing if their finish type is SP count
+const acMissionTypeHasAverageSet = new Set([
+    ACMissionType.VOLTAGE_TOTAL, ACMissionType.CRITICALS, ACMissionType.SKILLS
+]);
+
+export function acMissionTypeHasAverage(t: ACMissionType) {
+    return acMissionTypeHasAverageSet.has(t);
+}
+
 export enum SkillEffectType {
     SP_FILL = 3,
     SHIELD_GAIN = 4,

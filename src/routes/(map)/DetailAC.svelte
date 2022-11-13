@@ -2,6 +2,7 @@
     import T from "$lib/T.svelte";
     import {getContext} from "svelte";
     import {acMissionTypeToRole, Role} from "../../enums";
+    import {acMissionTypeHasAverage} from "../../enums.js";
     import type {LiveData} from "../../types";
 
     // Static database data (from +layout.svelte)
@@ -10,6 +11,9 @@
     export let i: number;
     const acData = data.appeal_chances[i];
     const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
+    const noteCount = acData.range_note_ids !== null
+            ? acData.range_note_ids[1] - acData.range_note_ids[0] + 1
+            : 0;
 </script>
 
 <div>
@@ -29,7 +33,10 @@
         {#if acData.range_note_ids !== null}
             <div>
                 <b><T key="appeal_chances.length"/>:</b>
-                <T key="format.note_count" params={[acData.range_note_ids[1]-acData.range_note_ids[0]+1]}/>
+                <T key="format.note_count" params={[noteCount]}/>
+                {#if acMissionTypeHasAverage(acData.mission_type)}
+                    (<T key="appeal_chances.average" params={[acData, noteCount]}/>)
+                {/if}
             </div>
             <div class="reward">
                 <div>

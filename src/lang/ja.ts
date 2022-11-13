@@ -10,23 +10,28 @@ import {
 } from "../enums";
 import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
-function numberFormat(n: number) {
+function numberFormat(n: number): string {
     // https://stackoverflow.com/a/2901298
     let parts = n.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return `<span class="inline-block">${parts.join(".")}</span>`;
 }
 
-function noteCount(n: number) {
+function noteCount(n: number): string {
     return numberFormat(n);
+}
+
+function removeLeadingComma(s: string): string {
+    if (s.charAt(0) === "、") return s.substring(1);
+    return s;
 }
 
 function songGimmick({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) {
     if (finish_type === SkillFinishType.UNTIL_SONG_END) {
         // Replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
-        return skill(effect_type, effect_amount, target, SkillFinishType.UNTIL_AC_END, 0);
+        finish_type = SkillFinishType.UNTIL_AC_END;
     }
-    return skill(effect_type, effect_amount, target, finish_type, finish_amount);
+    return removeLeadingComma(skill(effect_type, effect_amount, target, finish_type, finish_amount));
 }
 
 function noteGimmick({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickNote) {
@@ -38,7 +43,7 @@ function noteGimmick({trigger, effect_type, effect_amount, target, finish_type, 
     if (trigger === SkillTriggerNote.MISS)
         return `失敗時${connector}${skillString}`;
     if (trigger === SkillTriggerNote.ALWAYS)
-        return skillString;
+        return removeLeadingComma(skillString);
     if (trigger === SkillTriggerNote.HIT_VO)
         return `<span class="t vo">Vo</span>タイプで成功時${connector}${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SP)
@@ -55,7 +60,7 @@ function acGimmick({trigger, effect_type, effect_amount, target, finish_type, fi
 
     if (trigger === SkillTriggerAC.START) {
         if (finish_type === SkillFinishType.UNTIL_AC_END) {
-            return `AC中、${skillString}`;
+            return `AC中${skillString}`;
         } else {
             return `開始時${connector}${skillString}`;
         }
@@ -75,7 +80,7 @@ function skill(effectType: SkillEffectType, effectAmount: number, targetType: Sk
     const effect = skillEffect(effectType, effectAmount);
     const target = skillEffectTypeTargetsFormation(effectType) ? "" : skillTarget(targetType);
     const finish = skillFinish(finishType, finishAmount, skillEffectTypeAffectsSPVoltage(effectType));
-    return `${finish}${finish ? "、" : ""}${target}${effect}`;
+    return `${finish}、${target}${effect}`;
 }
 
 function skillEffect(effectType: SkillEffectType, effectAmount: number) {
@@ -365,11 +370,11 @@ function acMission({mission_type, mission_value}: LiveDataAC) {
 
 function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
     if (mission_type === ACMissionType.VOLTAGE_TOTAL) {
-        return `(1ノーツに平均ボルテージは${Math.ceil(mission_value / notes)})`;
+        return `1ノーツに平均ボルテージは${numberFormat(Math.ceil(mission_value / notes))}`;
     } else if (mission_type === ACMissionType.CRITICALS) {
-        return `(アピールの${Math.ceil(mission_value / notes * 100)}%がクリティカル判定出すのは必要)`;
+        return `アピールの${numberFormat(Math.ceil(mission_value / notes * 100))}%がクリティカル判定出すのは必要`;
     } else if (mission_type === ACMissionType.SKILLS) {
-        return `(アピールの${Math.ceil(mission_value / notes * 100)}%が特技を発動するのは必要)`;
+        return `アピールの${numberFormat(Math.ceil(mission_value / notes * 100))}%が特技を発動するのは必要`;
     }
     throw new Error(`No translation for requirement average of AC mission type ${mission_type}`);
 }
