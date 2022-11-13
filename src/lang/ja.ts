@@ -24,7 +24,7 @@ function noteCount(n: number) {
 function songGimmick({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) {
     if (finish_type === SkillFinishType.UNTIL_SONG_END) {
         // Replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
-        finish_type = SkillFinishType.INSTANT;
+        finish_type = SkillFinishType.UNTIL_AC_END;
     }
     return skill(effect_type, effect_amount, target, finish_type, finish_amount);
 }
@@ -33,17 +33,17 @@ function noteGimmick({trigger, effect_type, effect_amount, target, finish_type, 
     const skillString = skill(effect_type, effect_amount, target, finish_type, finish_amount);
 
     if (trigger === SkillTriggerNote.HIT)
-        return `If hit, ${skillString}`;
+        return `成功時${skillString}`;
     if (trigger === SkillTriggerNote.MISS)
-        return `If missed, ${skillString}`;
+        return `失敗時${skillString}`;
     if (trigger === SkillTriggerNote.ALWAYS)
         return skillString;
     if (trigger === SkillTriggerNote.HIT_VO)
-        return `If hit with a <span class="t vo">Vo</span> unit, ${skillString}`;
+        return `<span class="t vo">Vo</span>タイプで成功時${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SP)
-        return `If hit with a <span class="t sp">Sp</span> unit, ${skillString}`;
+        return `<span class="t sp">Sp</span>タイプで成功時${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SK)
-        return `If hit with a <span class="t sk">Sk</span> unit, ${skillString}`;
+        return `<span class="t sk">Sk</span>タイプで成功時${skillString}`;
 
     throw new Error(`No translation for note gimmick trigger type ${trigger}`);
 }
@@ -53,17 +53,17 @@ function acGimmick({trigger, effect_type, effect_amount, target, finish_type, fi
 
     if (trigger === SkillTriggerAC.START) {
         if (finish_type === SkillFinishType.UNTIL_AC_END) {
-            return `During this AC, ${skillString}`;
+            return `AC中${skillString}`;
         } else {
-            return `When the AC starts, ${skillString}`;
+            return `開始時${skillString}`;
         }
     }
     if (trigger === SkillTriggerAC.SUCCESS)
-        return `On AC Success, ${skillString}`;
+        return `成功時${skillString}`;
     if (trigger === SkillTriggerAC.FAILURE)
-        return `On AC Failure, ${skillString}`;
+        return `失敗時${skillString}`;
     if (trigger === SkillTriggerAC.END)
-        return `At the end of the AC, ${skillString}`;
+        return `終了時${skillString}`;
 
     throw new Error(`No translation for AC trigger type ${trigger}`);
 }
@@ -73,30 +73,30 @@ function skill(effectType: SkillEffectType, effectAmount: number, targetType: Sk
     const effect = skillEffect(effectType, effectAmount);
     const target = skillEffectTypeTargetsFormation(effectType) ? "" : skillTarget(targetType);
     const finish = skillFinish(finishType, finishAmount, skillEffectTypeAffectsSPVoltage(effectType));
-    return `${target}${effect}${finish}`;
+    return `${finish}、${target}${effect}`;
 }
 
 function skillEffect(effectType: SkillEffectType, effectAmount: number) {
     if (effectType === SkillEffectType.SP_FILL)
-        return `charge SP Gauge by ${numberFormat(effectAmount)} points`;
+        return `SPゲージを${numberFormat(effectAmount)}獲得`;
     if (effectType === SkillEffectType.SHIELD_GAIN)
-        return `gain ${numberFormat(effectAmount)} points of shield`;
+        return `シールドを${numberFormat(effectAmount)}獲得`;
     if (effectType === SkillEffectType.STAMINA_HEAL)
-        return `restore ${numberFormat(effectAmount)} points of stamina`;
+        return `スタミナを${numberFormat(effectAmount)}回復`;
     if (effectType === SkillEffectType.APPEAL_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Appeal`;
+        return `のアピール${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.VOGAIN_BUFF)
-        return `increase Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+        return `の獲得ボルテージ${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.SPGAIN_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
+        return `のSPゲージ獲得量${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance`;
+        return `のクリティカル率が${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.CRITPOWER_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Power`;
+        return `のクリティカル値が${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
+        return `の特技発動率${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.SPVO_BUFF)
-        return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+        return `のSP特技の獲得ボルテージ${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.APPEAL_BASE_BUFF)
         return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE_BUFF)
@@ -234,73 +234,73 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 }
 
 const skillTargetMap = {
-    [SkillTargetType.ALL]: `all units `,
-    [SkillTargetType.CHAR_MARI]: `Mari units `,
-    [SkillTargetType.CHAR_RUBY]: `Ruby units `,
-    [SkillTargetType.CHAR_AYUMU]: `Ayumu units `,
-    [SkillTargetType.CHAR_KASUMI]: `Kasumi units `,
-    [SkillTargetType.CHAR_SHIZUKU]: `Shizuku units `,
-    [SkillTargetType.CHAR_AI]: `Ai units `,
-    [SkillTargetType.CHAR_KARIN]: `Karin units `,
-    [SkillTargetType.CHAR_KANATA]: `Kanata units `,
-    [SkillTargetType.CHAR_SETSUNA]: `Setsuna units `,
-    [SkillTargetType.CHAR_EMMA]: `Emma units `,
-    [SkillTargetType.CHAR_RINA]: `Rina units `,
-    [SkillTargetType.GROUP_MUSE]: `µ's units `,
-    [SkillTargetType.GROUP_AQOURS]: `Aqours units `,
-    [SkillTargetType.GROUP_NIJI]: `Nijigaku units `,
-    [SkillTargetType.SUB_CYARON]: `CYaRon units `,
-    [SkillTargetType.SUB_AZALEA]: `AZALEA units `,
-    [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kiss units `,
-    [SkillTargetType.TYPE_VO]: `<span class="t vo">Vo</span> units `,
-    [SkillTargetType.TYPE_SP]: `<span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_GD]: `<span class="t gd">Gd</span> units `,
-    [SkillTargetType.TYPE_SK]: `<span class="t sk">Sk</span> units `,
+    [SkillTargetType.ALL]: `全員`,
+    [SkillTargetType.CHAR_MARI]: `鞠莉`,
+    [SkillTargetType.CHAR_RUBY]: `ルビィ`,
+    [SkillTargetType.CHAR_AYUMU]: `歩夢`,
+    [SkillTargetType.CHAR_KASUMI]: `かすみ`,
+    [SkillTargetType.CHAR_SHIZUKU]: `しずく`,
+    [SkillTargetType.CHAR_KARIN]: `果林`,
+    [SkillTargetType.CHAR_AI]: `愛`,
+    [SkillTargetType.CHAR_KANATA]: `彼方`,
+    [SkillTargetType.CHAR_SETSUNA]: `せつ菜`,
+    [SkillTargetType.CHAR_EMMA]: `エマ`,
+    [SkillTargetType.CHAR_RINA]: `璃奈`,
+    [SkillTargetType.GROUP_MUSE]: `µ'sのメンバー`,
+    [SkillTargetType.GROUP_AQOURS]: `Aqoursのメンバー`,
+    [SkillTargetType.GROUP_NIJI]: `ニジガクのメンバー`,
+    [SkillTargetType.SUB_CYARON]: `CYaRonのメンバー`,
+    [SkillTargetType.SUB_AZALEA]: `AZALEAのメンバー`,
+    [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kissのメンバー`,
+    [SkillTargetType.TYPE_VO]: `<span class="t vo">Vo</span>タイプ`,
+    [SkillTargetType.TYPE_SP]: `<span class="t sp">Sp</span>タイプ`,
+    [SkillTargetType.TYPE_GD]: `<span class="t gd">Gd</span>タイプ`,
+    [SkillTargetType.TYPE_SK]: `<span class="t sk">Sk</span>タイプ`,
     [SkillTargetType.NONE]: ``,
-    [SkillTargetType.ATTR_SMILE]: `<span class="a smile">Smile</span> units `,
-    [SkillTargetType.ATTR_PURE]: `<span class="a pure">Pure</span> units `,
-    [SkillTargetType.ATTR_COOL]: `<span class="a cool">Cool</span> units `,
-    [SkillTargetType.ATTR_ACTIVE]: `<span class="a active">Active</span> units `,
-    [SkillTargetType.ATTR_NATURAL]: `<span class="a natural">Natural</span> units `,
-    [SkillTargetType.ATTR_ELEGANT]: `<span class="a elegant">Elegant</span> units `,
-    [SkillTargetType.ATTR_NOT_SMILE]: `non-<span class="a smile">Smile</span> units `,
-    [SkillTargetType.TYPE_NOT_VO]: `non-<span class="t vo">Vo</span> units `,
-    [SkillTargetType.YEAR_1]: `1st Year units `,
-    [SkillTargetType.YEAR_2]: `2nd Year units `,
-    [SkillTargetType.YEAR_3]: `3rd Year units `,
-    [SkillTargetType.ATTR_NOT_PURE]: `non-<span class="a pure">Pure</span> units `,
-    [SkillTargetType.ATTR_NOT_COOL]: `non-<span class="a cool">Cool</span> units `,
-    [SkillTargetType.ATTR_NOT_ACTIVE]: `non-<span class="a active">Active</span> units `,
-    [SkillTargetType.ATTR_NOT_NATURAL]: `non-<span class="a natural">Natural</span> units `,
-    [SkillTargetType.ATTR_NOT_ELEGANT]: `non-<span class="a elegant">Elegant</span> units `,
-    [SkillTargetType.TYPE_NOT_SP]: `non-<span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_NOT_GD]: `non-<span class="t gd">Gd</span> units `,
-    [SkillTargetType.TYPE_NOT_SK]: `non-<span class="t sk">Sk</span> units `,
-    [SkillTargetType.STRATEGY]: `units in the current strategy `,
-    [SkillTargetType.GROUP_NOT_MUSE]: `non-µ's units `,
-    [SkillTargetType.TYPE_NOT_VO_GD]: `non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> units `,
-    [SkillTargetType.TYPE_NOT_VO_SP]: `non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_NOT_VO_SK]: `non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_NOT_GD_SP]: `non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_NOT_SP_SK]: `non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units `,
-    [SkillTargetType.GROUP_NOT_AQOURS]: `non-Aqours units `,
-    [SkillTargetType.GROUP_NOT_NIJI]: `non-Nijigaku units `,
-    [SkillTargetType.YEAR_NOT_1]: `non-1st Year units `,
-    [SkillTargetType.YEAR_NOT_2]: `non-2nd Year units `,
-    [SkillTargetType.YEAR_NOT_3]: `non-3rd Year units `,
-    [SkillTargetType.SUB_DIVERDIVA]: `DiverDiva units `,
-    [SkillTargetType.SUB_AZUNA]: `A•ZU•NA units `,
-    [SkillTargetType.SUB_QU4RTZ]: `QU4RTZ units `,
-    [SkillTargetType.SUB_NOT_DIVERDIVA]: `non-DiverDiva units `,
-    [SkillTargetType.SUB_NOT_AZUNA]: `non-A•ZU•NA units `,
-    [SkillTargetType.SUB_NOT_QU4RTZ]: `non-QU4RTZ units `,
-    [SkillTargetType.CHAR_SHIORIKO]: `Shioriko units `,
-    [SkillTargetType.CHAR_LANZHU]: `Lanzhu units `,
-    [SkillTargetType.CHAR_MIA]: `Mia units `
+    [SkillTargetType.ATTR_SMILE]: `<span class="a smile">スマイル</span>属性`,
+    [SkillTargetType.ATTR_PURE]: `<span class="a pure">ピュア</span>属性`,
+    [SkillTargetType.ATTR_COOL]: `<span class="a cool">クール</span>属性`,
+    [SkillTargetType.ATTR_ACTIVE]: `<span class="a active">アクティブ</span>属性`,
+    [SkillTargetType.ATTR_NATURAL]: `<span class="a natural">ナチュラル</span>属性`,
+    [SkillTargetType.ATTR_ELEGANT]: `<span class="a elegant">エレガント</span>属性`,
+    [SkillTargetType.ATTR_NOT_SMILE]: `<span class="a smile">スマイル</span>属性以外`,
+    [SkillTargetType.TYPE_NOT_VO]: `<span class="t vo">Vo</span>タイプ以外`,
+    [SkillTargetType.YEAR_1]: `1年生`,
+    [SkillTargetType.YEAR_2]: `2年生`,
+    [SkillTargetType.YEAR_3]: `3年生`,
+    [SkillTargetType.ATTR_NOT_PURE]: `<span class="a pure">ピュア</span>属性以外`,
+    [SkillTargetType.ATTR_NOT_COOL]: `<span class="a cool">クール</span>属性以外`,
+    [SkillTargetType.ATTR_NOT_ACTIVE]: `<span class="a active">アクティブ</span>属性以外`,
+    [SkillTargetType.ATTR_NOT_NATURAL]: `<span class="a natural">ナチュラル</span>属性以外`,
+    [SkillTargetType.ATTR_NOT_ELEGANT]: `<span class="a elegant">エレガント</span>属性以外`,
+    [SkillTargetType.TYPE_NOT_SP]: `<span class="t sp">Sp</span>タイプ以外`,
+    [SkillTargetType.TYPE_NOT_GD]: `<span class="t gd">Gd</span>タイプ以外`,
+    [SkillTargetType.TYPE_NOT_SK]: `<span class="t sk">Sk</span>タイプ以外`,
+    [SkillTargetType.STRATEGY]: `選択中の作戦`,
+    [SkillTargetType.GROUP_NOT_MUSE]: `µ'sのメンバー以外`,
+    [SkillTargetType.TYPE_NOT_VO_GD]: `<span class="t vo">Vo</span>タイプと<span class="t gd">Gd</span>タイプ以外`,
+    [SkillTargetType.TYPE_NOT_VO_SP]: `<span class="t vo">Vo</span>タイプと<span class="t sp">Sp</span>タイプ以外`,
+    [SkillTargetType.TYPE_NOT_VO_SK]: `<span class="t vo">Vo</span>タイプと<span class="t sk">Sk</span>タイプ以外`,
+    [SkillTargetType.TYPE_NOT_GD_SP]: `<span class="t gd">Gd</span>タイプと<span class="t sp">Sp</span>タイプ以外`,
+    [SkillTargetType.TYPE_NOT_SP_SK]: `<span class="t sp">Sp</span>タイプと<span class="t sk">Sk</span>タイプ以外`,
+    [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span>タイプと<span class="t sk">Sk</span>タイプ`,
+    [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span>タイプと<span class="t sk">Sk</span>タイプ`,
+    [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span>タイプと<span class="t sp">Sp</span>タイプ`,
+    [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span>タイプと<span class="t gd">Gd</span>タイプ`,
+    [SkillTargetType.GROUP_NOT_AQOURS]: `Aqoursのメンバー以外`,
+    [SkillTargetType.GROUP_NOT_NIJI]: `Nijigakuのメンバー以外`,
+    [SkillTargetType.YEAR_NOT_1]: `1年生以外`,
+    [SkillTargetType.YEAR_NOT_2]: `2年生以外`,
+    [SkillTargetType.YEAR_NOT_3]: `3年生以外`,
+    [SkillTargetType.SUB_DIVERDIVA]: `DiverDivaのメンバー`,
+    [SkillTargetType.SUB_AZUNA]: `A•ZU•NAのメンバー`,
+    [SkillTargetType.SUB_QU4RTZ]: `QU4RTZのメンバー`,
+    [SkillTargetType.SUB_NOT_DIVERDIVA]: `DiverDivaのメンバー以外`,
+    [SkillTargetType.SUB_NOT_AZUNA]: `A•ZU•NAのメンバー以外`,
+    [SkillTargetType.SUB_NOT_QU4RTZ]: `QU4RTZのメンバー以外`,
+    [SkillTargetType.CHAR_SHIORIKO]: `栞子`,
+    [SkillTargetType.CHAR_LANZHU]: `ランジュ`,
+    [SkillTargetType.CHAR_MIA]: `ミア`
 }
 
 function skillTarget(targetType: SkillTargetType) {
@@ -311,25 +311,25 @@ function skillTarget(targetType: SkillTargetType) {
 
 function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVoltageGainBuff: boolean) {
     if (finishType === SkillFinishType.UNTIL_SONG_END)
-        return ` until the song ends`;
+        return `ライブ終了まで`;
     if (finishType === SkillFinishType.NOTE_COUNT)
-        return ` for ${numberFormat(finishAmount)} notes`;
+        return `から${numberFormat(finishAmount)}ノーツの間`;
     if (finishType === SkillFinishType.INSTANT)
-        return ``;
+        return `に`;
     if (finishType === SkillFinishType.UNTIL_AC_END)
         return ``; // (This is handled in the trigger switch in acGimmick)
     if (finishType === SkillFinishType.SP_COUNT) {
         if (isSPVoltageGainBuff) {
-            if (finishAmount == 1) return ` for the next SP Skill`;
-            else return ` for the next ${numberFormat(finishAmount)} SP Skills`;
+            if (finishAmount == 1) return `次のSP特技発動は`;
+            else return `次の${numberFormat(finishAmount)}回のSP特技発動は`;
         } else {
-            if (finishAmount == 1) return ` until an SP Skill is used`;
-            else return ` until ${numberFormat(finishAmount)} SP Skills are used`;
+            if (finishAmount == 1) return `SP特技発動するまで`;
+            else return `${numberFormat(finishAmount)}回のSP特技するまで`;
         }
     }
     if (finishType === SkillFinishType.UNTIL_SWITCH) {
-        if (finishAmount <= 1) return ` until the next Strategy swap`;
-        else return ` until Strategies are swapped ${finishAmount} times`;
+        if (finishAmount <= 1) return `作戦切替するまで`;
+        else return `作戦切替${numberFormat(finishAmount)}回するまで`;
     }
 
     throw new Error(`No translation for skill finish type ${finishType}`);
@@ -337,37 +337,37 @@ function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVolt
 
 function acMission({mission_type, mission_value}: LiveDataAC) {
     if (mission_type === ACMissionType.VOLTAGE_TOTAL)
-        return `Get ${numberFormat(mission_value)} Voltage`;
+        return `合計${numberFormat(mission_value)}ボルテージを獲得する`;
     if (mission_type === ACMissionType.TIMING_NICE)
-        return `Hit ${numberFormat(mission_value)} NICEs`;
+        return `NICE以上の判定を${numberFormat(mission_value)}回出す`;
     if (mission_type === ACMissionType.TIMING_GREAT)
-        return `Hit ${numberFormat(mission_value)} GREATs`;
+        return `GREAT以上の判定を${numberFormat(mission_value)}回出す`;
     if (mission_type === ACMissionType.TIMING_WONDERFUL)
-        return `Hit ${numberFormat(mission_value)} WONDERFULs`;
+        return `WONDERFULの判定を${numberFormat(mission_value)}回出す`;
     if (mission_type === ACMissionType.VOLTAGE_SINGLE)
-        return `Get ${numberFormat(mission_value)} Voltage in one Appeal`;
+        return `1回で${numberFormat(mission_value)}ボルテージを獲得する`;
     if (mission_type === ACMissionType.VOLTAGE_SP)
-        return `Get ${numberFormat(mission_value)} Voltage from SP`;
+        return `SP特技で合計${numberFormat(mission_value)}ボルテージを獲得する`;
     if (mission_type === ACMissionType.UNIQUE)
-        return `Appeal with ${numberFormat(mission_value)} unique Units`;
+        return `${numberFormat(mission_value)}人のスクールアイドルでアピールする`;
     if (mission_type === ACMissionType.CRITICALS)
-        return `Get ${numberFormat(mission_value)} Criticals`;
+        return `クリティカル判定を${numberFormat(mission_value)}回出す`;
     if (mission_type === ACMissionType.SKILLS)
-        return `Activate ${numberFormat(mission_value)} Tap Skills`;
+        return `特技を${numberFormat(mission_value)}回発動する`;
     if (mission_type === ACMissionType.STAMINA) {
-        if (mission_value === 10000) return `Finish the AC with ${numberFormat(mission_value / 100)}% of max Stamina`;
-        else return `Finish the AC with ${numberFormat(mission_value / 100)}% of max Stamina or more`;
+        if (mission_value === 10000) return `スタミナを${numberFormat(mission_value / 100)}%維持する`;
+        else return `スタミナを${numberFormat(mission_value / 100)}%以上維持する`;
     }
     throw new Error(`No translation for mission title of AC mission type ${mission_type}`);
 }
 
 function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
     if (mission_type === ACMissionType.VOLTAGE_TOTAL) {
-        return `(avg. ${Math.ceil(mission_value / notes)} Voltage per note)`;
+        return `(1ノーツに平均ボルテージは${Math.ceil(mission_value / notes)})`;
     } else if (mission_type === ACMissionType.CRITICALS) {
-        return `(${Math.ceil(mission_value / notes * 100)}% of notes must crit)`;
+        return `(アピールの${Math.ceil(mission_value / notes * 100)}%がクリティカル判定出すのは必要)`;
     } else if (mission_type === ACMissionType.SKILLS) {
-        return `(${Math.ceil(mission_value / notes * 100)}% of taps must proc)`;
+        return `(アピールの${Math.ceil(mission_value / notes * 100)}%が特技を発動するのは必要)`;
     }
     throw new Error(`No translation for requirement average of AC mission type ${mission_type}`);
 }
@@ -410,7 +410,8 @@ export default {
     },
     search: {
         label: "曲名で絞り込む",
-        tooltip: "<span>ぼららら</span>とか<span>君ここ</span>とか<span>虹パ</span>とか略称もOK<br><span>+</span>/<span>++</span>付けると、上級+/チャレンジの譜面が表示されます。"
+        tooltip: "<span>ぼららら</span>とか<span>君ここ</span>とか<span>虹パ</span>とか略称もOK<br>" +
+                "<span>+</span>/<span>++</span>付けると、上級+/チャレンジの譜面が表示されます。"
     },
     songlist: {
         unavailable: "現在プレイできない",
@@ -442,12 +443,12 @@ export default {
         },
         sp_gauge_max: "最大SPゲージ量",
         note_count: "ノーツ数",
-        note_count_ac: "ACでノーツ数",
+        note_count_ac: "AC中ノーツ数",
         note_damage_total: "合計ノーツダメージ",
         ac_reward_total: "合計ACクリアボルテージ",
         song_length: "楽曲の時間",
         story_stages: "ストーリーステージ",
-        no_map: "譜面なし"
+        no_map: "譜面はまだありません"
     },
     dlp: {
         performance_points: "PP available",
@@ -487,15 +488,15 @@ export default {
             filter: "クリックで絞り込む",
             filter_remove: "クリックでリセット"
         },
-        gimmick: "ギミック",
-        no_gimmick: "ギミックなし"
+        gimmick: "特殊効果",
+        no_gimmick: "特殊効果なし"
     },
     appeal_chances: {
         title: "アピールチャンス",
         label: "AC",
         gimmick: acGimmick,
         mission: acMission,
-        length: "ノーツ",
+        length: "ノーツ数",
         average: acAverage,
         reward_voltage_label: "成功",
         reward_voltage: "ボルテージ",
