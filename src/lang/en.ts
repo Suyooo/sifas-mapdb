@@ -44,11 +44,11 @@ function noteGimmick({trigger, effect_type, effect_amount, target, finish_type, 
     if (trigger === SkillTriggerNote.ALWAYS)
         return capitalize(skillString);
     if (trigger === SkillTriggerNote.HIT_VO)
-        return `If hit with a <span class="t vo">Vo</span> unit, ${skillString}`;
+        return `If hit with a <span class="t vo">Vo</span> card, ${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SP)
-        return `If hit with a <span class="t sp">Sp</span> unit, ${skillString}`;
+        return `If hit with a <span class="t sp">Sp</span> card, ${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SK)
-        return `If hit with a <span class="t sk">Sk</span> unit, ${skillString}`;
+        return `If hit with a <span class="t sk">Sk</span> card, ${skillString}`;
 
     throw new Error(`No translation for note gimmick trigger type ${trigger}`);
 }
@@ -171,59 +171,59 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
     if (effectType === SkillEffectType.SP_GAIN_BY_TECH)
         return `charge SP Gauge by ${numberFormat(effectAmount / 100)}% of the appealing card's Technique`;
     if (effectType === SkillEffectType.APPEAL_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_DEBUFF_BY_VO)
-        return `lose ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+        return `lose ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t sk">Sk</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_VO)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t vo">Vo</span> unit in the formation`;
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_SP)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sp">Sp</span> unit in the formation`;
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_SK)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sk">Sk</span> unit in the formation`;
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_GD)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t gd">Gd</span> unit in the formation`;
+        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t gd">Gd</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_SP)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sp">Sp</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sk">Sk</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_GD)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t gd">Gd</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t gd">Gd</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_GD)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t gd">Gd</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_SP)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_GD)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t gd">Gd</span> card in the formation`;
     if (effectType === SkillEffectType.CRITCHANCE_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.CRITCHANCE_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.CRITPOWER_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Power for each <span class="t vo">Vo</span> unit in the formation`;
+        return `gain ${numberFormat(effectAmount / 100)}% Critical Power for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.SPVO_BUFF_BY_SP)
-        return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
+        return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_VO)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t vo">Vo</span> unit in the formation`;
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SP)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SK)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> unit in the formation`;
+        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> card in the formation`;
     if (effectType === SkillEffectType.SWAP_VO_BUFF)
         return `increase the Voltage gained from their Strategy Swap bonus by ${numberFormat(effectAmount)}`;
     if (effectType === SkillEffectType.SWAP_SK_BUFF)
@@ -239,73 +239,73 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 }
 
 const skillTargetMap = {
-    [SkillTargetType.ALL]: `all units `,
-    [SkillTargetType.CHAR_MARI]: `Mari units `,
-    [SkillTargetType.CHAR_RUBY]: `Ruby units `,
-    [SkillTargetType.CHAR_AYUMU]: `Ayumu units `,
-    [SkillTargetType.CHAR_KASUMI]: `Kasumi units `,
-    [SkillTargetType.CHAR_SHIZUKU]: `Shizuku units `,
-    [SkillTargetType.CHAR_AI]: `Ai units `,
-    [SkillTargetType.CHAR_KARIN]: `Karin units `,
-    [SkillTargetType.CHAR_KANATA]: `Kanata units `,
-    [SkillTargetType.CHAR_SETSUNA]: `Setsuna units `,
-    [SkillTargetType.CHAR_EMMA]: `Emma units `,
-    [SkillTargetType.CHAR_RINA]: `Rina units `,
-    [SkillTargetType.GROUP_MUSE]: `µ's units `,
-    [SkillTargetType.GROUP_AQOURS]: `Aqours units `,
-    [SkillTargetType.GROUP_NIJI]: `Nijigaku units `,
-    [SkillTargetType.SUB_CYARON]: `CYaRon units `,
-    [SkillTargetType.SUB_AZALEA]: `AZALEA units `,
-    [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kiss units `,
-    [SkillTargetType.TYPE_VO]: `<span class="t vo">Vo</span> units `,
-    [SkillTargetType.TYPE_SP]: `<span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_GD]: `<span class="t gd">Gd</span> units `,
-    [SkillTargetType.TYPE_SK]: `<span class="t sk">Sk</span> units `,
+    [SkillTargetType.ALL]: `all cards `,
+    [SkillTargetType.CHAR_MARI]: `Mari cards `,
+    [SkillTargetType.CHAR_RUBY]: `Ruby cards `,
+    [SkillTargetType.CHAR_AYUMU]: `Ayumu cards `,
+    [SkillTargetType.CHAR_KASUMI]: `Kasumi cards `,
+    [SkillTargetType.CHAR_SHIZUKU]: `Shizuku cards `,
+    [SkillTargetType.CHAR_KARIN]: `Karin cards `,
+    [SkillTargetType.CHAR_AI]: `Ai cards `,
+    [SkillTargetType.CHAR_KANATA]: `Kanata cards `,
+    [SkillTargetType.CHAR_SETSUNA]: `Setsuna cards `,
+    [SkillTargetType.CHAR_EMMA]: `Emma cards `,
+    [SkillTargetType.CHAR_RINA]: `Rina cards `,
+    [SkillTargetType.GROUP_MUSE]: `µ's cards `,
+    [SkillTargetType.GROUP_AQOURS]: `Aqours cards `,
+    [SkillTargetType.GROUP_NIJI]: `Nijigaku cards `,
+    [SkillTargetType.SUB_CYARON]: `CYaRon cards `,
+    [SkillTargetType.SUB_AZALEA]: `AZALEA cards `,
+    [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kiss cards `,
+    [SkillTargetType.TYPE_VO]: `<span class="t vo">Vo</span> cards `,
+    [SkillTargetType.TYPE_SP]: `<span class="t sp">Sp</span> cards `,
+    [SkillTargetType.TYPE_GD]: `<span class="t gd">Gd</span> cards `,
+    [SkillTargetType.TYPE_SK]: `<span class="t sk">Sk</span> cards `,
     [SkillTargetType.NONE]: ``,
-    [SkillTargetType.ATTR_SMILE]: `<span class="a smile">Smile</span> units `,
-    [SkillTargetType.ATTR_PURE]: `<span class="a pure">Pure</span> units `,
-    [SkillTargetType.ATTR_COOL]: `<span class="a cool">Cool</span> units `,
-    [SkillTargetType.ATTR_ACTIVE]: `<span class="a active">Active</span> units `,
-    [SkillTargetType.ATTR_NATURAL]: `<span class="a natural">Natural</span> units `,
-    [SkillTargetType.ATTR_ELEGANT]: `<span class="a elegant">Elegant</span> units `,
-    [SkillTargetType.ATTR_NOT_SMILE]: `non-<span class="a smile">Smile</span> units `,
-    [SkillTargetType.TYPE_NOT_VO]: `non-<span class="t vo">Vo</span> units `,
-    [SkillTargetType.YEAR_1]: `1st Year units `,
-    [SkillTargetType.YEAR_2]: `2nd Year units `,
-    [SkillTargetType.YEAR_3]: `3rd Year units `,
-    [SkillTargetType.ATTR_NOT_PURE]: `non-<span class="a pure">Pure</span> units `,
-    [SkillTargetType.ATTR_NOT_COOL]: `non-<span class="a cool">Cool</span> units `,
-    [SkillTargetType.ATTR_NOT_ACTIVE]: `non-<span class="a active">Active</span> units `,
-    [SkillTargetType.ATTR_NOT_NATURAL]: `non-<span class="a natural">Natural</span> units `,
-    [SkillTargetType.ATTR_NOT_ELEGANT]: `non-<span class="a elegant">Elegant</span> units `,
-    [SkillTargetType.TYPE_NOT_SP]: `non-<span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_NOT_GD]: `non-<span class="t gd">Gd</span> units `,
-    [SkillTargetType.TYPE_NOT_SK]: `non-<span class="t sk">Sk</span> units `,
-    [SkillTargetType.STRATEGY]: `units in the current strategy `,
-    [SkillTargetType.GROUP_NOT_MUSE]: `non-µ's units `,
-    [SkillTargetType.TYPE_NOT_VO_GD]: `non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> units `,
-    [SkillTargetType.TYPE_NOT_VO_SP]: `non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_NOT_VO_SK]: `non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_NOT_GD_SP]: `non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_NOT_SP_SK]: `non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units `,
-    [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units `,
-    [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units `,
-    [SkillTargetType.GROUP_NOT_AQOURS]: `non-Aqours units `,
-    [SkillTargetType.GROUP_NOT_NIJI]: `non-Nijigaku units `,
-    [SkillTargetType.YEAR_NOT_1]: `non-1st Year units `,
-    [SkillTargetType.YEAR_NOT_2]: `non-2nd Year units `,
-    [SkillTargetType.YEAR_NOT_3]: `non-3rd Year units `,
-    [SkillTargetType.SUB_DIVERDIVA]: `DiverDiva units `,
-    [SkillTargetType.SUB_AZUNA]: `A•ZU•NA units `,
-    [SkillTargetType.SUB_QU4RTZ]: `QU4RTZ units `,
-    [SkillTargetType.SUB_NOT_DIVERDIVA]: `non-DiverDiva units `,
-    [SkillTargetType.SUB_NOT_AZUNA]: `non-A•ZU•NA units `,
-    [SkillTargetType.SUB_NOT_QU4RTZ]: `non-QU4RTZ units `,
-    [SkillTargetType.CHAR_SHIORIKO]: `Shioriko units `,
-    [SkillTargetType.CHAR_LANZHU]: `Lanzhu units `,
-    [SkillTargetType.CHAR_MIA]: `Mia units `
+    [SkillTargetType.ATTR_SMILE]: `<span class="a smile">Smile</span> cards `,
+    [SkillTargetType.ATTR_PURE]: `<span class="a pure">Pure</span> cards `,
+    [SkillTargetType.ATTR_COOL]: `<span class="a cool">Cool</span> cards `,
+    [SkillTargetType.ATTR_ACTIVE]: `<span class="a active">Active</span> cards `,
+    [SkillTargetType.ATTR_NATURAL]: `<span class="a natural">Natural</span> cards `,
+    [SkillTargetType.ATTR_ELEGANT]: `<span class="a elegant">Elegant</span> cards `,
+    [SkillTargetType.ATTR_NOT_SMILE]: `non-<span class="a smile">Smile</span> cards `,
+    [SkillTargetType.TYPE_NOT_VO]: `non-<span class="t vo">Vo</span> cards `,
+    [SkillTargetType.YEAR_1]: `1st Year cards `,
+    [SkillTargetType.YEAR_2]: `2nd Year cards `,
+    [SkillTargetType.YEAR_3]: `3rd Year cards `,
+    [SkillTargetType.ATTR_NOT_PURE]: `non-<span class="a pure">Pure</span> cards `,
+    [SkillTargetType.ATTR_NOT_COOL]: `non-<span class="a cool">Cool</span> cards `,
+    [SkillTargetType.ATTR_NOT_ACTIVE]: `non-<span class="a active">Active</span> cards `,
+    [SkillTargetType.ATTR_NOT_NATURAL]: `non-<span class="a natural">Natural</span> cards `,
+    [SkillTargetType.ATTR_NOT_ELEGANT]: `non-<span class="a elegant">Elegant</span> cards `,
+    [SkillTargetType.TYPE_NOT_SP]: `non-<span class="t sp">Sp</span> cards `,
+    [SkillTargetType.TYPE_NOT_GD]: `non-<span class="t gd">Gd</span> cards `,
+    [SkillTargetType.TYPE_NOT_SK]: `non-<span class="t sk">Sk</span> cards `,
+    [SkillTargetType.STRATEGY]: `cards in the current strategy `,
+    [SkillTargetType.GROUP_NOT_MUSE]: `non-µ's cards `,
+    [SkillTargetType.TYPE_NOT_VO_GD]: `non-<span class="t vo">Vo</span> or <span class="t gd">Gd</span> cards `,
+    [SkillTargetType.TYPE_NOT_VO_SP]: `non-<span class="t vo">Vo</span> or <span class="t sp">Sp</span> cards `,
+    [SkillTargetType.TYPE_NOT_VO_SK]: `non-<span class="t vo">Vo</span> or <span class="t sk">Sk</span> cards `,
+    [SkillTargetType.TYPE_NOT_GD_SP]: `non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> cards `,
+    [SkillTargetType.TYPE_NOT_SP_SK]: `non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> cards `,
+    [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span> and <span class="t sk">Sk</span> cards `,
+    [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span> and <span class="t sk">Sk</span> cards `,
+    [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span> and <span class="t sp">Sp</span> cards `,
+    [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span> and <span class="t gd">Gd</span> cards `,
+    [SkillTargetType.GROUP_NOT_AQOURS]: `non-Aqours cards `,
+    [SkillTargetType.GROUP_NOT_NIJI]: `non-Nijigaku cards `,
+    [SkillTargetType.YEAR_NOT_1]: `non-1st Year cards `,
+    [SkillTargetType.YEAR_NOT_2]: `non-2nd Year cards `,
+    [SkillTargetType.YEAR_NOT_3]: `non-3rd Year cards `,
+    [SkillTargetType.SUB_DIVERDIVA]: `DiverDiva cards `,
+    [SkillTargetType.SUB_AZUNA]: `A•ZU•NA cards `,
+    [SkillTargetType.SUB_QU4RTZ]: `QU4RTZ cards `,
+    [SkillTargetType.SUB_NOT_DIVERDIVA]: `non-DiverDiva cards `,
+    [SkillTargetType.SUB_NOT_AZUNA]: `non-A•ZU•NA cards `,
+    [SkillTargetType.SUB_NOT_QU4RTZ]: `non-QU4RTZ cards `,
+    [SkillTargetType.CHAR_SHIORIKO]: `Shioriko cards `,
+    [SkillTargetType.CHAR_LANZHU]: `Lanzhu cards `,
+    [SkillTargetType.CHAR_MIA]: `Mia cards `
 }
 
 function skillTarget(targetType: SkillTargetType) {
@@ -354,7 +354,7 @@ function acMission({mission_type, mission_value}: LiveDataAC) {
     if (mission_type === ACMissionType.VOLTAGE_SP)
         return `Get ${numberFormat(mission_value)} Voltage from SP`;
     if (mission_type === ACMissionType.UNIQUE)
-        return `Appeal with ${numberFormat(mission_value)} unique Units`;
+        return `Appeal with ${numberFormat(mission_value)} unique cards`;
     if (mission_type === ACMissionType.CRITICALS)
         return `Get ${numberFormat(mission_value)} Criticals`;
     if (mission_type === ACMissionType.SKILLS)
@@ -415,7 +415,8 @@ export default {
     },
     search: {
         label: "Filter By Song Name",
-        tooltip: "You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>You can also add <span>+</span> or <span>++</span> to the end to instantly open the Adv+ or Challenge tab."
+        tooltip: "You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>" +
+                "You can also add <span>+</span> or <span>++</span> to the end to jump to the Adv+ or Challenge tab."
     },
     songlist: {
         unavailable: "unavailable",
@@ -452,7 +453,7 @@ export default {
         ac_reward_total: "Total AC Rewards",
         song_length: "Song Length",
         story_stages: "Story Stages",
-        no_map: "no note map available"
+        no_map: "no note map available yet"
     },
     dlp: {
         performance_points: "PP available",
