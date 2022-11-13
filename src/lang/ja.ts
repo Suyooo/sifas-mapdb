@@ -24,46 +24,48 @@ function noteCount(n: number) {
 function songGimmick({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) {
     if (finish_type === SkillFinishType.UNTIL_SONG_END) {
         // Replace type to remove "until the song ends" condition - pretty much implied through being the song gimmick
-        finish_type = SkillFinishType.UNTIL_AC_END;
+        return skill(effect_type, effect_amount, target, SkillFinishType.UNTIL_AC_END, 0);
     }
     return skill(effect_type, effect_amount, target, finish_type, finish_amount);
 }
 
 function noteGimmick({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickNote) {
     const skillString = skill(effect_type, effect_amount, target, finish_type, finish_amount);
+    const connector = finish_type === SkillFinishType.INSTANT ? "に" : "から";
 
     if (trigger === SkillTriggerNote.HIT)
-        return `成功時${skillString}`;
+        return `成功時${connector}${skillString}`;
     if (trigger === SkillTriggerNote.MISS)
-        return `失敗時${skillString}`;
+        return `失敗時${connector}${skillString}`;
     if (trigger === SkillTriggerNote.ALWAYS)
         return skillString;
     if (trigger === SkillTriggerNote.HIT_VO)
-        return `<span class="t vo">Vo</span>タイプで成功時${skillString}`;
+        return `<span class="t vo">Vo</span>タイプで成功時${connector}${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SP)
-        return `<span class="t sp">Sp</span>タイプで成功時${skillString}`;
+        return `<span class="t sp">Sp</span>タイプで成功時${connector}${skillString}`;
     if (trigger === SkillTriggerNote.HIT_SK)
-        return `<span class="t sk">Sk</span>タイプで成功時${skillString}`;
+        return `<span class="t sk">Sk</span>タイプで成功時${connector}${skillString}`;
 
     throw new Error(`No translation for note gimmick trigger type ${trigger}`);
 }
 
 function acGimmick({trigger, effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmickAC) {
     const skillString = skill(effect_type, effect_amount, target, finish_type, finish_amount);
+    const connector = finish_type === SkillFinishType.INSTANT ? "に" : "から";
 
     if (trigger === SkillTriggerAC.START) {
         if (finish_type === SkillFinishType.UNTIL_AC_END) {
-            return `AC中${skillString}`;
+            return `AC中、${skillString}`;
         } else {
-            return `開始時${skillString}`;
+            return `開始時${connector}${skillString}`;
         }
     }
     if (trigger === SkillTriggerAC.SUCCESS)
-        return `成功時${skillString}`;
+        return `成功時${connector}${skillString}`;
     if (trigger === SkillTriggerAC.FAILURE)
-        return `失敗時${skillString}`;
+        return `失敗時${connector}${skillString}`;
     if (trigger === SkillTriggerAC.END)
-        return `終了時${skillString}`;
+        return `終了時${connector}${skillString}`;
 
     throw new Error(`No translation for AC trigger type ${trigger}`);
 }
@@ -73,7 +75,7 @@ function skill(effectType: SkillEffectType, effectAmount: number, targetType: Sk
     const effect = skillEffect(effectType, effectAmount);
     const target = skillEffectTypeTargetsFormation(effectType) ? "" : skillTarget(targetType);
     const finish = skillFinish(finishType, finishAmount, skillEffectTypeAffectsSPVoltage(effectType));
-    return `${finish}、${target}${effect}`;
+    return `${finish}${finish ? "、" : ""}${target}${effect}`;
 }
 
 function skillEffect(effectType: SkillEffectType, effectAmount: number) {
@@ -98,137 +100,137 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
     if (effectType === SkillEffectType.SPVO_BUFF)
         return `のSP特技の獲得ボルテージ${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.APPEAL_BASE_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
+        return `の基本アピール${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+        return `の基本特技発動率${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+        return `の基本クリティカル率が${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.SPGAIN_BASE2_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
+        return `の基本SPゲージ獲得量${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+        return `の基本クリティカル率が${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.CRITPOWER_BASE2_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Power`;
+        return `の基本クリティカル値が${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+        return `の基本特技発動率${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal`;
+        return `の基本アピール${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+        return `の基本SP特技の獲得ボルテージ${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.VOGAIN_BASE2_BUFF)
-        return `increase Base Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
+        return `の基本獲得ボルテージ${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.CLEANSE_BUFFS)
-        return `lose all buffs (excluding those affecting Base values)`;
+        return `すべての上昇/増加効果を解除（基本上昇/基本増加を除く）`;
     if (effectType === SkillEffectType.STAMINA_DAMAGE)
-        return `take ${numberFormat(effectAmount)} points of stamina damage`;
-    if (effectType === SkillEffectType.SP_LOSE)
-        return `discharge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
+        return `${numberFormat(effectAmount)}スタミナダメージ`;
+    if (effectType === SkillEffectType.SP_LOSE_PERCENTAGE)
+        return `最大値の${numberFormat(effectAmount / 100)}%SPゲージ減少`;
     if (effectType === SkillEffectType.SHIELD_LOSE)
-        return `lose ${numberFormat(effectAmount)} points of shield`;
+        return `シールドが${numberFormat(effectAmount)}減少`;
     if (effectType === SkillEffectType.APPEAL_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Appeal`;
+        return `のアピール${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.VOGAIN_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Tap Voltage`;
+        return `の獲得ボルテージ${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.SPGAIN_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
+        return `のSPゲージ獲得量${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.CRITPOWER_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Critical Power`;
+        return `のクリティカル値が${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SKILLCHANCE_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
+        return `の特技発動率${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+        return `の基本特技発動率${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.VOGAIN_BASE2_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Tap Voltage`;
+        return `の基本獲得ボルテージ${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.APPEAL_BASE2_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Appeal`;
+        return `のアピール${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE2_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+        return `の基本クリティカル率が${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SPGAIN_BASE2_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
+        return `の基本SPゲージ獲得量${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.APPEAL_BASE_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Appeal`;
+        return `の基本アピール${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.SPGAIN_BASE_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base SP Gauge Fill Rate`;
+        return `の基本SPゲージ獲得量${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
+        return `の基本特技発動率${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE_DEBUFF)
-        return `lose ${numberFormat(effectAmount / 100)}% Base Critical Chance`;
+        return `の基本クリティカル率が${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SP_GAIN_PERCENTAGE)
-        return `charge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
+        return `最大値の${numberFormat(effectAmount / 100)}%SPゲージ獲得`;
     if (effectType === SkillEffectType.SHIELD_GAIN_PERCENTAGE)
-        return `gain ${numberFormat(effectAmount / 100)}% of max Stamina as shield`;
+        return `最大スタミナの${numberFormat(effectAmount / 100)}%シールド獲得`;
     if (effectType === SkillEffectType.STAMINA_HEAL_PERCENTAGE)
-        return `restore ${numberFormat(effectAmount / 100)}% of max Stamina`;
+        return `最大値の${numberFormat(effectAmount / 100)}%スタミナ回復`;
     if (effectType === SkillEffectType.DAMAGE_INCREASE)
-        return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
+        return `スタミナダメージが${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.DAMAGE_BASE2_INCREASE)
-        return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
+        return `基本スタミナダメージが${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.SP_GAIN_BY_TECH)
-        return `charge SP Gauge by ${numberFormat(effectAmount / 100)}% of the appealing card's Technique`;
+        return `アピールしているカードのテクニックの${numberFormat(effectAmount / 100)}%SPゲージ獲得`;
     if (effectType === SkillEffectType.APPEAL_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%アピール増加`;
     if (effectType === SkillEffectType.APPEAL_DEBUFF_BY_VO)
-        return `lose ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%アピール減少`;
     if (effectType === SkillEffectType.APPEAL_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t sk">Sk</span> unit in the formation`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%アピール増加`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_VO)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t vo">Vo</span> unit in the formation`;
+        return `<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount)}スタミナ回復`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_SP)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sp">Sp</span> unit in the formation`;
+        return `<span class="t sp">Sp</span>タイプ×${numberFormat(effectAmount)}スタミナ回復`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_SK)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t sk">Sk</span> unit in the formation`;
+        return `<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount)}スタミナ回復`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BY_GD)
-        return `restore ${numberFormat(effectAmount)} points of stamina for each <span class="t gd">Gd</span> unit in the formation`;
+        return `<span class="t gd">Gd</span>タイプ×${numberFormat(effectAmount)}スタミナ回復`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%基本アピール増加`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_SP)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sp">Sp</span> unit in the formation`;
+        return `が<span class="t sp">Sp</span>タイプ×${numberFormat(effectAmount / 100)}%基本アピール増加`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t sk">Sk</span> unit in the formation`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%基本アピール増加`;
     if (effectType === SkillEffectType.APPEAL_BASE2_BUFF_BY_GD)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Appeal for each <span class="t gd">Gd</span> unit in the formation`;
+        return `が<span class="t gd">Gd</span>タイプ×${numberFormat(effectAmount / 100)}%基本アピール増加`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%特技発動率上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%特技発動率上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BUFF_BY_GD)
-        return `gain ${numberFormat(effectAmount / 100)}% Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
+        return `が<span class="t gd">Gd</span>タイプ×${numberFormat(effectAmount / 100)}%特技発動率上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%基本特技発動率上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_SP)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sp">Sp</span> unit in the formation`;
+        return `が<span class="t sp">Sp</span>タイプ×${numberFormat(effectAmount / 100)}%基本特技発動率上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%基本特技発動率上昇`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_BUFF_BY_GD)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance for each <span class="t gd">Gd</span> unit in the formation`;
+        return `が<span class="t gd">Gd</span>タイプ×${numberFormat(effectAmount / 100)}%基本特技発動率上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%クリティカル率上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%クリティカル率上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%基本クリティカル率上昇`;
     if (effectType === SkillEffectType.CRITCHANCE_BASE2_BUFF_BY_SK)
-        return `gain ${numberFormat(effectAmount / 100)}% Base Critical Chance for each <span class="t sk">Sk</span> unit in the formation`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%基本クリティカル率上昇`;
     if (effectType === SkillEffectType.CRITPOWER_BUFF_BY_VO)
-        return `gain ${numberFormat(effectAmount / 100)}% Critical Power for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%クリティカル値上昇`;
     if (effectType === SkillEffectType.SPVO_BUFF_BY_SP)
-        return `increase SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
+        return `が<span class="t sp">Sp</span>タイプ×${numberFormat(effectAmount / 100)}%SP特技の獲得ボルテージ増加`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_VO)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t vo">Vo</span> unit in the formation`;
+        return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%基本SP特技の獲得ボルテージ増加`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SP)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> unit in the formation`;
+        return `が<span class="t sp">Sp</span>タイプ×${numberFormat(effectAmount / 100)}%基本SP特技の獲得ボルテージ増加`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SK)
-        return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> unit in the formation`;
-    if (effectType === SkillEffectType.SWAP_VO_BUFF)
-        return `increase the Voltage gained from their Strategy Swap bonus by ${numberFormat(effectAmount)}`;
-    if (effectType === SkillEffectType.SWAP_SK_BUFF)
-        return `increase the cooldown reduction from their Strategy Swap bonus by ${numberFormat(effectAmount)} turns`;
-    if (effectType === SkillEffectType.SWAP_SP_BUFF)
-        return `increase SP gained from their Strategy Swap bonus by ${numberFormat(effectAmount)} points`;
+        return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%基本SP特技の獲得ボルテージ増加`;
+    if (effectType === SkillEffectType.SWAP_VO_BASE_BUFF)
+        return `の基本作戦切替ボーナスに${numberFormat(effectAmount)}ボルテージ加算`;
+    if (effectType === SkillEffectType.SWAP_SK_BASE_BUFF)
+        return `の基本作戦切替ボーナスに${numberFormat(effectAmount)}加算`;
+    if (effectType === SkillEffectType.SWAP_SP_BASE_BUFF)
+        return `の基本作戦切替ボーナスに${numberFormat(effectAmount)}加算`;
     if (effectType === SkillEffectType.STAMINA_DAMAGE_PIERCE)
-        return `take ${numberFormat(effectAmount / 100)}% of max Stamina as damage, bypassing Shield`;
+        return `シールド効果を無視して最大スタミナ${numberFormat(effectAmount / 100)}%ダメージ`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BLOCK)
-        return `block healing`;
+        return `スタミナ回復不可`;
 
     throw new Error(`No translation for skill effect type ${effectType}`);
 }
@@ -313,9 +315,9 @@ function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVolt
     if (finishType === SkillFinishType.UNTIL_SONG_END)
         return `ライブ終了まで`;
     if (finishType === SkillFinishType.NOTE_COUNT)
-        return `から${numberFormat(finishAmount)}ノーツの間`;
+        return `${numberFormat(finishAmount)}ノーツの間`;
     if (finishType === SkillFinishType.INSTANT)
-        return `に`;
+        return ``;
     if (finishType === SkillFinishType.UNTIL_AC_END)
         return ``; // (This is handled in the trigger switch in acGimmick)
     if (finishType === SkillFinishType.SP_COUNT) {

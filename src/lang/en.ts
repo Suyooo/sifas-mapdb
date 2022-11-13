@@ -126,7 +126,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `lose all buffs (excluding those affecting Base values)`;
     if (effectType === SkillEffectType.STAMINA_DAMAGE)
         return `take ${numberFormat(effectAmount)} points of stamina damage`;
-    if (effectType === SkillEffectType.SP_LOSE)
+    if (effectType === SkillEffectType.SP_LOSE_PERCENTAGE)
         return `discharge SP Gauge by ${numberFormat(effectAmount / 100)}%`;
     if (effectType === SkillEffectType.SHIELD_LOSE)
         return `lose ${numberFormat(effectAmount)} points of shield`;
@@ -224,12 +224,12 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SK)
         return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> card in the formation`;
-    if (effectType === SkillEffectType.SWAP_VO_BUFF)
-        return `increase the Voltage gained from their Strategy Swap bonus by ${numberFormat(effectAmount)}`;
-    if (effectType === SkillEffectType.SWAP_SK_BUFF)
-        return `increase the cooldown reduction from their Strategy Swap bonus by ${numberFormat(effectAmount)} turns`;
-    if (effectType === SkillEffectType.SWAP_SP_BUFF)
-        return `increase SP gained from their Strategy Swap bonus by ${numberFormat(effectAmount)} points`;
+    if (effectType === SkillEffectType.SWAP_VO_BASE_BUFF)
+        return `increase the Base Voltage Gain from their Strategy Swap Bonus by ${numberFormat(effectAmount)}`;
+    if (effectType === SkillEffectType.SWAP_SK_BASE_BUFF)
+        return `increase the Base Cooldown Reduction from their Strategy Swap Bonus by ${numberFormat(effectAmount)} turns`;
+    if (effectType === SkillEffectType.SWAP_SP_BASE_BUFF)
+        return `increase the Base SP Gain from their Strategy Swap Bonus by ${numberFormat(effectAmount)} points`;
     if (effectType === SkillEffectType.STAMINA_DAMAGE_PIERCE)
         return `take ${numberFormat(effectAmount / 100)}% of max Stamina as damage, bypassing Shield`;
     if (effectType === SkillEffectType.STAMINA_HEAL_BLOCK)

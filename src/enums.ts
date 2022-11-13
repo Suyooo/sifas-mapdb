@@ -57,7 +57,7 @@ export enum SkillEffectType {
     VOGAIN_BASE2_BUFF = 51,
     CLEANSE_BUFFS = 52,
     STAMINA_DAMAGE = 68,
-    SP_LOSE = 69,
+    SP_LOSE_PERCENTAGE = 69,
     SHIELD_LOSE = 70,
     APPEAL_DEBUFF = 71,
     VOGAIN_DEBUFF = 72,
@@ -106,9 +106,9 @@ export enum SkillEffectType {
     SPVO_BASE2_BUFF_BY_VO = 217,
     SPVO_BASE2_BUFF_BY_SP = 218,
     SPVO_BASE2_BUFF_BY_SK = 219,
-    SWAP_VO_BUFF = 228,
-    SWAP_SK_BUFF = 229,
-    SWAP_SP_BUFF = 230,
+    SWAP_VO_BASE_BUFF = 228,
+    SWAP_SK_BASE_BUFF = 229,
+    SWAP_SP_BASE_BUFF = 230,
     STAMINA_DAMAGE_PIERCE = 263,
     STAMINA_HEAL_BLOCK = 265
 }
@@ -116,7 +116,7 @@ export enum SkillEffectType {
 // Skill Effect Types that target player status - don't print a target for these, even if one is defined in the info
 const skillEffectTypeTargetsFormationSet = new Set([
     SkillEffectType.SP_FILL, SkillEffectType.SHIELD_GAIN, SkillEffectType.STAMINA_HEAL, SkillEffectType.STAMINA_DAMAGE,
-    SkillEffectType.SP_LOSE, SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE,
+    SkillEffectType.SP_LOSE_PERCENTAGE, SkillEffectType.SHIELD_LOSE, SkillEffectType.SP_GAIN_PERCENTAGE,
     SkillEffectType.SHIELD_GAIN_PERCENTAGE, SkillEffectType.STAMINA_HEAL_PERCENTAGE, SkillEffectType.DAMAGE_INCREASE,
     SkillEffectType.DAMAGE_BASE2_INCREASE, SkillEffectType.SP_GAIN_BY_TECH, SkillEffectType.STAMINA_HEAL_BY_VO,
     SkillEffectType.STAMINA_HEAL_BY_SP, SkillEffectType.STAMINA_HEAL_BY_SK, SkillEffectType.STAMINA_HEAL_BY_GD,
