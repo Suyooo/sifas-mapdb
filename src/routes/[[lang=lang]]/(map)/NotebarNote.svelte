@@ -53,7 +53,6 @@
                 lowlightNext = !(gimmickHighlightsByNoteId[$filterNote]?.has(releaseNoteIndex));
             }
         } else if ($filterGimmick !== null) {
-            console.log(hitBySlot, $filterSlot);
             lowlight = !(noteData.gimmick === $filterGimmick || gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
                     || ($filterSlot !== null && hitBySlot !== $filterSlot);
             if (releaseNoteIndex !== undefined) {

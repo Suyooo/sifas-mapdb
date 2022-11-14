@@ -25,7 +25,6 @@ export const tooltipNotebar: Action<HTMLElement, { component: SvelteComponentCon
                     if (componentInstance) {
                         clearTimeout(unmountTimeout);
                     } else {
-                        console.log(new Map(Object.entries(params!.context)));
                         componentInstance = new params!.component({
                             target: instance.popper.querySelector(".tippy-content"),
                             props: params!.props,
