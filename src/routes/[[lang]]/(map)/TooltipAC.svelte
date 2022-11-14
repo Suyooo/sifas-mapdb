@@ -1,6 +1,6 @@
 <script lang="ts">
     import T from "$lib/T.svelte";
-    import type {LiveDataAC} from "../../types";
+    import type {LiveDataAC} from "$types";
 
     export let acData: LiveDataAC;
 </script>

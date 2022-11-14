@@ -1,7 +1,7 @@
 <script lang="ts">
+    import {skillTriggerNoteHasSlotCount} from "$enums";
     import T from "$lib/T.svelte";
-    import {skillTriggerNoteHasSlotCount} from "../../enums";
-    import type {LiveDataGimmickNote} from "../../types";
+    import type {LiveDataGimmickNote} from "$types";
 
     export let gimmickData: LiveDataGimmickNote;
     export let i: number;

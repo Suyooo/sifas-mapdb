@@ -7,7 +7,7 @@ import {
     SkillTargetType,
     SkillTriggerAC,
     SkillTriggerNote
-} from "../enums";
+} from "$enums";
 import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
 function numberFormat(n: number): string {
@@ -369,6 +369,7 @@ function acMission({mission_type, mission_value}: LiveDataAC) {
 }
 
 function acAverage({mission_type, mission_value}: LiveDataAC, notes: number) {
+    console.log(mission_type,mission_value,notes);
     if (mission_type === ACMissionType.VOLTAGE_TOTAL) {
         return `1ノーツに平均ボルテージは${numberFormat(Math.ceil(mission_value / notes))}`;
     } else if (mission_type === ACMissionType.CRITICALS) {

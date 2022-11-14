@@ -1,4 +1,4 @@
-import type {Item} from "../enums";
+import type {Item} from "$enums";
 import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
 export default {

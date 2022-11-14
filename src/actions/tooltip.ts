@@ -7,8 +7,8 @@ import "tippy.js/dist/svg-arrow.css";
 
 type SvelteComponentConstructor = new (...args: any) => SvelteComponentTyped<any>;
 
-export const tooltipNotebar: Action<HTMLElement, { component: SvelteComponentConstructor, props?: any }> =
-        (node: HTMLElement, params: { component: SvelteComponentConstructor, props?: any } | undefined) => {
+export const tooltipNotebar: Action<HTMLElement, { component: SvelteComponentConstructor, props?: any, context?: any }> =
+        (node: HTMLElement, params: { component: SvelteComponentConstructor, props?: any, context?: any } | undefined) => {
             if (params === undefined) return;
 
             let componentInstance: SvelteComponentTyped<any> | null = null;
@@ -25,9 +25,11 @@ export const tooltipNotebar: Action<HTMLElement, { component: SvelteComponentCon
                     if (componentInstance) {
                         clearTimeout(unmountTimeout);
                     } else {
+                        console.log(new Map(Object.entries(params!.context)));
                         componentInstance = new params!.component({
                             target: instance.popper.querySelector(".tippy-content"),
-                            props: params!.props
+                            props: params!.props,
+                            context: new Map(Object.entries(params!.context))
                         });
                     }
                 },

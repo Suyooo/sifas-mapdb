@@ -1,8 +1,8 @@
 <script lang="ts">
+    import T from "$lib/T.svelte";
+    import type {LiveData} from "$types";
     import {setContext} from "svelte";
     import {writable} from 'svelte/store';
-    import T from "../../lib/T.svelte";
-    import type {LiveData} from "../../types";
     import DetailAC from "./DetailAC.svelte";
     import DetailNoteGimmick from "./DetailNoteGimmick.svelte";
     import DetailSongGimmick from "./DetailSongGimmick.svelte";

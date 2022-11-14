@@ -1,8 +1,8 @@
 <script lang="ts">
+    import {SkillFinishType} from "$enums";
+    import {MarkerTracker} from "$lib/markerTracker";
+    import type {LiveData} from "$types";
     import {getContext, setContext} from "svelte";
-    import {SkillFinishType} from "../../enums";
-    import {MarkerTracker} from "../../lib/markerTracker";
-    import type {LiveData} from "../../types";
     import NotebarAC from "./NotebarAC.svelte";
     import NotebarNote from "./NotebarNote.svelte";
 

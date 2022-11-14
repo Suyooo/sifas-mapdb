@@ -1,9 +1,8 @@
 <script lang="ts">
+    import {tooltipNotebar} from "$actions/tooltip";
+    import {acMissionTypeToRole, Role} from "$enums";
+    import type {LiveData} from "$types";
     import {getContext} from "svelte";
-    import {tooltipNotebar} from "../../actions/tooltip";
-    import {Role} from "../../enums";
-    import {acMissionTypeToRole} from "../../enums.js";
-    import type {LiveData} from "../../types";
     import TooltipAC from "./TooltipAC.svelte";
 
     // Static database data (from +layout.svelte)
@@ -19,10 +18,16 @@
     const relativeStart = (startTime - notebarSize.start) / notebarSize.length;
     const relativeLength = (endTime - startTime) / notebarSize.length;
     const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
+
+    const pageLanguage = getContext("pageLanguage");
 </script>
 
 <div class="{acType}" style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}
-     use:tooltipNotebar="{{component: TooltipAC, props: {acData}}}">
+     use:tooltipNotebar={{
+         component: TooltipAC,
+         props: {acData},
+         context: {pageLanguage}
+     }}>
 </div>
 
 <style lang="postcss">

@@ -1,9 +1,9 @@
 <script lang="ts">
+    import {tooltipNotebar} from "$actions/tooltip";
+    import {NoteType} from "$enums";
+    import type {LiveData, LiveDataNote} from "$types";
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import {tooltipNotebar} from "../../actions/tooltip";
-    import {NoteType} from "../../enums";
-    import type {LiveData, LiveDataNote} from "../../types";
     import TooltipGimmick from "./TooltipGimmick.svelte";
 
     // Static database data (from +layout.svelte)
@@ -67,6 +67,8 @@
         lowlightMarker = $filterGimmick !== null && $filterGimmick !== noteData.gimmick
                 || ($filterSlot !== null && hitBySlot !== $filterSlot);
     }
+
+    const pageLanguage = getContext("pageLanguage");
 </script>
 
 <div class="allcont" style:left={relativeTime*100+"%"}>
@@ -82,7 +84,11 @@
              style:top={"-" + (($filterGimmick === noteData.gimmick ? layerLocal : layerGlobal) + 1) + "rem"}
              style:width={relativeGimmickLength ? ("calc("+(relativeGimmickLength*100)+"% + 0.375rem)") : null}
              on:mouseenter={() => $filterNote = i} on:mouseleave={() => $filterNote = null}
-             use:tooltipNotebar="{{component: TooltipGimmick, props: {gimmickData, i, hitBySlot}}}">
+             use:tooltipNotebar={{
+                 component: TooltipGimmick,
+                 props: {gimmickData, i, hitBySlot},
+                 context: {pageLanguage}
+             }}>
             {#if relativeGimmickLength}
                 <div class="markertail"></div>
             {/if}

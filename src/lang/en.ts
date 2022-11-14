@@ -7,7 +7,7 @@ import {
     SkillTargetType,
     SkillTriggerAC,
     SkillTriggerNote
-} from "../enums";
+} from "$enums";
 import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
 
 function capitalize(s: string) {

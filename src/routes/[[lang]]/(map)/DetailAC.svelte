@@ -1,9 +1,8 @@
 <script lang="ts">
+    import {acMissionTypeHasAverage, acMissionTypeToRole, Role} from "$enums";
     import T from "$lib/T.svelte";
+    import type {LiveData} from "$types";
     import {getContext} from "svelte";
-    import {acMissionTypeToRole, Role} from "../../enums";
-    import {acMissionTypeHasAverage} from "../../enums.js";
-    import type {LiveData} from "../../types";
 
     // Static database data (from +layout.svelte)
     const data = getContext<LiveData>("mapData");

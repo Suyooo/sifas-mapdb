@@ -1,10 +1,10 @@
 <script lang="ts">
+    import shortcut from "$actions/shortcut";
+    import {skillTriggerNoteHasSlotCount} from "$enums";
     import T from "$lib/T.svelte";
+    import type {LiveData} from "$types";
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
-    import shortcut from "../../actions/shortcut";
-    import {skillTriggerNoteHasSlotCount} from "../../enums.js";
-    import type {LiveData} from "../../types";
 
     // Static database data (from +layout.svelte)
     const data = getContext<LiveData>("mapData");
