@@ -18,8 +18,9 @@
     setContext("filterNote", writable<number | null>(null));
 </script>
 
-<a href="/">Back.</a>
-<slot/><br><br>
+<div class="mb-2">
+<slot/>
+</div>
 
 {#if data.notes !== undefined}
     <Notebar/>
