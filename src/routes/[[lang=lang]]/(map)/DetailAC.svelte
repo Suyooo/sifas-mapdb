@@ -9,7 +9,7 @@
 
     export let i: number;
     const acData = data.appeal_chances[i];
-    const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
+    const acColor = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
     const noteCount = acData.range_note_ids !== null
             ? acData.range_note_ids[1] - acData.range_note_ids[0] + 1
             : 0;
@@ -17,7 +17,7 @@
 
 <div>
     <div class="title">
-        <div class="indicator {acType}">&nbsp;</div>
+        <div class="indicator {acColor}">&nbsp;</div>
         <T key="appeal_chances.label"/> {i + 1}:
         <T key="appeal_chances.mission" params={[acData]}/>
     </div>

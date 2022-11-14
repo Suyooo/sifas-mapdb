@@ -10,8 +10,10 @@
     }
 </script>
 
-{#if typeof item === "function"}
-    {@html item(...params)}
-{:else}
-    {@html item}
-{/if}
+<span>
+    {#if typeof item === "function"}
+        {@html item(...params)}
+    {:else}
+        {@html item}
+    {/if}
+</span>

@@ -540,8 +540,8 @@ export default {
         none: "None"
     },
     format: {
-        number: numberFormat,
-        note_count: noteCount
+        note_count: noteCount,
+        number: numberFormat
     },
     items: () => ""
 };
