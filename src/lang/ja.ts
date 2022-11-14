@@ -334,7 +334,7 @@ function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVolt
             else return `${numberFormat(finishAmount)}回のSP特技するまで`;
         }
     }
-    if (finishType === SkillFinishType.UNTIL_SWITCH) {
+    if (finishType === SkillFinishType.UNTIL_SWAP) {
         if (finishAmount <= 1) return `作戦切替するまで`;
         else return `作戦切替${numberFormat(finishAmount)}回するまで`;
     }

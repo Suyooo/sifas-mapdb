@@ -57,6 +57,14 @@ module.exports = {
                         gimmick: colors.blue[300]
                     }
                 }
+            },
+            gridTemplateRows: {
+                "2a": "repeat(2, auto)",
+                "3a": "repeat(3, auto)",
+                "5a": "repeat(5, auto)"
+            },
+            height: {
+                "18": "4.5em"
             }
         },
     },

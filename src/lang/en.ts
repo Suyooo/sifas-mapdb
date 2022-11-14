@@ -332,7 +332,7 @@ function skillFinish(finishType: SkillFinishType, finishAmount: number, isSPVolt
             else return ` until ${numberFormat(finishAmount)} SP Skills are used`;
         }
     }
-    if (finishType === SkillFinishType.UNTIL_SWITCH) {
+    if (finishType === SkillFinishType.UNTIL_SWAP) {
         if (finishAmount <= 1) return ` until the next Strategy swap`;
         else return ` until Strategies are swapped ${finishAmount} times`;
     }

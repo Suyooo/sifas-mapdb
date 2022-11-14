@@ -222,7 +222,7 @@ export enum SkillFinishType {
     INSTANT = 3,
     UNTIL_AC_END = 4,
     SP_COUNT = 7,
-    UNTIL_SWITCH = 8
+    UNTIL_SWAP = 8
 }
 
 export function skillFinishTypeHasFixedLength(t: SkillFinishType) {
