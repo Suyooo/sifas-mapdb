@@ -1,3 +1,16 @@
+export interface LiveInfo {
+    display_order: number,
+    name: { kn: string, ro: string },
+    name_suffix: { kn: string, ro: string } | null,
+    attribute: Attribute,
+    unavailable: boolean,
+    permanent: boolean,
+    daily_weekday: (1 | 2 | 3 | 4 | 5 | 6 | 7)[] | null,
+    time_limit: number | null,
+    live_difficulty_ids: { free: number[], story: number[] }
+    default_live_difficulty_id: number
+}
+
 export interface LiveData {
     live_id: number,
     display_order: number,
