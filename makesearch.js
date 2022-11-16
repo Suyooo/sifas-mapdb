@@ -37,6 +37,7 @@ const customAbbreviationsRo = {
     "11003": "021",
     "11012": "t1w",
     "11072": "hsns",
+    "11081": "bhc",
     "11102": "aao",
     "12001": "tkmk",
     "12024": "yakitori",
