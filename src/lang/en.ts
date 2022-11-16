@@ -136,6 +136,8 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `lose ${numberFormat(effectAmount / 100)}% Tap Voltage`;
     if (effectType === SkillEffectType.SPGAIN_DEBUFF)
         return `lose ${numberFormat(effectAmount / 100)}% SP Gauge Fill Rate`;
+    if (effectType === SkillEffectType.CRITCHANCE_DEBUFF)
+        return `lose ${numberFormat(effectAmount / 100)}% Critical Chance`;
     if (effectType === SkillEffectType.CRITPOWER_DEBUFF)
         return `lose ${numberFormat(effectAmount / 100)}% Critical Power`;
     if (effectType === SkillEffectType.SKILLCHANCE_DEBUFF)
@@ -240,6 +242,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 
 const skillTargetMap = {
     [SkillTargetType.ALL]: `all cards `,
+    [SkillTargetType.CHAR_HANAMARU]: `Hanamaru cards `,
     [SkillTargetType.CHAR_MARI]: `Mari cards `,
     [SkillTargetType.CHAR_RUBY]: `Ruby cards `,
     [SkillTargetType.CHAR_AYUMU]: `Ayumu cards `,

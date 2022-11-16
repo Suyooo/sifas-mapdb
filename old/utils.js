@@ -106,9 +106,10 @@ function songNameRomaji(liveId) {
     if (liveId === "1066") return "Beginner's Sailing";
     if (liveId === "1064") return "in this unstable world";
     if (liveId === "1062") return "Oyasuminasan!";
+    if (liveId === "1100") return "Akogare Ranraran";
     if (liveId === "1069") return "New winding road";
-    if (liveId === "1068") return "RED GEM WINK";
     if (liveId === "1101") return "Shiny Racers";
+    if (liveId === "1068") return "RED GEM WINK";
     if (liveId === "1102") return "Cotton Candy Ei Ei Oh!";
 
     // Nijigaku

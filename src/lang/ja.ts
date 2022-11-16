@@ -138,6 +138,8 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `の獲得ボルテージ${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.SPGAIN_DEBUFF)
         return `のSPゲージ獲得量${numberFormat(effectAmount / 100)}%低下`;
+    if (effectType === SkillEffectType.CRITCHANCE_DEBUFF)
+        return `のクリティカル率が${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.CRITPOWER_DEBUFF)
         return `のクリティカル値が${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SKILLCHANCE_DEBUFF)
@@ -242,6 +244,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 
 const skillTargetMap = {
     [SkillTargetType.ALL]: `全員`,
+    [SkillTargetType.CHAR_HANAMARU]: `花丸`,
     [SkillTargetType.CHAR_MARI]: `鞠莉`,
     [SkillTargetType.CHAR_RUBY]: `ルビィ`,
     [SkillTargetType.CHAR_AYUMU]: `歩夢`,

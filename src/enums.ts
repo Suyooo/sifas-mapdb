@@ -71,6 +71,7 @@ export enum SkillEffectType {
     APPEAL_DEBUFF = 71,
     VOGAIN_DEBUFF = 72,
     SPGAIN_DEBUFF = 73,
+    CRITCHANCE_DEBUFF = 74,
     CRITPOWER_DEBUFF = 75,
     SKILLCHANCE_DEBUFF = 76,
     SKILLCHANCE_BASE2_DEBUFF = 78,
@@ -148,6 +149,7 @@ export function skillEffectTypeAffectsSPVoltage(t: SkillEffectType) {
 
 export enum SkillTargetType {
     ALL = 1,
+    CHAR_HANAMARU = 17,
     CHAR_MARI = 18,
     CHAR_RUBY = 19,
     CHAR_AYUMU = 20,
