@@ -1,8 +1,11 @@
 <script lang="ts">
     import {browser} from "$app/environment";
+    import {goto} from "$app/navigation";
+    import {page} from "$app/stores";
     import Notemap from "$lib/notemap/Notemap.svelte";
     import T from "$lib/T.svelte";
     import type {LiveData, LiveList} from "$types";
+    import {getContext} from "svelte";
 
     export let data: { liveList: LiveList, liveInfo: LiveData };
 
@@ -16,15 +19,34 @@
             data.liveInfo.appeal_chances.reduce((sum, ac) => sum + ac.reward_voltage!, 0);
 
     let openRanks = false, openCaps = false;
+    const storyStagesLabel = getContext<{ songinfo: { story_stages: string } }>("pageLanguage").songinfo.story_stages;
+
+    function doDiffSelection(e: Event) {
+        goto("/live/" + (<HTMLSelectElement>e.target)?.value, {keepFocus: true});
+    }
 </script>
 
-<div class="mb-2">
+<!-- Put all live difficulties into the head as link tags, so the adapter-static crawler can find them -->
+<svelte:head>
     {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-        <a href="/live/{l}">{l}</a>,
-    {/each}<br>
+        <link href="/live/{l}">
+    {/each}
     {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-        <a href="/live/{l}">{l}</a>,
-    {/each}<br><br>
+        <link href="/live/{l}">
+    {/each}
+</svelte:head>
+
+<div class="mb-2">
+    <select on:change={doDiffSelection}>
+        {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
+            <option value={l} selected={$page.params.id === l.toString()}>{l}</option>
+        {/each}
+        <optgroup label={storyStagesLabel}>
+            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
+                <option value={l} selected={$page.params.id === l.toString()}>{l}</option>
+            {/each}
+        </optgroup>
+    </select>
 
     <div class="sm:grid grid-rows-5a lg:grid-rows-3a grid-flow-col gap-x-8">
         <div>
@@ -44,12 +66,22 @@
                 <b><T key="songinfo.ranks.C"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.C]}/>
             </div>
         </div>
-        <div><b><T key="songinfo.note_damage"/>:</b> <T key="format.number" params={[data.liveInfo.note_damage]}/></div>
+        <div>
+            <b><T key="songinfo.note_damage"/>:</b> <T key="format.number" params={[data.liveInfo.note_damage]}/>
+        </div>
         {#if data.liveInfo.notes !== null}
-            <div><b><T key="songinfo.note_count"/>:</b> <T key="format.number" params={[data.liveInfo.notes.length]}/></div>
-            <div><b><T key="songinfo.note_count_ac"/>:</b> <T key="format.number" params={[noteCountAc]}/></div>
-            <div><b><T key="songinfo.note_damage_total"/>:</b> <T key="format.number" params={[totalDamage]}/></div>
-            <div><b><T key="songinfo.ac_reward_total"/>:</b> <T key="format.number" params={[totalRewards]}/></div>
+            <div>
+                <b><T key="songinfo.note_count"/>:</b> <T key="format.number" params={[data.liveInfo.notes.length]}/>
+            </div>
+            <div>
+                <b><T key="songinfo.note_count_ac"/>:</b> <T key="format.number" params={[noteCountAc]}/>
+            </div>
+            <div>
+                <b><T key="songinfo.note_damage_total"/>:</b> <T key="format.number" params={[totalDamage]}/>
+            </div>
+            <div>
+                <b><T key="songinfo.ac_reward_total"/>:</b> <T key="format.number" params={[totalRewards]}/>
+            </div>
         {/if}
         <div>
             <div class="extra" class:open={openCaps}>
@@ -72,13 +104,17 @@
                 <T key="format.number" params={[data.liveInfo.voltage_caps.swap]}/>
             </div>
         </div>
-        <div><b><T key="songinfo.sp_gauge_max"/>:</b> <T key="format.number" params={[data.liveInfo.sp_gauge_max]}/></div>
-        <div><b><T key="songinfo.song_length"/>:</b> <T key="format.number" params={[data.liveInfo.song_length]}/></div>
+        <div>
+            <b><T key="songinfo.sp_gauge_max"/>:</b> <T key="format.number" params={[data.liveInfo.sp_gauge_max]}/>
+        </div>
+        <div>
+            <b><T key="songinfo.song_length"/>:</b> <T key="format.number" params={[data.liveInfo.song_length]}/>
+        </div>
     </div>
 </div>
 
 {#key data.liveInfo}
-    <Notemap data={data.liveInfo} />
+    <Notemap data={data.liveInfo}/>
 {/key}
 
 <style lang="postcss">
