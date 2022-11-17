@@ -1,5 +1,6 @@
 <script lang="ts">
     import {browser} from "$app/environment";
+    import Notemap from "$lib/notemap/Notemap.svelte";
     import T from "$lib/T.svelte";
     import type {LiveData, LiveList} from "$types";
 
@@ -17,62 +18,68 @@
     let openRanks = false, openCaps = false;
 </script>
 
-{#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-    <a href="/live/{l}">{l}</a>,
-{/each}<br>
-{#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-    <a href="/live/{l}">{l}</a>,
-{/each}<br><br>
+<div class="mb-2">
+    {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
+        <a href="/live/{l}">{l}</a>,
+    {/each}<br>
+    {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
+        <a href="/live/{l}">{l}</a>,
+    {/each}<br><br>
 
-<div class="sm:grid grid-rows-5a lg:grid-rows-3a grid-flow-col gap-x-8">
-    <div>
-        <div class="extra" class:open={openRanks}>
-            <b><T key="songinfo.ranks.S"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.S]}/>
-            {#if browser}
-                <button class="icon" on:click={() => openRanks = !openRanks}>
-                    <span class="open">v</span><span class="icon close">^</span>
-                </button>
-            {/if}
-        </div>
+    <div class="sm:grid grid-rows-5a lg:grid-rows-3a grid-flow-col gap-x-8">
         <div>
-            <b><T key="songinfo.ranks.A"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.A]}/>
-            <br>
-            <b><T key="songinfo.ranks.B"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.B]}/>
-            <br>
-            <b><T key="songinfo.ranks.C"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.C]}/>
+            <div class="extra" class:open={openRanks}>
+                <b><T key="songinfo.ranks.S"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.S]}/>
+                {#if browser}
+                    <button class="icon" on:click={() => openRanks = !openRanks}>
+                        <span class="open">v</span><span class="icon close">^</span>
+                    </button>
+                {/if}
+            </div>
+            <div>
+                <b><T key="songinfo.ranks.A"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.A]}/>
+                <br>
+                <b><T key="songinfo.ranks.B"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.B]}/>
+                <br>
+                <b><T key="songinfo.ranks.C"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.C]}/>
+            </div>
         </div>
-    </div>
-    <div><b><T key="songinfo.note_damage"/>:</b> <T key="format.number" params={[data.liveInfo.note_damage]}/></div>
-    {#if data.liveInfo.notes !== null}
-        <div><b><T key="songinfo.note_count"/>:</b> <T key="format.number" params={[data.liveInfo.notes.length]}/></div>
-        <div><b><T key="songinfo.note_count_ac"/>:</b> <T key="format.number" params={[noteCountAc]}/></div>
-        <div><b><T key="songinfo.note_damage_total"/>:</b> <T key="format.number" params={[totalDamage]}/></div>
-        <div><b><T key="songinfo.ac_reward_total"/>:</b> <T key="format.number" params={[totalRewards]}/></div>
-    {/if}
-    <div>
-        <div class="extra" class:open={openCaps}>
-            <b><T key="songinfo.voltage_caps.tap"/>:</b>
-            <T key="format.number" params={[data.liveInfo.voltage_caps.tap]}/>
-            {#if browser}
-                <button class="icon" on:click={() => openCaps = !openCaps}>
-                    <span class="open">v</span><span class="icon close">^</span>
-                </button>
-            {/if}
-        </div>
+        <div><b><T key="songinfo.note_damage"/>:</b> <T key="format.number" params={[data.liveInfo.note_damage]}/></div>
+        {#if data.liveInfo.notes !== null}
+            <div><b><T key="songinfo.note_count"/>:</b> <T key="format.number" params={[data.liveInfo.notes.length]}/></div>
+            <div><b><T key="songinfo.note_count_ac"/>:</b> <T key="format.number" params={[noteCountAc]}/></div>
+            <div><b><T key="songinfo.note_damage_total"/>:</b> <T key="format.number" params={[totalDamage]}/></div>
+            <div><b><T key="songinfo.ac_reward_total"/>:</b> <T key="format.number" params={[totalRewards]}/></div>
+        {/if}
         <div>
-            <b><T key="songinfo.voltage_caps.sp"/>:</b>
-            <T key="format.number" params={[data.liveInfo.voltage_caps.sp]}/>
-            <br>
-            <b><T key="songinfo.voltage_caps.skill"/>:</b>
-            <T key="format.number" params={[data.liveInfo.voltage_caps.skill]}/>
-            <br>
-            <b><T key="songinfo.voltage_caps.swap"/>:</b>
-            <T key="format.number" params={[data.liveInfo.voltage_caps.swap]}/>
+            <div class="extra" class:open={openCaps}>
+                <b><T key="songinfo.voltage_caps.tap"/>:</b>
+                <T key="format.number" params={[data.liveInfo.voltage_caps.tap]}/>
+                {#if browser}
+                    <button class="icon" on:click={() => openCaps = !openCaps}>
+                        <span class="open">v</span><span class="icon close">^</span>
+                    </button>
+                {/if}
+            </div>
+            <div>
+                <b><T key="songinfo.voltage_caps.sp"/>:</b>
+                <T key="format.number" params={[data.liveInfo.voltage_caps.sp]}/>
+                <br>
+                <b><T key="songinfo.voltage_caps.skill"/>:</b>
+                <T key="format.number" params={[data.liveInfo.voltage_caps.skill]}/>
+                <br>
+                <b><T key="songinfo.voltage_caps.swap"/>:</b>
+                <T key="format.number" params={[data.liveInfo.voltage_caps.swap]}/>
+            </div>
         </div>
+        <div><b><T key="songinfo.sp_gauge_max"/>:</b> <T key="format.number" params={[data.liveInfo.sp_gauge_max]}/></div>
+        <div><b><T key="songinfo.song_length"/>:</b> <T key="format.number" params={[data.liveInfo.song_length]}/></div>
     </div>
-    <div><b><T key="songinfo.sp_gauge_max"/>:</b> <T key="format.number" params={[data.liveInfo.sp_gauge_max]}/></div>
-    <div><b><T key="songinfo.song_length"/>:</b> <T key="format.number" params={[data.liveInfo.song_length]}/></div>
 </div>
+
+{#key data.liveInfo}
+    <Notemap data={data.liveInfo} />
+{/key}
 
 <style lang="postcss">
     div.extra {

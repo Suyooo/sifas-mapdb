@@ -51,7 +51,7 @@ export const tooltipNotebar: Action<HTMLElement, { component: SvelteComponentCon
                 },
                 destroy: () => {
                     tippyInstance.destroy();
-                    if (componentInstance !== null) componentInstance.$destroy();
+                    if (componentInstance !== null && node.parentNode) componentInstance.$destroy();
                     clearTimeout(unmountTimeout);
                 }
             }
