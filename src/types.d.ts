@@ -1,4 +1,9 @@
-export interface LiveInfo {
+export interface LiveList {
+    lives: { [liveId: number]: LiveListItem },
+    by_group: { [groupId: number]: number[] }
+}
+
+export interface LiveListItem {
     display_order: number,
     name: { kn: string, ro: string },
     name_suffix: { kn: string, ro: string } | null,

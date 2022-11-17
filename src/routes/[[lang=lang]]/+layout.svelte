@@ -3,7 +3,7 @@
     import {setContext} from "svelte";
 
     export let data: { pageLanguage: any };
-    setContext<any>("pageLanguage", data);
+    setContext<any>("pageLanguage", data.pageLanguage);
 
     function setLang(code: string): void {
         console.log(code);

@@ -9,8 +9,8 @@
     import Notebar from "./Notebar.svelte";
 
     // Static database data (no stores neccessary)
-    export let data: LiveData;
-    setContext<LiveData>("mapData", data);
+    export let data: {liveInfo: LiveData};
+    setContext<LiveData>("mapData", data.liveInfo);
 
     // Dynamic data (need stores for filters etc.)
     setContext("filterGimmick", writable<number | null>(null));
@@ -22,7 +22,7 @@
 <slot/>
 </div>
 
-{#if data.notes !== undefined}
+{#if data.liveInfo.notes !== undefined}
     <Notebar/>
 {:else}
     <T key="songinfo.no_map"/>
@@ -35,15 +35,15 @@
         </h5>
         <div>
             <div class="bg-accent-100">
-                {#if data.gimmick && data.gimmick.length > 1}
+                {#if data.liveInfo.gimmick && data.liveInfo.gimmick.length > 1}
                     <T key="gimmicks.song_gimmick.label_multiple"/>
                 {:else}
                     <T key="gimmicks.song_gimmick.label"/>
                 {/if}
             </div>
             <div>
-                {#if data.gimmick}
-                    {#each data.gimmick as _, i}
+                {#if data.liveInfo.gimmick}
+                    {#each data.liveInfo.gimmick as _, i}
                         <DetailSongGimmick {i}/>
                     {/each}
                 {:else}
@@ -51,7 +51,7 @@
                 {/if}
             </div>
         </div>
-        {#each data.note_gimmicks as _, i}
+        {#each data.liveInfo.note_gimmicks as _, i}
             <DetailNoteGimmick {i}/>
         {/each}
     </div>
@@ -59,7 +59,7 @@
         <h5>
             <T key="appeal_chances.title"/>
         </h5>
-        {#each data.appeal_chances as _, i}
+        {#each data.liveInfo.appeal_chances as _, i}
             <DetailAC {i}/>
         {/each}
     </div>

@@ -1,7 +1,7 @@
 import {Attribute} from "$enums";
 import * as Settings from "$lib/settings";
 import * as SongNames from "$lib/songNames";
-import type {LiveData, LiveDataExtraFree, LiveDataExtraStory, LiveInfo} from "$types";
+import type {LiveData, LiveDataExtraFree, LiveDataExtraStory, LiveListItem} from "$types";
 import {json} from "@sveltejs/kit";
 import * as fs from "fs";
 import type {RequestHandler} from "./$types";
@@ -27,7 +27,7 @@ const difficultyIdFromLiveDiffId = (liveDiffId: number) => Math.floor(liveDiffId
 const versionIdFromLiveDiffId = (liveDiffId: number) => liveDiffId % 10;
 
 export const GET: RequestHandler = async () => {
-    const livesDict: { [liveId: number]: LiveInfo } = {};
+    const livesDict: { [liveId: number]: LiveListItem } = {};
     const liveIdsByGroupId: { [groupId: number]: number[] } = {
         0: [],
         1: [],
