@@ -1,66 +1,62 @@
 <script lang="ts">
     import {tooltipNotebar} from "$actions/tooltip";
     import {NoteType} from "$enums";
-    import type {LiveData} from "$types";
+    import type {LiveData, LiveDataNote} from "$types";
     import {getContext} from "svelte";
     import type {Writable} from "svelte/store";
     import TooltipGimmick from "./TooltipGimmick.svelte";
 
     // Static database data (from +layout.svelte)
-    const mapData = getContext<Writable<LiveData>>("mapData");
+    const mapData = getContext<LiveData>("mapData");
     // Static dump data (from Notebar.svelte)
-    const notebarSize = getContext<Writable<{ start: number, end: number, length: number }>>("notebarSize");
-    const gimmickMarkers = getContext<Writable<{
-        [k: number]: { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
-    }>>("gimmickMarkers");
-    const gimmickHighlightsByGimmickId =
-            getContext<Writable<{ [k: number]: Set<number> }>>("gimmickHighlightsByGimmickId");
-    const gimmickHighlightsByNoteId = getContext<Writable<{ [k: number]: Set<number> }>>("gimmickHighlightsByNoteId");
+    const notebarSize = getContext<{ start: number, end: number, length: number }>("notebarSize");
+    const gimmickMarkers = getContext<{
+        [k: number]:
+                { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
+    }>("gimmickMarkers");
+    const gimmickHighlightsByGimmickId = getContext<{ [k: number]: Set<number> }>("gimmickHighlightsByGimmickId");
+    const gimmickHighlightsByNoteId = getContext<{ [k: number]: Set<number> }>("gimmickHighlightsByNoteId");
 
-    // Dynamic data (from +layout.svelte)
+    // Dynamic data (stores, from +layout.svelte)
     const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
     const filterSlot = getContext<Writable<number | null>>("filterSlot");
     const filterNote = getContext<Writable<number | null>>("filterNote");
 
     export let i: number;
-    $: hitBySlot = i % 3;
-    $: noteData = $mapData.notes![i];
-    $: gimmickData = noteData.gimmick !== null ? $mapData.note_gimmicks[noteData.gimmick] : null;
-    $: relativeTime = (noteData.time - $notebarSize.start) / $notebarSize.length;
-    let releaseNoteIndex: number | undefined, relativeHoldLength: number | undefined;
-    let relativeGimmickLength: number | undefined, layerGlobal: number, layerLocal: number;
+    const hitBySlot: number = i % 3;
+    const noteData: LiveDataNote = mapData.notes![i];
+    const relativeTime = (noteData.time - notebarSize.start) / notebarSize.length;
 
-    $: {
-        // Is this a hold note?
-        if (noteData.type === NoteType.HOLD_START) {
-            releaseNoteIndex = i + 1;
-            while ($mapData.notes![releaseNoteIndex].rail !== noteData.rail) {
-                releaseNoteIndex++;
-            }
-            const absoluteHoldLength = $mapData.notes![releaseNoteIndex].time - noteData.time;
-            relativeHoldLength = absoluteHoldLength / $notebarSize.length;
+    // Is this a hold note?
+    let releaseNoteIndex: number | undefined, relativeHoldLength: number | undefined;
+    if (noteData.type === NoteType.HOLD_START) {
+        releaseNoteIndex = i + 1;
+        while (mapData.notes![releaseNoteIndex].rail !== noteData.rail) {
+            releaseNoteIndex++;
         }
+        const absoluteHoldLength = mapData.notes![releaseNoteIndex].time - noteData.time;
+        relativeHoldLength = absoluteHoldLength / notebarSize.length;
     }
 
-    $: {
-        // Get gimmick marker (calculated in Notebar.svelte) if the note has a gimmick
-        if (noteData.gimmick !== null) {
-            ({layerGlobal, layerLocal, relativeGimmickLength} = $gimmickMarkers[i]);
-        }
+    // Get gimmick marker (calculated in Notebar.svelte) if the note has a gimmick
+    let relativeGimmickLength: number | undefined, layerGlobal: number, layerLocal: number;
+    const gimmickData = noteData.gimmick !== null ? mapData.note_gimmicks[noteData.gimmick] : null;
+    if (noteData.gimmick !== null) {
+        ({layerGlobal, layerLocal, relativeGimmickLength} = gimmickMarkers[i]);
     }
 
     let lowlight: boolean, lowlightNext: boolean, lowlightMarker: boolean;
     $: {
         if ($filterNote !== null) {
-            lowlight = !($filterNote === i || $gimmickHighlightsByNoteId[$filterNote]?.has(i));
+            lowlight = !($filterNote === i || gimmickHighlightsByNoteId[$filterNote]?.has(i));
             if (releaseNoteIndex !== undefined) {
-                lowlightNext = !($gimmickHighlightsByNoteId[$filterNote]?.has(releaseNoteIndex));
+                lowlightNext = !(gimmickHighlightsByNoteId[$filterNote]?.has(releaseNoteIndex));
             }
         } else if ($filterGimmick !== null) {
-            lowlight = !(noteData.gimmick === $filterGimmick || $gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
+            lowlight = !(noteData.gimmick === $filterGimmick || gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
                     || ($filterSlot !== null && hitBySlot !== $filterSlot);
             if (releaseNoteIndex !== undefined) {
-                lowlightNext = !($gimmickHighlightsByGimmickId[$filterGimmick]?.has(releaseNoteIndex))
+                lowlightNext = !(gimmickHighlightsByGimmickId[$filterGimmick]?.has(releaseNoteIndex))
                         || ($filterSlot !== null && ((hitBySlot + 1) % 3) !== $filterSlot);
             }
         } else {

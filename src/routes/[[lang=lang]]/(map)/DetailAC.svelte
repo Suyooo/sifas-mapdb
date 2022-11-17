@@ -3,15 +3,14 @@
     import T from "$lib/T.svelte";
     import type {LiveData} from "$types";
     import {getContext} from "svelte";
-    import type {Writable} from "svelte/store";
 
     // Static database data (from +layout.svelte)
-    const data = getContext<Writable<LiveData>>("mapData");
+    const data = getContext<LiveData>("mapData");
 
     export let i: number;
-    $: acData = $data.appeal_chances[i];
-    $: acColor = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
-    $: noteCount = acData.range_note_ids !== null
+    const acData = data.appeal_chances[i];
+    const acColor = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
+    const noteCount = acData.range_note_ids !== null
             ? acData.range_note_ids[1] - acData.range_note_ids[0] + 1
             : 0;
 </script>
