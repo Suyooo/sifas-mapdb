@@ -24,7 +24,7 @@
     setContext("gimmickHighlightsByNoteId", gimmickHighlightsByNoteId);
 
     let notes: LiveDataNote[];
-    let gimmickMarkerTrackers: { global: MarkerTracker, [k: number]: MarkerTracker } ;
+    let gimmickMarkerTrackers: { global: MarkerTracker, [k: number]: MarkerTracker };
     $: {
         notes = $mapData.notes!;
 
@@ -93,9 +93,11 @@
             {#each $mapData.appeal_chances as _, i}
                 <NotebarAC {i}/>
             {/each}
-            {#each notes as _, i}
-                <NotebarNote {i}/>
-            {/each}
+            {#key $mapData.notes}
+                {#each notes as _, i}
+                    <NotebarNote {i}/>
+                {/each}
+            {/key}
         </div>
     </div>
 </div>
