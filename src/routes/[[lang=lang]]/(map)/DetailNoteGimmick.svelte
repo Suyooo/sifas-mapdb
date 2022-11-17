@@ -7,14 +7,14 @@
     import type {Writable} from "svelte/store";
 
     // Static database data (from +layout.svelte)
-    const data = getContext<LiveData>("mapData");
+    const data = getContext<Writable<LiveData>>("mapData");
 
-    // Dynamic data (stores, from +layout.svelte)
+    // Dynamic data (from +layout.svelte)
     const filterGimmick = getContext<Writable<number | null>>("filterGimmick");
     const filterSlot = getContext<Writable<number | null>>("filterSlot");
 
     export let i: number;
-    const noteGimmickData = data.note_gimmicks[i];
+    $: noteGimmickData = $data.note_gimmicks[i];
 
     $: isFilteredTarget = $filterGimmick !== null && $filterGimmick === i;
     $: isFilteredOut = $filterGimmick !== null && $filterGimmick !== i;

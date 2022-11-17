@@ -2,13 +2,14 @@
     import T from "$lib/T.svelte";
     import type {LiveData} from "$types";
     import {getContext} from "svelte";
+    import type {Writable} from "svelte/store";
 
     // Static database data (from +layout.svelte)
-    const data = getContext<LiveData>("mapData");
+    const data = getContext<Writable<LiveData>>("mapData");
 
     export let i: number;
-    const gimmickData = data.gimmick![i];
-    const showNum = data.gimmick!.length > 1
+    $: gimmickData = $data.gimmick![i];
+    $: showNum = $data.gimmick!.length > 1
 </script>
 
 <div class="gimmick">

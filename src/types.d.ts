@@ -1,3 +1,18 @@
+import {
+    ACMissionType,
+    Attribute,
+    Difficulty,
+    NoteAction,
+    NoteType,
+    SkillCalcType,
+    SkillEffectType,
+    SkillFinishType,
+    SkillScaleType,
+    SkillTargetType,
+    SkillTriggerAC,
+    SkillTriggerNote
+} from "./enums";
+
 export interface LiveList {
     lives: { [liveId: number]: LiveListItem },
     by_group: { [groupId: number]: number[] }

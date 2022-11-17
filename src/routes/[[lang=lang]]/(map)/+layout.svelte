@@ -8,11 +8,15 @@
     import DetailSongGimmick from "./DetailSongGimmick.svelte";
     import Notebar from "./Notebar.svelte";
 
-    // Static database data (no stores neccessary)
+    // Static database data
     export let data: {liveInfo: LiveData};
-    setContext<LiveData>("mapData", data.liveInfo);
+    const mapData = writable<LiveData>(data.liveInfo);
+    setContext("mapData", mapData);
+    $: {
+        $mapData = data.liveInfo;
+    }
 
-    // Dynamic data (need stores for filters etc.)
+    // Dynamic data (filters etc.)
     setContext("filterGimmick", writable<number | null>(null));
     setContext("filterSlot", writable<number | null>(null));
     setContext("filterNote", writable<number | null>(null));

@@ -3,21 +3,22 @@
     import {acMissionTypeToRole, Role} from "$enums";
     import type {LiveData} from "$types";
     import {getContext} from "svelte";
+    import type {Writable} from "svelte/store";
     import TooltipAC from "./TooltipAC.svelte";
 
     // Static database data (from +layout.svelte)
-    const mapData = getContext<LiveData>("mapData");
+    const mapData = getContext<Writable<LiveData>>("mapData");
     // Static dump data (from Notebar.svelte)
-    const notebarSize = getContext<{ start: number, end: number, length: number }>("notebarSize");
+    const notebarSize = getContext<Writable<{ start: number, end: number, length: number }>>("notebarSize");
 
     export let i: number;
-    const acData = mapData.appeal_chances[i];
-    const startTime = mapData.notes![acData.range_note_ids![0]].time;
-    const endTime = mapData.notes![acData.range_note_ids![1]].time;
+    $: acData = $mapData.appeal_chances[i];
+    $: startTime = $mapData.notes![acData.range_note_ids![0]].time;
+    $: endTime = $mapData.notes![acData.range_note_ids![1]].time;
 
-    const relativeStart = (startTime - notebarSize.start) / notebarSize.length;
-    const relativeLength = (endTime - startTime) / notebarSize.length;
-    const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
+    $: relativeStart = (startTime - $notebarSize.start) / $notebarSize.length;
+    $: relativeLength = (endTime - startTime) / $notebarSize.length;
+    $: acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
 
     const pageLanguage = getContext("pageLanguage");
 </script>
