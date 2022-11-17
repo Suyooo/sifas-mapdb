@@ -1,5 +1,6 @@
 <script lang="ts">
     import shortcut from "$actions/shortcut";
+    import {browser} from "$app/environment";
     import {skillTriggerNoteHasSlotCount} from "$enums";
     import T from "$lib/T.svelte";
     import type {LiveData} from "$types";
@@ -41,13 +42,15 @@
         <div>
             <T key="gimmicks.note_gimmick.label"/> {i + 1}
         </div>
-        <div class:hidden={!isFilteredTarget}>
-            {#if isFilteredTarget}
-                <T key="gimmicks.note_gimmick.filter_remove"/>
-            {:else}
-                <T key="gimmicks.note_gimmick.filter"/>
-            {/if}
-        </div>
+        {#if browser}
+            <div class:hidden={!isFilteredTarget}>
+                {#if isFilteredTarget}
+                    <T key="gimmicks.note_gimmick.filter_remove"/>
+                {:else}
+                    <T key="gimmicks.note_gimmick.filter"/>
+                {/if}
+            </div>
+        {/if}
     </div>
     <div>
         <div>
@@ -60,10 +63,10 @@
                 <div class="slots">
                     {#each noteGimmickData.count_slot as slotCount, slotIdx}
                         {#if slotCount > 0}
-                            <div class:bg-accent-300={isFilteredTarget && $filterSlot === slotIdx}
-                                 on:click|stopPropagation={() => filter(slotIdx)}>
+                            <button class:bg-accent-300={isFilteredTarget && $filterSlot === slotIdx}
+                                 on:click|stopPropagation={() => filter(slotIdx)} class:cursor-default={!browser}>
                                 <T key="gimmicks.note_gimmick.slot" params={[slotIdx + 1]}/> ×{slotCount}
-                            </div>
+                            </button>
                         {/if}
                     {/each}
                 </div>
@@ -83,7 +86,7 @@
                 @apply flex-grow;
             }
 
-            & > div:last-child {
+            & > div:last-child:not(:first-child) {
                 @apply text-xs font-normal;
             }
         }
@@ -97,7 +100,7 @@
         & .slots {
             @apply inline-block;
 
-            & > div {
+            & > button {
                 @apply inline-block px-2 ml-2 border border-neutral-200 rounded-full transition-colors;
             }
         }

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import {browser} from "$app/environment";
     import T from "$lib/T.svelte";
     import type {LiveData, LiveList} from "$types";
 
@@ -27,9 +28,11 @@
     <div>
         <div class="extra" class:open={openRanks}>
             <b><T key="songinfo.ranks.S"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.S]}/>
-            <button class="icon" on:click={() => openRanks = !openRanks}>
-                <span class="open">v</span><span class="icon close">^</span>
-            </button>
+            {#if browser}
+                <button class="icon" on:click={() => openRanks = !openRanks}>
+                    <span class="open">v</span><span class="icon close">^</span>
+                </button>
+            {/if}
         </div>
         <div>
             <b><T key="songinfo.ranks.A"/>:</b> <T key="format.number" params={[data.liveInfo.ranks.A]}/>
@@ -50,9 +53,11 @@
         <div class="extra" class:open={openCaps}>
             <b><T key="songinfo.voltage_caps.tap"/>:</b>
             <T key="format.number" params={[data.liveInfo.voltage_caps.tap]}/>
-            <button class="icon" on:click={() => openCaps = !openCaps}>
-                <span class="open">v</span><span class="icon close">^</span>
-            </button>
+            {#if browser}
+                <button class="icon" on:click={() => openCaps = !openCaps}>
+                    <span class="open">v</span><span class="icon close">^</span>
+                </button>
+            {/if}
         </div>
         <div>
             <b><T key="songinfo.voltage_caps.sp"/>:</b>
