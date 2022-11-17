@@ -88,3 +88,19 @@
         }
     }
 }
+
+.tabbar {
+    @apply flex items-center overflow-x-auto;
+
+    & > * {
+        @apply h-12 uppercase tracking-wide p-4 flex items-center justify-center whitespace-nowrap;
+    }
+
+    & > .sep {
+        @apply w-1 p-0 bg-accent-600;
+    }
+
+    & > .label {
+        @apply font-bold text-accent-600;
+    }
+}

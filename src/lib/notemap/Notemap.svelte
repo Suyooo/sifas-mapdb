@@ -67,7 +67,7 @@
     }
 
     h5 {
-        @apply text-accent-700 text-xl tracking-widest uppercase mt-4 mb-2
+        @apply text-accent-600 font-bold text-xl tracking-widest uppercase mt-4 mb-2
     }
 
     .boxes {
