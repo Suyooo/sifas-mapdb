@@ -35,7 +35,7 @@
         throw new Error("Unknown difficulty in live ID: " + liveDiffId);
     }
 
-    function optionKeyStory(storyLive: {liveDiffId: number, extraInfo: LiveDataExtraStory}): string {
+    function optionKeyStory(storyLive: { liveDiffId: number, extraInfo: LiveDataExtraStory }): string {
         const location = storyLive.extraInfo.story_chapter + "-" + storyLive.extraInfo.story_stage;
         if (storyLive.extraInfo.story_chapter >= 20 && storyLive.extraInfo.story_chapter <= 43) {
             return location + " " + (storyLive.extraInfo.story_is_hard_mode ? "Hard" : "Normal");
@@ -46,30 +46,65 @@
 </script>
 
 {#if browser}
-    <select on:change={doDiffSelection}>
-        {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-            <option value={l} selected={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></option>
-        {/each}
-        <optgroup label={storyStagesLabel}>
-            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-                <option value={l.liveDiffId} selected={$page.params.id === l.liveDiffId.toString()}>
-                    {optionKeyStory(l)}
-                </option>
+    {#if true}
+        <div class="tabbar">
+            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
+                <a href="/live/{l}" class:active={$page.params.id === l.toString()}>
+                    <T key={optionKeyFree(l)}/>
+                    <div class="indicator">&nbsp;</div>
+                </a>
             {/each}
-        </optgroup>
-    </select>
+            {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
+                <div class="sep">&nbsp;</div>
+                <div class:active={$page.params.id.charAt(0) === "3"}>
+                    <select on:change={doDiffSelection}>
+                        <option disabled selected={$page.params.id.charAt(0) !== "3"}>
+                            {storyStagesLabel}
+                        </option>
+                        {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
+                            <option value={l.liveDiffId} selected={$page.params.id === l.liveDiffId.toString()}>
+                                {optionKeyStory(l)}
+                            </option>
+                        {/each}
+                    </select>
+                    <div class="indicator">&nbsp;</div>
+                </div>
+            {/if}
+        </div>
+    {:else}
+        <select on:change={doDiffSelection}>
+            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
+                <option value={l} selected={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></option>
+            {/each}
+            {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
+                <optgroup label={storyStagesLabel}>
+                    {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
+                        <option value={l.liveDiffId} selected={$page.params.id === l.liveDiffId.toString()}>
+                            {optionKeyStory(l)}
+                        </option>
+                    {/each}
+                </optgroup>
+            {/if}
+        </select>
+    {/if}
 {:else}
     <div class="tabbar">
         {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-            <a href="/live/{l}" class:active={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></a>
-        {/each}
-        <div class="sep">&nbsp;</div>
-        <div class="label"><T key="songinfo.story_stages"/></div>
-        {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-            <a href="/live/{l.liveDiffId}" class:active={$page.params.id === l.liveDiffId.toString()}>
-                {optionKeyStory(l)}
+            <a href="/live/{l}" class:active={$page.params.id === l.toString()}>
+                <T key={optionKeyFree(l)}/>
+                <div class="indicator">&nbsp;</div>
             </a>
         {/each}
+        {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
+            <div class="sep">&nbsp;</div>
+            <div class="label"><T key="songinfo.story_stages"/></div>
+            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
+                <a href="/live/{l.liveDiffId}" class:active={$page.params.id === l.liveDiffId.toString()}>
+                    {optionKeyStory(l)}
+                    <div class="indicator">&nbsp;</div>
+                </a>
+            {/each}
+        {/if}
     </div>
 {/if}
 
