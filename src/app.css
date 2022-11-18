@@ -94,7 +94,7 @@
 
     & > * {
         @apply relative flex-1 h-12 uppercase tracking-wide px-4 flex items-center justify-center whitespace-nowrap
-        bg-accent-100/0 transition-colors hover:bg-accent-100;
+        bg-accent-100/0 transition-colors hover:bg-accent-100 outline-offset-[-.5rem];
 
         & > .indicator {
             @apply absolute left-0 w-full h-1 bottom-0 overflow-hidden;

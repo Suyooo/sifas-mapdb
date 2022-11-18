@@ -22,7 +22,11 @@
     const storyStagesLabel = getContext<{ songinfo: { story_stages: string } }>("pageLanguage").songinfo.story_stages;
 
     function doDiffSelection(e: Event) {
-        goto("/live/" + (<HTMLSelectElement>e.target)?.value, {keepFocus: true});
+        gotoLiveDiff((<HTMLSelectElement>e.target)?.value);
+    }
+
+    function gotoLiveDiff(d: string | number) {
+        goto("/live/" + d, {keepFocus: true});
     }
 
     function optionKeyFree(liveDiffId: number): string {
@@ -49,10 +53,10 @@
     {#if true}
         <div class="tabbar">
             {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-                <a href="/live/{l}" class:active={$page.params.id === l.toString()}>
+                <button on:click={() => gotoLiveDiff(l)} class:active={$page.params.id === l.toString()}>
                     <T key={optionKeyFree(l)}/>
                     <div class="indicator">&nbsp;</div>
-                </a>
+                </button>
             {/each}
             {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
                 <div class="sep">&nbsp;</div>
