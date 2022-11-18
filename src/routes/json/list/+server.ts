@@ -66,10 +66,10 @@ export const GET: RequestHandler = async () => {
             }
 
             if (isStoryStageLiveDiff(liveDiffId)) {
-                livesDict[liveId].live_difficulty_ids.story.push(liveDiffId);
-                storyOrder[liveDiffId] = (<LiveDataExtraStory>liveData.extra_info).story_chapter * 1000
-                        + (<LiveDataExtraStory>liveData.extra_info).story_stage * 10
-                        + ((<LiveDataExtraStory>liveData.extra_info).story_is_hard_mode ? 1 : 0);
+                const storyExtraInfo = <LiveDataExtraStory>liveData.extra_info;
+                livesDict[liveId].live_difficulty_ids.story.push({liveDiffId, extraInfo: storyExtraInfo});
+                storyOrder[liveDiffId] = storyExtraInfo.story_chapter * 1000 + storyExtraInfo.story_stage * 10
+                        + (storyExtraInfo.story_is_hard_mode ? 1 : 0);
             } else {
                 // Priority for song info/default difficulty: Adv > Adv+ > Cha > Int > Beg
                 const currentDefaultDiff = difficultyIdFromLiveDiffId(livesDict[liveId].default_live_difficulty_id);
@@ -104,7 +104,7 @@ export const GET: RequestHandler = async () => {
                     - ((10 - versionIdFromLiveDiffId(b)) * 100 + difficultyIdFromLiveDiffId(b));
         });
         livesDict[parseInt(liveId)].live_difficulty_ids.story.sort((a, b) => {
-            return storyOrder[a] - storyOrder[b];
+            return storyOrder[a.liveDiffId] - storyOrder[b.liveDiffId];
         });
     });
     Object.keys(liveIdsByGroupId).forEach(groupId => {

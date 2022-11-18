@@ -4,7 +4,7 @@
     import {page} from "$app/stores";
     import Notemap from "$lib/notemap/Notemap.svelte";
     import T from "$lib/T.svelte";
-    import type {LiveData, LiveList} from "$types";
+    import type {LiveData, LiveDataExtraStory, LiveList} from "$types";
     import {getContext} from "svelte";
 
     export let data: { liveList: LiveList, liveInfo: LiveData };
@@ -24,28 +24,51 @@
     function doDiffSelection(e: Event) {
         goto("/live/" + (<HTMLSelectElement>e.target)?.value, {keepFocus: true});
     }
+
+    function optionKeyFree(liveDiffId: number): string {
+        const diff = Math.floor(liveDiffId / 10) % 100;
+        if (diff === 10) return "difficulty.beginner";
+        else if (diff === 20) return "difficulty.intermediate";
+        else if (diff === 30) return "difficulty.advanced";
+        else if (diff === 40) return "difficulty.advplus";
+        else if (diff === 50) return "difficulty.challenge";
+        throw new Error("Unknown difficulty in live ID: " + liveDiffId);
+    }
+
+    function optionKeyStory(storyLive: {liveDiffId: number, extraInfo: LiveDataExtraStory}): string {
+        const location = storyLive.extraInfo.story_chapter + "-" + storyLive.extraInfo.story_stage;
+        if (storyLive.extraInfo.story_chapter >= 20 && storyLive.extraInfo.story_chapter <= 43) {
+            return location + " " + (storyLive.extraInfo.story_is_hard_mode ? "Hard" : "Normal");
+        } else {
+            return location;
+        }
+    }
 </script>
 
 {#if browser}
     <select on:change={doDiffSelection}>
         {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-            <option value={l} selected={$page.params.id === l.toString()}>{l}</option>
+            <option value={l} selected={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></option>
         {/each}
         <optgroup label={storyStagesLabel}>
             {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-                <option value={l} selected={$page.params.id === l.toString()}>{l}</option>
+                <option value={l.liveDiffId} selected={$page.params.id === l.liveDiffId.toString()}>
+                    {optionKeyStory(l)}
+                </option>
             {/each}
         </optgroup>
     </select>
 {:else}
     <div class="tabbar">
         {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-            <a href="/live/{l}" class:active={$page.params.id === l.toString()}>{l}</a>
+            <a href="/live/{l}" class:active={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></a>
         {/each}
         <div class="sep">&nbsp;</div>
         <div class="label"><T key="songinfo.story_stages"/></div>
         {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-            <a href="/live/{l}" class:active={$page.params.id === l.toString()}>{l}</a>
+            <a href="/live/{l.liveDiffId}" class:active={$page.params.id === l.liveDiffId.toString()}>
+                {optionKeyStory(l)}
+            </a>
         {/each}
     </div>
 {/if}

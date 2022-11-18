@@ -93,7 +93,11 @@
     @apply flex items-center overflow-x-auto;
 
     & > * {
-        @apply h-12 uppercase tracking-wide p-4 flex items-center justify-center whitespace-nowrap;
+        @apply h-12 uppercase tracking-wide p-4 flex items-center justify-center whitespace-nowrap bg-accent-100/0;
+    }
+
+    & > a {
+        @apply transition-colors hover:bg-accent-100;
     }
 
     & > .sep {

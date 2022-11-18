@@ -27,7 +27,7 @@ export interface LiveListItem {
     permanent: boolean,
     daily_weekday: (1 | 2 | 3 | 4 | 5 | 6 | 7)[] | null,
     time_limit: number | null,
-    live_difficulty_ids: { free: number[], story: number[] }
+    live_difficulty_ids: { free: number[], story: { liveDiffId: number, extraInfo: LiveDataExtraStory }[] }
     default_live_difficulty_id: number
 }
 

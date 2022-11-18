@@ -104,7 +104,7 @@
             @apply absolute top-0 w-[2px] h-3;
 
             & > .note {
-                @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note transition-opacity duration-300;
+                @apply absolute top-0 left-0 w-[2px] ml-[-1px] h-3 bg-notebar-note transition-opacity;
 
                 &.gimmick {
                     @apply bg-notebar-note-gimmick;
@@ -112,7 +112,7 @@
             }
 
             & > .hold {
-                @apply absolute left-0 top-1 h-1 w-full transition-opacity duration-300;
+                @apply absolute left-0 top-1 h-1 w-full transition-opacity;
                 background: repeating-linear-gradient(
                         to right, white 0, white 1px, rgba(255, 225, 255, 0) 1px, rgba(255, 225, 255, 0) 2px);
             }
