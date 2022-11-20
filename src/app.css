@@ -90,11 +90,11 @@
 }
 
 .tabbar {
-    @apply flex items-center w-full overflow-x-auto;
+    @apply flex items-center w-full;
 
     & > * {
         @apply relative flex-1 h-12 uppercase tracking-wide px-4 flex items-center justify-center whitespace-nowrap
-        bg-accent-100/0 transition-colors hover:bg-accent-100 outline-offset-[-.5rem];
+        bg-accent-100/0 outline-offset-[-2px];
 
         & > .indicator {
             @apply absolute left-0 w-full h-1 bottom-0 overflow-hidden;
@@ -109,11 +109,19 @@
         }
     }
 
+    & > a, & > button {
+        @apply transition-colors hover:bg-accent-100;
+    }
+
     & > .sep {
-        @apply flex-grow-0 w-1 p-0 bg-accent-600 hover:bg-accent-100/0;
+        @apply flex-grow-0 w-1 p-0 bg-accent-600;
     }
 
     & > .label {
-        @apply font-bold text-accent-600 hover:bg-accent-100/0;
+        @apply font-bold text-accent-600;
     }
+
+    /*& .fancyselect {
+        @apply w-full rounded px-4 py-2 bg-accent-100 uppercase;
+    }*/
 }

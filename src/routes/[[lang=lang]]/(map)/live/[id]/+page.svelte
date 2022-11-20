@@ -2,6 +2,7 @@
     import {browser} from "$app/environment";
     import {goto} from "$app/navigation";
     import {page} from "$app/stores";
+    import NavDropdown from "$lib/NavDropdown.svelte";
     import Notemap from "$lib/notemap/Notemap.svelte";
     import T from "$lib/T.svelte";
     import type {LiveData, LiveDataExtraStory, LiveList} from "$types";
@@ -19,9 +20,20 @@
             data.liveInfo.appeal_chances.reduce((sum, ac) => sum + ac.reward_voltage!, 0);
 
     let openRanks = false, openCaps = false;
-    const storyStagesLabel = getContext<{ songinfo: { story_stages: string } }>("pageLanguage").songinfo.story_stages;
 
-    function doDiffSelection(e: Event) {
+    $: storyStagesLabel = getContext<{ songinfo: { story_stages: string } }>("pageLanguage").songinfo.story_stages;
+    $: storyStagesOptions = data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.map(live => ({
+        value: live.liveDiffId.toString(),
+        label: optionKeyStory(live),
+        current: $page.params.id === live.liveDiffId.toString()
+    }));
+    $: isStoryStage = $page.params.id.charAt(0) === "3";
+
+    function doDiffSelectionNavDropdown(e: CustomEvent<string>) {
+        gotoLiveDiff(e.detail);
+    }
+
+    function doDiffSelectionSelectMenu(e: Event) {
         gotoLiveDiff((<HTMLSelectElement>e.target)?.value);
     }
 
@@ -49,68 +61,65 @@
     }
 </script>
 
-{#if browser}
-    {#if true}
-        <div class="tabbar">
-            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-                <button on:click={() => gotoLiveDiff(l)} class:active={$page.params.id === l.toString()}>
-                    <T key={optionKeyFree(l)}/>
-                    <div class="indicator">&nbsp;</div>
-                </button>
-            {/each}
-            {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
-                <div class="sep">&nbsp;</div>
-                <div class:active={$page.params.id.charAt(0) === "3"}>
-                    <select on:change={doDiffSelection}>
-                        <option disabled selected={$page.params.id.charAt(0) !== "3"}>
-                            {storyStagesLabel}
-                        </option>
+<nav>
+    {#if browser}
+        {#if true}
+            <div class="tabbar">
+                {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
+                    <button on:click={() => gotoLiveDiff(l)} class:active={$page.params.id === l.toString()} role="link">
+                        <T key={optionKeyFree(l)}/>
+                        <div class="indicator">&nbsp;</div>
+                    </button>
+                {/each}
+                {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
+                    <div class="sep">&nbsp;</div>
+                    <div class:active={isStoryStage}>
+                        <NavDropdown on:select={doDiffSelectionNavDropdown} ariaLabel={storyStagesLabel}
+                                     label={storyStagesOptions.find(o => o.current)?.label ?? storyStagesLabel}
+                                     options={storyStagesOptions} let:option>
+                            {option.label}
+                        </NavDropdown>
+                        <div class="indicator">&nbsp;</div>
+                    </div>
+                {/if}
+            </div>
+        {:else}
+            <select on:change={doDiffSelectionSelectMenu}>
+                {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
+                    <option value={l} selected={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></option>
+                {/each}
+                {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
+                    <optgroup label={storyStagesLabel}>
                         {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
                             <option value={l.liveDiffId} selected={$page.params.id === l.liveDiffId.toString()}>
                                 {optionKeyStory(l)}
                             </option>
                         {/each}
-                    </select>
-                    <div class="indicator">&nbsp;</div>
-                </div>
-            {/if}
-        </div>
+                    </optgroup>
+                {/if}
+            </select>
+        {/if}
     {:else}
-        <select on:change={doDiffSelection}>
+        <div class="tabbar overflow-x-auto">
             {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-                <option value={l} selected={$page.params.id === l.toString()}><T key={optionKeyFree(l)}/></option>
-            {/each}
-            {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
-                <optgroup label={storyStagesLabel}>
-                    {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-                        <option value={l.liveDiffId} selected={$page.params.id === l.liveDiffId.toString()}>
-                            {optionKeyStory(l)}
-                        </option>
-                    {/each}
-                </optgroup>
-            {/if}
-        </select>
-    {/if}
-{:else}
-    <div class="tabbar">
-        {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.free as l}
-            <a href="/live/{l}" class:active={$page.params.id === l.toString()}>
-                <T key={optionKeyFree(l)}/>
-                <div class="indicator">&nbsp;</div>
-            </a>
-        {/each}
-        {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
-            <div class="sep">&nbsp;</div>
-            <div class="label"><T key="songinfo.story_stages"/></div>
-            {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
-                <a href="/live/{l.liveDiffId}" class:active={$page.params.id === l.liveDiffId.toString()}>
-                    {optionKeyStory(l)}
+                <a href="/live/{l}" class:active={$page.params.id === l.toString()}>
+                    <T key={optionKeyFree(l)}/>
                     <div class="indicator">&nbsp;</div>
                 </a>
             {/each}
-        {/if}
-    </div>
-{/if}
+            {#if data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story.length > 0}
+                <div class="sep">&nbsp;</div>
+                <div class="label"><T key="songinfo.story_stages"/></div>
+                {#each data.liveList.lives[data.liveInfo.live_id].live_difficulty_ids.story as l}
+                    <a href="/live/{l.liveDiffId}" class:active={$page.params.id === l.liveDiffId.toString()}>
+                        {optionKeyStory(l)}
+                        <div class="indicator">&nbsp;</div>
+                    </a>
+                {/each}
+            {/if}
+        </div>
+    {/if}
+</nav>
 
 <div class="infogrid">
     <div>
