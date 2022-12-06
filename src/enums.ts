@@ -215,7 +215,8 @@ export enum SkillTargetType {
     SUB_NOT_QU4RTZ = 109,
     CHAR_SHIORIKO = 112,
     CHAR_LANZHU = 113,
-    CHAR_MIA = 114
+    CHAR_MIA = 114,
+    ATTR_COOL_GROUP_AQOURS = 115
 }
 
 export enum SkillFinishType {

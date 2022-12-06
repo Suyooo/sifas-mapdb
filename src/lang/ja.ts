@@ -310,7 +310,8 @@ const skillTargetMap = {
     [SkillTargetType.SUB_NOT_QU4RTZ]: `QU4RTZのメンバー以外`,
     [SkillTargetType.CHAR_SHIORIKO]: `栞子`,
     [SkillTargetType.CHAR_LANZHU]: `ランジュ`,
-    [SkillTargetType.CHAR_MIA]: `ミア`
+    [SkillTargetType.CHAR_MIA]: `ミア`,
+    [SkillTargetType.ATTR_COOL_GROUP_AQOURS]: `<span class="a cool">クール</span>属性のAqours`
 }
 
 function skillTarget(targetType: SkillTargetType) {

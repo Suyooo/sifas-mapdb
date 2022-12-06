@@ -116,6 +116,7 @@ function skillTarget(targetId) {
     if (targetId === 112) return 'Shioriko units ';
     if (targetId === 113) return 'Lanzhu units ';
     if (targetId === 114) return 'Mia units ';
+    if (targetId === 115) return '<span class="a cool">Cool</span> Aqours units ';
     throw new Error('Unknown Skill Target ' + targetId);
 }
 

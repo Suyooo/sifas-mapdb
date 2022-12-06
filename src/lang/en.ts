@@ -308,7 +308,8 @@ const skillTargetMap = {
     [SkillTargetType.SUB_NOT_QU4RTZ]: `non-QU4RTZ cards `,
     [SkillTargetType.CHAR_SHIORIKO]: `Shioriko cards `,
     [SkillTargetType.CHAR_LANZHU]: `Lanzhu cards `,
-    [SkillTargetType.CHAR_MIA]: `Mia cards `
+    [SkillTargetType.CHAR_MIA]: `Mia cards `,
+    [SkillTargetType.ATTR_COOL_GROUP_AQOURS]: `<span class="a cool">Cool</span> Aqours cards `
 }
 
 function skillTarget(targetType: SkillTargetType) {

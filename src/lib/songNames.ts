@@ -82,6 +82,7 @@ const romaji: { [pureLiveId: string]: string } = {
     "1016": "Aqours☆HEROES",
     "1092": "Nando Datte Yakusoku!",
     "1093": "BANZAI! digital trippers",
+    "1054": "Kimi no Hitomi o Meguru Bouken",
     "1005": "Torikoriko PLEASE!!",
     "1082": "Amazing Travel DNA",
     "1044": "GALAXY HidE and SeeK",
