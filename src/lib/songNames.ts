@@ -134,6 +134,7 @@ const romaji: { [pureLiveId: string]: string } = {
     "2112": "Ryouran! Victory Road (Type A)",
     "2113": "Ryouran! Victory Road (Type B)",
     "2098": "Mirai Harmony",
+    "2120": "Hurray Hurray",
     "2031": "SUPER NOVA",
     "2067": "POWER SPOT!!",
     "2066": "Love Triangle",
@@ -258,6 +259,8 @@ const suffix: { [pureLiveId: string]: { kn: string, ro: string } } = {
     "2111": {kn: "イベント", ro: "Event"},    // トワイライト (event prerelease version)
     "2117": {kn: "イベント", ro: "Event"},    // 祭花 -saika- (event prerelease version)
     "2118": {kn: "イベント", ro: "Event"},    // Happy Nyan! Days (event prerelease version)
+    "2119": {kn: "イベント", ro: "Event"},    // Twinkle Town (event prerelease version)
+    "2120": {kn: "イベント", ro: "Event"},    // Hurray Hurray (event prerelease version)
     "2997": {kn: "MV", ro: "MV"},           // MONSTER GIRLS (MV version)
     "2998": {kn: "MV", ro: "MV"},           // I'm Still... (MV version)
     "2999": {kn: "MV", ro: "MV"},           // Queendom (MV version)
