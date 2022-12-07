@@ -142,6 +142,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2112") return "Ryouran! Victory Road (Type A)";
     if (liveId === "2113") return "Ryouran! Victory Road (Type B)";
     if (liveId === "2098") return "Mirai Harmony";
+    if (liveId === "2120") return "Hurray Hurray";
     if (liveId === "2031") return "SUPER NOVA";
     if (liveId === "2067") return "POWER SPOT!!";
     if (liveId === "2066") return "Love Triangle";
@@ -262,6 +263,9 @@ function songNamePostfix(liveId) {
     if (liveId === "2053") return "2D";       // Just Believe!!! (limited version)
     if (liveId === "2109") return "Event";    // Just Believe!!! （12人Ver.） (event prerelease version)
     if (liveId === "2117") return "Event";    // 祭花 -saika- (event prerelease version)
+    if (liveId === "2118") return "Event";    // Happy Nyan! Days (event prerelease version)
+    if (liveId === "2119") return "Event";    // Twinkle Town (event prerelease version)
+    if (liveId === "2120") return "Event";    // Hurray Hurray (event prerelease version)
     if (liveId === "2997") return "MV";       // MONSTER GIRLS (MV version)
     if (liveId === "2998") return "MV";       // I'm Still... (MV version)
     if (liveId === "2999") return "MV";       // Queendom (MV version)
