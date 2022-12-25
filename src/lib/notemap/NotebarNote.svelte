@@ -12,7 +12,7 @@
     const notebarSize = getContext<{ start: number, end: number, length: number }>("notebarSize");
     const gimmickMarkers = getContext<{
         [k: number]:
-                { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
+            { layerGlobal: number, layerLocal: number, relativeGimmickLength: number | undefined }
     }>("gimmickMarkers");
     const gimmickHighlightsByGimmickId = getContext<{ [k: number]: Set<number> }>("gimmickHighlightsByGimmickId");
     const gimmickHighlightsByNoteId = getContext<{ [k: number]: Set<number> }>("gimmickHighlightsByNoteId");
@@ -54,17 +54,17 @@
             }
         } else if ($filterGimmick !== null) {
             lowlight = !(noteData.gimmick === $filterGimmick || gimmickHighlightsByGimmickId[$filterGimmick]?.has(i))
-                    || ($filterSlot !== null && hitBySlot !== $filterSlot);
+                || ($filterSlot !== null && hitBySlot !== $filterSlot);
             if (releaseNoteIndex !== undefined) {
                 lowlightNext = !(gimmickHighlightsByGimmickId[$filterGimmick]?.has(releaseNoteIndex))
-                        || ($filterSlot !== null && ((hitBySlot + 1) % 3) !== $filterSlot);
+                    || ($filterSlot !== null && ((hitBySlot + 1) % 3) !== $filterSlot);
             }
         } else {
             lowlight = lowlightNext = false;
         }
 
         lowlightMarker = $filterGimmick !== null && $filterGimmick !== noteData.gimmick
-                || ($filterSlot !== null && hitBySlot !== $filterSlot);
+            || ($filterSlot !== null && hitBySlot !== $filterSlot);
     }
 
     const pageLanguage = getContext("pageLanguage");
@@ -92,6 +92,13 @@
                 <div class="markertail"></div>
             {/if}
             <div class="marker"><span>{noteData.gimmick + 1}</span></div>
+        </div>
+    {/if}
+    {#if i % 5 === 4}
+        <div class="counter">
+            {#if i % 10 === 9}
+                {i+1}
+            {/if}
         </div>
     {/if}
 </div>
@@ -138,6 +145,16 @@
             & > .markertail {
                 @apply absolute left-0 top-1 w-full h-1 m-[-1px] bg-white rounded-full border border-black
                 pointer-events-none box-content;
+            }
+        }
+
+        & > .counter {
+            @apply absolute top-7 -left-4 w-8 pointer-events-none text-center;
+            font-size: 50%;
+
+            &:before {
+                @apply absolute left-4 -top-1 w-[1px] h-1 bg-black;
+                content: " ";
             }
         }
     }

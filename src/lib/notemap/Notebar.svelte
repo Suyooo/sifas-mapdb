@@ -97,7 +97,7 @@
 
 <style lang="postcss">
     .notebarcont {
-        @apply w-full overflow-x-hidden;
+        @apply w-full overflow-x-hidden pb-4;
     }
 
     .notebar {
