@@ -82,7 +82,7 @@
 </script>
 
 <div class="navdropdown" class:open={open} on:keydown={key} bind:this={container}>
-    <button on:click={open ? (() => open = false) : doOpen} aria-expanded={open} bind:this={mainButton} on:blur={blur}
+    <button on:mousedown={open ? (() => open = false) : doOpen} aria-expanded={open} bind:this={mainButton}
             aria-haspopup="true" aria-controls={"navdropdown" + randomId} aria-label={ariaLabel ?? label}>
         {label}
     </button>
@@ -90,7 +90,7 @@
         {#each options as option,i (option.value)}
             {#if !option.hidden}
                 <li id={"navdropdown"+randomId+"-" + option.value} aria-current={option.current ? "page" : null}>
-                    <button on:click={() => select(option)} disabled={!open} bind:this={listButtons[i]} on:blur={blur}
+                    <button on:mouseup={() => select(option)} disabled={!open} bind:this={listButtons[i]} on:blur={blur}
                             aria-label={option.label} aria-disabled={option.disabled} role="link">
                         <slot {option}/>
                     </button>
@@ -145,8 +145,11 @@
         position: absolute;
         top: 100%;
         left: 0;
-        width: 100%;
+        min-width: 100%;
         z-index: 9;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .navdropdown li > button {
