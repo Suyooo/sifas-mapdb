@@ -59,12 +59,14 @@ function towerNameRomaji(towerId) {
     if (towerId === 33030) return "Dream Live Parade ~ 3rd Anniversary Next TOKIMEKI! ~";
     if (towerId === 33031) return "Dream Live Parade ~µ's On Stage~";
     if (towerId === 33032) return "Dream Live Parade ~Aqours On Stage~";
+    if (towerId === 33033) return "Dream Live Parade ~Nijigaku On Stage~";
 
     throw new Error('Unknown Romaji Tower Name for ' + towerId);
 }
 
 function towerNameYear(towerId) {
     if (towerId === 33007) return "2021";
+    if (towerId === 33008) return "2021";
     if (towerId === 33009) return "2021";
     if (towerId === 33011) return "2021";
     if (towerId === 33012) return "2021";
@@ -72,6 +74,7 @@ function towerNameYear(towerId) {
     if (towerId === 33022) return "2022";
     if (towerId === 33023) return "2022";
     if (towerId === 33026) return "2022";
+    if (towerId === 33033) return "2022";
 
     return undefined;
 }

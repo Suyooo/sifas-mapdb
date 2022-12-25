@@ -244,6 +244,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 
 const skillTargetMap = {
     [SkillTargetType.ALL]: `全員`,
+    [SkillTargetType.CHAR_YOSHIKO]: `善子`,
     [SkillTargetType.CHAR_HANAMARU]: `花丸`,
     [SkillTargetType.CHAR_MARI]: `鞠莉`,
     [SkillTargetType.CHAR_RUBY]: `ルビィ`,

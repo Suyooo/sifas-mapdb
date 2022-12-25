@@ -149,6 +149,7 @@ export function skillEffectTypeAffectsSPVoltage(t: SkillEffectType) {
 
 export enum SkillTargetType {
     ALL = 1,
+    CHAR_YOSHIKO = 16,
     CHAR_HANAMARU = 17,
     CHAR_MARI = 18,
     CHAR_RUBY = 19,

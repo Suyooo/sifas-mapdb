@@ -106,6 +106,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1067") return "WHITE FIRST LOVE";
     if (liveId === "1066") return "Beginner's Sailing";
     if (liveId === "1064") return "in this unstable world";
+    if (liveId === "1099") return "Tatehoko Tsubasa";
     if (liveId === "1062") return "Oyasuminasan!";
     if (liveId === "1100") return "Akogare Ranraran";
     if (liveId === "1069") return "New winding road";

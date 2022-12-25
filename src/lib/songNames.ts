@@ -98,6 +98,7 @@ const romaji: { [pureLiveId: string]: string } = {
     "1067": "WHITE FIRST LOVE",
     "1066": "Beginner's Sailing",
     "1064": "in this unstable world",
+    "1099": "Tatehoko Tsubasa",
     "1062": "Oyasuminasan!",
     "1100": "Akogare Ranraran",
     "1069": "New winding road",

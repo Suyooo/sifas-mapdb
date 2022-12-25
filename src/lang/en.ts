@@ -242,6 +242,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 
 const skillTargetMap = {
     [SkillTargetType.ALL]: `all cards `,
+    [SkillTargetType.CHAR_YOSHIKO]: `Yoshiko cards `,
     [SkillTargetType.CHAR_HANAMARU]: `Hanamaru cards `,
     [SkillTargetType.CHAR_MARI]: `Mari cards `,
     [SkillTargetType.CHAR_RUBY]: `Ruby cards `,
