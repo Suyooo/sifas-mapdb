@@ -181,7 +181,7 @@
         <b><T key="songinfo.sp_gauge_max"/>:</b> <T key="format.number" params={[data.liveInfo.sp_gauge_max]}/>
     </div>
     <div>
-        <b><T key="songinfo.song_length"/>:</b> <T key="format.number" params={[data.liveInfo.song_length]}/>
+        <b><T key="songinfo.song_length"/>:</b> <T key="format.song_time" params={[data.liveInfo.song_length, false]}/>
     </div>
 </div>
 

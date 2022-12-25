@@ -8,7 +8,7 @@ import {
     SkillTriggerAC,
     SkillTriggerNote
 } from "$enums";
-import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "../types";
+import type {LiveDataAC, LiveDataGimmick, LiveDataGimmickAC, LiveDataGimmickNote} from "$types";
 
 function capitalize(s: string) {
     if (s.charAt(0) == "µ") return s; // don't uppercase µ
@@ -24,6 +24,13 @@ function numberFormat(n: number) {
 
 function noteCount(n: number) {
     return `${numberFormat(n)} note` + (n === 1 ? `` : `s`);
+}
+
+function songTime(ms: number, showMs: boolean) {
+    const min = Math.floor(ms / 60000);
+    const msec = (ms % 60000);
+    if (showMs) return min + ":" + (msec / 1000).toFixed(3);
+    else return min + ":" + Math.floor(msec / 1000);
 }
 
 function songGimmick({effect_type, effect_amount, target, finish_type, finish_amount}: LiveDataGimmick) {
@@ -546,7 +553,8 @@ export default {
     },
     format: {
         note_count: noteCount,
-        number: numberFormat
+        number: numberFormat,
+        song_time: songTime
     },
     items: () => ""
 };

@@ -21,6 +21,12 @@ function noteCount(n: number): string {
     return numberFormat(n);
 }
 
+function songTime(ms: number, showMs: boolean) {
+    const min = Math.floor(ms / 60000);
+    const msec = (ms % 60000);
+    return min + "分" + Math.floor(msec / 1000) + "秒" + (showMs ? msec % 1000 : "");
+}
+
 function removeLeadingComma(s: string): string {
     if (s.charAt(0) === "、") return s.substring(1);
     return s;
@@ -548,7 +554,8 @@ export default {
     },
     format: {
         number: numberFormat,
-        note_count: noteCount
+        note_count: noteCount,
+        song_time: songTime
     },
     items: () => ""
 };

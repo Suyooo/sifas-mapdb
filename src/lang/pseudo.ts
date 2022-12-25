@@ -169,6 +169,7 @@ export default {
     format: {
         number: (n: number) => `$$$$$.format.number(${n})$$$$$`,
         note_count: (n: number) => `$$$$$.format.note_count(${n})$$$$$`,
+        song_time: (ms: number, showMs: boolean) => `$$$$$.format.song_time(${ms},${showMs})$$$$$`
     },
     items: (itemDict: { (itemId: Item): number }) => `$$$$$items(${JSON.stringify(itemDict)})$$$$$`
 };
