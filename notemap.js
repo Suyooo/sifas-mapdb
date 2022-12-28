@@ -152,6 +152,7 @@ function skillEffect(typeId, amount) {
     if (typeId === 74) return 'lose ' + format(amount / 100) + '% Critical Chance';
     if (typeId === 75) return 'lose ' + format(amount / 100) + '% Critical Power';
     if (typeId === 76) return 'lose ' + format(amount / 100) + '% Skill Activation Chance';
+    if (typeId === 77) return 'reduce SP Voltage Gain by ' + format(amount / 100) + '%';
     if (typeId === 78) return 'lose ' + format(amount / 100) + '% Base Skill Activation Chance';
     if (typeId === 79) return 'lose ' + format(amount / 100) + '% Base Tap Voltage';
     if (typeId === 81) return 'lose ' + format(amount / 100) + '% Base Appeal';
