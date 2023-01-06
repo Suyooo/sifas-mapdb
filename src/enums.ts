@@ -2,6 +2,18 @@ export enum Attribute {
     SMILE = 1, PURE, COOL, ACTIVE, NATURAL, ELEGANT, NONE
 }
 
+export type AttributeKey = "smile" | "pure" | "cool" | "active" | "natural" | "elegant" | "none";
+
+export function attributeToKey(a: Attribute): AttributeKey {
+    if (a === Attribute.SMILE) return "smile";
+    if (a === Attribute.PURE) return "pure";
+    if (a === Attribute.COOL) return "cool";
+    if (a === Attribute.ACTIVE) return "active";
+    if (a === Attribute.NATURAL) return "natural";
+    if (a === Attribute.ELEGANT) return "elegant";
+    else return "none";
+}
+
 export enum Difficulty {
     BEGINNER = 10, INTERMEDIATE = 20, ADVANCED = 30, ADVANCED_PLUS = 35, CHALLENGE = 37
 }

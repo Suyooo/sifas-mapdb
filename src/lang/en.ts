@@ -402,7 +402,7 @@ export default {
         start: "Start",
         muse: "µ's",
         aqours: "Aqours",
-        nijigaku: "Nijigaku",
+        niji: "Nijigaku",
         liella: "Liella!",
         dlp: "DLP",
         rankings: "Rankings"
@@ -545,6 +545,7 @@ export default {
         challenge_short: "Ch",
     },
     attribute: {
+        title: "Attribute",
         smile: "Smile",
         pure: "Pure",
         cool: "Cool",

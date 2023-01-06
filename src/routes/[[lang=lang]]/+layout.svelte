@@ -1,9 +1,10 @@
 <script lang="ts">
     import "$css";
     import {setContext} from "svelte";
+    import type {Language} from "$types";
 
     export let data: { pageLanguage: any };
-    setContext<any>("pageLanguage", data.pageLanguage);
+    setContext<Language>("pageLanguage", data.pageLanguage);
 
     function setLang(code: string): void {
         console.log(code);

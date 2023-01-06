@@ -307,7 +307,7 @@ const skillTargetMap = {
     [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span>タイプと<span class="t sp">Sp</span>タイプ`,
     [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span>タイプと<span class="t gd">Gd</span>タイプ`,
     [SkillTargetType.GROUP_NOT_AQOURS]: `Aqoursのメンバー以外`,
-    [SkillTargetType.GROUP_NOT_NIJI]: `Nijigakuのメンバー以外`,
+    [SkillTargetType.GROUP_NOT_NIJI]: `ニジガクのメンバー以外`,
     [SkillTargetType.YEAR_NOT_1]: `1年生以外`,
     [SkillTargetType.YEAR_NOT_2]: `2年生以外`,
     [SkillTargetType.YEAR_NOT_3]: `3年生以外`,
@@ -403,7 +403,7 @@ export default {
         start: "スタート",
         muse: "µ's",
         aqours: "Aqours",
-        nijigaku: "ニジガク",
+        niji: "ニジガク",
         liella: "Liella!",
         dlp: "DLP",
         rankings: "ランキング"
@@ -546,6 +546,7 @@ export default {
         challenge_short: "ﾁｬﾚﾝｼﾞ",
     },
     attribute: {
+        attribute: "属性",
         smile: "スマイル",
         pure: "ピュア",
         cool: "クール",

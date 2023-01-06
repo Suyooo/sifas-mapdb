@@ -12,7 +12,7 @@ export default {
         start: "%%%%%.tab.start%%%%%",
         muse: "%%%%%.tab.muse%%%%%",
         aqours: "%%%%%.tab.aqours%%%%%",
-        nijigaku: "%%%%%.tab.nijigaku%%%%%",
+        niji: "%%%%%.tab.niji%%%%%",
         liella: "%%%%%.tab.liella%%%%%",
         dlp: "%%%%%.tab.dlp%%%%%",
         rankings: "%%%%%.tab.rankings%%%%%"
@@ -158,6 +158,7 @@ export default {
         challenge_short: "%%%%%.difficulty.challenge_short%%%%%"
     },
     attribute: {
+        title: "%%%%%.attribute.title%%%%%",
         smile: "%%%%%.attribute.smile%%%%%",
         pure: "%%%%%.attribute.pure%%%%%",
         cool: "%%%%%.attribute.cool%%%%%",

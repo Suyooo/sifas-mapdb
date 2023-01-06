@@ -2,6 +2,7 @@ import {
     ACMissionType,
     Attribute,
     Difficulty,
+    Item,
     NoteAction,
     NoteType,
     SkillCalcType,
@@ -110,4 +111,173 @@ export interface LiveDataExtraSBL {
 export interface LiveDataExtraDLP {
     dlp_tower_id: number,
     dlp_floor: number
+}
+
+export interface Language {
+    meta: {
+        title: string
+    },
+    header: {
+        title: string
+    },
+    tab: {
+        start: string,
+        muse: string,
+        aqours: string,
+        niji: string,
+        liella: string,
+        dlp: string,
+        rankings: string
+    },
+    preferences: {
+        title: string,
+        titles: string,
+        titles_toggle: string,
+        titles_kana: string,
+        titles_kana_toggle: string,
+        titles_roma: string,
+        titles_roma_toggle: string,
+        unavailable: string,
+        unavailable_toggle: string,
+        unavailable_hide: string,
+        unavailable_hide_toggle: string,
+        unavailable_show: string,
+        unavailable_show_toggle: string,
+        site_theme: string,
+        site_theme_light: string,
+        site_theme_dark: string,
+        save: string,
+        cancel: string
+    },
+    search: {
+        label: string,
+        tooltip: string
+    },
+    songlist: {
+        unavailable: string,
+        daily: string,
+        weekdays: {
+            1: string,
+            2: string,
+            3: string,
+            4: string,
+            5: string,
+            6: string,
+            7: string
+        },
+        time_limited: string
+    },
+    songinfo: {
+        ranks: {
+            S: string,
+            A: string,
+            B: string,
+            C: string
+        },
+        note_damage: string,
+        voltage_caps: {
+            tap: string,
+            sp: string,
+            skill: string,
+            swap: string
+        },
+        sp_gauge_max: string,
+        note_count: string,
+        note_count_ac: string,
+        note_damage_total: string,
+        ac_reward_total: string,
+        song_length: string,
+        story_stages: string,
+        no_map: string
+    },
+    dlp: {
+        performance_points: string,
+        performance_points_recoverable: string,
+        performance_points_recovery_cost: string,
+        progress_reward: string,
+        story_node: string,
+        songinfo: {
+            voltage_target: string,
+            song_difficulty: string,
+            reward_clear: string,
+            voltage_target_short: string,
+            note_damage_short: string
+        }
+    },
+    scale: {
+        label: string,
+        time: string,
+        turns: string
+    },
+    gimmicks: {
+        title: string,
+        song_gimmick: {
+            label: string,
+            label_multiple: string,
+            gimmick: (p: LiveDataGimmick) => string,
+            cleansable: string,
+            cleansable_yes: string,
+            cleansable_no: string,
+        },
+        note_gimmick: {
+            label: string,
+            gimmick: (p: LiveDataGimmickNote) => string,
+            amount: string,
+            position: string,
+            slot: (n: number) => string,
+            filter: string,
+            filter_remove: string,
+        },
+        no_gimmick: string
+    },
+    appeal_chances: {
+        title: string,
+        label: string,
+        gimmick: (p: LiveDataGimmickAC) => string,
+        mission: (p: LiveDataAC) => string,
+        length: string,
+        average: (p: LiveDataAC, notes: number) => string,
+        reward_voltage_label: string,
+        reward_voltage: string,
+        penalty_damage_label: string,
+        penalty_damage: string
+    },
+    rankings: {
+        column_song: string,
+        show_all_link: string,
+        length_title: string,
+        length_column_length: string,
+        length_show_all_description: string,
+        notes_title: string,
+        notes_column_notes: string,
+        notes_show_all_description: string
+    },
+    difficulty: {
+        beginner: string,
+        beginner_short: string,
+        intermediate: string,
+        intermediate_short: string,
+        advanced: string,
+        advanced_short: string,
+        advplus: string,
+        advplus_short: string,
+        challenge: string,
+        challenge_short: string
+    },
+    attribute: {
+        title: string,
+        smile: string,
+        pure: string,
+        cool: string,
+        active: string,
+        natural: string,
+        elegant: string,
+        none: string
+    },
+    format: {
+        number: (n: number) => string,
+        note_count: (n: number) => string,
+        song_time: (ms: number, showMs: boolean) => string
+    },
+    items: (itemDict: { (itemId: Item): number }) => string
 }

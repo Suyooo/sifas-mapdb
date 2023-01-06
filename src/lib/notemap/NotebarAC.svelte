@@ -1,7 +1,7 @@
 <script lang="ts">
     import {tooltipNotebar} from "$actions/tooltip";
     import {acMissionTypeToRole, Role} from "$enums";
-    import type {LiveData} from "$types";
+    import type {Language, LiveData} from "$types";
     import {getContext} from "svelte";
     import TooltipAC from "./TooltipAC.svelte";
 
@@ -19,7 +19,7 @@
     const relativeLength = (endTime - startTime) / notebarSize.length;
     const acType = Role[acMissionTypeToRole(acData.mission_type)].toLowerCase();
 
-    const pageLanguage = getContext("pageLanguage");
+    const pageLanguage = getContext<Language>("pageLanguage");
 </script>
 
 <div class="{acType}" style:left={relativeStart*100+"%"} style:width={relativeLength*100+"%"}
