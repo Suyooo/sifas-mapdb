@@ -150,6 +150,8 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `のクリティカル値が${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.SKILLCHANCE_DEBUFF)
         return `の特技発動率${numberFormat(effectAmount / 100)}%低下`;
+    if (effectType === SkillEffectType.SPVO_DEBUFF)
+        return `のSP特技の獲得ボルテージ${numberFormat(effectAmount / 100)}%減少`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_DEBUFF)
         return `の基本特技発動率${numberFormat(effectAmount / 100)}%低下`;
     if (effectType === SkillEffectType.VOGAIN_BASE2_DEBUFF)

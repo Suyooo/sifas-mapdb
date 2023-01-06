@@ -149,6 +149,8 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `lose ${numberFormat(effectAmount / 100)}% Critical Power`;
     if (effectType === SkillEffectType.SKILLCHANCE_DEBUFF)
         return `lose ${numberFormat(effectAmount / 100)}% Skill Activation Chance`;
+    if (effectType === SkillEffectType.SPVO_DEBUFF)
+        return `reduce SP Voltage Gain by ${numberFormat(effectAmount / 100)}%`;
     if (effectType === SkillEffectType.SKILLCHANCE_BASE2_DEBUFF)
         return `lose ${numberFormat(effectAmount / 100)}% Base Skill Activation Chance`;
     if (effectType === SkillEffectType.VOGAIN_BASE2_DEBUFF)

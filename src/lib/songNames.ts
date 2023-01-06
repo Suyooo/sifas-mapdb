@@ -32,6 +32,7 @@ const romaji: { [pureLiveId: string]: string } = {
     "0078": "SENTIMENTAL StepS",
     "0007": "LONELIEST BABY",
     "0087": "SUNNY DAY SONG",
+    "0022": "Aishiteru Banzai!",
     "0005": "PSYCHIC FIRE",
     "0043": "Cutie Panther",
     "0004": "Shunjou Romantic",
