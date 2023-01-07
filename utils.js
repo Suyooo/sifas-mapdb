@@ -47,6 +47,7 @@ function songNameRomaji(liveId) {
     if (liveId === "0049") return "Binetsu kara Mystery";
     if (liveId === "0015") return "NO EXIT ORION";
     if (liveId === "0025") return "sweet&sweet holiday";
+    if (liveId === "0024") return "Love marginal";
     if (liveId === "0059") return "Someday of my life";
     if (liveId === "0061") return "Arifureta Kanashimi no Hate";
     if (liveId === "0064") return "Blueberry ♡ Train";
