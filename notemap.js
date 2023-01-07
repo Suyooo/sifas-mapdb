@@ -114,6 +114,7 @@ function skillTarget(targetId) {
     if (targetId === 107) return 'non-DiverDiva units ';
     if (targetId === 108) return 'non-A•ZU•NA units ';
     if (targetId === 109) return 'non-QU4RTZ units ';
+    if (targetId === 110) return 'R3BIRTH units ';
     if (targetId === 112) return 'Shioriko units ';
     if (targetId === 113) return 'Lanzhu units ';
     if (targetId === 114) return 'Mia units ';
