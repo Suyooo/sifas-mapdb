@@ -107,6 +107,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1070") return "Sakana ka Nanda ka?";
     if (liveId === "1067") return "WHITE FIRST LOVE";
     if (liveId === "1066") return "Beginner's Sailing";
+    if (liveId === "1098") return "Totsuzen GIRL";
     if (liveId === "1064") return "in this unstable world";
     if (liveId === "1099") return "Tatehoko Tsubasa";
     if (liveId === "1062") return "Oyasuminasan!";

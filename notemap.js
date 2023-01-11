@@ -48,6 +48,7 @@ const removeTargetSet = new Set([3, 4, 5, 68, 69, 70, 91, 93, 96, 101, 105, 112,
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
+    if (targetId === 15) return 'You units ';
     if (targetId === 16) return 'Yoshiko units ';
     if (targetId === 17) return 'Hanamaru units ';
     if (targetId === 18) return 'Mari units ';
@@ -101,6 +102,7 @@ function skillTarget(targetId) {
     if (targetId === 91) return 'non-<span class="t gd">Gd</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 92) return 'non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> units ';
     if (targetId === 93) return '<span class="t sp">Sp</span> and <span class="t sk">Sk</span> units ';
+    if (targetId === 94) return '<span class="t gd">Gd</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 96) return '<span class="t vo">Vo</span> and <span class="t sk">Sk</span> units ';
     if (targetId === 97) return '<span class="t vo">Vo</span> and <span class="t sp">Sp</span> units ';
     if (targetId === 98) return '<span class="t vo">Vo</span> and <span class="t gd">Gd</span> units ';
@@ -170,6 +172,7 @@ function skillEffect(typeId, amount) {
     if (typeId === 101) return 'increase Stamina Damage by ' + format(amount / 100) + '%';
     if (typeId === 105) return 'increase Stamina Damage by ' + format(amount / 100) + '%';
     if (typeId === 112) return 'charge SP Gauge by ' + format(amount / 100) + '% of the tapping card\'s Technique';
+    if (typeId === 118) return 'increase the Stamina Recovery from their Strategy Switch bonus by ' + format(amount / 100) + '%';
     if (typeId === 119) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 120) return 'lose ' + format(amount / 100) + '% Appeal for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 123) return 'gain ' + format(amount / 100) + '% Appeal for each <span class="t sk">Sk</span> unit in the formation';
@@ -197,9 +200,10 @@ function skillEffect(typeId, amount) {
     if (typeId === 217) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t vo">Vo</span> unit in the formation';
     if (typeId === 218) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sp">Sp</span> unit in the formation';
     if (typeId === 219) return 'increase Base SP Voltage Gain by ' + format(amount / 100) + '% for each <span class="t sk">Sk</span> unit in the formation';
-    if (typeId === 228) return 'increase the Voltage gained from their Strategy Switch bonus by ' + format(amount);
-    if (typeId === 229) return 'increase the cooldown reduction from their Strategy Switch bonus by ' + format(amount) + ' turns';
-    if (typeId === 230) return 'increase SP gained from their Strategy Switch bonus by ' + format(amount) + ' points';
+    if (typeId === 226) return 'increase the Cooldown Reduction from their Strategy Switch bonus by ' + format(amount) + ' turns';
+    if (typeId === 228) return 'increase the Base Voltage Gain from their Strategy Switch bonus by ' + format(amount);
+    if (typeId === 229) return 'increase the Base Cooldown Reduction from their Strategy Switch bonus by ' + format(amount) + ' turns';
+    if (typeId === 230) return 'increase Base SP Gain from their Strategy Switch bonus by ' + format(amount) + ' points';
     if (typeId === 263) return 'take ' + format(amount / 100) + '% of max Stamina as damage, bypassing Shield';
     if (typeId === 265) return 'block Healing';
     throw new Error('Unknown Skill Effect Type ' + typeId);
