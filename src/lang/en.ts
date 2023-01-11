@@ -181,6 +181,8 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `increase Stamina Damage by ${numberFormat(effectAmount / 100)}%`;
     if (effectType === SkillEffectType.SP_GAIN_BY_TECH)
         return `charge SP Gauge by ${numberFormat(effectAmount / 100)}% of the appealing card's Technique`;
+    if (effectType === SkillEffectType.SWAP_GD_BUFF)
+        return `increase the Stamina Recovery from their Strategy Swap Bonus by ${numberFormat(effectAmount / 100)}%`;
     if (effectType === SkillEffectType.APPEAL_BUFF_BY_VO)
         return `gain ${numberFormat(effectAmount / 100)}% Appeal for each <span class="t vo">Vo</span> card in the formation`;
     if (effectType === SkillEffectType.APPEAL_DEBUFF_BY_VO)
@@ -235,11 +237,13 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sp">Sp</span> card in the formation`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SK)
         return `increase Base SP Voltage Gain by ${numberFormat(effectAmount / 100)}% for each <span class="t sk">Sk</span> card in the formation`;
-    if (effectType === SkillEffectType.SWAP_VO_BASE_BUFF)
+    if (effectType === SkillEffectType.SWAP_SK_BUFF)
+        return `increase the Cooldown Reduction from their Strategy Swap Bonus by ${numberFormat(effectAmount)} turns`;
+    if (effectType === SkillEffectType.SWAP_VO_BASE2_BUFF)
         return `increase the Base Voltage Gain from their Strategy Swap Bonus by ${numberFormat(effectAmount)}`;
-    if (effectType === SkillEffectType.SWAP_SK_BASE_BUFF)
+    if (effectType === SkillEffectType.SWAP_SK_BASE2_BUFF)
         return `increase the Base Cooldown Reduction from their Strategy Swap Bonus by ${numberFormat(effectAmount)} turns`;
-    if (effectType === SkillEffectType.SWAP_SP_BASE_BUFF)
+    if (effectType === SkillEffectType.SWAP_SP_BASE2_BUFF)
         return `increase the Base SP Gain from their Strategy Swap Bonus by ${numberFormat(effectAmount)} points`;
     if (effectType === SkillEffectType.STAMINA_DAMAGE_PIERCE)
         return `take ${numberFormat(effectAmount / 100)}% of max Stamina as damage, bypassing Shield`;
@@ -251,6 +255,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 
 const skillTargetMap = {
     [SkillTargetType.ALL]: `all cards `,
+    [SkillTargetType.CHAR_YOU]: `You cards `,
     [SkillTargetType.CHAR_YOSHIKO]: `Yoshiko cards `,
     [SkillTargetType.CHAR_HANAMARU]: `Hanamaru cards `,
     [SkillTargetType.CHAR_MARI]: `Mari cards `,
@@ -267,6 +272,7 @@ const skillTargetMap = {
     [SkillTargetType.GROUP_MUSE]: `µ's cards `,
     [SkillTargetType.GROUP_AQOURS]: `Aqours cards `,
     [SkillTargetType.GROUP_NIJI]: `Nijigaku cards `,
+    [SkillTargetType.SUB_PRINTEMPS]: `Printemps cards `,
     [SkillTargetType.SUB_CYARON]: `CYaRon cards `,
     [SkillTargetType.SUB_AZALEA]: `AZALEA cards `,
     [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kiss cards `,
@@ -302,6 +308,7 @@ const skillTargetMap = {
     [SkillTargetType.TYPE_NOT_GD_SP]: `non-<span class="t gd">Gd</span> or <span class="t sp">Sp</span> cards `,
     [SkillTargetType.TYPE_NOT_SP_SK]: `non-<span class="t sp">Sp</span> or <span class="t sk">Sk</span> cards `,
     [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span> and <span class="t sk">Sk</span> cards `,
+    [SkillTargetType.TYPE_GD_SK]: `<span class="t gd">Gd</span> and <span class="t sk">Sk</span> cards `,
     [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span> and <span class="t sk">Sk</span> cards `,
     [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span> and <span class="t sp">Sp</span> cards `,
     [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span> and <span class="t gd">Gd</span> cards `,
@@ -316,6 +323,7 @@ const skillTargetMap = {
     [SkillTargetType.SUB_NOT_DIVERDIVA]: `non-DiverDiva cards `,
     [SkillTargetType.SUB_NOT_AZUNA]: `non-A•ZU•NA cards `,
     [SkillTargetType.SUB_NOT_QU4RTZ]: `non-QU4RTZ cards `,
+    [SkillTargetType.SUB_R3BIRTH]: `R3BIRTH cards `,
     [SkillTargetType.CHAR_SHIORIKO]: `Shioriko cards `,
     [SkillTargetType.CHAR_LANZHU]: `Lanzhu cards `,
     [SkillTargetType.CHAR_MIA]: `Mia cards `,

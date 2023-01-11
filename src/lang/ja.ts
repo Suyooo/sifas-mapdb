@@ -182,6 +182,8 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `基本スタミナダメージが${numberFormat(effectAmount / 100)}%増加`;
     if (effectType === SkillEffectType.SP_GAIN_BY_TECH)
         return `アピールしているカードのテクニックの${numberFormat(effectAmount / 100)}%SPゲージ獲得`;
+    if (effectType === SkillEffectType.SWAP_GD_BUFF)
+        return `の作戦切替ボーナスを${numberFormat(effectAmount / 100)}%上昇`;
     if (effectType === SkillEffectType.APPEAL_BUFF_BY_VO)
         return `が<span class="t vo">Vo</span>タイプ×${numberFormat(effectAmount / 100)}%アピール増加`;
     if (effectType === SkillEffectType.APPEAL_DEBUFF_BY_VO)
@@ -236,11 +238,13 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
         return `が<span class="t sp">Sp</span>タイプ×${numberFormat(effectAmount / 100)}%基本SP特技の獲得ボルテージ増加`;
     if (effectType === SkillEffectType.SPVO_BASE2_BUFF_BY_SK)
         return `が<span class="t sk">Sk</span>タイプ×${numberFormat(effectAmount / 100)}%基本SP特技の獲得ボルテージ増加`;
-    if (effectType === SkillEffectType.SWAP_VO_BASE_BUFF)
+    if (effectType === SkillEffectType.SWAP_SK_BUFF)
+        return `の作戦切替ボーナスを${numberFormat(effectAmount)}上昇`;
+    if (effectType === SkillEffectType.SWAP_VO_BASE2_BUFF)
         return `の基本作戦切替ボーナスに${numberFormat(effectAmount)}ボルテージ加算`;
-    if (effectType === SkillEffectType.SWAP_SK_BASE_BUFF)
+    if (effectType === SkillEffectType.SWAP_SK_BASE2_BUFF)
         return `の基本作戦切替ボーナスに${numberFormat(effectAmount)}加算`;
-    if (effectType === SkillEffectType.SWAP_SP_BASE_BUFF)
+    if (effectType === SkillEffectType.SWAP_SP_BASE2_BUFF)
         return `の基本作戦切替ボーナスに${numberFormat(effectAmount)}加算`;
     if (effectType === SkillEffectType.STAMINA_DAMAGE_PIERCE)
         return `シールド効果を無視して最大スタミナ${numberFormat(effectAmount / 100)}%ダメージ`;
@@ -252,6 +256,7 @@ function skillEffect(effectType: SkillEffectType, effectAmount: number) {
 
 const skillTargetMap = {
     [SkillTargetType.ALL]: `全員`,
+    [SkillTargetType.CHAR_YOU]: `曜`,
     [SkillTargetType.CHAR_YOSHIKO]: `善子`,
     [SkillTargetType.CHAR_HANAMARU]: `花丸`,
     [SkillTargetType.CHAR_MARI]: `鞠莉`,
@@ -268,6 +273,7 @@ const skillTargetMap = {
     [SkillTargetType.GROUP_MUSE]: `µ'sのメンバー`,
     [SkillTargetType.GROUP_AQOURS]: `Aqoursのメンバー`,
     [SkillTargetType.GROUP_NIJI]: `ニジガクのメンバー`,
+    [SkillTargetType.SUB_PRINTEMPS]: `Printempsのメンバー`,
     [SkillTargetType.SUB_CYARON]: `CYaRonのメンバー`,
     [SkillTargetType.SUB_AZALEA]: `AZALEAのメンバー`,
     [SkillTargetType.SUB_GUILTYKISS]: `Guilty Kissのメンバー`,
@@ -303,6 +309,7 @@ const skillTargetMap = {
     [SkillTargetType.TYPE_NOT_GD_SP]: `<span class="t gd">Gd</span>タイプと<span class="t sp">Sp</span>タイプ以外`,
     [SkillTargetType.TYPE_NOT_SP_SK]: `<span class="t sp">Sp</span>タイプと<span class="t sk">Sk</span>タイプ以外`,
     [SkillTargetType.TYPE_SP_SK]: `<span class="t sp">Sp</span>タイプと<span class="t sk">Sk</span>タイプ`,
+    [SkillTargetType.TYPE_GD_SK]: `<span class="t gd">Gd</span>タイプと<span class="t sk">Sk</span>タイプ`,
     [SkillTargetType.TYPE_VO_SK]: `<span class="t vo">Vo</span>タイプと<span class="t sk">Sk</span>タイプ`,
     [SkillTargetType.TYPE_VO_SP]: `<span class="t vo">Vo</span>タイプと<span class="t sp">Sp</span>タイプ`,
     [SkillTargetType.TYPE_VO_GD]: `<span class="t vo">Vo</span>タイプと<span class="t gd">Gd</span>タイプ`,
@@ -317,6 +324,7 @@ const skillTargetMap = {
     [SkillTargetType.SUB_NOT_DIVERDIVA]: `DiverDivaのメンバー以外`,
     [SkillTargetType.SUB_NOT_AZUNA]: `A•ZU•NAのメンバー以外`,
     [SkillTargetType.SUB_NOT_QU4RTZ]: `QU4RTZのメンバー以外`,
+    [SkillTargetType.SUB_R3BIRTH]: `R3BIRTHのメンバー`,
     [SkillTargetType.CHAR_SHIORIKO]: `栞子`,
     [SkillTargetType.CHAR_LANZHU]: `ランジュ`,
     [SkillTargetType.CHAR_MIA]: `ミア`,

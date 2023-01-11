@@ -102,6 +102,7 @@ export enum SkillEffectType {
     DAMAGE_INCREASE = 101,
     DAMAGE_BASE2_INCREASE = 105,
     SP_GAIN_BY_TECH = 112,
+    SWAP_GD_BUFF = 118,
     APPEAL_BUFF_BY_VO = 119,
     APPEAL_DEBUFF_BY_VO = 120,
     APPEAL_BUFF_BY_SK = 123,
@@ -129,9 +130,10 @@ export enum SkillEffectType {
     SPVO_BASE2_BUFF_BY_VO = 217,
     SPVO_BASE2_BUFF_BY_SP = 218,
     SPVO_BASE2_BUFF_BY_SK = 219,
-    SWAP_VO_BASE_BUFF = 228,
-    SWAP_SK_BASE_BUFF = 229,
-    SWAP_SP_BASE_BUFF = 230,
+    SWAP_SK_BUFF = 226,
+    SWAP_VO_BASE2_BUFF = 228,
+    SWAP_SK_BASE2_BUFF = 229,
+    SWAP_SP_BASE2_BUFF = 230,
     STAMINA_DAMAGE_PIERCE = 263,
     STAMINA_HEAL_BLOCK = 265
 }
@@ -152,8 +154,9 @@ export function skillEffectTypeTargetsFormation(t: SkillEffectType) {
 
 // Skill Effect Types that affect SP Voltage, which might need a different phrasing if their finish type is SP count
 const skillEffectTypeAffectsSPVoltageSet = new Set([
-    SkillEffectType.SPVO_BUFF, SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.SPVO_BUFF_BY_SP,
-    SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_SK
+    SkillEffectType.SPVO_BUFF, SkillEffectType.SPVO_BASE2_BUFF, SkillEffectType.SPVO_DEBUFF,
+    SkillEffectType.SPVO_BUFF_BY_SP, SkillEffectType.SPVO_BASE2_BUFF_BY_VO, SkillEffectType.SPVO_BASE2_BUFF_BY_SP,
+    SkillEffectType.SPVO_BASE2_BUFF_BY_SK
 ]);
 
 export function skillEffectTypeAffectsSPVoltage(t: SkillEffectType) {
@@ -162,6 +165,7 @@ export function skillEffectTypeAffectsSPVoltage(t: SkillEffectType) {
 
 export enum SkillTargetType {
     ALL = 1,
+    CHAR_YOU = 15,
     CHAR_YOSHIKO = 16,
     CHAR_HANAMARU = 17,
     CHAR_MARI = 18,
@@ -178,6 +182,7 @@ export enum SkillTargetType {
     GROUP_MUSE = 29,
     GROUP_AQOURS = 30,
     GROUP_NIJI = 31,
+    SUB_PRINTEMPS = 32,
     SUB_CYARON = 35,
     SUB_AZALEA = 36,
     SUB_GUILTYKISS = 37,
@@ -213,6 +218,7 @@ export enum SkillTargetType {
     TYPE_NOT_GD_SP = 90,
     TYPE_NOT_SP_SK = 92,
     TYPE_SP_SK = 93,
+    TYPE_GD_SK = 94,
     TYPE_VO_SK = 96,
     TYPE_VO_SP = 97,
     TYPE_VO_GD = 98,
@@ -227,6 +233,7 @@ export enum SkillTargetType {
     SUB_NOT_DIVERDIVA = 107,
     SUB_NOT_AZUNA = 108,
     SUB_NOT_QU4RTZ = 109,
+    SUB_R3BIRTH = 110,
     CHAR_SHIORIKO = 112,
     CHAR_LANZHU = 113,
     CHAR_MIA = 114,

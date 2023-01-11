@@ -47,6 +47,7 @@ function songNameRomaji(liveId) {
     if (liveId === "0049") return "Binetsu kara Mystery";
     if (liveId === "0015") return "NO EXIT ORION";
     if (liveId === "0025") return "sweet&sweet holiday";
+    if (liveId === "0024") return "Love marginal";
     if (liveId === "0059") return "Someday of my life";
     if (liveId === "0061") return "Arifureta Kanashimi no Hate";
     if (liveId === "0064") return "Blueberry ♡ Train";
@@ -106,6 +107,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1070") return "Sakana ka Nanda ka?";
     if (liveId === "1067") return "WHITE FIRST LOVE";
     if (liveId === "1066") return "Beginner's Sailing";
+    if (liveId === "1098") return "Totsuzen GIRL";
     if (liveId === "1064") return "in this unstable world";
     if (liveId === "1099") return "Tatehoko Tsubasa";
     if (liveId === "1062") return "Oyasuminasan!";
@@ -145,6 +147,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2113") return "Ryouran! Victory Road (Type B)";
     if (liveId === "2098") return "Mirai Harmony";
     if (liveId === "2120") return "Hurray Hurray";
+    if (liveId === "2122") return "What You Gonna Do";
     if (liveId === "2031") return "SUPER NOVA";
     if (liveId === "2067") return "POWER SPOT!!";
     if (liveId === "2066") return "Love Triangle";
