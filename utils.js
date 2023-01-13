@@ -176,6 +176,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2103") return "ENJOY IT!";
     if (liveId === "2119") return "Twinkle Town";
     if (liveId === "2056") return "MONSTER GIRLS";
+    if (liveId === "2124") return "Vroom Vroom";
     if (liveId === "2002") return "Yume e no Ippo";
     if (liveId === "2011") return "Kaika Sengen";
     if (liveId === "2021") return "Say Good-Bye Namida";
