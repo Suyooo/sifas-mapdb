@@ -40,11 +40,7 @@ for (const floor of tower.floors) {
 
     const vo = floor.voltage_target;
     const ac = (linked_live || floor).appeal_chances
-        .map(a => a.reward_voltage
-            + (a.mission_type === ACMissionType.VOLTAGE_TOTAL
-            || a.mission_type === ACMissionType.VOLTAGE_SINGLE
-            || a.mission_type === ACMissionType.VOLTAGE_SP
-                ? a.mission_value : 0))
+        .map(a => a.reward_voltage + (a.mission_type === ACMissionType.VOLTAGE_SP ? a.mission_value : 0))
         .reduce((acc, n) => acc + n, 0);
     const no = (linked_live || floor).notes.length;
     const dm = Math.floor(floor.note_damage / 100) * 100;
