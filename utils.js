@@ -140,7 +140,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2099") return "Colorful Dreams! Colorful Smiles!";
     if (liveId === "2100") return "Yume ga Bokura no Taiyou sa";
     if (liveId === "2108") return "Future Parade";
-    if (liveId === "2110") return "Miracle STAY TUNE!";
+    if (liveId === "2110") return "Miracle STAY TUNE! (Ver. 1)";
     if (liveId === "2097") return "Eien no Isshun";
     if (liveId === "2111") return "Twilight";
     if (liveId === "2112") return "Ryouran! Victory Road (Type A)";
