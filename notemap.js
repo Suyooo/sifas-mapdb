@@ -444,6 +444,9 @@ function makeNotemap(liveData) {
                 case NoteGimmickTrigger.ON_SP_HIT:
                     skillstr = 'If hit with an <span class="t sp">Sp</span> unit, ';
                     break;
+                case NoteGimmickTrigger.ON_GD_HIT:
+                    skillstr = 'If hit with an <span class="t gd">Gd</span> unit, ';
+                    break;
                 case NoteGimmickTrigger.ON_SK_HIT:
                     skillstr = 'If hit with an <span class="t sk">Sk</span> unit, ';
                     break;
