@@ -66,6 +66,7 @@ function skillTarget(targetId) {
     if (targetId === 30) return 'Aqours units ';
     if (targetId === 31) return 'Nijigaku units ';
     if (targetId === 32) return 'Printemps units ';
+    if (targetId === 33) return 'BiBi units ';
     if (targetId === 35) return 'CYaRon units ';
     if (targetId === 36) return 'AZALEA units ';
     if (targetId === 37) return 'Guilty Kiss units ';
