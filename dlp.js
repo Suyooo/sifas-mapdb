@@ -78,7 +78,7 @@ function towerNameYear(towerId) {
     if (towerId === 33023) return "2022";
     if (towerId === 33026) return "2022";
     if (towerId === 33033) return "2022";
-    if (towerId === 33034) return "2022";
+    if (towerId === 33034) return "2023";
 
     return undefined;
 }
