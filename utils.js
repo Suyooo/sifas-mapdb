@@ -159,6 +159,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2085") return "SUPER NOVA";
     if (liveId === "2102") return "Eternal Light";
     if (liveId === "2117") return "Saika -saika-";
+    if (liveId === "2125") return "Shadow Effect";
     if (liveId === "2032") return "Dream Land! Dream World!";
     if (liveId === "2068") return "Kakushiaji!";
     if (liveId === "2065") return "Cheer for you!!";
