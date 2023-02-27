@@ -118,6 +118,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1101") return "Shiny Racers";
     if (liveId === "1068") return "RED GEM WINK";
     if (liveId === "1102") return "Cotton Candy Ei Ei Oh!";
+    if (liveId === "1103") return "DREAMY COLOR";
 
     // Nijigaku
     if (liveId === "2001") return "TOKIMEKI Runners";
