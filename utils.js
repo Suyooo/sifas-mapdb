@@ -46,6 +46,7 @@ function songNameRomaji(liveId) {
     if (liveId === "0038") return "Diamond Princess no Yuutsu";
     if (liveId === "0004") return "Shunjou Romantic";
     if (liveId === "0049") return "Binetsu kara Mystery";
+    if (liveId === "0027") return "Shiranai Love*Oshiete Love";
     if (liveId === "0015") return "NO EXIT ORION";
     if (liveId === "0025") return "sweet&sweet holiday";
     if (liveId === "0024") return "Love marginal";
