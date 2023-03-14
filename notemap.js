@@ -48,6 +48,7 @@ const removeTargetSet = new Set([3, 4, 5, 68, 69, 70, 91, 93, 96, 101, 105, 112,
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
+    if (targetId === 13) return 'Kanan units ';
     if (targetId === 14) return 'Dia units ';
     if (targetId === 15) return 'You units ';
     if (targetId === 16) return 'Yoshiko units ';

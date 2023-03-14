@@ -107,6 +107,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1059") return "One More Sunshine Story";
     if (liveId === "1065") return "Pianoforte Monologue";
     if (liveId === "1070") return "Sakana ka Nanda ka?";
+    if (liveId === "1096") return "Motto ne!";
     if (liveId === "1067") return "WHITE FIRST LOVE";
     if (liveId === "1097") return "Perfect SEKAI";
     if (liveId === "1066") return "Beginner's Sailing";
