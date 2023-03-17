@@ -183,6 +183,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2087") return "Sing & Smile!!";
     if (liveId === "2103") return "ENJOY IT!";
     if (liveId === "2119") return "Twinkle Town";
+    if (liveId === "2127") return "PASTEL";
     if (liveId === "2056") return "MONSTER GIRLS";
     if (liveId === "2124") return "Vroom Vroom";
     if (liveId === "2002") return "Yume e no Ippo";
