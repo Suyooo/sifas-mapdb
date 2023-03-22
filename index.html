@@ -3,8 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>SIFAS Note Map Database</title>
-    <meta name="og:title"
-          content="Idol School All-Stars Festival - Postcard Database">
     <meta name="description"
           content="Song information database for SIFAS, including complete note maps, gimmick note timings and AC rewards.">
     <link rel="canonical" href="https://suyo.be/sifas/mapdb/"/>
@@ -29,8 +27,8 @@
 </head>
 <body class="loading">
 <script>
-    if (document.cookie.indexOf("dark-mode=yes") !== -1) {
-        document.body.className += ' dark-mode';
+    if (localStorage.getItem("dark-mode") === "yes") {
+        document.body.className += " dark-mode";
     }
 </script>
 <div class="font-preload">
@@ -139,7 +137,8 @@
                     and Enter to open up the maps. And most importantly - just start typing anywhere you want, and
                     you'll immediately jump to the Search tab! Once you're focused on a song, you can use Left/Right to
                     scroll the note bar, change the displayed difficulty with Ctrl+Left/Right, or press Ctrl+1-9/0 to
-                    highlight note gimmicks. (If you're on Mac, it works the same, with Cmd instead of Ctrl!)
+                    highlight note gimmicks. Finally, you can use Ctrl+A and Ctrl+S to toggle song info dropdowns and
+                    the timeline scale! (If you're on Mac, it works the same, with Cmd instead of Ctrl!)
                 </li>
                 <li>
                     After selecting a difficulty or DLP floor, you can copy the URL from the address bar. Share it with
@@ -147,24 +146,20 @@
                     who need song information!
                 </li>
             </ul>
-            <b>The TODO Corner:</b>
-            <ul class="browser-default">
-                <li>
-                    Fix history going a little wack when searching
-                </li>
-                <li>
-                    Make note bar measurement work with touch events
-                </li>
-                <li>
-                    Make location hash handler only force indicator if a collapsible is opened, not if it's already open
-                </li>
-            </ul>
         </div>
         <div id="tab_search" class="col s12" data-type="fixed">
             <div class="input-field" style="width: 100%">
                 <i class="material-icons prefix">search</i>
                 <input id="search_input" type="text">
-                <label for="search_input">Filter By Song Name (Japanese or Romanized)</label>
+                <label for="search_input">
+                    Filter By Song Name (Full Title or Abbreviations, Kana or Romanized)
+                    <span class="explain-button bigger">
+                        <a class="tooltipped" data-position="top" data-delay="0"
+                                                          data-tooltip="You can use abbreviations like <span>m start</span>, <span>kimikoko</span> or <span>nsnm</span>.<br>You can also add <span>+</span> or <span>++</span> to the end to instantly open the Adv+ or Challenge tab.">
+                            <i class="material-icons">help</i>
+                        </a>
+                    </span>
+                </label>
             </div>
             <div id="search_loading" class="unloaded">Loading...</div>
         </div>
@@ -174,24 +169,6 @@
         <div id="tab_liella" class="col s12 unloaded group-tab" data-type="free">Loading...</div>
         <div id="tab_dlp" class="col s12 unloaded" data-type="dlp">Loading...</div>
         <div id="tab_rankings" class="col s12 unloaded" data-type="top">Loading...</div>
-    </div>
-</div>
-<div class="popup-background valign-wrapper" id="popUpCookieConsent">
-    <div class="popup-dialog z-depth-5 card">
-        <div class="card-content">
-            <h5>Cookie Policy</h5>
-            SIFAS Map DB uses cookies to store your preferences. It will only do so if you agree to this message.
-            The page is still functional without if you do not allow storage, however, the site will reset to default
-            settings on every visit. No other data is stored, and this information is not saved on the server or used to
-            identify you.<br>
-            You can revoke your consent at any time by removing all cookies saved on your device by this site.<br>
-            <br>
-            Do you agree with the cookie policy and allow this site to store cookies on your device?
-        </div>
-        <div class="card-action right-align">
-            <a class="orange-text has-on-click" id="consentYesButton" tabindex="0">Yes</a>
-            <a class="orange-text has-on-click" id="consentNoButton" tabindex="0">No</a>
-        </div>
     </div>
 </div>
 <div class="popup-background valign-wrapper" id="popUpPreferences">
@@ -212,7 +189,7 @@
                 <input name="preferencesUnavailable" type="radio" id="preferencesUnavailableShow" value="show">
                 <label for="preferencesUnavailableShow">Show</label>
             </div>
-            <span class="form-label">Dark Mode (BETA)</span>
+            <span class="form-label">Dark Mode (might look slightly wacky)</span>
             <div class="radio-row">
                 <input name="preferencesDarkMode" type="radio" id="preferencesDarkModeOff" value="no" checked>
                 <label for="preferencesDarkModeOff">Off</label>
@@ -232,6 +209,8 @@
 </div>
 <script type="text/javascript" src="vendor/jquery.min.js"></script>
 <script type="text/javascript" src="vendor/materialize.min.js"></script>
+<script type="text/javascript" src="vendor/fuzzysort.min.js"></script>
 <script type="text/javascript" src="js/mapdb.js"></script>
+<script type="text/javascript" src="js/searchindex.js"></script>
 </body>
 </html>

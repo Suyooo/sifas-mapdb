@@ -51,6 +51,10 @@ body:not(.loading) > .container {
     width: 100%;
 }
 
+.song-name {
+    font-weight: bold;
+}
+
 .floorno {
     width: 3em;
 }
@@ -116,7 +120,7 @@ h5 {
     margin-right: 4em;
 }
 
-body:not(.show-unavail) .collapsible.unavail {
+body:not(.show-unavail) .collapsible.unavail, body:not(.show-unavail) .tab.unavail {
     display: none;
 }
 
@@ -125,27 +129,24 @@ body:not(.show-unavail) .collapsible.unavail {
     color: var(--dark-border);
 }
 
-
-.collapsible.note .collapsible-header b::after {
-    font-weight: normal;
-    margin-left: 0.5em;
+.tab.unavail {
+    background-color: var(--option);
 }
 
-.collapsible.temp .collapsible-header b::after {
-    content: "(time-limited)";
+.collapsible-header .postfix, .collapsible-header .note {
+    margin-left: .25em;
 }
 
-.collapsible.temp.has-date .collapsible-header b::after {
-    content: "(time-limited, " attr(data-end-formatted) ")";
+.postfix {
+    font-weight: bold;
+}
+
+.collapsible-header .note, .rankingtable .note {
+    font-style: italic;
+}
+
+.expiry-time {
     border-bottom: 1px dashed var(--dark-border);
-}
-
-.collapsible.unavail .collapsible-header b::after {
-    content: "(unavailable)";
-}
-
-.collapsible.daily .collapsible-header b::after {
-    content: "(daily: " attr(data-weekday) ")";
 }
 
 .collapsible-body .tabs.tabs-transparent {
@@ -166,8 +167,17 @@ body:not(.show-unavail) .collapsible.unavail {
     text-decoration: none;
 }
 
-.collapsible-body .tabs.tabs-transparent.fakeindicator .tab a.active {
-    border-bottom: 5px solid var(--key-normal);
+.tabs.tabs-transparent .tab a {
+    border-bottom: 0 solid var(--key-normal);
+    transition: border-bottom-width .3s;
+}
+
+.tabs.tabs-transparent .tab a.active {
+    border-bottom-width: 5px;
+}
+
+.indicator {
+    display: none;
 }
 
 div.group-tab {
@@ -194,9 +204,46 @@ body.show-unavail div.group-tab div.no-available-songs {
     vertical-align: text-bottom;
 }
 
+.live-extra-toggle {
+    position: relative;
+}
+
+.live-extra-toggle::after {
+    display: inline-block;
+    width: 1em;
+    height: 1.5em;
+    line-height: 1.5em;
+    content: "keyboard_arrow_down";
+    font-family: 'Material Icons';
+    font-size: .75em;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    left: .25em;
+    top: 0;
+}
+
+.live-extra-toggle.open::after {
+    content: "keyboard_arrow_up";
+}
+
+.live-extra-container {
+    height: 0;
+    overflow: hidden;
+    transition: height .5s;
+    margin-left: .25em;
+    padding-left: .5em;
+    border-left: 1px var(--dark-border) solid;
+}
+
+.live-extra-toggle.open + .live-extra-container {
+    height: 4.5em;
+}
+
 .notebarcontainer {
     overflow-x: auto;
     overflow-y: hidden;
+    clear: both;
 }
 
 .notebar {
@@ -206,8 +253,8 @@ body.show-unavail div.group-tab div.no-available-songs {
     position: relative;
     height: 1em;
     user-select: none;
-    --gimmicklayers: -999;
-    margin: calc((var(--gimmicklayers) * 0.625 + 0.5) * 1em) 0 1.2em;
+    --markerlayers: 0;
+    margin: calc((var(--markerlayers) * 0.625 + 0.5) * 1em) 0 1.2em;
     z-index: 1;
     font-size: 150%;
 }
@@ -231,6 +278,9 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .appealchance {
     position: absolute;
+    left: var(--time-pos);
+    width: var(--time-len);
+    transition: left .3s, width .3s;
     top: 0;
     height: 100%;
     font-size: 70%;
@@ -257,6 +307,8 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .note {
     position: absolute;
+    left: var(--time-pos);
+    transition: left .3s;
     height: 50%;
     background: var(--sidenav);
     width: 2px;
@@ -274,6 +326,9 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .hold {
     position: absolute;
+    left: var(--time-pos);
+    width: var(--time-len);
+    transition: left .3s, width .3s;
     height: 0.25em;
     z-index: 4;
     background: repeating-linear-gradient(to right, var(--sidenav) 0%, var(--sidenav) 50%, transparent 50%, transparent 100%);
@@ -299,10 +354,12 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .notebar .gimmick {
     position: absolute;
+    left: var(--time-pos);
+    width: var(--time-len);
+    transition: opacity .2s, top .2s, left .3s, width .3s;
     font-size: 50%;
     --gimmicklayer: -999;
     --gimmicklayer-filtered: -999;
-    transition: opacity .2s, top .2s;
     user-select: none;
     top: calc((-1.45 - var(--gimmicklayer) * 1.25) * 1em);
     background: var(--panel);
@@ -344,6 +401,8 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .notebar .marker {
+    left: var(--time-pos);
+    transition: left .3s;
     width: 2em;
     text-align: center;
     position: absolute;
@@ -370,6 +429,48 @@ body.show-unavail div.group-tab div.no-available-songs {
     position: absolute;
     opacity: 0.5;
     z-index: 6;
+}
+
+.scale {
+    display: flex;
+    font-size: 70%;
+    color: var(--dark-border);
+    justify-content: end;
+    margin-top: -1.9em;
+}
+
+.scale .header {
+    padding: .2em;
+    font-weight: bold;
+}
+
+.scale .time, .scale .turns {
+    padding: .2em .5em;
+    margin-left: .5em;
+    cursor: pointer;
+    border-radius: 1em;
+    background-color: var(--panel);
+    border: 1px solid var(--key-normal);
+    transition: background-color .2s;
+}
+
+.scale:not(.turnscale) .time, .scale.turnscale .turns {
+    border-radius: 1em;
+    background-color: var(--key-normal);
+}
+
+.scale.turnscale + .notebarcontainer .note,
+.scale.turnscale + .notebarcontainer .marker,
+.scale.turnscale + .notebarcontainer .appealchance,
+.scale.turnscale + .notebarcontainer .hold,
+.scale.turnscale + .notebarcontainer .gimmick {
+    left: var(--turn-pos);
+}
+
+.scale.turnscale + .notebarcontainer .appealchance,
+.scale.turnscale + .notebarcontainer .hold,
+.scale.turnscale + .notebarcontainer .gimmick {
+    width: var(--turn-len);
 }
 
 .detailinfo h5 {
@@ -421,6 +522,43 @@ body.show-unavail div.group-tab div.no-available-songs {
     margin-top: 0.33em;
 }
 
+.detailinfo > div.gimmick .slotcontainer {
+    display: inline-block;
+}
+
+.detailinfo > div.gimmick .slot {
+    border-radius: 1em;
+    background-color: var(--panel);
+    border: 1px solid var(--key-normal);
+    transition: background-color .2s;
+    padding: .2em .5em;
+    margin-left: .5em;
+    white-space: nowrap;
+}
+
+.detailinfo > div.gimmick .slot.filtered {
+    background-color: var(--key-normal);
+}
+
+.tooltip .slot {
+    display: none;
+}
+
+.detailinfo .songgimmick {
+    width: 100%;
+    display: flex;
+}
+
+.detailinfo .songgimmick > .number {
+    flex: 0 1 0;
+    font-weight: bold;
+    padding-right: .5em;
+}
+
+.detailinfo .songgimmick > .text {
+    flex: 1 1 0;
+}
+
 .detailinfo > div.filtered > div:first-child {
     background-color: var(--key-normal);
 }
@@ -461,6 +599,33 @@ body.show-unavail div.group-tab div.no-available-songs {
 
 .tooltip .col.m6 {
     width: 100%;
+}
+
+.live-difficulty.active, ul.floor li.active .live-difficulty {
+    overflow-y: hidden;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.live-difficulty.active {
+    max-height: calc(100vh - 5rem - 83px);
+}
+
+ul.floor li.active .live-difficulty {
+    max-height: calc(100vh - 5rem);
+}
+
+div.active[id$="-story"] .live-difficulty.active {
+    max-height: calc(100vh - 5rem - 141px);
+}
+
+.live-difficulty > * {
+    flex-shrink: 0;
+}
+
+.live-difficulty > .detailinfo-container {
+    flex: 1 1 100%;
+    overflow-y: auto;
 }
 
 .tower .collapsible-body .collapsible {
@@ -546,7 +711,7 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .striped-manually > tbody > tr.odd {
-    background-color: var(--option);
+    background-color: var(--sneaky);
 }
 
 .rankingtable {
@@ -562,12 +727,17 @@ body.show-unavail div.group-tab div.no-available-songs {
 }
 
 .rankingtable thead tr {
-    background-color: var(--key-low) !important;
+    background-color: var(--key-normal) !important;
 }
 
 .rankingtable tr.hidden {
     display: none;
-    background-color: var(--border);
+    background-color: var(--key-low);
+}
+
+.rankingtable tr.hidden.odd {
+    display: none;
+    background-color: var(--key-low2);
 }
 
 .rankingtable.show-all tr.hidden {
@@ -621,6 +791,18 @@ body.show-unavail div.group-tab div.no-available-songs {
 
     .rankingtable.open tr.open-button {
         display: none;
+    }
+
+    .scale {
+        margin-top: 0;
+    }
+
+    .live-extra-toggle::after {
+        width: 3em;
+        height: 3.5em;
+        line-height: 3.5em;
+        left: -.75em;
+        top: -1em;
     }
 }
 

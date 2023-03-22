@@ -1,0 +1,125 @@
+<div class="col l6">
+    <h5>Shortest Song Lengths</h5>
+    <table class="striped-manually rankingtable" style="display: table;">
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Song</th>
+            <th>Length</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% let rankDefault = 0, rankAll = 0, cntDefault = 1, cntAll = 1, last = undefined,
+                oddDefault = false, oddAll = false; %>
+        <% for (const rank of length) { %>
+            <%
+                if (rank.length !== last) {
+                    rankDefault = cntDefault;
+                    rankAll = cntAll;
+                }
+                if (rank.showByDefault) {
+                    oddDefault = !oddDefault;
+                    cntDefault++;
+                } else {
+                    oddAll = !oddAll;
+                }
+                cntAll++;
+                last = rank.length;
+            %>
+            <tr class="
+                <% if (rank.showByDefault) { %>
+                    <%- oddDefault ? "odd" : "" %>
+                <% } else { %>
+                    hidden <%- oddAll ? "odd" : "" %>
+                <% } %>
+                <% if (rankDefault >= 11) { %>
+                    hide-if-narrow
+                <% } %>">
+                <td>
+                    <span class="notopen"><%- rankDefault %></span>
+                    <span class="open"><%- rankAll %></span>
+                </td>
+                <td style="background-image: url('image/icon_<%- rank.attribute %>.png')">&nbsp;</td>
+                <td>
+                    <a href="#live<%- rank.linkTo %>">
+                        <span class="song-name translatable" data-rom="<%- rank.nameRomaji %>"><%- rank.nameKana %></span>
+                        <% if (rank.namePostfix) { %> <span class="postfix">(<%- rank.namePostfix %>)</span><% } %>
+                        <% if (rank.hasNonAdvDifficulty) { %> <span class="note">(<%- rank.difficulty %>)</span><% } %>
+                    </a>
+                </td>
+                <td><%- Math.floor(rank.length / 60000) %>:<%- ((rank.length % 60000 / 1000).toFixed(3)).padStart(6, "0") %></td>
+            </tr>
+        <% } %>
+        <tr class="open-button">
+            <td colspan="4"><a class="has-on-click waves-effect orange lighten-3 waves-light btn" tabindex="0"
+                               style="color: var(--text)">show full list</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <small class="right">(only showing songs currently available on JP - <a class="has-on-click" tabindex="0">click to
+            see all known songs</a>)</small>
+</div>
+<div class="col l6">
+    <h5>Highest Note Counts</h5>
+    <table class="striped-manually rankingtable" style="display: table;">
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Song</th>
+            <th>Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% rankDefault = 0, rankAll = 0, cntDefault = 1, cntAll = 1, last = undefined,
+                oddDefault = false, oddAll = false; %>
+        <% for (const rank of note) { %>
+            <%
+                if (rank.noteCount !== last) {
+                    rankDefault = cntDefault;
+                    rankAll = cntAll;
+                }
+                if (rank.showByDefault) {
+                    oddDefault = !oddDefault;
+                    cntDefault++;
+                } else {
+                    oddAll = !oddAll;
+                }
+                cntAll++;
+                last = rank.noteCount;
+            %>
+            <tr class="
+                <% if (rank.showByDefault) { %>
+                    <%- oddDefault ? "odd" : "" %>
+                <% } else { %>
+                    hidden <%- oddAll ? "odd" : "" %>
+                <% } %>
+                <% if (rankDefault >= 11) { %>
+                    hide-if-narrow
+                <% } %>">
+                <td>
+                    <span class="notopen"><%- rankDefault %></span>
+                    <span class="open"><%- rankAll %></span>
+                </td>
+                <td style="background-image: url('image/icon_<%- rank.attribute %>.png')">&nbsp;</td>
+                <td>
+                    <a href="#live<%- rank.linkTo %>">
+                        <span class="song-name translatable" data-rom="<%- rank.nameRomaji %>"><%- rank.nameKana %></span>
+                        <% if (rank.namePostfix) { %> <span class="postfix">(<%- rank.namePostfix %>)</span><% } %>
+                        <% if (rank.hasNonAdvDifficulty) { %> <span class="note">(<%- rank.difficulty %>)</span><% } %>
+                    </a>
+                </td>
+                <td><%- rank.noteCount %></td>
+            </tr>
+        <% } %>
+        <tr class="open-button">
+            <td colspan="4"><a class="has-on-click waves-effect orange lighten-3 waves-light btn" tabindex="0"
+                               style="color: var(--text)">show full list</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <small class="right">(only showing songs that can be displayed on your profile - <a class="has-on-click"
+                                                                                        tabindex="0">click to see all
+            known songs</a>)</small>
+</div>

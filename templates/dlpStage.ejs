@@ -1,0 +1,21 @@
+<div class="row nomargin">
+    <div class="col l6">
+        <b>Target Voltage:</b> <%- targetVoltage %><br>
+        <b>Clear Reward:</b> <%- clearReward %><br>
+        <b>Base Note Damage:</b> <%- noteDamage %>
+        <% if (hasNoteDamageRate) { %>
+            (<%- noteDamageRate %>% of Free Live)
+        <% } %>
+    </div>
+    <div class="col l6">
+        <b>Base Difficulty:</b> <%- baseDifficulty %><br>
+        <b>Appeal Voltage Cap:</b> <%- capTap %> <span class="live-extra-toggle"></span>
+        <div class="live-extra-container">
+            <b>SP Voltage Cap:</b> <%- capSp %><br>
+            <b>Skill Voltage Cap:</b> <%- capSkill %><br>
+            <b>Swap Bonus Voltage Cap:</b> <%- capSwap %>
+        </div>
+        <b>SP Gauge Size:</b> <%- spGaugeSize %>
+    </div>
+</div>
+<%- include('notemap', noteMap); %>

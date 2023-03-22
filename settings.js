@@ -1,7 +1,4 @@
 module.exports = {
-    "current_event_live_ids": [],
-    "limited_song_deadlines": {
-        12091: 1646632740,
-        13007: 1647151140
-    }
+    "active_event_live_ids": [20027], // first five digits as integer
+    "limited_song_deadlines": {} // (mapping: live ID => unix timestamp in ms)
 };

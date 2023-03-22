@@ -1,0 +1,48 @@
+<b>Performance Points:</b> <%- ppAtStart %> (+ <%- ppRecoveryLimit %> recoverable)<br>
+<b>PP Recovery Cost:</b> <%- ppRecoveryCost %> Loveca Stars<br>
+<br>
+<% for (const floor of floors) { %>
+    <% if (floor.isStory) { %>
+        <div class="fake-collapsible-header">
+            <div class="spacer">&nbsp;</div>
+            <b>Story Node:</b>&nbsp;<%- floor.storyTitle %>
+        </div>
+    <% } else { %>
+        <ul class="collapsible floor" id="<%- id %>-<%- floor.floorNo %>" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header <% if (floor.isSuperStage) { %>light-blue lighten-5<% } %>">
+                    <img src="image/icon_<%- floor.attribute %>.png" alt="<%- floor.attribute %>">
+                    <b class="floorno"><%- floor.floorNo %>)</b>
+                    <div class="row">
+                        <div class="col l3">
+                            <span class="song-name translatable" data-rom="<%- floor.nameRomaji %> data-jpn="<%- floor.nameKana %> data-apr="<%- floor.nameApril %>">
+                                <%- floor.nameApril %>
+                            </span>
+                            <% if (floor.namePostfix) { %><span class="postfix">(<%- floor.namePostfix %>)</span><% } %>
+                        </div>
+                        <div class="col l3"><b>Target:</b> <%- floor.targetVoltage %></div>
+                        <div class="col l3">
+                            <% if (floor.noteMap.hasSongGimmicks) { %>
+                                <b>Cleansable:</b> <%- floor.noteMap.songGimmicks.some(g => g.isCleansable) ? "Yes" : "No" %>
+                            <% } else { %>
+                                &nbsp;
+                            <% } %>
+                        </div>
+                        <div class="col l3">
+                            <b>Note Damage:</b>
+                            <%- floor.noteDamage %>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapsible-body live-difficulty unloaded" id="<%- floor.liveDifficultyId %>">
+                    Loading...
+                </div>
+            </li>
+        </ul>
+    <% } %>
+    <% if (floor.hasProgressReward) { %>
+        <div class="progress reward"><b>Progress Reward:</b> <%- floor.progressReward %></div>
+    <% } else { %>
+        <div class="progress">&nbsp;</div>
+    <% } %>
+<% } %>
