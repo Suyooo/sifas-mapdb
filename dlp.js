@@ -1,6 +1,6 @@
 /*
 This file generates the DLP info page from the tower information in the tower folder.
-Copyright (C) 2020-2022 Suyooo
+Copyright (C) 2020-2023 Suyooo
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
