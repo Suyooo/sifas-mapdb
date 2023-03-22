@@ -1,6 +1,6 @@
 /*
 This file generates the map database page from all the files in the mapdb folder.
-Copyright (C) 2020-2022 Suyooo
+Copyright (C) 2020-2023 Suyooo
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
