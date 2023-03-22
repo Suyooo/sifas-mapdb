@@ -456,6 +456,48 @@ function songNameApril(live_id) {
     if (liveId === "1090") return "fly to the future";
     if (liveId === "0100") return "couple ring ";
 
+    if (liveId === "0007") return "The only child";
+    if (liveId === "0022") return "I love you too!";
+    if (liveId === "0024") return "Love on the border";
+    if (liveId === "0038") return "Diamond Princess grief";
+    if (liveId === "0078") return "emotional measures";
+    if (liveId === "0087") return "The song of the sun";
+    if (liveId === "0027") return "Anonymous love * Talk about love";
+    if (liveId === "1016") return "Accor ☆ Heroes";
+    if (liveId === "1054") return "Adventure is in front of you";
+    if (liveId === "1083") return "jump up and down! !";
+    if (liveId === "1092") return "I promise you no matter what!";
+    if (liveId === "1093") return "Long live! digital hiker";
+    if (liveId === "1096") return "far!";
+    if (liveId === "1097") return "The ideal world";
+    if (liveId === "1098") return "A wonderful girl";   // good opinion
+    if (liveId === "1099") return "my head";
+    if (liveId === "1100") return "Miss Run Running";
+    if (liveId === "1101") return "excellent runner";
+    if (liveId === "1102") return "Cockroach AA AA!";   // AAAAAAAAAAAAAAA
+    if (liveId === "1103") return "a nice color";
+    if (liveId === "2096") return "Just believe it! ! ! (see 12 people)";
+    if (liveId === "2097") return "Eternal time";
+    if (liveId === "2099") return "Different smiles! Dreamy colors!";
+    if (liveId === "2100") return "I dream of the sun";
+    if (liveId === "2102") return "infinite light";
+    if (liveId === "2103") return "fun!";
+    if (liveId === "2104") return "several! Ice wings! !";
+    if (liveId === "2105") return "method";
+    if (liveId === "2106") return "The stars we attack";
+    if (liveId === "2107") return "The virtuous city";
+    if (liveId === "2108") return "future weapons";
+    if (liveId === "2110") return "Please look forward to the miracle!";
+    if (liveId === "2121") return "Please look forward to the miracle! (second door)";
+    if (liveId === "2111") return "being in the dark";
+    if (liveId === "2112") return "In confusion! The Road to Victory (Form A)";
+    if (liveId === "2113") return "In confusion! The Road to Victory (Form B)";
+    if (liveId === "2122") return "Vacho and others";
+    if (liveId === "2124") return "Engine breakdown";
+    if (liveId === "2125") return "but the results";
+    if (liveId === "2126") return "Green!"; // colours in languages are fun
+    if (liveId === "2127") return "pie";
+
     console.log("Unknown Funny Name for " + live_id);
 }
 

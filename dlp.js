@@ -93,6 +93,25 @@ function towerNameApril(towerId) {
     if (towerId === 33020) return "Dream Live Parade ~ SK boys on stage ~";
     if (towerId === 33021) return "Dream live parade - pure / smiling on stage - ";
 
+    if (towerId === 33022) return "Dream Live Parade ~ Cool / Active Stage ~";
+    if (towerId === 33023) return "Dream Live Parade ~ Natural and elegant stage ~";
+    if (towerId === 33024) return "Dream walk ~ first class ~";
+    if (towerId === 33025) return "Dream Living Parade ~Stage II Year~";
+    if (towerId === 33026) return "Dream Living Parade ~Category Stage 3~";
+    if (towerId === 33027) return "Dream Parade Live ~ 3rd Birthday (Part 1)~";
+    if (towerId === 33028) return "Parade of Living Dreams ~3. Birthday (Part 2)~";
+    if (towerId === 33029) return "Parade of Living Dreams ~3. Birthday (Part 2)~"; // [sic]
+    if (towerId === 33030) return "Dream Live Parade ~ 3rd Anniversary Advance TOKIMEKI!";
+    if (towerId === 33031) return "Dream Live Parade ~µ's on stage~";
+    if (towerId === 33032) return "Dream Live Parade ~Acours on Stage~";
+    if (towerId === 33033) return "Dream Live Parade ~Rainbow Stage~";
+    if (towerId === 33034) return "Dream Live Parade ~SP Stage Race~";
+    if (towerId === 33035) return "Dream Live Parade ~ Genre Stage Gd ~";
+    if (towerId === 33036) return "Dreamwalk ~ All Stars ~";
+    if (towerId === 33037) return "Dream Live Parade ~3.5 Year Anniversary First Diary~";
+    if (towerId === 33038) return "Dream Live Parade ~ 3.5 and 2 Birthday Diary ~";
+    if (towerId === 33039) return "Dream Live Parade ~3.5 Year Anniversary 3rd Diary~";
+
     throw new Error("Unknown Funny Tower Name for " + towerId);
 }
 
