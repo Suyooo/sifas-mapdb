@@ -36,7 +36,7 @@ function format(x) {
 }
 
 function skill(skill) {
-    let eff = skillEffect(skill.effect_type, skill.effect_amount);
+    let eff = " " + skillEffect(skill.effect_type, skill.effect_amount);
     return (removeTargetSet.has(skill.effect_type) ? "" : skillTarget(skill.target)) + eff +
         skillFinish(skill.finish_type, skill.finish_amount, eff.indexOf("SP Voltage Gain") !== -1);
     // TODO: The parameter for isSPVoltageGainBuff is based on the skill effect strings above right now...
