@@ -112,6 +112,7 @@ function towerNameApril(towerId) {
     if (towerId === 33037) return "Dream Live Parade ~3.5 Year Anniversary First Diary~";
     if (towerId === 33038) return "Dream Live Parade ~ 3.5 and 2 Birthday Diary ~";
     if (towerId === 33039) return "Dream Live Parade ~3.5 Year Anniversary 3rd Diary~";
+    if (towerId === 33040) return "Dream Parade Live ~ 3.5 year final program ~";
 
     throw new Error("Unknown Funny Tower Name for " + towerId);
 }

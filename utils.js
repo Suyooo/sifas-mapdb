@@ -463,6 +463,7 @@ function songNameApril(live_id) {
     if (liveId === "0038") return "Diamond Princess grief";
     if (liveId === "0078") return "emotional measures";
     if (liveId === "0087") return "The song of the sun";
+    if (liveId === "0122") return "The song of the sun";
     if (liveId === "0027") return "Anonymous love * Talk about love";
     if (liveId === "1016") return "Accor ☆ Heroes";
     if (liveId === "1054") return "Adventure is in front of you";
