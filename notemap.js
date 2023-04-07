@@ -48,6 +48,7 @@ const removeTargetSet = new Set([3, 4, 5, 68, 69, 70, 91, 93, 96, 101, 105, 112,
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
+    if (targetId === 12) return 'Riko units ';
     if (targetId === 13) return 'Kanan units ';
     if (targetId === 14) return 'Dia units ';
     if (targetId === 15) return 'You units ';
@@ -143,6 +144,7 @@ function skillEffect(typeId, amount) {
     if (typeId === 26) return 'gain ' + format(amount / 100) + '% Base Appeal';
     if (typeId === 33) return 'gain ' + format(amount / 100) + '% Base Skill Activation Chance';
     if (typeId === 36) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
+    if (typeId === 40) return 'gain ' + format(amount / 100) + '% Base Critical Power';
     if (typeId === 45) return 'gain ' + format(amount / 100) + '% Base SP Gauge Fill Rate';
     if (typeId === 46) return 'gain ' + format(amount / 100) + '% Base Critical Chance';
     if (typeId === 47) return 'gain ' + format(amount / 100) + '% Base Critical Power';
