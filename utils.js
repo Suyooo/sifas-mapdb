@@ -96,6 +96,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1092") return "Nando Datte Yakusoku!";
     if (liveId === "1093") return "BANZAI! digital trippers";
     if (liveId === "1054") return "Kimi no Hitomi o Meguru Bouken";
+    if (liveId === "1055") return "Yuuki wa Doko ni? Kimi no Mune ni!";
     if (liveId === "1005") return "Torikoriko PLEASE!!";
     if (liveId === "1082") return "Amazing Travel DNA";
     if (liveId === "1044") return "GALAXY HidE and SeeK";
