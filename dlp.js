@@ -179,6 +179,7 @@ for (const towerId of towerIds) {
             floorNo: floor.floor_number,
             isStory: false,
             isSuperStage: floor.floor_type === DLPFloorType.SUPER_STAGE,
+            isBonusStage: floor.floor_type === DLPFloorType.BONUS_STAGE,
             liveDifficultyId: floor.live_difficulty_id,
             nameKana: floor.song_name,
             nameRomaji: Utils.songNameRomaji(floor.live_id),

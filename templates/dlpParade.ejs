@@ -10,7 +10,9 @@
     <% } else { %>
         <ul class="collapsible floor" id="<%- id %>-<%- floor.floorNo %>" data-collapsible="expandable">
             <li>
-                <div class="collapsible-header <% if (floor.isSuperStage) { %>light-blue lighten-5<% } %>">
+                <div class="collapsible-header
+                    <% if (floor.isSuperStage) { %>light-blue lighten-5<% } %>
+                    <% if (floor.isBonusStage) { %>red lighten-5<% } %>">
                     <img src="image/icon_<%- floor.attribute %>.png" alt="<%- floor.attribute %>">
                     <b class="floorno"><%- floor.floorNo %>)</b>
                     <div class="row">
