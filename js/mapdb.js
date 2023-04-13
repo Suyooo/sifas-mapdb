@@ -352,6 +352,7 @@ function handleLocation() {
     if (window.location.hash) return;
     disableHistory = true;
     let location = window.location.search.substring(1);
+    while (location.endsWith("=")) location = location.substring(0, location.length - 1);
 
     if (location.startsWith("live")) {
         // Direct link to a live difficulty
