@@ -14,7 +14,7 @@
                     <% if (floor.isSuperStage) { %>light-blue lighten-5<% } %>
                     <% if (floor.isBonusStage) { %>red lighten-5<% } %>">
                     <img src="image/icon_<%- floor.attribute %>.png" alt="<%- floor.attribute %>">
-                    <b class="floorno"><%- floor.floorNo %>)</b>
+                    <b class="floorno"><%- floor.isBonusStage ? "★" : floor.floorNo %>)</b>
                     <div class="row">
                         <div class="col l3">
                             <span class="song-name translatable" data-rom="<%- floor.nameRomaji %>"><%- floor.nameKana %></span>
@@ -41,8 +41,22 @@
         </ul>
     <% } %>
     <% if (floor.hasProgressReward) { %>
-        <div class="progress reward"><b>Progress Reward:</b> <%- floor.progressReward %></div>
-    <% } else { %>
+        <div class="progress reward">
+            <b>
+                <% if (floor.isClearReward) { %>
+                    Clear Reward:
+                <% } else { %>
+                    Progress Reward:
+                <% } %>
+            </b>
+            <%- floor.progressReward %>
+            <% if (floor.unlocksBonusStages) { %>
+                <br><b>Bonus Stages</b> for Voltage Ranking are unlocked
+            <% } %>
+        </div>
+    <% } else if (!floor.isBonusStage) { %>
         <div class="progress">&nbsp;</div>
+    <% } else { %>
+        <div class="progress noline">&nbsp;</div>
     <% } %>
 <% } %>

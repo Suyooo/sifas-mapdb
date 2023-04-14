@@ -635,23 +635,38 @@ div.active[id$="-story"] .live-difficulty.active {
 
 .progress {
     background: none;
-    height: 1.5em;
+    height: unset;
     line-height: 1em;
     margin: 0 0 0 1.66em;
     padding-left: 2em;
-    border-left: 5px dotted var(--key-normal);
+    border-left: 4px dotted var(--key-normal);
     text-transform: uppercase;
+    overflow: visible;
 }
 
 .progress.reward {
-    height: 5em;
-    padding-top: 2em;
+    padding-top: 1.75em;
+    line-height: 1.5em;
+    padding-bottom: 1.75em;
 }
 
 .progress.reward:last-child {
-    height: 3em;
-    overflow: visible;
-    margin-bottom: 2em;
+    padding-bottom: 0.25em;
+}
+
+.progress.reward:last-child::before {
+    content: " ";
+    position: absolute;
+    left: calc(-.375em - 2px);
+    width: .75em;
+    height: .75em;
+    border-radius: 1em;
+    background: var(--key-normal);
+    bottom: 0;
+}
+
+.progress.noline {
+    border-left: none;
 }
 
 .input-field .prefix.active {

@@ -160,6 +160,7 @@ for (const towerId of towerIds) {
     }
 
     const floorSavePromises = [];
+    let bonusStagesUnlocked = false;
     for (const floor of tower.floors) {
         if (floor.floor_type === DLPFloorType.STORY) {
             towerData.floors.push({
@@ -178,11 +179,18 @@ for (const towerId of towerIds) {
             linked_live.note_damage = floor.note_damage;
         }
 
+        if (floor.floor_type === DLPFloorType.BONUS_STAGE && !bonusStagesUnlocked) {
+            towerData.floors.at(-1).unlocksBonusStages = true;
+            towerData.floors.at(-1).isClearReward = true;
+            bonusStagesUnlocked = true;
+        }
+
         const floorData = {
             floorNo: floor.floor_number,
             isStory: false,
             isSuperStage: floor.floor_type === DLPFloorType.SUPER_STAGE,
             isBonusStage: floor.floor_type === DLPFloorType.BONUS_STAGE,
+            unlocksBonusStages: false,
             liveDifficultyId: floor.live_difficulty_id,
             nameKana: floor.song_name,
             nameRomaji: Utils.songNameRomaji(floor.live_id),
@@ -191,6 +199,7 @@ for (const towerId of towerIds) {
             targetVoltage: notemap.format(floor.voltage_target),
             clearReward: makeRewardString(floor.reward_clear),
             hasProgressReward: floor.reward_progress !== null,
+            isClearReward: false,
             noteDamage: notemap.format(floor.note_damage),
             hasNoteDamageRate: floor.note_damage_rate != undefined,
             baseDifficulty: Difficulty.name(floor.song_difficulty),
@@ -228,6 +237,8 @@ for (const towerId of towerIds) {
             livePageCount++;
         }
     }
+
+    towerData.floors.at(-1).isClearReward = true;
 
     if (hasUpdatedFloors) {
         hasUpdatedTowers = true;
