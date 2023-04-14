@@ -14,7 +14,9 @@
                     <% if (floor.isSuperStage) { %>light-blue lighten-5<% } %>
                     <% if (floor.isBonusStage) { %>red lighten-5<% } %>">
                     <img src="image/icon_<%- floor.attribute %>.png" alt="<%- floor.attribute %>">
-                    <b class="floorno"><%- floor.isBonusStage ? "★" : floor.floorNo %>)</b>
+                    <% if (!floor.isBonusStage) { %>
+                        <b class="floorno"><%- floor.floorNo %>)</b>
+                    <% } %>
                     <div class="row">
                         <div class="col l3">
                             <span class="song-name translatable" data-rom="<%- floor.nameRomaji %>"><%- floor.nameKana %></span>
