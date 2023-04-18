@@ -83,7 +83,7 @@ function songNameRomaji(liveId) {
     if (liveId === "1017") return "Mattete Ai no Uta";
     if (liveId === "1010") return "MIRAI TICKET";
     if (liveId === "1089") return "smile smile ship Start!";
-    if (liveId === "1090") return "Future Flight";
+    if (liveId === "1090") return "Future flight";
     if (liveId === "1025") return "Mijuku DREAMER";
     if (liveId === "1060") return "WATER BLUE NEW WORLD";
     if (liveId === "1036") return "Humming Friend";
