@@ -48,6 +48,16 @@ const removeTargetSet = new Set([3, 4, 5, 68, 69, 70, 91, 93, 96, 101, 105, 112,
 
 function skillTarget(targetId) {
     if (targetId === 1) return 'all units ';
+    if (targetId === 2) return 'Honoka units ';
+    if (targetId === 3) return 'Eli units ';
+    if (targetId === 4) return 'Kotori units ';
+    if (targetId === 5) return 'Umi units ';
+    if (targetId === 6) return 'Rin units ';
+    if (targetId === 7) return 'Maki units ';
+    if (targetId === 8) return 'Nozomi units ';
+    if (targetId === 9) return 'Hanayo units ';
+    if (targetId === 10) return 'Nico units ';
+    if (targetId === 11) return 'Chika units ';
     if (targetId === 12) return 'Riko units ';
     if (targetId === 13) return 'Kanan units ';
     if (targetId === 14) return 'Dia units ';
