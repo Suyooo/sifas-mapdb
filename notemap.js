@@ -137,6 +137,7 @@ function skillTarget(targetId) {
     if (targetId === 113) return 'Lanzhu units ';
     if (targetId === 114) return 'Mia units ';
     if (targetId === 115) return '<span class="a cool">Cool</span> Aqours units ';
+    if (targetId === 116) return 'units in the current strategy (at the time of AC clear) ';
     throw new Error('Unknown Skill Target ' + targetId);
 }
 

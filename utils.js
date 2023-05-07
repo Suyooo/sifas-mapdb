@@ -160,6 +160,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2098") return "Mirai Harmony";
     if (liveId === "2120") return "Hurray Hurray";
     if (liveId === "2122") return "What You Gonna Do";
+    if (liveId === "2129") return "OUR P13CES!!!";
     if (liveId === "2031") return "SUPER NOVA";
     if (liveId === "2067") return "POWER SPOT!!";
     if (liveId === "2066") return "Love Triangle";
