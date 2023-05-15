@@ -43,6 +43,7 @@ function songNameRomaji(liveId) {
     if (liveId === "0022") return "Aishiteru Banzai!";
     if (liveId === "0122") return "SUNNY DAY SONG";
     if (liveId === "0116") return "Korekara";
+    if (liveId === "0101") return "Sayounara e Sayonara!";
     if (liveId === "0005") return "PSYCHIC FIRE";
     if (liveId === "0043") return "Cutie Panther";
     if (liveId === "0038") return "Diamond Princess no Yuutsu";
