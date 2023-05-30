@@ -138,6 +138,8 @@ function skillTarget(targetId) {
     if (targetId === 114) return 'Mia units ';
     if (targetId === 115) return '<span class="a cool">Cool</span> Aqours units ';
     if (targetId === 116) return 'units in the current strategy (at the time of AC clear) ';
+    if (targetId === 117) return 'µ\'s and Nijigaku units';
+    if (targetId === 118) return 'Aqours and Nijigaku units';
     throw new Error('Unknown Skill Target ' + targetId);
 }
 
