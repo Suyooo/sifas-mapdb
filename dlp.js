@@ -69,6 +69,7 @@ function towerNameRomaji(towerId) {
     if (towerId === 33040) return "Dream Live Parade ~ 3.5th Anniversary last diary ~";
     if (towerId === 33041) return "Dream Live Parade ~Vo Types On Stage~";
     if (towerId === 33042) return "Dream Live Parade ~Sk Types On Stage~";
+    if (towerId === 33043) return "Dream Live Parade ~Encore Stage~";
 
     throw new Error('Unknown Romaji Tower Name for ' + towerId);
 }
