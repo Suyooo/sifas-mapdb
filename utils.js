@@ -134,6 +134,7 @@ function songNameRomaji(liveId) {
     if (liveId === "2001") return "TOKIMEKI Runners";
     if (liveId === "2020") return "Love U my friends (2D)";
     if (liveId === "2034") return "TOKIMEKI Runners (Chapter 17 Ver.)";
+    if (liveId === "2130") return "TOKIMEKI Runners (12 Member Ver.)";
     if (liveId === "2053") return "Just Believe!!!";
     if (liveId === "2040") return "Nijiiro Passions!";
     if (liveId === "2041") return "NEO SKY, NEO MAP!";
